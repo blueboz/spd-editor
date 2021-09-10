@@ -1,0 +1,56 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        maven {
+            it.allowInsecureProtocol(true)
+            allowInsecureProtocol true
+            url 'http://21.97.49.36:80/artifactory/fms-maven-virtual'
+            credentials {
+                username = "chenweidian-yfzx"
+                password = "Chen@2020"
+            }
+        }
+    }
+}
+
+plugins {
+    id 'org.jetbrains.intellij' version '1.1.6'
+    id 'java'
+}
+
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenLocal()
+    maven {
+        allowInsecureProtocol true
+        url 'http://21.97.49.36:80/artifactory/fms-maven-virtual'
+        credentials {
+            username = "chenweidian-yfzx"
+            password = "Chen@2020"
+        }
+    }
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+}
+
+// See https://github.com/JetBrains/gradle-intellij-plugin/
+intellij {
+//    version = '2021.2.1'
+    localPath = 'D:\\Program Files\\JetBrains\\IntelliJ IDEA 2021.2.1'
+}
+
+
+patchPluginXml {
+    changeNotes = """
+      Add change notes here.<br>
+      <em>most HTML tags may be used</em>"""
+}
+test {
+    useJUnitPlatform()
+}
