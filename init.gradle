@@ -1,0 +1,29 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        maven {
+            it.allowInsecureProtocol(true)
+            allowInsecureProtocol true
+            url 'http://21.97.49.36:80/artifactory/fms-maven-virtual'
+            credentials {
+                username = "chenweidian-yfzx"
+                password = "Chen@2020"
+            }
+        }
+        mavenCentral()
+    }
+}
+
+repositories {
+    mavenLocal()
+    maven {
+        allowInsecureProtocol true
+        url 'http://21.97.49.36:80/artifactory/fms-maven-virtual'
+        credentials {
+            username = "chenweidian-yfzx"
+            password = "Chen@2020"
+        }
+    }
+    mavenCentral()
+
+}
