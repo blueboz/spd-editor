@@ -23,7 +23,7 @@ dependencies {
 intellij {
 //    version = '2021.2.1'
     localPath = 'D:\\Program Files\\JetBrains\\IntelliJ IDEA 2021.2.1'
-    instrumentCode = false
+//    instrumentCode = false
 }
 
 
@@ -38,4 +38,8 @@ test {
 
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
+}
+
+runIde{
+    autoReloadPlugins=true
 }

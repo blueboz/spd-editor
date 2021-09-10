@@ -14,9 +14,15 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->
+        <fileEditorProvider implementation="cn.boz.jb.plugin.idea.fileeditor.MyFileEditorProvider"
+                            id="myFileEditorProvider" order="last">
+        </fileEditorProvider>
     </extensions>
 
     <actions>
         <!-- Add your actions here -->
     </actions>
+
+
+
 </idea-plugin>
