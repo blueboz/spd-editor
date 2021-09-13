@@ -4,6 +4,7 @@ import cn.boz.jb.plugin.floweditor.gui.process.bridge.RectBridge;
 import cn.boz.jb.plugin.floweditor.gui.shape.HiPoint;
 import cn.boz.jb.plugin.floweditor.gui.shape.Rect;
 import cn.boz.jb.plugin.floweditor.gui.utils.FontUtils;
+import cn.boz.jb.plugin.floweditor.gui.utils.IcoMoonUtils;
 import cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
@@ -27,8 +28,8 @@ public class CallActivity extends RectBridge {
 
         chartPanel.markFont();
         chartPanel.setColor(getForegroundColor());
-        chartPanel.setFontExt(FontUtils.FA);
-        chartPanel.drawString(this.getX()+1,this.getY()+1, FontUtils.plus());
+        chartPanel.setFontExt(IcoMoonUtils.getFont16());
+        chartPanel.drawString(this.getX()+1,this.getY()+1, IcoMoonUtils.getPlus());
         chartPanel.resetFont();
         chartPanel.drawString(this.getX(),this.getY(),this.getWidth(),this.getHeight(),this.getName());
     }

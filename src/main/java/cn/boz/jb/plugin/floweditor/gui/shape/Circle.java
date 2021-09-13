@@ -74,7 +74,7 @@ public class Circle extends Shape {
      * @param bstyle
      * @param bColor
      */
-    private void drawInnerBorder(ChartPanel chartPanel, Shape shape, int bw, String bstyle, Color bColor) {
+    protected void drawInnerBorder(ChartPanel chartPanel, Shape shape, int bw, String bstyle, Color bColor) {
         if (bw > 0) {
             chartPanel.markColor();
             chartPanel.markStroke();

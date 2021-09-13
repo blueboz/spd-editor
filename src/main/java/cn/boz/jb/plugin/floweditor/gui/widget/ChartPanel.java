@@ -974,7 +974,7 @@ public class ChartPanel extends JPanel implements MouseListener, MouseMotionList
         }
         Font font = this.currentGraphic.getFont();
         HiPoint hiPoint = translatePoint(x, y);
-        Font fontScale = new Font(font.getName(), font.getStyle(), (int) Math.round(translateSize(font.getSize())));
+        Font fontScale = font.deriveFont(Font.PLAIN, (int) Math.round(translateSize(font.getSize())));
         this.currentGraphic.setFont(fontScale);
         FontMetrics fontMetrics = this.currentGraphic.getFontMetrics(font);
         double offsety = Math.round(lineheight / 2.0 - fontMetrics.getDescent() + fontMetrics.getAscent() / 2.0);
@@ -1520,6 +1520,8 @@ public class ChartPanel extends JPanel implements MouseListener, MouseMotionList
         shapes.add(shape);
         BaseState serialize = shape.serialize();
         recordStateChange(new StateChange(null, serialize));
+        recalcBoard();
+
     }
 
     @Override
@@ -1804,10 +1806,10 @@ public class ChartPanel extends JPanel implements MouseListener, MouseMotionList
                 for (BaseState baseState : operateds) {
                     if (baseState instanceof ShapeState) {
                         ShapeState sbe = (ShapeState) baseState;
-                        shapes.add((Shape) sbe.operated);
+                        shapes.remove((Shape) sbe.operated);
                     } else if (baseState instanceof LineState) {
                         LineState ls = (LineState) baseState;
-                        lines.add((Line) ls.operated);
+                        lines.remove((Line) ls.operated);
                     }
                 }
             }

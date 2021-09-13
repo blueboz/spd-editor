@@ -9,10 +9,7 @@ import cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel;
 import org.dom4j.Element;
 
 public class CircleBridge extends Circle implements Diagram {
-    @Override
-    public void drawContent(ChartPanel chartPanel) {
-        super.drawContent(chartPanel);
-    }
+
 
     @Override
     public Element buildProcessNode() {
@@ -38,5 +35,19 @@ public class CircleBridge extends Circle implements Diagram {
         this.setY(rect.getY());
         this.setWidth(35);
         this.setHeight(35);
+    }
+
+    @Override
+    public void drawContent(ChartPanel chartPanel) {
+        double diameter;
+        if(this.width>this.height){
+            diameter=this.height;
+        }else{
+            diameter=this.width;
+        }
+        double newx=this.x+this.width/2-diameter/2;
+        double newy=this.y+this.height/2-diameter/2;
+        chartPanel.fillOval(newx, newy, diameter, diameter);
+        super.drawInnerBorder(chartPanel, this, borderWidth, borderStyle, borderColor);
     }
 }
