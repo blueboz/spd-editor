@@ -35,6 +35,19 @@ public class Button extends JComponent implements MouseListener, MouseMotionList
     private Integer offset = 0;
     private boolean animation;
 
+    Font font = new Font("FontAwesome", Font.PLAIN, 20);
+
+    public Button(String title, Boolean toggleAble, String id, String group,Font font) {
+        this.group = group;
+        this.title = title;
+        this.toggleAble = toggleAble;
+        this.id = id;
+        this.setPreferredSize(new Dimension(40, 40));
+        this.addMouseListener(this);
+        this.addMouseMotionListener(this);
+        this.animation=true;
+        this.font=font;
+    }
 
 
     public Button(String title, Boolean toggleAble, String id, String group) {
@@ -112,7 +125,7 @@ public class Button extends JComponent implements MouseListener, MouseMotionList
             fontsize = this.getHeight();
         }
         fontsize -= 16;
-        Font font = new Font("FontAwesome", Font.PLAIN, fontsize);
+        Font font = this.font.deriveFont(Font.PLAIN, fontsize);
         Font bkfont = g2d.getFont();
 
         FontMetrics metrics = g.getFontMetrics(font);

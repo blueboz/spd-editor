@@ -21,6 +21,7 @@ public class MyFileEditor implements FileEditor {
     private ChartPanel chartPanel;
 
     public MyFileEditor(VirtualFile virtualFile) {
+        System.out.println("load ing");
         this.virtualFile = virtualFile;
         chartPanel = new ChartPanel();
         chartPanel.loadFromFile(new File(virtualFile.getPath()));
@@ -33,7 +34,7 @@ public class MyFileEditor implements FileEditor {
 
     @Override
     public @Nullable JComponent getPreferredFocusedComponent() {
-        return null;
+        return chartPanel;
     }
 
     @Override
@@ -44,6 +45,11 @@ public class MyFileEditor implements FileEditor {
     @Override
     public void setState(@NotNull FileEditorState fileEditorState) {
 
+    }
+
+    @Override
+    public @Nullable VirtualFile getFile() {
+        return virtualFile;
     }
 
     @Override

@@ -15,6 +15,7 @@ import cn.boz.jb.plugin.floweditor.gui.shape.Prismatic;
 import cn.boz.jb.plugin.floweditor.gui.shape.Shape;
 import cn.boz.jb.plugin.floweditor.gui.utils.ConstantUtils;
 import cn.boz.jb.plugin.floweditor.gui.utils.FontUtils;
+import cn.boz.jb.plugin.floweditor.gui.utils.IcoMoonUtils;
 import cn.boz.jb.plugin.floweditor.gui.widget.Button;
 import cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel;
 
@@ -65,36 +66,38 @@ public class FlowEditorGui extends JFrame implements MouseListener {
      * 处理菜单的相关细节
      */
     private void processMenu() {
-        Button flowbtn = new Button(FontUtils.arrowleft(), true, "flowbtn", "oper");
+        Button flowbtn = new Button(IcoMoonUtils.getSequenceFlow(), true, "flowbtn", "oper",IcoMoonUtils.getFont());
         flowbtn.addMouseListener(this);
         menu.add(flowbtn);
-        Button user = new Button(FontUtils.user(), true, "user", "oper");
+        Button user = new Button(IcoMoonUtils.getUserTask(), true, "user", "oper",IcoMoonUtils.getFont());
         user.addMouseListener(this);
         menu.add(user);
-        Button service = new Button(FontUtils.cog(), true, "service", "oper");
+        Button service = new Button(IcoMoonUtils.getServiceTask(), true, "service", "oper",IcoMoonUtils.getFont());
         service.addMouseListener(this);
         menu.add(service);
-        Button call = new Button(FontUtils.plus(), true, "call", "oper");
+        Button call = new Button(IcoMoonUtils.getCallActivity(), true, "call", "oper",IcoMoonUtils.getFont());
         call.addMouseListener(this);
         menu.add(call);
 
-        Button exclude = new Button(FontUtils.close(), true, "exclude", "oper");
+        Button exclude = new Button(IcoMoonUtils.getExclusiveGateway(), true, "exclude", "oper",IcoMoonUtils.getFont());
         exclude.addMouseListener(this);
         menu.add(exclude);
 
-        Button parallel = new Button(FontUtils.plus(), true, "parallel", "oper");
+        Button parallel = new Button(IcoMoonUtils.getParallelGateway(), true, "parallel", "oper",IcoMoonUtils.getFont());
         parallel.addMouseListener(this);
         menu.add(parallel);
 
-        Button foreach = new Button(FontUtils.circleo(), true, "foreach", "oper");
+        Button foreach = new Button(IcoMoonUtils.getForeachGateway(), true, "foreach", "oper",IcoMoonUtils.getFont());
         foreach.addMouseListener(this);
         menu.add(foreach);
 
-        Button start = new Button(FontUtils.play(), true, "start", "oper");
+        Button start = new Button(IcoMoonUtils.getStartEvent(), true, "start", "oper",IcoMoonUtils.getFont());
         start.addMouseListener(this);
         menu.add(start);
 
-        Button end = new Button(FontUtils.stop(), true, "stop", "oper");
+
+
+        Button end = new Button(IcoMoonUtils.getEndEvent(), true, "stop", "oper",IcoMoonUtils.getFont());
         end.addMouseListener(this);
         menu.add(end);
 

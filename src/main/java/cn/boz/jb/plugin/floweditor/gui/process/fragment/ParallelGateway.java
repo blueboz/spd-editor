@@ -5,6 +5,7 @@ import cn.boz.jb.plugin.floweditor.gui.process.bridge.PrismaticBridge;
 import cn.boz.jb.plugin.floweditor.gui.shape.HiPoint;
 import cn.boz.jb.plugin.floweditor.gui.shape.Rect;
 import cn.boz.jb.plugin.floweditor.gui.utils.FontUtils;
+import cn.boz.jb.plugin.floweditor.gui.utils.IcoMoonUtils;
 import cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
@@ -20,8 +21,8 @@ public class ParallelGateway extends PrismaticBridge implements Gateway {
 
         chartPanel.markFont();
         chartPanel.setColor(getForegroundColor());
-        chartPanel.setFontExt(FontUtils.FA_25);
-        chartPanel.drawString(this.getX(),this.getY()+3,this.getWidth(),this.getHeight(), FontUtils.plus());
+        chartPanel.setFontExt(IcoMoonUtils.getFont20());
+        chartPanel.drawString(this.getX(),this.getY()+3,this.getWidth(),this.getHeight(), IcoMoonUtils.getPlus());
         chartPanel.resetFont();
 
     }
