@@ -17,7 +17,9 @@
         <fileEditorProvider implementation="cn.boz.jb.plugin.idea.fileeditor.MyFileEditorProvider"
                             id="myFileEditorProvider" order="last">
         </fileEditorProvider>
+        <toolWindow factoryClass="cn.boz.jb.plugin.idea.toolwindow.MyToolWindowFactory" id="myToolwindow"  anchor="right" order="last"></toolWindow>
     </extensions>
+
 
     <actions>
         <!-- Add your actions here -->

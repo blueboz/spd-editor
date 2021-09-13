@@ -2413,7 +2413,6 @@ public class ChartPanel extends JPanel implements MouseListener, MouseMotionList
     @Override
     public void keyPressed(KeyEvent e) {
         int keyCode = e.getKeyCode();
-        System.out.println(keyCode);
         if (ctrlPressing) {
             if (keyCode == 65) {
                 //Ctrl+A

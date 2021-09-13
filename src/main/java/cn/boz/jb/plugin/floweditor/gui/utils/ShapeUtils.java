@@ -69,7 +69,7 @@ public class ShapeUtils {
             }
         }
         //下边线
-        return null;
+        return  new HiPoint(x, y + height);
     }
     /**
      * 判断是否在小点区域范围内
