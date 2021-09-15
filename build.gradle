@@ -38,7 +38,7 @@ test {
 
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
-//    options.compilerArgs ['-Xlint:unchecked']
+    options.compilerArgs ['-Xlint:unchecked']
 }
 
 runIde{
@@ -48,6 +48,10 @@ runIde{
 
 tasks.whenTaskAdded { task ->
     if (task.name.equals("lint")) {
+        task.enabled = false
+    }
+
+    if (task.name.equals("buildSearchableOptions")) {
         task.enabled = false
     }
 }
