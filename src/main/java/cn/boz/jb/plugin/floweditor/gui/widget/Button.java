@@ -1,6 +1,7 @@
 package cn.boz.jb.plugin.floweditor.gui.widget;
 
 import cn.boz.jb.plugin.floweditor.gui.listener.ToggleListener;
+import cn.boz.jb.plugin.floweditor.gui.utils.FontUtils;
 
 import javax.swing.JComponent;
 import javax.swing.Timer;
@@ -35,7 +36,7 @@ public class Button extends JComponent implements MouseListener, MouseMotionList
     private Integer offset = 0;
     private boolean animation;
 
-    Font font = new Font("FontAwesome", Font.PLAIN, 20);
+    Font font = FontUtils.FA;
 
     public Button(String title, Boolean toggleAble, String id, String group,Font font) {
         this.group = group;
@@ -161,7 +162,36 @@ public class Button extends JComponent implements MouseListener, MouseMotionList
 
     @Override
     public void mouseClicked(MouseEvent e) {
+//        if(e.getButton()!=MouseEvent.BUTTON1){
+//            return ;
+//        }
+//        if (toggleAble) {
+//            this.fireToggleListener(toggle, !toggle);
+//            toggle = !toggle;
+//            //并且给同组的设置toggle
+//            Container parent = this.getParent();
+//            Component[] components = parent.getComponents();
+//            for (Component component : components) {
+//                if (!(component instanceof Button)) {
+//                    continue;
+//                }
+//                Button comp = (Button) component;
+//                if (this.group != null && this.group.equals(comp.getGroup())) {
+//                    if (!this.getId().equals(comp.getId())) {
+//                        comp.setToggle(false);
+//                    }
+//                }
+//            }
+//        }
+//        repaint();
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
         if(e.getButton()!=MouseEvent.BUTTON1){
+            return ;
+        }
+        if(press==true){
             return ;
         }
         if (toggleAble) {
@@ -181,14 +211,6 @@ public class Button extends JComponent implements MouseListener, MouseMotionList
                     }
                 }
             }
-        }
-        repaint();
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-        if(e.getButton()!=MouseEvent.BUTTON1){
-            return ;
         }
         this.press = true;
         repaint();

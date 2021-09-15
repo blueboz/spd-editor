@@ -21,10 +21,10 @@ public class MyFileEditor implements FileEditor {
     private ChartPanel chartPanel;
 
     public MyFileEditor(VirtualFile virtualFile) {
-        System.out.println("load ing");
         this.virtualFile = virtualFile;
         chartPanel = new ChartPanel();
         chartPanel.loadFromFile(new File(virtualFile.getPath()));
+
     }
 
     @Override
@@ -54,17 +54,20 @@ public class MyFileEditor implements FileEditor {
 
     @Override
     public boolean isModified() {
-        return false;
+        return chartPanel.isModified();
     }
 
     @Override
     public boolean isValid() {
-        return false;
+        return true;
     }
 
     @Override
     public void addPropertyChangeListener(@NotNull PropertyChangeListener propertyChangeListener) {
-        System.out.println(propertyChangeListener);
+        //keneng
+//        PropertyChangeEvent propertyChangeEvent = new PropertyChangeEvent
+//        propertyChangeListener.propertyChange();
+//        System.out.println(propertyChangeListener);
     }
 
     @Override

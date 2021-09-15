@@ -7,7 +7,6 @@ import cn.boz.jb.plugin.floweditor.gui.hist.BaseState;
 import cn.boz.jb.plugin.floweditor.gui.hist.LineState;
 import cn.boz.jb.plugin.floweditor.gui.hist.ShapeState;
 import cn.boz.jb.plugin.floweditor.gui.hist.StateChange;
-import cn.boz.jb.plugin.floweditor.gui.process.Gateway;
 import cn.boz.jb.plugin.floweditor.gui.process.definition.ProcessDefinition;
 import cn.boz.jb.plugin.floweditor.gui.shape.HiPoint;
 import cn.boz.jb.plugin.floweditor.gui.shape.Label;
@@ -25,6 +24,7 @@ import cn.boz.jb.plugin.floweditor.gui.utils.ShapePos;
 import cn.boz.jb.plugin.floweditor.gui.utils.ShapeUtils;
 
 import javax.imageio.ImageIO;
+import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -33,6 +33,7 @@ import javax.swing.Timer;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
@@ -58,7 +59,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -69,7 +69,7 @@ import java.util.stream.Collectors;
 /**
  * 流程画板面板
  */
-public class ChartPanel extends JPanel implements MouseListener, MouseMotionListener, KeyListener, MouseWheelListener {
+public class ChartPanel extends JComponent implements MouseListener, MouseMotionListener, KeyListener, MouseWheelListener {
     private ConstantUtils constantUtils = ConstantUtils.getInstance();
     public static final String FROM = "from";
     public static final String TO = "to";
@@ -174,8 +174,9 @@ public class ChartPanel extends JPanel implements MouseListener, MouseMotionList
 
     public ChartPanel() {
         this.setBackground(Color.gray);
-        this.setFont(FontUtils.PF_12);
+        this.setFont(FontUtils.PF.deriveFont(Font.PLAIN,12));
         //初始化的图形仅仅供测试
+
 
         addMouseMotionListener(this);
         addMouseListener(this);
@@ -190,6 +191,8 @@ public class ChartPanel extends JPanel implements MouseListener, MouseMotionList
         }
 //        File file = new File("E:\\RTC_work\\DEV3\\xfunds_201608\\import\\即期交易事件流程-spotTradeProcess.spd");
 //        loadFromFile(file);
+//        this.setPreferredSize(new Dimension(600,600));
+//        this.setBounds(0,0,600,600);
     }
 
     public int getMode() {
@@ -2893,4 +2896,11 @@ public class ChartPanel extends JPanel implements MouseListener, MouseMotionList
         return new Size(0, lineheight);
     }
 
+    public boolean isModified() {
+        if(stateHistory.size()>0){
+            return true;
+        }
+        return false;
+
+    }
 }
