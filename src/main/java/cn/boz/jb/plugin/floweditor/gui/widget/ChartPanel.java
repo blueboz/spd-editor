@@ -649,7 +649,7 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
         drawDebug();
         //绘制耗损性能情况
 //        drawOccupation();
-//        g.dispose();
+        g.dispose();
     }
 
     private void drawOccupation() {
@@ -2551,7 +2551,7 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
     /**
      * 图形删除的操作回调函数
      */
-    private void shapeDelete() {
+    public void shapeDelete() {
         List<Shape> collect = shapes.stream().filter(it -> it.isDraging()).collect(Collectors.toList());
         List<BaseState> befores = new ArrayList<>();
         for (Shape shape : collect) {

@@ -28,8 +28,8 @@ public class RectBridge extends Shape implements Diagram
 
     @Override
     public void init(HiPoint hiPoint){
-        this.setX(hiPoint.x);
-        this.setY(hiPoint.y);
+        this.setX(hiPoint.x-52);
+        this.setY(hiPoint.y-27);
         this.setWidth(105);
         this.setHeight(55);
     }

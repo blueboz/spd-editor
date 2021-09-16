@@ -23,8 +23,8 @@ public class CircleBridge extends Circle implements Diagram {
 
     @Override
     public void init(HiPoint hiPoint){
-        this.setX(hiPoint.x);
-        this.setY(hiPoint.y);
+        this.setX(hiPoint.x-17);
+        this.setY(hiPoint.y-17);
         this.setWidth(35);
         this.setHeight(35);
     }

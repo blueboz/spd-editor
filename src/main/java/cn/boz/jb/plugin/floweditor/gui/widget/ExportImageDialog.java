@@ -24,6 +24,9 @@ import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+/**
+ * 导出为图片的按钮
+ */
 public class ExportImageDialog extends JDialog {
 
     private double initScale;

@@ -36,7 +36,7 @@ public class FlowEditorComponent extends JComponent implements MouseListener {
     public FlowEditorComponent() {
         gPanel = new ChartPanel();
         menu = new JPanel();
-        menu.setBackground(Color.white);
+        menu.setBackground(ConstantUtils.getInstance().getBtnBarColor());
         processMenu();
         BorderLayout borderLayout = new BorderLayout();
         this.setLayout(borderLayout);
@@ -142,6 +142,9 @@ public class FlowEditorComponent extends JComponent implements MouseListener {
         theme.addMouseListener(this);
         menu.add(theme);
 
+        Button trash = new Button(FontUtils.trash(), false, "trash");
+        trash.addMouseListener(this);
+        menu.add(trash);
 
         Button label = new Button(FontUtils.starhalf(), false, "label", false);
 
@@ -209,11 +212,12 @@ public class FlowEditorComponent extends JComponent implements MouseListener {
             case "service":
                 gPanel.setModeOfNewShape(ServiceTask.class);
                 break;
-            case "user\n":
-                gPanel.setModeOfNewShape(UserTask.class);
-                break;
             case "equation":
                 gPanel.resetScale();
+                break;
+            case "trash":
+                gPanel.shapeDelete();
+                repaint();
                 break;
             case "redo":
                 gPanel.redo();
@@ -239,14 +243,18 @@ public class FlowEditorComponent extends JComponent implements MouseListener {
                 String title = myButton.getTitle();
                 if (title.equals(FontUtils.sun())) {
                     ConstantUtils.getInstance().setColorModeLight();
+                    this.menu.setBackground(ConstantUtils.getInstance().getBtnBarColor());
                     repaint();
                 } else if (title.equals(FontUtils.moon())) {
                     ConstantUtils.getInstance().setColorModeDark();
+                    this.menu.setBackground(ConstantUtils.getInstance().getBtnBarColor());
                     repaint();
                 } else if (title.equals(FontUtils.paint())) {
                     ConstantUtils.getInstance().setColorfulMode();
+                    this.menu.setBackground(ConstantUtils.getInstance().getBtnBarColor());
                     repaint();
                 }
+
                 break;
             case "label":
 
@@ -290,5 +298,13 @@ public class FlowEditorComponent extends JComponent implements MouseListener {
     @Override
     public void mouseExited(MouseEvent e) {
 
+    }
+
+    public ChartPanel getgPanel() {
+        return gPanel;
+    }
+
+    public void setgPanel(ChartPanel gPanel) {
+        this.gPanel = gPanel;
     }
 }

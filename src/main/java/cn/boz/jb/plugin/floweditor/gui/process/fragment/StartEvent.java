@@ -49,19 +49,13 @@ public class StartEvent extends CircleBridge {
 
     @Override
     public void init(HiPoint hiPoint){
-        this.setX(hiPoint.x);
-        this.setY(hiPoint.y);
-        this.setWidth(35);
-        this.setHeight(35);
+        super.init(hiPoint);
         this.setName("Start");
     }
 
     @Override
     public void init(Rect rect) {
-        this.setX(rect.getX());
-        this.setY(rect.getY());
-        this.setWidth(35);
-        this.setHeight(35);
+        super.init(rect);
         this.setName("Start");
 
     }

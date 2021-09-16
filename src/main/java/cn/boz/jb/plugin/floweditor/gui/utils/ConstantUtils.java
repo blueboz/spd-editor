@@ -45,7 +45,20 @@ public class ConstantUtils {
     private Color chartPanelNewShapeInvalidColor;
 
     private Color alignLineColor;//=new Color(242, 40, 255, 139);
+    private Color btnBarColor;
 
+    //按钮前景色
+    private Color btnColor;
+    //按钮悬浮颜色
+    private Color btnHoverColor;
+    //按钮激活颜色
+    private Color btnActiveColor;
+    //按钮背景色
+    private Color btnBgColor;
+    //按钮悬浮背景色
+    private Color btnBgHoverColor;
+    //按钮激活背景色
+    private Color btnBgActiveColor;
 
     private int colorMode = COLOR_MODE_ORIGINAL;
 
@@ -109,6 +122,14 @@ public class ConstantUtils {
         chartPanelDraggingShapeColor=new Color(177, 177, 177, 255);
         chartPanelNewShapeInvalidColor= Color.RED;
         chartPanelNewShapeValidColor=Color.GREEN;
+        btnBarColor=new Color(116, 116, 116);
+        btnColor=new Color(255, 255, 255);
+        btnHoverColor=new Color(255, 255, 255);
+        btnActiveColor=new Color(132, 132, 132);
+        btnBgColor=new Color(8, 8, 8, 238);
+        btnBgHoverColor=new Color(202, 202, 202, 157);
+        btnBgActiveColor=new Color(255, 255, 255 );
+
     }
 
     /**
@@ -120,10 +141,10 @@ public class ConstantUtils {
         setColorModeCurrent(COLOR_MODE_LIGHT);
         shapeActiveBackgroundColor = new Color(78, 226, 255, 158);
         shapeActiveForegroundColor= new Color(0, 0, 0);;
-        shapeBackgroundColor = new Color(255, 253, 253, 139);
+        shapeBackgroundColor = new Color(255, 255, 255, 228);
         shapeForegroundColor = new Color(0, 0, 0);
 
-        chartPanelBoardColor = new Color(255, 255, 255, 134);
+        chartPanelBoardColor = new Color(173, 173, 173, 47);
         chartPanelHoverBorderColor = new Color(0, 0, 0, 255);
         chartPanelFlowLineActiveColor = new Color(0, 148, 179);
         chartPanelFlowLineHoverColor = new Color(165, 165, 165);
@@ -134,6 +155,13 @@ public class ConstantUtils {
 
         chartPanelNewShapeInvalidColor=new Color(219, 19, 19);
         chartPanelNewShapeValidColor=new Color(0, 203, 13);
+        btnBarColor=Color.WHITE;
+        btnColor=new Color(117, 117, 117);
+        btnHoverColor=new Color(117, 117, 117);
+        btnActiveColor=new Color(240, 240, 240);
+        btnBgColor=new Color(117, 117, 117,0);
+        btnBgHoverColor=new Color(185, 185, 185, 109);
+        btnBgActiveColor=new Color(25, 25, 25, 197);
     }
 
     /**
@@ -309,5 +337,61 @@ public class ConstantUtils {
 
     public void setLabelShowMode(int labelShowMode) {
         this.labelShowMode = labelShowMode;
+    }
+
+    public Color getBtnColor() {
+        return btnColor;
+    }
+
+    public void setBtnColor(Color btnColor) {
+        this.btnColor = btnColor;
+    }
+
+    public Color getBtnHoverColor() {
+        return btnHoverColor;
+    }
+
+    public void setBtnHoverColor(Color btnHoverColor) {
+        this.btnHoverColor = btnHoverColor;
+    }
+
+    public Color getBtnActiveColor() {
+        return btnActiveColor;
+    }
+
+    public void setBtnActiveColor(Color btnActiveColor) {
+        this.btnActiveColor = btnActiveColor;
+    }
+
+    public Color getBtnBgColor() {
+        return btnBgColor;
+    }
+
+    public void setBtnBgColor(Color btnBgColor) {
+        this.btnBgColor = btnBgColor;
+    }
+
+    public Color getBtnBgHoverColor() {
+        return btnBgHoverColor;
+    }
+
+    public void setBtnBgHoverColor(Color btnBgHoverColor) {
+        this.btnBgHoverColor = btnBgHoverColor;
+    }
+
+    public Color getBtnBgActiveColor() {
+        return btnBgActiveColor;
+    }
+
+    public void setBtnBgActiveColor(Color btnBgActiveColor) {
+        this.btnBgActiveColor = btnBgActiveColor;
+    }
+
+    public Color getBtnBarColor() {
+        return btnBarColor;
+    }
+
+    public void setBtnBarColor(Color btnBarColor) {
+        this.btnBarColor = btnBarColor;
     }
 }
