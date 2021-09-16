@@ -1,6 +1,7 @@
 package cn.boz.jb.plugin.idea.fileeditor;
 
 import cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel;
+import cn.boz.jb.plugin.floweditor.gui.widget.FlowEditorComponent;
 import com.intellij.openapi.fileEditor.FileEditor;
 import com.intellij.openapi.fileEditor.FileEditorLocation;
 import com.intellij.openapi.fileEditor.FileEditorState;
@@ -18,23 +19,26 @@ public class MyFileEditor implements FileEditor {
 
     private VirtualFile virtualFile;
 
-    private ChartPanel chartPanel;
+//    private ChartPanel chartPanel;
+    private FlowEditorComponent flowEditorComponent;
 
     public MyFileEditor(VirtualFile virtualFile) {
         this.virtualFile = virtualFile;
-        chartPanel = new ChartPanel();
-        chartPanel.loadFromFile(new File(virtualFile.getPath()));
+        flowEditorComponent = new FlowEditorComponent();
+//        chartPanel = new ChartPanel();
+//        chartPanel.loadFromFile(new File(virtualFile.getPath()));
+        flowEditorComponent.getgPanel().loadFromFile(new File(virtualFile.getPath()));
 
     }
 
     @Override
     public @NotNull JComponent getComponent() {
-        return chartPanel;
+        return flowEditorComponent;
     }
 
     @Override
     public @Nullable JComponent getPreferredFocusedComponent() {
-        return chartPanel;
+        return flowEditorComponent;
     }
 
     @Override
@@ -54,7 +58,7 @@ public class MyFileEditor implements FileEditor {
 
     @Override
     public boolean isModified() {
-        return chartPanel.isModified();
+        return flowEditorComponent.getgPanel().isModified();
     }
 
     @Override

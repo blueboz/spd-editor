@@ -1,6 +1,7 @@
 package cn.boz.jb.plugin.floweditor.gui.widget;
 
 import cn.boz.jb.plugin.floweditor.gui.listener.ToggleListener;
+import cn.boz.jb.plugin.floweditor.gui.utils.ConstantUtils;
 import cn.boz.jb.plugin.floweditor.gui.utils.FontUtils;
 
 import javax.swing.JComponent;
@@ -38,7 +39,7 @@ public class Button extends JComponent implements MouseListener, MouseMotionList
 
     Font font = FontUtils.FA;
 
-    public Button(String title, Boolean toggleAble, String id, String group,Font font) {
+    public Button(String title, Boolean toggleAble, String id, String group, Font font) {
         this.group = group;
         this.title = title;
         this.toggleAble = toggleAble;
@@ -46,8 +47,8 @@ public class Button extends JComponent implements MouseListener, MouseMotionList
         this.setPreferredSize(new Dimension(40, 40));
         this.addMouseListener(this);
         this.addMouseMotionListener(this);
-        this.animation=true;
-        this.font=font;
+        this.animation = true;
+        this.font = font;
     }
 
 
@@ -59,7 +60,7 @@ public class Button extends JComponent implements MouseListener, MouseMotionList
         this.setPreferredSize(new Dimension(40, 40));
         this.addMouseListener(this);
         this.addMouseMotionListener(this);
-        this.animation=true;
+        this.animation = true;
     }
 
     public Button(String title, Boolean toggleAble, String id) {
@@ -69,17 +70,17 @@ public class Button extends JComponent implements MouseListener, MouseMotionList
         this.setPreferredSize(new Dimension(40, 40));
         this.addMouseListener(this);
         this.addMouseMotionListener(this);
-        this.animation=true;
+        this.animation = true;
     }
 
-    public Button(String title, Boolean toggleAble, String id,Boolean animation) {
+    public Button(String title, Boolean toggleAble, String id, Boolean animation) {
         this.title = title;
         this.toggleAble = toggleAble;
         this.id = id;
         this.setPreferredSize(new Dimension(40, 40));
         this.addMouseListener(this);
         this.addMouseMotionListener(this);
-        this.animation=animation;
+        this.animation = animation;
     }
 
     public void addMyButtonToggleListener(ToggleListener listener) {
@@ -100,9 +101,34 @@ public class Button extends JComponent implements MouseListener, MouseMotionList
         return toggle;
     }
 
+
+
+    private Color getForegroundColor() {
+        if (hover || (toggle && toggleAble)) {
+            if ((toggle && toggleAble) || press) {
+                return ConstantUtils.getInstance().getBtnActiveColor();
+            } else {
+                return ConstantUtils.getInstance().getBtnHoverColor();
+            }
+        } else {
+            return ConstantUtils.getInstance().getBtnColor();
+        }
+    }
+
+    private Color getBackgroundColor() {
+        if (hover || (toggle && toggleAble)) {
+            if ((toggle && toggleAble) || press) {
+                return ConstantUtils.getInstance().getBtnBgActiveColor();
+            } else {
+                return ConstantUtils.getInstance().getBtnBgHoverColor();
+            }
+        } else {
+            return null;
+        }
+    }
+
     @Override
     public void paint(Graphics g) {
-        super.paint(g);
 
         Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
@@ -110,15 +136,12 @@ public class Button extends JComponent implements MouseListener, MouseMotionList
         g2d.setRenderingHint(RenderingHints.KEY_RENDERING,
                 RenderingHints.VALUE_RENDER_QUALITY);
 
-        if (hover || (toggle && toggleAble)) {
+        Color bgc = getBackgroundColor();
+        if(bgc!=null){
             Color color = g2d.getColor();
-            if ((toggle && toggleAble) || press) {
-                g2d.setColor(new Color(207, 207, 207, 255));
-            } else {
-                g2d.setColor(new Color(223, 223, 223, 255));
-            }
-
-            g2d.fillRect(2, 2, this.getWidth() - 4, this.getHeight() - 4);
+            g2d.setColor(bgc);
+//            g2d.fillRect(2, 2, this.getWidth() - 4, this.getHeight() - 4);
+            g2d.fillRoundRect(4,4,this.getWidth()-8,this.getHeight()-8,5,5);
             g2d.setColor(color);
         }
         int fontsize = this.getWidth();
@@ -136,20 +159,20 @@ public class Button extends JComponent implements MouseListener, MouseMotionList
 
         int strHeight = metrics.getHeight();
         int top = (this.getHeight() - strHeight) / 2 + metrics.getAscent();
-        Color cc = new Color(117, 117, 117);
         Color bkc = g2d.getColor();
-        g2d.setColor(cc);
+
+        g2d.setColor(getForegroundColor());
         if (tempTitle != null) {
 
             Dimension preferredSize = this.getPreferredSize();
             int tmpstrWidth = metrics.stringWidth(tempTitle);
             int lefttemp = (this.getWidth() - tmpstrWidth) / 2; //左边位置
 
-            g2d.drawString(tempTitle, lefttemp, top - Math.round(preferredSize.getHeight()*offset/100));
+            g2d.drawString(tempTitle, lefttemp, top - Math.round(preferredSize.getHeight() * offset / 100));
             int strWidth = metrics.stringWidth(centerWords);
             int left = (this.getWidth() - strWidth) / 2; //左边位置
 
-            g2d.drawString(centerWords, left, top + preferredSize.height - Math.round(preferredSize.getHeight()*offset/100));
+            g2d.drawString(centerWords, left, top + preferredSize.height - Math.round(preferredSize.getHeight() * offset / 100));
         } else {
             int strWidth = metrics.stringWidth(centerWords);
             int left = (this.getWidth() - strWidth) / 2; //左边位置
@@ -162,37 +185,16 @@ public class Button extends JComponent implements MouseListener, MouseMotionList
 
     @Override
     public void mouseClicked(MouseEvent e) {
-//        if(e.getButton()!=MouseEvent.BUTTON1){
-//            return ;
-//        }
-//        if (toggleAble) {
-//            this.fireToggleListener(toggle, !toggle);
-//            toggle = !toggle;
-//            //并且给同组的设置toggle
-//            Container parent = this.getParent();
-//            Component[] components = parent.getComponents();
-//            for (Component component : components) {
-//                if (!(component instanceof Button)) {
-//                    continue;
-//                }
-//                Button comp = (Button) component;
-//                if (this.group != null && this.group.equals(comp.getGroup())) {
-//                    if (!this.getId().equals(comp.getId())) {
-//                        comp.setToggle(false);
-//                    }
-//                }
-//            }
-//        }
-//        repaint();
+
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
-        if(e.getButton()!=MouseEvent.BUTTON1){
-            return ;
+        if (e.getButton() != MouseEvent.BUTTON1) {
+            return;
         }
-        if(press==true){
-            return ;
+        if (press == true) {
+            return;
         }
         if (toggleAble) {
             this.fireToggleListener(toggle, !toggle);
@@ -218,8 +220,8 @@ public class Button extends JComponent implements MouseListener, MouseMotionList
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        if(e.getButton()!=MouseEvent.BUTTON1){
-            return ;
+        if (e.getButton() != MouseEvent.BUTTON1) {
+            return;
         }
         this.press = false;
         repaint();
@@ -246,6 +248,7 @@ public class Button extends JComponent implements MouseListener, MouseMotionList
 
     @Override
     public void mouseMoved(MouseEvent e) {
+        repaint();
 
     }
 
@@ -288,9 +291,9 @@ public class Button extends JComponent implements MouseListener, MouseMotionList
         if (timer != null) {
             return;
         }
-        if(!animation){
-            this.title=title;
-            return ;
+        if (!animation) {
+            this.title = title;
+            return;
         }
 
         synchronized (Button.class) {

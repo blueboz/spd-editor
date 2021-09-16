@@ -26,8 +26,8 @@ public class PrismaticBridge extends Prismatic implements Diagram {
 
     @Override
     public void init(HiPoint hiPoint){
-        this.setX(hiPoint.x);
-        this.setY(hiPoint.y);
+        this.setX(hiPoint.x-20);
+        this.setY(hiPoint.y-20);
         this.setWidth(40);
         this.setHeight(40);
     }

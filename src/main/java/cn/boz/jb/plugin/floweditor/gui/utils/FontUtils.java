@@ -133,6 +133,10 @@ public class FontUtils {
         return "\uf0e2";
     }
 
+    public static String trash() {
+        return "\uf014";
+    }
+
     public static String crosshairs() {
         return "\uf05b";
     }
