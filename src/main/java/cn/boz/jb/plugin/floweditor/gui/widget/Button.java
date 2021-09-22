@@ -199,18 +199,26 @@ public class Button extends JComponent implements MouseListener, MouseMotionList
         if (toggleAble) {
             this.fireToggleListener(toggle, !toggle);
             toggle = !toggle;
-            //并且给同组的设置toggle
-            Container parent = this.getParent();
-            Component[] components = parent.getComponents();
-            for (Component component : components) {
-                if (!(component instanceof Button)) {
-                    continue;
-                }
-                Button comp = (Button) component;
-                if (this.group != null && this.group.equals(comp.getGroup())) {
-                    if (!this.getId().equals(comp.getId())) {
-                        comp.setToggle(false);
+            if(toggle){
+                //并且给同组的设置toggle
+                Container parent = this.getParent();
+                Component[] components = parent.getComponents();
+                for (Component component : components) {
+                    if (!(component instanceof Button)) {
+                        continue;
                     }
+                    Button comp = (Button) component;
+                    if (this.group != null && this.group.equals(comp.getGroup())) {
+                        if (!this.getId().equals(comp.getId())) {
+                            comp.setToggle(false);
+                        }
+                    }
+                }
+            }else{
+                Container parent = this.getParent();
+                Component[] components = parent.getComponents();
+                if(components.length>1){
+                    toggle=true;
                 }
             }
         }

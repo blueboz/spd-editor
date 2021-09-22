@@ -209,6 +209,7 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
         //由于目前
         this.setMode(MODE_LINE);
         this.newLineClass=clz;
+        this.newShapeClass=null;
     }
 
     /**
@@ -220,6 +221,7 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
         //由于目前
         this.setMode(MODE_NEW_SHAPE);
         this.newShapeClass=clz;
+        this.newLineClass=null;
     }
 
 

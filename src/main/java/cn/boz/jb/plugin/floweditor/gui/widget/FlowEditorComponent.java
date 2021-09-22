@@ -85,6 +85,7 @@ public class FlowEditorComponent extends JComponent implements MouseListener {
 
         Button movebtn = new Button(FontUtils.arrows(), true, "movebtn", "oper");
         movebtn.addMouseListener(this);
+        movebtn.setToggle(true);
         menu.add(movebtn);
         Button handbtn = new Button(FontUtils.hand(), true, "handbtn", "oper");
         handbtn.addMouseListener(this);
@@ -159,6 +160,12 @@ public class FlowEditorComponent extends JComponent implements MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
+
+
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
         if (e.getButton() != MouseEvent.BUTTON1) {
             return;
         }
@@ -174,6 +181,7 @@ public class FlowEditorComponent extends JComponent implements MouseListener {
                 gPanel.setModeOfNewShape(Shape.class);
                 break;
             case "movebtn":
+
                 gPanel.setMode(ChartPanel.MODE_DEFAULT);
                 break;
             case "user":
@@ -276,12 +284,6 @@ public class FlowEditorComponent extends JComponent implements MouseListener {
             default:
                 break;
         }
-
-
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
 
     }
 
