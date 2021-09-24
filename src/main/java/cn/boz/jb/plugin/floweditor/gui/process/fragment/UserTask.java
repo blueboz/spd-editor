@@ -59,6 +59,12 @@ public class UserTask extends RectBridge {
     public String getExpression() {
         return expression;
     }
+    public String getExpressionExt(){
+        if(expression==null){
+            return "";
+        }
+        return expression.replace("#LEY#","\n");
+    }
 
     public void setExpression(String expression) {
         this.expression = expression;

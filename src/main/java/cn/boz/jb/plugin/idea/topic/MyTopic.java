@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class MyTopic extends Topic {
 
+    @SuppressWarnings("unchecked")
     public MyTopic(@NonNls @NotNull String name, @NotNull Class listenerClass) {
         super(name, listenerClass);
     }

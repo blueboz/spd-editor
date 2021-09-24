@@ -1,20 +1,13 @@
 package cn.boz.jb.plugin.idea.widget;
 
 import cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel;
-import com.intellij.ui.AddEditRemovePanel;
 import com.intellij.ui.JBSplitter;
+import com.intellij.ui.components.JBPanel;
 import com.intellij.ui.table.JBTable;
-import com.intellij.ui.table.TableView;
 
-import javax.swing.JButton;
 import javax.swing.JComponent;
-import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellEditor;
-import javax.swing.table.TableColumn;
-import javax.swing.table.TableColumnModel;
-import javax.swing.table.TableModel;
 import java.awt.BorderLayout;
 import java.io.File;
 
@@ -23,10 +16,12 @@ public class SpdEditor extends JComponent {
     ChartPanel chartPanel;
     JBSplitter jbSplitter;
     JBTable jbTable;
+    JBPanel<JBPanel> jbPanelJBPanel;
     DefaultTableModel defaultTableModel;
     public SpdEditor(){
         jbSplitter = new JBSplitter();
         chartPanel = new ChartPanel();
+        jbPanelJBPanel = new JBPanel<>();
         this.setLayout(new BorderLayout());
 
 
@@ -36,7 +31,7 @@ public class SpdEditor extends JComponent {
                 return super.getCellEditor(row, column);
             }
          };
-         defaultTableModel = new DefaultTableModel(null,new String[]{"property","value"}){
+         defaultTableModel = new DefaultTableModel(null,new String[]{"属性","值"}){
             @Override
             public boolean isCellEditable(int row, int column) {
                 if(column==0){
@@ -50,12 +45,17 @@ public class SpdEditor extends JComponent {
         defaultTableModel.addRow(new Object[]{"username","jaychou"});
         defaultTableModel.addRow(new Object[]{"age","27"});
         defaultTableModel.addRow(new Object[]{"gender","male"});
+        defaultTableModel.addRow(new Object[]{"home","japan"});
         jbTable.setModel(defaultTableModel);
+        jbTable.setRowHeight(38);
 
+        jbPanelJBPanel.setLayout(new BorderLayout());
+        jbPanelJBPanel.add(jbTable.getTableHeader(),BorderLayout.NORTH);
+        jbPanelJBPanel.add(jbTable,BorderLayout.CENTER);
 
         this.add(jbSplitter,BorderLayout.CENTER);
         jbSplitter.setFirstComponent(chartPanel);
-        jbSplitter.setSecondComponent(jbTable);
+        jbSplitter.setSecondComponent(jbPanelJBPanel);
     }
 
     public void loadFromFile(File file){
@@ -64,5 +64,13 @@ public class SpdEditor extends JComponent {
 
     public boolean isModified() {
         return chartPanel.isModified();
+    }
+
+    public ChartPanel getChartPanel() {
+        return chartPanel;
+    }
+
+    public void setChartPanel(ChartPanel chartPanel) {
+        this.chartPanel = chartPanel;
     }
 }
