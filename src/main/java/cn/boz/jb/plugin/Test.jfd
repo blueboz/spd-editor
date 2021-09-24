@@ -13,14 +13,6 @@ new FormModel {
 			} )
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
 				name: "panel1"
-				add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
-					name: "scrollPane1"
-					add( new FormComponent( "javax.swing.JTable" ) {
-						name: "table1"
-					} )
-				}, new FormLayoutConstraints( class java.lang.String ) {
-					"value": "Center"
-				} )
 				add( new FormComponent( "javax.swing.JSpinner" ) {
 					name: "spinner1"
 				}, new FormLayoutConstraints( class java.lang.String ) {
@@ -31,6 +23,39 @@ new FormModel {
 					"text": "text"
 				}, new FormLayoutConstraints( class java.lang.String ) {
 					"value": "West"
+				} )
+				add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+					name: "scrollPane1"
+					add( new FormComponent( "javax.swing.JTable" ) {
+						name: "table1"
+						"model": new com.jformdesigner.model.SwingTableModel( new java.util.Vector {
+							add( new java.util.Vector {
+								add( "1" )
+								add( "3" )
+							} )
+							add( new java.util.Vector {
+								add( "4" )
+								add( "5" )
+							} )
+						}, new java.util.Vector {
+							add( null )
+							add( null )
+						}, new java.util.Vector {
+							add( null )
+							add( class java.lang.String )
+						}, new java.util.Vector {
+							add( null )
+							add( null )
+						}, new java.util.Vector {
+							add( null )
+							add( null )
+						} )
+						"font": new com.jformdesigner.model.SwingDerivedFont( null, 0, 2, false )
+						"autoCreateRowSorter": true
+						"fillsViewportHeight": true
+					} )
+				}, new FormLayoutConstraints( class java.lang.String ) {
+					"value": "Center"
 				} )
 			}, new FormLayoutConstraints( class java.lang.String ) {
 				"value": "Center"

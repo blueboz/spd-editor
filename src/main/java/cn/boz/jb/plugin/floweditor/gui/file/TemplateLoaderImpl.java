@@ -162,7 +162,7 @@ public class TemplateLoaderImpl implements TemplateLoader {
                 } else if ("callActivity".equals(eName)) {
                     CallActivity callActivity = new CallActivity();
                     setRectBridge(callActivity, id, name);
-                    callActivity.setCalledElement(name);
+                    callActivity.setCalledElement(attributeValue(p.attribute("calledElement")));
                     setBound(callActivity, readBounds(showp).get(0));
                     processMap.put(id, callActivity);
 

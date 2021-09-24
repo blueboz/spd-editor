@@ -1,12 +1,14 @@
 package cn.boz.jb.plugin.floweditor.gui.widget;
 
 import cn.boz.jb.plugin.floweditor.gui.control.Alignable;
+import cn.boz.jb.plugin.floweditor.gui.events.ShapeSelectedEvent;
 import cn.boz.jb.plugin.floweditor.gui.file.TemplateLoaderImpl;
 import cn.boz.jb.plugin.floweditor.gui.hist.BaseGroupState;
 import cn.boz.jb.plugin.floweditor.gui.hist.BaseState;
 import cn.boz.jb.plugin.floweditor.gui.hist.LineState;
 import cn.boz.jb.plugin.floweditor.gui.hist.ShapeState;
 import cn.boz.jb.plugin.floweditor.gui.hist.StateChange;
+import cn.boz.jb.plugin.floweditor.gui.listener.ShapeSelectedListener;
 import cn.boz.jb.plugin.floweditor.gui.process.definition.ProcessDefinition;
 import cn.boz.jb.plugin.floweditor.gui.shape.HiPoint;
 import cn.boz.jb.plugin.floweditor.gui.shape.Label;
@@ -28,12 +30,10 @@ import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.Timer;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Cursor;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
@@ -70,10 +70,11 @@ import java.util.stream.Collectors;
  * 流程画板面板
  */
 public class ChartPanel extends JComponent implements MouseListener, MouseMotionListener, KeyListener, MouseWheelListener {
+
+    private List<ShapeSelectedListener> shapeSelectedListeners = new ArrayList<>();
     private ConstantUtils constantUtils = ConstantUtils.getInstance();
-    public static final String FROM = "from";
-    public static final String TO = "to";
-    private static boolean debug = false;
+
+    private static boolean debug = true;
     private Graphics2D currentGraphic = null;
     private Stroke currentStroke = null;
     LinkedList<Shape> shapes = new LinkedList<>();
@@ -174,9 +175,8 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
 
     public ChartPanel() {
         this.setBackground(Color.gray);
-        this.setFont(FontUtils.PF.deriveFont(Font.PLAIN,12));
+        this.setFont(FontUtils.PF.deriveFont(Font.PLAIN, 12));
         //初始化的图形仅仅供测试
-
 
         addMouseMotionListener(this);
         addMouseListener(this);
@@ -208,8 +208,8 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
     public void setModeOfNewLine(Class<? extends Line> clz) {
         //由于目前
         this.setMode(MODE_LINE);
-        this.newLineClass=clz;
-        this.newShapeClass=null;
+        this.newLineClass = clz;
+        this.newShapeClass = null;
     }
 
     /**
@@ -220,8 +220,8 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
     public void setModeOfNewShape(Class<? extends Shape> clz) {
         //由于目前
         this.setMode(MODE_NEW_SHAPE);
-        this.newShapeClass=clz;
-        this.newLineClass=null;
+        this.newShapeClass = clz;
+        this.newLineClass = null;
     }
 
 
@@ -707,7 +707,7 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
             if (newShapeClass != null && MODE_NEW_SHAPE == mode) {
                 try {
                     Shape shape = newShapeClass.getDeclaredConstructor().newInstance();
-                    shape.drawNewShape(this,rect);
+                    shape.drawNewShape(this, rect);
                 } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
                     e.printStackTrace();
                 }
@@ -718,7 +718,7 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
     }
 
     private void drawDragShape() {
-        Graphics2D g2d =  this.currentGraphic;
+        Graphics2D g2d = this.currentGraphic;
 
         if (dragPressObj != null) {
             markColor();
@@ -877,7 +877,7 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
         if (!debug) {
             return;
         }
-        Graphics2D g = (Graphics2D) this.currentGraphic;
+        Graphics2D g = this.currentGraphic;
 
         int offsetright = 200;
         Color color = g.getColor();
@@ -887,7 +887,7 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
         int lineheight = 18;
         int x = initx;
         int y = inity;
-        g.setColor(new Color(227, 227, 227, 217));
+        g.setColor(new Color(86, 86, 86, 217));
         g.fillRect(initx, inity, offsetright, lineheight * (shapes.size() * 3 + 1));
 
 
@@ -974,8 +974,8 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
      * @param text       文本内容
      */
     public void drawString(double x, double y, double w, double h, double lineheight, String text) {
-        if(text==null){
-            text="NULL";
+        if (text == null) {
+            text = "NULL";
         }
         Font font = this.currentGraphic.getFont();
         HiPoint hiPoint = translatePoint(x, y);
@@ -1149,59 +1149,60 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
         this.mode = markMode;
     }
 
-    public void setIdForLine(Line line){
-        int id=calcIdForLine(line);
-        line.setId(line.getIdPrefix()+(id+1));
+    public void setIdForLine(Line line) {
+        int id = calcIdForLine(line);
+        line.setId(line.getIdPrefix() + (id + 1));
     }
 
     private int calcIdForLine(Line line) {
         Class<? extends Line> aClass = line.getClass();
-        int maxidx=0;
+        int maxidx = 0;
         for (Line l : lines) {
-            if(l.getClass()==aClass){
+            if (l.getClass() == aClass) {
                 String id = l.getId();
                 String idPrefix = l.getIdPrefix();
                 String substring = id.substring(idPrefix.length());
                 int i = Integer.parseInt(substring);
-                if(maxidx<i){
-                    maxidx=i;
+                if (maxidx < i) {
+                    maxidx = i;
                 }
             }
         }
         return maxidx;
     }
 
-    public void setIdForShape(Shape shape){
+    public void setIdForShape(Shape shape) {
         int i = calcIdForShape(shape);
-        shape.setId(shape.getIdPrefix()+(i+1));
+        shape.setId(shape.getIdPrefix() + (i + 1));
     }
 
-    public int calcIdForShape(Shape shape){
+    public int calcIdForShape(Shape shape) {
         Class<? extends Shape> aClass = shape.getClass();
-        int maxidx=0;
+        int maxidx = 0;
         for (Shape s : shapes) {
-            if(s.getClass()==aClass){
+            if (s.getClass() == aClass) {
                 String id = s.getId();
                 String idPrefix = s.getIdPrefix();
                 String substring = id.substring(idPrefix.length());
                 int i = Integer.parseInt(substring);
-                if(maxidx<i){
-                    maxidx=i;
+                if (maxidx < i) {
+                    maxidx = i;
                 }
             }
         }
         return maxidx;
     }
+
     @Override
     public void mouseClicked(MouseEvent e) {
-        if(e.getButton()!=MouseEvent.BUTTON1){
-            return ;
+        if (e.getButton() != MouseEvent.BUTTON1) {
+            return;
         }
 
         if (whitespacePressing) {
             return;
         }
-         if (MODE_NEW_SHAPE == mode) {
+        if (MODE_NEW_SHAPE == mode) {
             //记录新句型
             HiPoint point = retranslatePoint(e.getPoint());
 
@@ -1319,8 +1320,9 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
 
     @Override
     public void mousePressed(MouseEvent e) {
-        if(e.getButton()!=MouseEvent.BUTTON1){
-            return ;
+        this.grabFocus();
+        if (e.getButton() != MouseEvent.BUTTON1) {
+            return;
         }
         if (MODE_MOVE == mode || whitespacePressing) {
             this.boardMoveStartPoint = e.getPoint();
@@ -1408,6 +1410,18 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
             }
 
 
+            List<Object> selectObj = new ArrayList<>();
+            selectObj.addAll(lines.stream().filter(Line::isSelected).collect(Collectors.toList()));
+            selectObj.addAll(shapes.stream().filter(Shape::isDraging).collect(Collectors.toList()));
+
+            if(selectObj.size()==1){
+                fireShapeSelected(selectObj.get(0));
+            }else if(selectObj.size()>1){
+                fireShapeSelected(null);
+            }else{
+                fireShapeSelected(this);
+            }
+
             repaint();
         }
         //取得虚拟对象，画画
@@ -1454,21 +1468,21 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
                 repaint();
                 return;
             }
-            try{
+            try {
                 Line line = newLineClass.getConstructor().newInstance();
                 //进行关联
                 line.setStartShape(lineStartObj);
                 line.setEndShape(endShape);
                 //保证ID与name 被初始化
                 setIdForLine(line);
-                line.init(lineStartObj,endShape);
+                line.init(lineStartObj, endShape);
                 lineStartObj.headOfLine.add(line);
                 endShape.tailOfLine.add(line);
                 lineStartObj = null;
                 lineCursorTracker = null;
                 addLine(line);
                 repaint();
-            }catch (Exception ee){
+            } catch (Exception ee) {
                 ee.printStackTrace();
             }
         }
@@ -1531,8 +1545,8 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        if(e.getButton()!=MouseEvent.BUTTON1){
-            return ;
+        if (e.getButton() != MouseEvent.BUTTON1) {
+            return;
         }
         if (whitespacePressing || ctrlPressing) {
             return;
@@ -2419,47 +2433,48 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
     public void keyPressed(KeyEvent e) {
         int keyCode = e.getKeyCode();
         if (ctrlPressing) {
-            if (keyCode == 65) {
+
+            if (keyCode == KeyEvent.VK_A) {
                 //Ctrl+A
                 for (Shape shape : shapes) {
                     shape.focus(null);
                 }
-            } else if (keyCode == 90) {
+            } else if (keyCode == KeyEvent.VK_Z) {
                 //Ctrl+z
                 undo();
-            } else if (keyCode == 89) {
+            } else if (keyCode == KeyEvent.VK_Y) {
                 //Ctrl+Y
                 redo();
-            } else if (keyCode == 67) {
+            } else if (keyCode == KeyEvent.VK_C) {
                 //Ctrl+C
                 copy();
-            } else if (keyCode == 86) {
+            } else if (keyCode == KeyEvent.VK_V) {
                 //Ctrl+V
                 paste();
-            }else if(keyCode==83){
+            } else if (keyCode == KeyEvent.VK_S) {
                 //Ctrl+S
                 save();
             }
 
         }
 
-        if (16 == e.getKeyCode()) {
+        if (KeyEvent.VK_SHIFT == e.getKeyCode()) {
             if (!shiftPressing) {
                 shiftPressing = true;
             }
         }
-        if (17 == e.getKeyCode()) {
+        if (KeyEvent.VK_CONTROL == e.getKeyCode()) {
             //ctrl控制键
             if (ctrlPressing != true) {
                 ctrlPressing = true;
                 markCursor();
             }
-        } else if (32 == e.getKeyCode()) {
+        } else if (KeyEvent.VK_SPACE == e.getKeyCode()) {
             //空格键，标识移动
             markCursor();
             whitespacePressing = true;
             this.setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
-        } else if (27 == e.getKeyCode()) {
+        } else if (KeyEvent.VK_ESCAPE == e.getKeyCode()) {
             //esc键
             if (mode == MODE_LINE) {
                 lineStartObj = null;
@@ -2478,24 +2493,24 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
                     shape.setResizing(false);
                 }
             }
-        } else if (127 == e.getKeyCode()) {
+        } else if (KeyEvent.VK_DELETE == e.getKeyCode()) {
             shapeDelete();
-        } else if (37 == e.getKeyCode()) {
+        } else if (KeyEvent.VK_LEFT == e.getKeyCode()) {
             //LEFT
             draggingOffsetX = -1;
             draggingOffsetY = 0;
             doDrag();
-        } else if (38 == e.getKeyCode()) {
+        } else if (KeyEvent.VK_UP == e.getKeyCode()) {
             //UP
             draggingOffsetX = 0;
             draggingOffsetY = -1;
             doDrag();
-        } else if (39 == e.getKeyCode()) {
+        } else if (KeyEvent.VK_RIGHT == e.getKeyCode()) {
             //RIGHT
             draggingOffsetX = 1;
             draggingOffsetY = 0;
             doDrag();
-        } else if (40 == e.getKeyCode()) {
+        } else if (KeyEvent.VK_DOWN == e.getKeyCode()) {
             //DOWN
             draggingOffsetX = 0;
             draggingOffsetY = 1;
@@ -2557,11 +2572,11 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
         List<Shape> collect = shapes.stream().filter(it -> it.isDraging()).collect(Collectors.toList());
         List<BaseState> befores = new ArrayList<>();
         for (Shape shape : collect) {
-            if(shape instanceof Label){
-                Label label= (Label) shape;
+            if (shape instanceof Label) {
+                Label label = (Label) shape;
                 Line boundLine = label.getBoundLine();
                 boundLine.setSelected(true);
-            }else{
+            } else {
                 List<Line> headOfLine = shape.headOfLine;
                 ///关联删除
                 for (Line line : headOfLine) {
@@ -2899,10 +2914,58 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
     }
 
     public boolean isModified() {
-        if(stateHistory.size()>0){
+        if (stateHistory.size() > 0) {
             return true;
         }
         return false;
 
+    }
+
+    /**
+     * 触发图形选中监听器
+     *
+     * @param shape
+     */
+    private void fireShapeSelected(Object shape) {
+        System.out.println("selected:" + shape);
+        ShapeSelectedEvent shapeSelectedEvent = new ShapeSelectedEvent(shape);
+        shapeSelectedListeners.forEach(listener -> listener.shapeSelected(shapeSelectedEvent));
+    }
+
+
+    /**
+     * 图形选中监听
+     *
+     * @param listener
+     */
+    public void registerShapeSelectedListener(ShapeSelectedListener listener) {
+        shapeSelectedListeners.add(listener);
+    }
+
+    /**
+     * 图形选中监听
+     *
+     * @param listener
+     */
+    public void unRegisterShapeSelectedListener(ShapeSelectedListener listener) {
+        shapeSelectedListeners.remove(listener);
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public void setName(String name) {
+        this.name = name;
     }
 }

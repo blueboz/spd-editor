@@ -43,7 +43,7 @@ public class RandomColorUtils {
     }
 
     private static boolean isDark(int r,int g,int b) {
-        return !(r * 0.299 + g * 0.578 + b * 0.114 >= 192);
+        return !(r * 0.299 + g * 0.578 + b * 0.114 >= 200);
 
     }
 }

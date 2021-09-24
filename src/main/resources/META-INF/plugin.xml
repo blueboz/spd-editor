@@ -23,6 +23,9 @@
 
     <actions>
         <!-- Add your actions here -->
+        <action class="cn.boz.jb.plugin.addbom.AddBomAction" id="addBomAction" description="添加UTF-8 BOM" text="AddBom" icon="SpdEditorIcons.BOM_16_ICON">
+            <add-to-group group-id="ProjectViewPopupMenu" anchor="before" relative-to-action="EditorPaste"></add-to-group>
+        </action>
     </actions>
 
 

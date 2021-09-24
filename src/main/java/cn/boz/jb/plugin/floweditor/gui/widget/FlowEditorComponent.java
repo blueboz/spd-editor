@@ -19,10 +19,10 @@ import cn.boz.jb.plugin.floweditor.gui.utils.IcoMoonUtils;
 
 import javax.swing.JComponent;
 import javax.swing.JPanel;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.FlowLayout;
-import java.awt.LayoutManager;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -32,16 +32,26 @@ public class FlowEditorComponent extends JComponent implements MouseListener {
 
     private ChartPanel gPanel;
     private JPanel menu;
+    PropertyEditor propertyEditor;
 
     public FlowEditorComponent() {
+        //处理图形组件
         gPanel = new ChartPanel();
+
+        //处理菜单组件
         menu = new JPanel();
         menu.setBackground(ConstantUtils.getInstance().getBtnBarColor());
         processMenu();
+
+        //处理属性编辑器组件
+        propertyEditor = new PropertyEditor(gPanel);
+
         BorderLayout borderLayout = new BorderLayout();
         this.setLayout(borderLayout);
+
         this.add(gPanel,BorderLayout.CENTER);
         this.add(menu,BorderLayout.NORTH);
+        this.add(propertyEditor,BorderLayout.SOUTH);
     }
 
     /**
@@ -93,9 +103,9 @@ public class FlowEditorComponent extends JComponent implements MouseListener {
         Button crosshairs = new Button(FontUtils.crosshairs(), false, "crosshairs");
         crosshairs.addMouseListener(this);
         menu.add(crosshairs);
-        Button winclose = new Button(FontUtils.windowclose(), false, "winclose");
-        winclose.addMouseListener(this);
-        menu.add(winclose);
+//        Button winclose = new Button(FontUtils.windowclose(), false, "winclose");
+//        winclose.addMouseListener(this);
+//        menu.add(winclose);
         Button equation = new Button(FontUtils.cube(), false, "equation");
         equation.addMouseListener(this);
         menu.add(equation);
@@ -136,6 +146,20 @@ public class FlowEditorComponent extends JComponent implements MouseListener {
                     theme.setTitle(FontUtils.paint());
                 } else if (title.equals(FontUtils.paint())) {
                     theme.setTitle(FontUtils.sun());
+                }
+                title = theme.getTitle();
+                if (title.equals(FontUtils.sun())) {
+                    ConstantUtils.getInstance().setColorModeLight();
+                    menu.setBackground(ConstantUtils.getInstance().getBtnBarColor());
+                    repaint();
+                } else if (title.equals(FontUtils.moon())) {
+                    ConstantUtils.getInstance().setColorModeDark();
+                    menu.setBackground(ConstantUtils.getInstance().getBtnBarColor());
+                    repaint();
+                } else if (title.equals(FontUtils.paint())) {
+                    ConstantUtils.getInstance().setColorfulMode();
+                    menu.setBackground(ConstantUtils.getInstance().getBtnBarColor());
+                    repaint();
                 }
                 super.mouseClicked(e);
             }
@@ -248,20 +272,7 @@ public class FlowEditorComponent extends JComponent implements MouseListener {
                 gPanel.save();
                 break;
             case "theme":
-                String title = myButton.getTitle();
-                if (title.equals(FontUtils.sun())) {
-                    ConstantUtils.getInstance().setColorModeLight();
-                    this.menu.setBackground(ConstantUtils.getInstance().getBtnBarColor());
-                    repaint();
-                } else if (title.equals(FontUtils.moon())) {
-                    ConstantUtils.getInstance().setColorModeDark();
-                    this.menu.setBackground(ConstantUtils.getInstance().getBtnBarColor());
-                    repaint();
-                } else if (title.equals(FontUtils.paint())) {
-                    ConstantUtils.getInstance().setColorfulMode();
-                    this.menu.setBackground(ConstantUtils.getInstance().getBtnBarColor());
-                    repaint();
-                }
+
 
                 break;
             case "label":

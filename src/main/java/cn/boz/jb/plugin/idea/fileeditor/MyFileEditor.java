@@ -15,12 +15,16 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.JComponent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MyFileEditor implements FileEditor {
 
     private VirtualFile virtualFile;
 
     SpdEditor spdEditor;
+    private FileEditorState fileEditorState;
+    private Map userdata=new HashMap<>();
 
     public MyFileEditor(VirtualFile virtualFile) {
         this.virtualFile = virtualFile;
@@ -36,7 +40,7 @@ public class MyFileEditor implements FileEditor {
 
     @Override
     public @Nullable JComponent getPreferredFocusedComponent() {
-        return spdEditor;
+        return spdEditor.getChartPanel();
     }
 
     @Override
@@ -46,7 +50,7 @@ public class MyFileEditor implements FileEditor {
 
     @Override
     public void setState(@NotNull FileEditorState fileEditorState) {
-
+        this.fileEditorState=fileEditorState;
     }
 
     @Override
@@ -87,13 +91,17 @@ public class MyFileEditor implements FileEditor {
 
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public <T> @Nullable T getUserData(@NotNull Key<T> key) {
-        return null;
+        System.out.println("get user data:"+key);
+        return (T) userdata.get(key);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public <T> void putUserData(@NotNull Key<T> key, @Nullable T t) {
-
+        userdata.put(key,t);
+        System.out.println("put user data:"+key+" t:"+t);
     }
 }
