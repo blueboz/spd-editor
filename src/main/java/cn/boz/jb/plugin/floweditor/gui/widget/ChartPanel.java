@@ -1,6 +1,7 @@
 package cn.boz.jb.plugin.floweditor.gui.widget;
 
 import cn.boz.jb.plugin.floweditor.gui.control.Alignable;
+import cn.boz.jb.plugin.floweditor.gui.control.PropertyObject;
 import cn.boz.jb.plugin.floweditor.gui.events.ShapeSelectedEvent;
 import cn.boz.jb.plugin.floweditor.gui.file.TemplateLoaderImpl;
 import cn.boz.jb.plugin.floweditor.gui.hist.BaseGroupState;
@@ -10,6 +11,8 @@ import cn.boz.jb.plugin.floweditor.gui.hist.ShapeState;
 import cn.boz.jb.plugin.floweditor.gui.hist.StateChange;
 import cn.boz.jb.plugin.floweditor.gui.listener.ShapeSelectedListener;
 import cn.boz.jb.plugin.floweditor.gui.process.definition.ProcessDefinition;
+import cn.boz.jb.plugin.floweditor.gui.property.Property;
+import cn.boz.jb.plugin.floweditor.gui.property.impl.TextFieldProperty;
 import cn.boz.jb.plugin.floweditor.gui.shape.HiPoint;
 import cn.boz.jb.plugin.floweditor.gui.shape.Label;
 import cn.boz.jb.plugin.floweditor.gui.shape.Line;
@@ -69,12 +72,12 @@ import java.util.stream.Collectors;
 /**
  * 流程画板面板
  */
-public class ChartPanel extends JComponent implements MouseListener, MouseMotionListener, KeyListener, MouseWheelListener {
+public class ChartPanel extends JComponent implements MouseListener, MouseMotionListener, KeyListener, MouseWheelListener, PropertyObject {
 
     private List<ShapeSelectedListener> shapeSelectedListeners = new ArrayList<>();
     private ConstantUtils constantUtils = ConstantUtils.getInstance();
 
-    private static boolean debug = true;
+    private static boolean debug = false;
     private Graphics2D currentGraphic = null;
     private Stroke currentStroke = null;
     LinkedList<Shape> shapes = new LinkedList<>();
@@ -175,7 +178,7 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
 
     public ChartPanel() {
         this.setBackground(Color.gray);
-        this.setFont(FontUtils.PF.deriveFont(Font.PLAIN, 12));
+//        this.setFont(FontUtils.PF.deriveFont(Font.PLAIN, 12));
         //初始化的图形仅仅供测试
 
         addMouseMotionListener(this);
@@ -1410,15 +1413,15 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
             }
 
 
-            List<Object> selectObj = new ArrayList<>();
+            List<PropertyObject> selectObj = new ArrayList<>();
             selectObj.addAll(lines.stream().filter(Line::isSelected).collect(Collectors.toList()));
             selectObj.addAll(shapes.stream().filter(Shape::isDraging).collect(Collectors.toList()));
 
-            if(selectObj.size()==1){
+            if (selectObj.size() == 1) {
                 fireShapeSelected(selectObj.get(0));
-            }else if(selectObj.size()>1){
+            } else if (selectObj.size() > 1) {
                 fireShapeSelected(null);
-            }else{
+            } else {
                 fireShapeSelected(this);
             }
 
@@ -2926,7 +2929,7 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
      *
      * @param shape
      */
-    private void fireShapeSelected(Object shape) {
+    private void fireShapeSelected(PropertyObject shape) {
         System.out.println("selected:" + shape);
         ShapeSelectedEvent shapeSelectedEvent = new ShapeSelectedEvent(shape);
         shapeSelectedListeners.forEach(listener -> listener.shapeSelected(shapeSelectedEvent));
@@ -2967,5 +2970,14 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
     @Override
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public Property[] getPropertyEditors() {
+        Property[] ps = new Property[]{
+                new TextFieldProperty("id", this),
+                new TextFieldProperty("name", this)
+        };
+        return ps;
     }
 }

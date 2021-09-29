@@ -19,7 +19,7 @@ new FormModel {
 					"value": "South"
 				} )
 				add( new FormComponent( "javax.swing.JButton" ) {
-					name: "button1"
+					name: "buttfsadfon1"
 					"text": "text"
 				}, new FormLayoutConstraints( class java.lang.String ) {
 					"value": "West"
@@ -51,7 +51,6 @@ new FormModel {
 							add( null )
 						} )
 						"font": new com.jformdesigner.model.SwingDerivedFont( null, 0, 2, false )
-						"autoCreateRowSorter": true
 						"fillsViewportHeight": true
 					} )
 				}, new FormLayoutConstraints( class java.lang.String ) {

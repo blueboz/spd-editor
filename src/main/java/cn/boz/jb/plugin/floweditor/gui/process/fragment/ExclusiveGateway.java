@@ -2,6 +2,8 @@ package cn.boz.jb.plugin.floweditor.gui.process.fragment;
 
 import cn.boz.jb.plugin.floweditor.gui.process.Gateway;
 import cn.boz.jb.plugin.floweditor.gui.process.bridge.PrismaticBridge;
+import cn.boz.jb.plugin.floweditor.gui.property.Property;
+import cn.boz.jb.plugin.floweditor.gui.property.impl.TextFieldProperty;
 import cn.boz.jb.plugin.floweditor.gui.shape.HiPoint;
 import cn.boz.jb.plugin.floweditor.gui.shape.Rect;
 import cn.boz.jb.plugin.floweditor.gui.utils.FontUtils;
@@ -64,4 +66,5 @@ public class ExclusiveGateway extends PrismaticBridge implements Gateway {
         super.init(hiPoint);
         this.setName("For Gateway");
     }
+
 }
