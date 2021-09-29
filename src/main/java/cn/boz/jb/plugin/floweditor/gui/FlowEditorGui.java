@@ -34,6 +34,7 @@ import java.io.IOException;
 public class FlowEditorGui extends JFrame implements MouseListener {
 
     FlowEditorComponent flowEditorComponent;
+
     public FlowEditorGui() {
 
         this.setTitle("流程图工具v1.0");
@@ -63,7 +64,7 @@ public class FlowEditorGui extends JFrame implements MouseListener {
                 FlowEditorGui xServiceGui = new FlowEditorGui();
                 xServiceGui.setVisible(true);
                 Rectangle rectangle = ge.getMaximumWindowBounds();
-                xServiceGui.setBounds(rectangle.x + rectangle.width / 4, rectangle.y + rectangle.height / 4, rectangle.width / 2, rectangle.height / 2);
+                xServiceGui.setBounds((int)rectangle.getWidth()/2,0, rectangle.width/2, rectangle.height);
                 xServiceGui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             } catch (Exception e) {
                 e.printStackTrace();

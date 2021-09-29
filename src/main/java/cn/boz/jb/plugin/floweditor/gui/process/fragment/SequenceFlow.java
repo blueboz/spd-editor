@@ -1,6 +1,8 @@
 package cn.boz.jb.plugin.floweditor.gui.process.fragment;
 
 import cn.boz.jb.plugin.floweditor.gui.process.bridge.LineBridge;
+import cn.boz.jb.plugin.floweditor.gui.property.Property;
+import cn.boz.jb.plugin.floweditor.gui.property.impl.TextFieldProperty;
 import cn.boz.jb.plugin.floweditor.gui.shape.HiPoint;
 import cn.boz.jb.plugin.floweditor.gui.shape.Label;
 import cn.boz.jb.plugin.floweditor.gui.shape.Shape;
@@ -93,5 +95,14 @@ public class SequenceFlow extends LineBridge {
         super.init(startShape,endShape);
         this.setSourceRef(startShape.getId());
         this.setTargetRef(endShape.getId());
+    }
+
+    @Override
+    public Property[] getPropertyEditors() {
+        Property[] ps = new Property[]{
+                new TextFieldProperty("name", this),
+                new TextFieldProperty("condition", this),
+        };
+        return ps;
     }
 }

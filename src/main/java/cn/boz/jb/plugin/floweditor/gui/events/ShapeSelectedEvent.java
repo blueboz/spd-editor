@@ -1,18 +1,20 @@
 package cn.boz.jb.plugin.floweditor.gui.events;
 
+import cn.boz.jb.plugin.floweditor.gui.control.PropertyObject;
+
 public class ShapeSelectedEvent {
 
-    private Object selectedObject;
+    private PropertyObject selectedObject;
 
-    public ShapeSelectedEvent(Object selectedObject) {
+    public ShapeSelectedEvent(PropertyObject selectedObject) {
         this.selectedObject = selectedObject;
     }
 
-    public Object getSelectedObject() {
+    public PropertyObject getSelectedObject() {
         return selectedObject;
     }
 
-    public void setSelectedObject(Object selectedObject) {
+    public void setSelectedObject(PropertyObject selectedObject) {
         this.selectedObject = selectedObject;
     }
 }

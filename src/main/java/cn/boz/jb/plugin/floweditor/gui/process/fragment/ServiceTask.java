@@ -1,6 +1,9 @@
 package cn.boz.jb.plugin.floweditor.gui.process.fragment;
 
 import cn.boz.jb.plugin.floweditor.gui.process.bridge.RectBridge;
+import cn.boz.jb.plugin.floweditor.gui.property.Property;
+import cn.boz.jb.plugin.floweditor.gui.property.impl.TextAreaProperty;
+import cn.boz.jb.plugin.floweditor.gui.property.impl.TextFieldProperty;
 import cn.boz.jb.plugin.floweditor.gui.shape.HiPoint;
 import cn.boz.jb.plugin.floweditor.gui.shape.Rect;
 import cn.boz.jb.plugin.floweditor.gui.utils.FontUtils;
@@ -68,6 +71,7 @@ public class ServiceTask extends RectBridge {
         element.addAttribute("listener", this.getListener());
         return element;
     }
+
     @Override
     public String getIdPrefix() {
         return "servicetask";
@@ -84,7 +88,15 @@ public class ServiceTask extends RectBridge {
     public void init(Rect rect) {
         super.init(rect);
         this.setName("Service Task");
+    }
 
+    @Override
+    public Property[] getPropertyEditors() {
+        Property[] ps = new Property[]{
+                new TextAreaProperty("expression", this),
+                new TextFieldProperty("listener", this),
+        };
+        return ps;
     }
 }
 

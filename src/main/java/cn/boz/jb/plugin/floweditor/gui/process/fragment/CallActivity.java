@@ -1,6 +1,8 @@
 package cn.boz.jb.plugin.floweditor.gui.process.fragment;
 
 import cn.boz.jb.plugin.floweditor.gui.process.bridge.RectBridge;
+import cn.boz.jb.plugin.floweditor.gui.property.Property;
+import cn.boz.jb.plugin.floweditor.gui.property.impl.TextFieldProperty;
 import cn.boz.jb.plugin.floweditor.gui.shape.HiPoint;
 import cn.boz.jb.plugin.floweditor.gui.shape.Rect;
 import cn.boz.jb.plugin.floweditor.gui.utils.FontUtils;
@@ -74,5 +76,13 @@ public class CallActivity extends RectBridge {
     public void init(HiPoint hiPoint) {
         super.init(hiPoint);
         this.setName("Call activity");
+    }
+
+    @Override
+    public Property[] getPropertyEditors() {
+        Property[] ps = new Property[]{
+                new TextFieldProperty("calledElement", this),
+        };
+        return ps;
     }
 }

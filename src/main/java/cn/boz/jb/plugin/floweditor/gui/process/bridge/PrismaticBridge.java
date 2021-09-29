@@ -1,6 +1,8 @@
 package cn.boz.jb.plugin.floweditor.gui.process.bridge;
 
 import cn.boz.jb.plugin.floweditor.gui.process.control.Diagram;
+import cn.boz.jb.plugin.floweditor.gui.property.Property;
+import cn.boz.jb.plugin.floweditor.gui.property.impl.TextFieldProperty;
 import cn.boz.jb.plugin.floweditor.gui.shape.HiPoint;
 import cn.boz.jb.plugin.floweditor.gui.shape.Prismatic;
 import cn.boz.jb.plugin.floweditor.gui.shape.Rect;
@@ -38,5 +40,13 @@ public class PrismaticBridge extends Prismatic implements Diagram {
         this.setY(rect.getY());
         this.setWidth(40);
         this.setHeight(40);
+    }
+
+    @Override
+    public Property[] getPropertyEditors() {
+        Property[] ps = new Property[]{
+                new TextFieldProperty("name", this),
+        };
+        return ps;
     }
 }

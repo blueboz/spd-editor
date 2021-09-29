@@ -19,8 +19,6 @@ import cn.boz.jb.plugin.floweditor.gui.utils.IcoMoonUtils;
 
 import javax.swing.JComponent;
 import javax.swing.JPanel;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.MouseAdapter;
@@ -32,7 +30,7 @@ public class FlowEditorComponent extends JComponent implements MouseListener {
 
     private ChartPanel gPanel;
     private JPanel menu;
-    PropertyEditor propertyEditor;
+    PropertyEditorGui propertyEditor;
 
     public FlowEditorComponent() {
         //处理图形组件
@@ -44,7 +42,7 @@ public class FlowEditorComponent extends JComponent implements MouseListener {
         processMenu();
 
         //处理属性编辑器组件
-        propertyEditor = new PropertyEditor(gPanel);
+        propertyEditor = new PropertyEditorGui(gPanel);
 
         BorderLayout borderLayout = new BorderLayout();
         this.setLayout(borderLayout);

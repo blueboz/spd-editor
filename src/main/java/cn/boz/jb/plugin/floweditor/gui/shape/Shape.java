@@ -2,6 +2,7 @@ package cn.boz.jb.plugin.floweditor.gui.shape;
 
 import cn.boz.jb.plugin.floweditor.gui.control.Alignable;
 import cn.boz.jb.plugin.floweditor.gui.control.Attachable;
+import cn.boz.jb.plugin.floweditor.gui.control.PropertyObject;
 import cn.boz.jb.plugin.floweditor.gui.control.Resizable;
 import cn.boz.jb.plugin.floweditor.gui.hist.BaseState;
 import cn.boz.jb.plugin.floweditor.gui.hist.Restorable;
@@ -26,7 +27,7 @@ import java.util.Random;
 /**
  * 图形组件
  */
-public class Shape implements Restorable, Resizable, Alignable, Attachable,Cloneable {
+public class Shape implements Restorable, Resizable, Alignable, Attachable,Cloneable, PropertyObject {
     protected String id;
     protected String name;
     //鼠标当前是否悬浮于图形上面
@@ -1252,6 +1253,7 @@ public class Shape implements Restorable, Resizable, Alignable, Attachable,Clone
             return true;
         }
     }
+
 
 
 }

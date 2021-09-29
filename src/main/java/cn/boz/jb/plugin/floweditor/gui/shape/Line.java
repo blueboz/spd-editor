@@ -1,15 +1,16 @@
 package cn.boz.jb.plugin.floweditor.gui.shape;
 
+import cn.boz.jb.plugin.floweditor.gui.control.PropertyObject;
 import cn.boz.jb.plugin.floweditor.gui.hist.BaseState;
 import cn.boz.jb.plugin.floweditor.gui.hist.LineState;
 import cn.boz.jb.plugin.floweditor.gui.hist.Restorable;
+import cn.boz.jb.plugin.floweditor.gui.property.Property;
 import cn.boz.jb.plugin.floweditor.gui.utils.ConstantUtils;
 import cn.boz.jb.plugin.floweditor.gui.utils.LineUtils;
 import cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel;
 
 import java.awt.BasicStroke;
 import java.awt.Point;
-import java.awt.Stroke;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -18,7 +19,7 @@ import java.util.List;
 /**
  * 线段
  */
-public class Line implements Restorable, Comparable {
+public class Line implements Restorable, Comparable, PropertyObject {
     protected String id;
     protected String name;
 
@@ -716,5 +717,10 @@ public class Line implements Restorable, Comparable {
         Label label = new Label(0, 0, 0, 0,this.getName());
         this.setLabel(label);
         label.setBoundLine(this);
+    }
+
+    @Override
+    public Property[] getPropertyEditors() {
+        return PropertyObject.super.getPropertyEditors();
     }
 }

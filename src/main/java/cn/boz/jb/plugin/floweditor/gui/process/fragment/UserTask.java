@@ -1,16 +1,15 @@
 package cn.boz.jb.plugin.floweditor.gui.process.fragment;
 
 import cn.boz.jb.plugin.floweditor.gui.process.bridge.RectBridge;
+import cn.boz.jb.plugin.floweditor.gui.property.Property;
+import cn.boz.jb.plugin.floweditor.gui.property.impl.TextAreaProperty;
+import cn.boz.jb.plugin.floweditor.gui.property.impl.TextFieldProperty;
 import cn.boz.jb.plugin.floweditor.gui.shape.HiPoint;
 import cn.boz.jb.plugin.floweditor.gui.shape.Rect;
-import cn.boz.jb.plugin.floweditor.gui.shape.Shape;
-import cn.boz.jb.plugin.floweditor.gui.utils.FontUtils;
 import cn.boz.jb.plugin.floweditor.gui.utils.IcoMoonUtils;
 import cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
-
-import java.awt.Color;
 
 public class UserTask extends RectBridge {
 
@@ -59,12 +58,7 @@ public class UserTask extends RectBridge {
     public String getExpression() {
         return expression;
     }
-    public String getExpressionExt(){
-        if(expression==null){
-            return "";
-        }
-        return expression.replace("#LEY#","\n");
-    }
+
 
     public void setExpression(String expression) {
         this.expression = expression;
@@ -154,5 +148,20 @@ public class UserTask extends RectBridge {
     @Override
     public String getIdPrefix() {
         return "userTask";
+    }
+
+    @Override
+    public Property[] getPropertyEditors() {
+        Property[] ps = new Property[]{
+                new TextFieldProperty("bussinesKey", this),
+                new TextFieldProperty("bussinesId", this),
+                new TextFieldProperty("bussinesDescrition", this),
+                new TextFieldProperty("rights", this),
+                new TextAreaProperty("expression", this),
+                new TextFieldProperty("validSecond", this),
+                new TextFieldProperty("openSecond", this),
+                new TextFieldProperty("eventListener", this),
+        };
+        return ps;
     }
 }
