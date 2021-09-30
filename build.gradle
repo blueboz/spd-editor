@@ -19,6 +19,16 @@ dependencies {
 
 }
 
+sourceSets {
+    main {
+        resources {
+            exclude 'PingFang*.ttf'
+            exclude 'README.md'
+            exclude 'import.zip'
+            exclude 'background.jpeg'
+        }
+    }
+}
 
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/
@@ -27,7 +37,7 @@ intellij {
     localPath = 'F:\\App\\JetBrains\\IntelliJ IDEA 2021.2.1'
 //    instrumentCode = false
 //    sandboxDir.set("${project.rootDir}/.sandbox")
-    sandboxDir ="${project.rootDir}/.sandbox"
+    sandboxDir = "${project.rootDir}/.sandbox"
 
 }
 
@@ -47,8 +57,8 @@ tasks.withType(JavaCompile) {
     options.compilerArgs << '-Xlint:unchecked'
 }
 
-runIde{
-    autoReloadPlugins=true
+runIde {
+    autoReloadPlugins = false
 }
 
 

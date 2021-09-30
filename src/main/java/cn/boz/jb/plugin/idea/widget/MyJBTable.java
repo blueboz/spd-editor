@@ -1,8 +1,11 @@
-package cn.boz.jb.plugin.floweditor.gui.widget;
+package cn.boz.jb.plugin.idea.widget;
 
+import cn.boz.jb.plugin.floweditor.gui.control.PropertyObject;
+import cn.boz.jb.plugin.floweditor.gui.events.ShapeSelectedEvent;
+import cn.boz.jb.plugin.floweditor.gui.listener.ShapeSelectedListener;
 import cn.boz.jb.plugin.floweditor.gui.property.Property;
+import com.intellij.ui.table.JBTable;
 
-import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
@@ -10,31 +13,32 @@ import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MyTable extends JTable {
+public class MyJBTable extends JBTable implements ShapeSelectedListener {
 
-    public static int DEFAULT_ROW_HEIGHT=28;
-    private MyTableCellEditor myTableCellEditor;
+    public static int DEFAULT_ROW_HEIGHT = 28;
+    private MyJBTableCellEditor myTableCellEditor;
     private MyTableModel myTableModel;
-    private MyTableCellRender myTableCellRender;
+    private MyJBTableCellRender myTableCellRender;
     private List<Property> myProperties = new ArrayList<>();
+    private PropertyObject operatedObject;
 
-    public MyTable() {
-        myTableCellEditor = new MyTableCellEditor();
+    public MyJBTable() {
+        myTableCellEditor = new MyJBTableCellEditor();
         myTableModel = new MyTableModel();
-        myTableCellRender = new MyTableCellRender();
+        myTableCellRender = new MyJBTableCellRender();
         this.setModel(myTableModel);
         //初始化各行高度
         for (int i = 0; i < myProperties.size(); i++) {
             this.setRowHeight(i, myProperties.get(i).getRowHeight());
         }
-        this.getTableHeader().setPreferredSize(new Dimension(0,DEFAULT_ROW_HEIGHT));
+        this.getTableHeader().setPreferredSize(new Dimension(0, DEFAULT_ROW_HEIGHT));
 
     }
 
 
     public void clearProperies() {
         //编辑器是否应该重新获取
-        if(this.isEditing()){
+        if (this.isEditing()) {
             this.getCellEditor().stopCellEditing();
         }
 
@@ -72,6 +76,36 @@ public class MyTable extends JTable {
         }
     }
 
+    @Override
+    public void shapeSelected(ShapeSelectedEvent shapeSelectedEvent) {
+
+        PropertyObject selectedObject = shapeSelectedEvent.getSelectedObject();
+        setOperatedObject(selectedObject);
+    }
+
+    /**
+     * 设置被操作的对象
+     * @param selectedObject
+     */
+    private void setOperatedObject(PropertyObject selectedObject) {
+        this.clearProperies();
+        if(selectedObject==null){
+
+            this.repaint();
+            return ;
+        }
+        //修改操作的对象的时候，是需要重新进行维护的
+        if (this.operatedObject == selectedObject) {
+            return;
+        }
+        this.operatedObject = selectedObject;
+
+        Property[] propertyEditors = operatedObject.getPropertyEditors();
+        for (Property p : propertyEditors) {
+            this.addProperty(p);
+        }
+        this.resetRowHeight();
+    }
 
     public class MyTableModel extends AbstractTableModel {
 
@@ -89,6 +123,7 @@ public class MyTable extends JTable {
         public int getColumnCount() {
             return 2;
         }
+
 
 
         @Override

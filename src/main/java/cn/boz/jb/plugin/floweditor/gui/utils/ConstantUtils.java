@@ -96,7 +96,7 @@ public class ConstantUtils {
     }
 
     /**
-     * 亮色模式下的控件颜色
+     * 暗色模式下的控件颜色
      *
      * @param
      */
@@ -108,7 +108,7 @@ public class ConstantUtils {
         shapeBackgroundColor = new Color(255, 255, 255, 65);
         shapeForegroundColor = new Color(234, 234, 234);
 
-        chartPanelBoardColor = new Color(6, 6, 6, 134);
+        chartPanelBoardColor = new Color(110, 110, 110, 185);
         chartPanelHoverBorderColor = new Color(255, 255, 255, 255);
         chartPanelFlowLineActiveColor = new Color(151, 237, 251, 255);
         chartPanelFlowLineHoverColor = new Color(145, 229, 242, 255);
@@ -122,7 +122,7 @@ public class ConstantUtils {
         chartPanelDraggingShapeColor=new Color(177, 177, 177, 255);
         chartPanelNewShapeInvalidColor= Color.RED;
         chartPanelNewShapeValidColor=Color.GREEN;
-        btnBarColor=new Color(116, 116, 116);
+        btnBarColor=new Color(162, 162, 162);
         btnColor=new Color(255, 255, 255);
         btnHoverColor=new Color(255, 255, 255);
         btnActiveColor=new Color(132, 132, 132);
@@ -144,18 +144,19 @@ public class ConstantUtils {
         shapeBackgroundColor = new Color(255, 255, 255, 228);
         shapeForegroundColor = new Color(0, 0, 0);
 
-        chartPanelBoardColor = new Color(173, 173, 173, 47);
+        chartPanelBoardColor = new Color(212, 212, 212, 255);
         chartPanelHoverBorderColor = new Color(0, 0, 0, 255);
-        chartPanelFlowLineActiveColor = new Color(0, 148, 179);
+        chartPanelFlowLineActiveColor = new Color(0, 109, 130);
         chartPanelFlowLineHoverColor = new Color(165, 165, 165);
         chartPanelFlowLineFillColor = new Color(0, 0, 0);
+        chartPanelNewFlowLineFillColor = new Color(1, 198, 230, 255);
         chartPanelBackgroundOddColor = new Color(255, 255, 255, 125);
         chartPanelBackgroundEvenColor = new Color(212, 212, 212, 112);
         chartPanelDraggingShapeColor=new Color(106, 106, 106, 255);
 
         chartPanelNewShapeInvalidColor=new Color(219, 19, 19);
         chartPanelNewShapeValidColor=new Color(0, 203, 13);
-        btnBarColor=Color.WHITE;
+        btnBarColor=new Color(234, 234, 234);
         btnColor=new Color(117, 117, 117);
         btnHoverColor=new Color(117, 117, 117);
         btnActiveColor=new Color(240, 240, 240);

@@ -5,6 +5,7 @@ import cn.boz.jb.plugin.floweditor.gui.widget.MyTable;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import java.lang.reflect.Field;
+import java.lang.reflect.Type;
 
 /**
  * 定义一个属性
@@ -26,7 +27,6 @@ public abstract class Property {
     public void setRowHeight(Integer rowHeight) {
         this.rowHeight = rowHeight;
     }
-
 
 
     public Object getOperatedObj() {
@@ -83,10 +83,11 @@ public abstract class Property {
         this.propertyRender = new JLabel();
         valueRender.setAutoscrolls(false);
         propertyRender.setAutoscrolls(false);
+
     }
 
-    public Property(String propertyName,String displayProperyName, Object operatedObj) {
-        this.displayProperyName=displayProperyName;
+    public Property(String propertyName, String displayProperyName, Object operatedObj) {
+        this.displayProperyName = displayProperyName;
         this.propertyName = propertyName;
         this.operatedObj = operatedObj;
         this.valueRender = new JLabel();
@@ -98,6 +99,21 @@ public abstract class Property {
 
     public abstract String getInputValue();
 
+    public Field getFieldOfClass(Class clz, String propertyName) {
+        try {
+            Field field = clz.getDeclaredField(propertyName);
+            return field;
+        } catch (NoSuchFieldException e) {
+            Type genericSuperclass = clz.getGenericSuperclass();
+            if (genericSuperclass != null) {
+                return getFieldOfClass((Class) genericSuperclass, propertyName);
+            }
+            return null;
+        }catch (Exception e){
+            return null;
+        }
+    }
+
     /**
      * 获取属性值
      *
@@ -105,20 +121,22 @@ public abstract class Property {
      */
     public Object getValue() {
         try {
-            Field field = operatedObj.getClass().getDeclaredField(propertyName);
+            Field field = getFieldOfClass(operatedObj.getClass(), propertyName);
             if (field != null) {
                 field.setAccessible(true);
                 Object o = field.get(operatedObj);
-                if(o==null){
+                if (o == null) {
                     return "";
                 }
                 if (o instanceof String) {
-                    String result= (String) o;
-                    return result.replace("#LEY#","\n");
+                    String result = (String) o;
+                    return result.replace("#LEY#", "\n");
                 }
                 return o;
+            } else {
+                throw new RuntimeException(propertyName + "不存在");
             }
-        } catch (NoSuchFieldException | IllegalAccessException e) {
+        } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
         return null;
@@ -131,12 +149,12 @@ public abstract class Property {
      */
     public void setValue(Object value) {
         try {
-            Field field = operatedObj.getClass().getDeclaredField(propertyName);
+            Field field = getFieldOfClass(operatedObj.getClass(), propertyName);
             if (field != null) {
                 field.setAccessible(true);
                 field.set(operatedObj, value);
             }
-        } catch (NoSuchFieldException | IllegalAccessException e) {
+        } catch ( IllegalAccessException e) {
             e.printStackTrace();
         }
     }

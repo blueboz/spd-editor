@@ -1,4 +1,4 @@
-package cn.boz.jb.plugin.floweditor.gui.widget;
+package cn.boz.jb.plugin.idea.widget;
 
 import cn.boz.jb.plugin.floweditor.gui.property.Property;
 
@@ -10,7 +10,7 @@ import javax.swing.table.TableCellEditor;
 import java.awt.Component;
 import java.util.EventObject;
 
-public class MyTableCellEditor implements TableCellEditor {
+public class MyJBTableCellEditor implements TableCellEditor {
     private EventListenerList listenerList = new EventListenerList();
 
     private JTable table;
