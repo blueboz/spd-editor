@@ -101,7 +101,7 @@ public class SequenceFlow extends LineBridge {
     public Property[] getPropertyEditors() {
         Property[] ps = new Property[]{
                 new TextFieldProperty("name", this),
-                new TextFieldProperty("condition", this),
+                new TextFieldProperty("conditionExpression", this),
         };
         return ps;
     }

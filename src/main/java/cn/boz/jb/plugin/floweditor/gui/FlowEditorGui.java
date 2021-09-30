@@ -1,22 +1,5 @@
 package cn.boz.jb.plugin.floweditor.gui;
 
-import cn.boz.jb.plugin.floweditor.gui.process.fragment.CallActivity;
-import cn.boz.jb.plugin.floweditor.gui.process.fragment.EndEvent;
-import cn.boz.jb.plugin.floweditor.gui.process.fragment.ExclusiveGateway;
-import cn.boz.jb.plugin.floweditor.gui.process.fragment.ForeachGateway;
-import cn.boz.jb.plugin.floweditor.gui.process.fragment.ParallelGateway;
-import cn.boz.jb.plugin.floweditor.gui.process.fragment.SequenceFlow;
-import cn.boz.jb.plugin.floweditor.gui.process.fragment.ServiceTask;
-import cn.boz.jb.plugin.floweditor.gui.process.fragment.StartEvent;
-import cn.boz.jb.plugin.floweditor.gui.process.fragment.UserTask;
-import cn.boz.jb.plugin.floweditor.gui.shape.Circle;
-import cn.boz.jb.plugin.floweditor.gui.shape.Line;
-import cn.boz.jb.plugin.floweditor.gui.shape.Prismatic;
-import cn.boz.jb.plugin.floweditor.gui.shape.Shape;
-import cn.boz.jb.plugin.floweditor.gui.utils.ConstantUtils;
-import cn.boz.jb.plugin.floweditor.gui.utils.FontUtils;
-import cn.boz.jb.plugin.floweditor.gui.widget.Button;
-import cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel;
 import cn.boz.jb.plugin.floweditor.gui.widget.FlowEditorComponent;
 
 import javax.imageio.ImageIO;
@@ -31,16 +14,17 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 
-public class FlowEditorGui extends JFrame implements MouseListener {
+public class FlowEditorGui extends JFrame implements MouseListener  {
 
-    FlowEditorComponent flowEditorComponent;
+    private FlowEditorComponent flowEditorComponent;
+
 
     public FlowEditorGui() {
 
         this.setTitle("流程图工具v1.0");
         BufferedImage read = null;
         try {
-            read = ImageIO.read(FlowEditorGui.class.getClassLoader().getResourceAsStream("flow2.png"));
+            read = ImageIO.read(FlowEditorGui.class.getClassLoader().getResourceAsStream("applogo.png"));
             this.setIconImage(read);
         } catch (IOException e) {
             e.printStackTrace();
@@ -48,14 +32,12 @@ public class FlowEditorGui extends JFrame implements MouseListener {
         this.setLayout(new BorderLayout());
         flowEditorComponent = new FlowEditorComponent();
         this.add(flowEditorComponent, BorderLayout.CENTER);
-//        this.pack();
 
     }
 
     /**
      * 处理菜单的相关细节
      */
-
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             try {
@@ -64,17 +46,13 @@ public class FlowEditorGui extends JFrame implements MouseListener {
                 FlowEditorGui xServiceGui = new FlowEditorGui();
                 xServiceGui.setVisible(true);
                 Rectangle rectangle = ge.getMaximumWindowBounds();
-                xServiceGui.setBounds((int)rectangle.getWidth()/2,0, rectangle.width/2, rectangle.height);
+                xServiceGui.setBounds((int) rectangle.getWidth() / 2, 0, rectangle.width / 2, rectangle.height);
                 xServiceGui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
-
         });
-
     }
-
 
     @Override
     public void mouseClicked(MouseEvent e) {
@@ -100,4 +78,7 @@ public class FlowEditorGui extends JFrame implements MouseListener {
     public void mouseExited(MouseEvent e) {
 
     }
+
+
+
 }

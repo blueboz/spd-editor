@@ -1,12 +1,12 @@
 <idea-plugin>
-    <id>org.example.spd-editor</id>
-    <name>Plugin display name here</name>
-    <vendor email="support@yourcompany.com" url="http://www.yourcompany.com">YourCompany</vendor>
+    <id>cn.boz.jb.plugin.spd-editor</id>
+    <name>Erayt Spd Editor</name>
+    <vendor email="1173626291@qq.com" url="http://blueboz.github.com">Blueboz.Chen</vendor>
 
     <description><![CDATA[
-    Enter short description for your plugin here.<br>
-    <em>most HTML tags may be used</em>
+    This is an Spd editor plugin.
     ]]></description>
+    <version>1.0.0</version>
 
     <!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html
          on how to target different products -->
@@ -18,6 +18,7 @@
                             id="myFileEditorProvider" order="last">
         </fileEditorProvider>
         <toolWindow factoryClass="cn.boz.jb.plugin.idea.toolwindow.MyToolWindowFactory" id="myToolwindow"  anchor="right" order="last"></toolWindow>
+        <fileType name="spd editor" extensions="spd" implementationClass="cn.boz.jb.plugin.idea.filetype.SpdFileType"></fileType>
     </extensions>
 
 
@@ -27,7 +28,6 @@
             <add-to-group group-id="ProjectViewPopupMenu" anchor="before" relative-to-action="EditorPaste"></add-to-group>
         </action>
     </actions>
-
 
 
 </idea-plugin>

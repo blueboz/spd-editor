@@ -30,7 +30,7 @@ public class FlowEditorComponent extends JComponent implements MouseListener {
 
     private ChartPanel gPanel;
     private JPanel menu;
-    PropertyEditorGui propertyEditor;
+    PropertyEditor propertyEditor;
 
     public FlowEditorComponent() {
         //处理图形组件
@@ -42,7 +42,7 @@ public class FlowEditorComponent extends JComponent implements MouseListener {
         processMenu();
 
         //处理属性编辑器组件
-        propertyEditor = new PropertyEditorGui(gPanel);
+        propertyEditor = new PropertyEditor(gPanel);
 
         BorderLayout borderLayout = new BorderLayout();
         this.setLayout(borderLayout);

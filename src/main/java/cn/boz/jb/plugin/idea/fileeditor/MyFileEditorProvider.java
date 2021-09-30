@@ -1,19 +1,23 @@
 package cn.boz.jb.plugin.idea.fileeditor;
 
+import cn.boz.jb.plugin.idea.filetype.SpdFileType;
 import com.intellij.openapi.fileEditor.FileEditor;
 import com.intellij.openapi.fileEditor.FileEditorPolicy;
 import com.intellij.openapi.fileEditor.FileEditorProvider;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.openapi.vfs.VirtualFileManager;
+import com.intellij.util.messages.MessageBus;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
 public class MyFileEditorProvider implements FileEditorProvider, DumbAware {
     @Override
     public boolean accept(@NotNull Project project, @NotNull VirtualFile virtualFile) {
-        String name = virtualFile.getName();
-        if (name.endsWith(".spd")) {
+//        MessageBus messageBus = project.getMessageBus();
+//        messageBus.connect().subscribe(VirtualFileManager.VFS_CHANGES);
+        if(virtualFile.getFileType() instanceof SpdFileType){
             return true;
         }
         return false;

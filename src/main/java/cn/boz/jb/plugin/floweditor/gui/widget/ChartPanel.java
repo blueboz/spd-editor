@@ -22,7 +22,6 @@ import cn.boz.jb.plugin.floweditor.gui.shape.Rect;
 import cn.boz.jb.plugin.floweditor.gui.shape.Shape;
 import cn.boz.jb.plugin.floweditor.gui.shape.Size;
 import cn.boz.jb.plugin.floweditor.gui.utils.ConstantUtils;
-import cn.boz.jb.plugin.floweditor.gui.utils.FontUtils;
 import cn.boz.jb.plugin.floweditor.gui.utils.LineUtils;
 import cn.boz.jb.plugin.floweditor.gui.utils.NumberUtils;
 import cn.boz.jb.plugin.floweditor.gui.utils.ShapePos;
@@ -56,7 +55,6 @@ import java.awt.font.GlyphVector;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -174,28 +172,17 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
     //触发drag事件就会置位true
     private boolean dragFlag = false;
 
-    private BufferedImage backgroundImage = null;
 
     public ChartPanel() {
-        this.setBackground(Color.gray);
-//        this.setFont(FontUtils.PF.deriveFont(Font.PLAIN, 12));
+        setBackground(Color.gray);
         //初始化的图形仅仅供测试
-
         addMouseMotionListener(this);
         addMouseListener(this);
-        this.setFocusable(true);
+        setFocusable(true);
+        grabFocus();
         addKeyListener(this);
         addMouseWheelListener(this);
 
-        try (InputStream inputStream = ChartPanel.class.getClassLoader().getResourceAsStream("background.jpeg");) {
-            backgroundImage = ImageIO.read(inputStream);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-//        File file = new File("E:\\RTC_work\\DEV3\\xfunds_201608\\import\\即期交易事件流程-spotTradeProcess.spd");
-//        loadFromFile(file);
-//        this.setPreferredSize(new Dimension(600,600));
-//        this.setBounds(0,0,600,600);
     }
 
     public int getMode() {
@@ -431,7 +418,8 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
         HiPoint point = translatePoint(x, y);
         Size size = translateSize(w, h);
         Graphics2D g2d = (Graphics2D) this.currentGraphic;
-        g2d.fillRect(doubleToInt(point.x), doubleToInt(point.y), doubleToInt(size.getW()), doubleToInt(size.getH()));
+//        g2d.fillRect(doubleToInt(point.x), doubleToInt(point.y), doubleToInt(size.getW()), doubleToInt(size.getH()));
+        g2d.fillRoundRect(doubleToInt(point.x), doubleToInt(point.y), doubleToInt(size.getW()), doubleToInt(size.getH()),10,10);
     }
 
     /**
@@ -797,9 +785,7 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
         int width = this.getWidth();
         int height = this.getHeight();
 
-        if (this.backgroundImage != null) {
-            this.currentGraphic.drawImage(backgroundImage, 0, 0, (img, infoflags, x, y, width1, height1) -> false);
-        }
+
 
 
         markColor();
@@ -2801,6 +2787,7 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
 
         //记录历史？算了吧
         recalcBoard();
+        fireShapeSelected(this);
 
     }
 
@@ -2930,7 +2917,6 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
      * @param shape
      */
     private void fireShapeSelected(PropertyObject shape) {
-        System.out.println("selected:" + shape);
         ShapeSelectedEvent shapeSelectedEvent = new ShapeSelectedEvent(shape);
         shapeSelectedListeners.forEach(listener -> listener.shapeSelected(shapeSelectedEvent));
     }

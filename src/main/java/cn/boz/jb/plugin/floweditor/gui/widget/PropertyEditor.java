@@ -9,7 +9,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import java.awt.BorderLayout;
 
-public class PropertyEditorGui extends JPanel implements ShapeSelectedListener {
+public class PropertyEditor extends JPanel implements ShapeSelectedListener {
     private PropertyObject operatedObject;
 
     public PropertyObject getOperatedObject() {
@@ -63,9 +63,10 @@ public class PropertyEditorGui extends JPanel implements ShapeSelectedListener {
     private ChartPanel chartPanel;
 
     private MyTable jTable;
+
     private JScrollPane jScrollPane;
 
-    public PropertyEditorGui(ChartPanel chartPanel) {
+    public PropertyEditor(ChartPanel chartPanel) {
         this.chartPanel = chartPanel;
         chartPanel.registerShapeSelectedListener(this);
         jTable = new MyTable();

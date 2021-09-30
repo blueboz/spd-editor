@@ -1,11 +1,15 @@
 package cn.boz.jb.plugin.floweditor.gui.property.impl;
 
 import cn.boz.jb.plugin.floweditor.gui.property.Property;
+import com.intellij.openapi.ui.Messages;
 
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import java.awt.Rectangle;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 
@@ -27,6 +31,19 @@ public class TextAreaProperty extends Property {
         textArea.setAutoscrolls(true);
         textArea.setLineWrap(true);
         jScrollPane.setViewportView(textArea);
+        textArea.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() >= 2) {
+                    JTextField jTextField = new JTextField();
+                    jTextField.setText(textArea.getText());
+                    Messages.showTextAreaDialog(jTextField,"请录入",null);
+                    textArea.setText(jTextField.getText());
+                }
+
+                super.mouseClicked(e);
+            }
+        });
     }
 
     @Override
@@ -44,7 +61,7 @@ public class TextAreaProperty extends Property {
 
     @Override
     public Integer getRowHeight() {
-        return 64;
+        return 72;
     }
 
 
