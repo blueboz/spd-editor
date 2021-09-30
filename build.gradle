@@ -72,5 +72,7 @@ tasks.whenTaskAdded { task ->
     }
 }
 publishPlugin {
-    token = System.getenv("ORG_GRADLE_PROJECT_intellijPublishToken")
+
+//    token = System.getenv("ORG_GRADLE_PROJECT_intellijPublishToken")
+    token = "perm:Y2hlbndlaXRpYW5n.OTItNDc3MA==.yRcJmYWU09Teim5uGyvRaWLkW9XwSl"
 }
