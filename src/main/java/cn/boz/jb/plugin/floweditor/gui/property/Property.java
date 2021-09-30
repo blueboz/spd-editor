@@ -66,12 +66,14 @@ public abstract class Property {
     private JLabel propertyRender;
 
     public JComponent getValueRender() {
+//        valueRender.setText((String) getValue());
         valueRender.setText("<html>" + ((String) getValue()).replace("\n", "<br>") + "</html>");
         return valueRender;
     }
 
 
     public JComponent getPropertyRender() {
+//        propertyRender.setText(getPropertyName());
         propertyRender.setText("<html>" + this.getPropertyName().replace("\n", "<br>") + "</html>");
         return propertyRender;
     }
@@ -109,7 +111,7 @@ public abstract class Property {
                 return getFieldOfClass((Class) genericSuperclass, propertyName);
             }
             return null;
-        }catch (Exception e){
+        } catch (Exception e) {
             return null;
         }
     }
@@ -130,7 +132,9 @@ public abstract class Property {
                 }
                 if (o instanceof String) {
                     String result = (String) o;
-                    return result.replace("#LEY#", "\n");
+                    result = result.replace("#LEY#", "\n");
+                    result = result.replace("&quot;", "\"");
+                    return result;
                 }
                 return o;
             } else {
@@ -152,9 +156,17 @@ public abstract class Property {
             Field field = getFieldOfClass(operatedObj.getClass(), propertyName);
             if (field != null) {
                 field.setAccessible(true);
-                field.set(operatedObj, value);
+                if (value instanceof String) {
+                    String result = (String) value;
+                    result = result.replace("\n", "#LEY#");
+                    result = result.replace("\"", "&quot;");
+                    field.set(operatedObj, result);
+
+                } else {
+                    field.set(operatedObj, value);
+                }
             }
-        } catch ( IllegalAccessException e) {
+        } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
     }
