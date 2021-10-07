@@ -7,6 +7,9 @@
     This is an Spd editor plugin.
     ]]></description>
     <version>1.0.0</version>
+    <change-notes>
+        support edit for spd file.which is activiti like editor .this is the first version .
+    </change-notes>
 
     <!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html
          on how to target different products -->
