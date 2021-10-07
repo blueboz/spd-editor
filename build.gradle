@@ -34,7 +34,8 @@ sourceSets {
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
 //    version = '2021.2.1'
-    localPath = 'F:\\App\\JetBrains\\IntelliJ IDEA 2021.2.1'
+    localPath = '/Volumes/Mac/App/IntelliJ IDEA.app'
+//    localPath = 'F:\\App\\JetBrains\\IntelliJ IDEA 2021.2.1'
 //    instrumentCode = false
 //    sandboxDir.set("${project.rootDir}/.sandbox")
     sandboxDir = "${project.rootDir}/.sandbox"
