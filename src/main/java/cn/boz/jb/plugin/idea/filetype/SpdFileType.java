@@ -28,6 +28,7 @@ public class SpdFileType implements FileType {
 
     @Override
     public @Nullable Icon getIcon() {
+
         return SpdEditorIcons.FLOW_GRAY_16_ICON;
     }
 
