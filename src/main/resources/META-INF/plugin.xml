@@ -1,10 +1,10 @@
 <idea-plugin>
     <id>cn.boz.jb.plugin.spd-editor</id>
     <name>Erayt Spd Editor</name>
-    <vendor email="1173626291@qq.com" url="http://blueboz.github.com">Blueboz.Chen</vendor>
+    <vendor email="1173626291@qq.com" url="http://blog.csdn.net/blueboz">Blueboz.Chen</vendor>
 
     <description><![CDATA[
-    This is an Spd editor plugin.
+    This is an Spd editor plugin,Which support features such as flow viewer,flow edit,flow image export ,save.
     ]]></description>
     <version>1.0.0</version>
     <change-notes>
