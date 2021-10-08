@@ -1,10 +1,9 @@
 package icons;
 
 import com.intellij.openapi.util.IconLoader;
-import com.intellij.util.ImageLoader;
+import com.intellij.ui.IconManager;
 
 import javax.swing.Icon;
-import javax.swing.ImageIcon;
 
 public class SpdEditorIcons {
 

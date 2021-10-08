@@ -46,7 +46,7 @@ println "${project.rootDir}"
 
 patchPluginXml {
     changeNotes = """
-    support edit for spd file.which is activiti like editor .this is the first version .
+    - icon color change with theme.
       """
 }
 test {
