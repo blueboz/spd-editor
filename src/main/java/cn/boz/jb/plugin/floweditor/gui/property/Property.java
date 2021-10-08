@@ -134,6 +134,8 @@ public abstract class Property {
                     String result = (String) o;
                     result = result.replace("#LEY#", "\n");
                     result = result.replace("&quot;", "\"");
+                    result = result.replace("&gt;", ">");
+                    result = result.replace("&lt;", "<");
                     return result;
                 }
                 return o;
@@ -160,6 +162,8 @@ public abstract class Property {
                     String result = (String) value;
                     result = result.replace("\n", "#LEY#");
                     result = result.replace("\"", "&quot;");
+                    result = result.replace(">", "&gt;");
+                    result = result.replace("<", "&lt;");
                     field.set(operatedObj, result);
 
                 } else {

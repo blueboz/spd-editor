@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'org.example'
-version '1.0.1-SNAPSHOT'
+version '1.0.2-SNAPSHOT'
 
 sourceCompatibility = 1.11
 
@@ -34,8 +34,8 @@ sourceSets {
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
 //    version = '2021.2.1'
-    localPath = '/Volumes/Mac/App/IntelliJ IDEA.app'
-//    localPath = 'F:\\App\\JetBrains\\IntelliJ IDEA 2021.2.1'
+//    localPath = '/Volumes/Mac/App/IntelliJ IDEA.app'
+    localPath = 'F:\\App\\JetBrains\\IntelliJ IDEA 2021.2.1'
 //    instrumentCode = false
 //    sandboxDir.set("${project.rootDir}/.sandbox")
     sandboxDir = "${project.rootDir}/.sandbox"
@@ -46,8 +46,8 @@ println "${project.rootDir}"
 
 patchPluginXml {
     changeNotes = """
-      Add change notes here.<br>
-      <em>most HTML tags may be used</em>"""
+    support edit for spd file.which is activiti like editor .this is the first version .
+      """
 }
 test {
     useJUnitPlatform()
@@ -74,6 +74,7 @@ tasks.whenTaskAdded { task ->
 }
 publishPlugin {
     channels = ['beta']
+//    channels = ['Stable']
 
 //    token = System.getenv("ORG_GRADLE_PROJECT_intellijPublishToken")
     token = "perm:Y2hlbndlaXRpYW5n.OTItNDc3MA==.yRcJmYWU09Teim5uGyvRaWLkW9XwSl"
