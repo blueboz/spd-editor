@@ -26,6 +26,7 @@ import cn.boz.jb.plugin.floweditor.gui.utils.LineUtils;
 import cn.boz.jb.plugin.floweditor.gui.utils.NumberUtils;
 import cn.boz.jb.plugin.floweditor.gui.utils.ShapePos;
 import cn.boz.jb.plugin.floweditor.gui.utils.ShapeUtils;
+import cn.boz.jb.plugin.idea.listener.ProcessSaveListener;
 
 import javax.imageio.ImageIO;
 import javax.swing.JComponent;
@@ -73,6 +74,7 @@ import java.util.stream.Collectors;
 public class ChartPanel extends JComponent implements MouseListener, MouseMotionListener, KeyListener, MouseWheelListener, PropertyObject {
 
     private List<ShapeSelectedListener> shapeSelectedListeners = new ArrayList<>();
+    private List<ProcessSaveListener> processSaveListener = new ArrayList<>();
     private ConstantUtils constantUtils = ConstantUtils.getInstance();
 
     private static boolean debug = false;
@@ -419,7 +421,7 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
         Size size = translateSize(w, h);
         Graphics2D g2d = (Graphics2D) this.currentGraphic;
 //        g2d.fillRect(doubleToInt(point.x), doubleToInt(point.y), doubleToInt(size.getW()), doubleToInt(size.getH()));
-        g2d.fillRoundRect(doubleToInt(point.x), doubleToInt(point.y), doubleToInt(size.getW()), doubleToInt(size.getH()),10,10);
+        g2d.fillRoundRect(doubleToInt(point.x), doubleToInt(point.y), doubleToInt(size.getW()), doubleToInt(size.getH()), 10, 10);
     }
 
     /**
@@ -784,8 +786,6 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
 
         int width = this.getWidth();
         int height = this.getHeight();
-
-
 
 
         markColor();
@@ -1552,6 +1552,8 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
             this.boardMoveStartPoint = null;
             this.boardMoveStartOriginPoint = null;
         }
+        fireSavedListener();
+
     }
 
     /**
@@ -1824,6 +1826,7 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
         }
         recalcBoard();
         repaint();
+        fireSavedListener();
 
     }
 
@@ -1899,6 +1902,7 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
         recalcBoard();
 
         repaint();
+        fireSavedListener();
 
     }
 
@@ -2747,6 +2751,25 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
         repaint();
     }
 
+    /**
+     * 触发保存监听器，用于对当前流程进行保存
+     */
+    public void fireSavedListener() {
+        ProcessDefinition processDefinition = new ProcessDefinition();
+        processDefinition.setId(id);
+        processDefinition.setName(name);
+        processDefinition.setShapes(this.shapes);
+        processDefinition.setLines(this.lines);
+        byte[] bytes = TemplateLoaderImpl.getInstance().saveToBytes(processDefinition);
+        for (ProcessSaveListener saveListener : processSaveListener) {
+            try {
+                saveListener.save(bytes);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     public void save() {
         JFileChooser jFileChooser = new JFileChooser();
 
@@ -2768,26 +2791,31 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
 
 
     public void loadFromFile(File file) {
-        ProcessDefinition processDefinition = TemplateLoaderImpl.getInstance().loadFromFile(file.toURI().toString());
-        if (processDefinition == null) {
-            JOptionPane.showMessageDialog(this, "所选文件格式有误");
-            return;
-        }
-        this.id = processDefinition.getId();
-        this.name = processDefinition.getName();
-        autofixedOffset(processDefinition);
-        List<Shape> shapes = processDefinition.getShapes();
-        List<Line> lines = processDefinition.getLines();
-        this.shapes.clear();
-        this.lines.clear();
-        List<Label> labels = lines.stream().filter(it -> it.getLabel() != null).map(it -> it.getLabel()).collect(Collectors.toList());
-        this.shapes.addAll(shapes);
-        this.lines.addAll(lines);
-        this.shapes.addAll(labels);
+        try {
 
-        //记录历史？算了吧
-        recalcBoard();
-        fireShapeSelected(this);
+            ProcessDefinition processDefinition = TemplateLoaderImpl.getInstance().loadFromFile(file.toURI().toString());
+            if (processDefinition == null) {
+                JOptionPane.showMessageDialog(this, "所选文件格式有误");
+                return;
+            }
+            this.id = processDefinition.getId();
+            this.name = processDefinition.getName();
+            autofixedOffset(processDefinition);
+            List<Shape> shapes = processDefinition.getShapes();
+            List<Line> lines = processDefinition.getLines();
+            this.shapes.clear();
+            this.lines.clear();
+            List<Label> labels = lines.stream().filter(it -> it.getLabel() != null).map(it -> it.getLabel()).collect(Collectors.toList());
+            this.shapes.addAll(shapes);
+            this.lines.addAll(lines);
+            this.shapes.addAll(labels);
+
+            //记录历史？算了吧
+            recalcBoard();
+            fireShapeSelected(this);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "解析时候发生异常:" + e.getMessage());
+        }
 
     }
 
@@ -2921,6 +2949,12 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
         shapeSelectedListeners.forEach(listener -> listener.shapeSelected(shapeSelectedEvent));
     }
 
+    /**
+     * 流程图保存回调
+     */
+    public void registerProcessSaveListener(ProcessSaveListener listener) {
+        processSaveListener.add(listener);
+    }
 
     /**
      * 图形选中监听

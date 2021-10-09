@@ -30,8 +30,10 @@ import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
 
-import java.io.File;
+import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -51,7 +53,7 @@ public class TemplateLoaderImpl implements TemplateLoader {
     }
 
     @Override
-    public ProcessDefinition loadFromFile(String filename) {
+    public ProcessDefinition loadFromFile(String filename) throws DocumentException {
         try {
             ProcessDefinition processDefinition = new ProcessDefinition();
 
@@ -192,11 +194,13 @@ public class TemplateLoaderImpl implements TemplateLoader {
             return processDefinition;
 
         } catch (DocumentException e) {
-            e.printStackTrace();
+            throw e;
+        } catch (Exception e) {
+
+            throw e;
         }
 
 
-        return null;
     }
 
 
@@ -271,9 +275,7 @@ public class TemplateLoaderImpl implements TemplateLoader {
         return res;
     }
 
-
-    @Override
-    public void saveToFile(ProcessDefinition processDefinition, String filename) {
+    public void saveToStream(ProcessDefinition processDefinition, OutputStream outputStream) throws IOException {
         Document doc = DocumentHelper.createDocument();
         Element definitions = doc.addElement("definitions");
         Element process = definitions.addElement("process");
@@ -315,9 +317,31 @@ public class TemplateLoaderImpl implements TemplateLoader {
         format.setPadText(true);
         format.setNewLineAfterDeclaration(false);
         format.setEncoding("UTF-8");
+        XMLWriter xmlWriter = new XMLWriter(outputStream, format);
+        xmlWriter.write(doc);
+    }
+
+    /**
+     * 保存到字节数组
+     *
+     * @param processDefinition
+     * @return
+     */
+    public byte[] saveToBytes(ProcessDefinition processDefinition) {
+        try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+            saveToStream(processDefinition, baos);
+            return baos.toByteArray();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    @Override
+    public void saveToFile(ProcessDefinition processDefinition, String filename) {
+
         try (FileOutputStream fis = new FileOutputStream(filename)) {
-            XMLWriter xmlWriter = new XMLWriter(fis, format);
-            xmlWriter.write(doc);
+            saveToStream(processDefinition, fis);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

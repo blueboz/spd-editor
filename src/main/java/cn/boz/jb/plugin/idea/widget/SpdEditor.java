@@ -18,6 +18,9 @@ import cn.boz.jb.plugin.floweditor.gui.utils.FontUtils;
 import cn.boz.jb.plugin.floweditor.gui.utils.IcoMoonUtils;
 import cn.boz.jb.plugin.floweditor.gui.widget.Button;
 import cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel;
+import com.intellij.openapi.actionSystem.ActionManager;
+import com.intellij.openapi.actionSystem.ActionToolbar;
+import com.intellij.openapi.actionSystem.DefaultActionGroup;
 import com.intellij.ui.JBSplitter;
 import com.intellij.ui.components.JBPanel;
 import com.intellij.ui.components.JBScrollBar;
@@ -29,18 +32,13 @@ import javax.swing.JScrollBar;
 import javax.swing.Timer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.LayoutManager;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.io.File;
-import java.util.concurrent.Flow;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class SpdEditor extends JComponent implements MouseListener {
@@ -55,9 +53,10 @@ public class SpdEditor extends JComponent implements MouseListener {
 
     JBScrollPane jbMenuScroll;
     JPanel menu;
+
     public SpdEditor() {
         this.setLayout(new BorderLayout());
-        jbSplitter = new JBSplitter(false,0.8f);
+        jbSplitter = new JBSplitter(false, 0.8f);
         jbSplitter.setShowDividerControls(true);
         jbSplitter.setShowDividerIcon(true);
         add(jbSplitter, BorderLayout.CENTER);
@@ -73,7 +72,7 @@ public class SpdEditor extends JComponent implements MouseListener {
         jbSplitter.setFirstComponent(chartPanel);
         jbSplitter.setSecondComponent(jbPropertyScroll);
 
-        jbMenuScroll=new JBScrollPane();
+        jbMenuScroll = new JBScrollPane();
         jbMenuScroll.setVerticalScrollBarPolicy(JBScrollPane.VERTICAL_SCROLLBAR_NEVER);
         JBScrollBar jbScrollBar = new JBScrollBar();
 //        jbScrollBar.setPreferredSize(new Dimension(0,4));
@@ -83,7 +82,7 @@ public class SpdEditor extends JComponent implements MouseListener {
             @Override
             public void mouseWheelMoved(MouseWheelEvent e) {
                 JScrollBar horizontalScrollBar = jbMenuScroll.getHorizontalScrollBar();
-                 int value = horizontalScrollBar.getValue();
+                int value = horizontalScrollBar.getValue();
                 int maximum = horizontalScrollBar.getMaximum();
                 int minimum = horizontalScrollBar.getMinimum();
 
@@ -92,17 +91,17 @@ public class SpdEditor extends JComponent implements MouseListener {
                 //经过调教，此规律是最顺滑的
                 final long time = 15;
                 final long pace = 60;
-                if(e.getWheelRotation()==1){
+                if (e.getWheelRotation() == 1) {
                     //up
-                    value+=e.getScrollAmount()*3;
-                    if(value>=maximum){
-                        value=maximum;
+                    value += e.getScrollAmount() * 3;
+                    if (value >= maximum) {
+                        value = maximum;
                     }
-                }else{
+                } else {
                     //down
-                    value-=e.getScrollAmount()*3;
-                    if(value<=minimum){
-                        value=minimum;
+                    value -= e.getScrollAmount() * 3;
+                    if (value <= minimum) {
+                        value = minimum;
                     }
                 }
                 horizontalScrollBar.setValue(value);
@@ -113,11 +112,12 @@ public class SpdEditor extends JComponent implements MouseListener {
         menu.setBackground(ConstantUtils.getInstance().getBtnBarColor());
         processMenu(menu);
 
-        jbMenuScroll.setViewportView(menu);
-        add(jbMenuScroll,BorderLayout.NORTH);
+//        jbMenuScroll.setViewportView(menu);
+//        add(jbMenuScroll, BorderLayout.NORTH);
 
-
-
+        DefaultActionGroup group = (DefaultActionGroup) ActionManager.getInstance().getAction("spdgroup");
+        ActionToolbar spdToolbar = ActionManager.getInstance().createActionToolbar("SpdEditor", group, true);
+        spdToolbar.setTargetComponent(this);
 
     }
 
@@ -241,7 +241,6 @@ public class SpdEditor extends JComponent implements MouseListener {
         menuPanel.add(label);
 
 
-
         FlowLayout flowLayout = new FlowLayout(FlowLayout.LEFT, 0, 0);
         menuPanel.setLayout(flowLayout);
 //        menuPanel.setMaximumSize(new Dimension(0,40));
@@ -348,7 +347,8 @@ public class SpdEditor extends JComponent implements MouseListener {
                 chartPanel.export();
                 break;
             case "save":
-                chartPanel.save();
+//                chartPanel.save();
+                chartPanel.fireSavedListener();
                 break;
             case "theme":
 

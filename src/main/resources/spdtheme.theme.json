@@ -1,0 +1,12 @@
+{
+  "name": "spdtheme",
+  "dark": true,
+  "author": "",
+  "editorScheme": "/spdtheme.xml",
+  "colors": {
+    "basicBackground": "#ff0"
+  },
+  "ui": {
+    "Menu.background": "basicBackground"
+  }
+}

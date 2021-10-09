@@ -1,11 +1,12 @@
 package cn.boz.jb.plugin.idea.fileeditor;
 
-import cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel;
-import cn.boz.jb.plugin.floweditor.gui.widget.FlowEditorComponent;
 import cn.boz.jb.plugin.idea.widget.SpdEditor;
+import com.intellij.openapi.application.Application;
+import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.fileEditor.FileEditor;
 import com.intellij.openapi.fileEditor.FileEditorLocation;
 import com.intellij.openapi.fileEditor.FileEditorState;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.vfs.VirtualFile;
 import org.jetbrains.annotations.Nls;
@@ -15,22 +16,41 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.JComponent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 public class MyFileEditor implements FileEditor {
 
     private VirtualFile virtualFile;
+    private Project project;
 
-    SpdEditor spdEditor;
+    private SpdEditor spdEditor;
     private FileEditorState fileEditorState;
-    private Map userdata=new HashMap<>();
+    private Map userdata = new HashMap<>();
 
-    public MyFileEditor(VirtualFile virtualFile) {
+    public SpdEditor getSpdEditor() {
+        return spdEditor;
+    }
+
+    public void setSpdEditor(SpdEditor spdEditor) {
+        this.spdEditor = spdEditor;
+    }
+
+    public MyFileEditor(Project project, VirtualFile virtualFile) {
         this.virtualFile = virtualFile;
+        this.project = project;
         spdEditor = new SpdEditor();
         spdEditor.loadFromFile(new File(virtualFile.getPath()));
-
+        spdEditor.getChartPanel().registerProcessSaveListener((bs) -> {
+            WriteCommandAction.runWriteCommandAction(project, () -> {
+                try {
+                    virtualFile.setBinaryContent(bs);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+        });
     }
 
     @Override
@@ -50,7 +70,7 @@ public class MyFileEditor implements FileEditor {
 
     @Override
     public void setState(@NotNull FileEditorState fileEditorState) {
-        this.fileEditorState=fileEditorState;
+        this.fileEditorState = fileEditorState;
     }
 
     @Override
@@ -94,14 +114,14 @@ public class MyFileEditor implements FileEditor {
     @SuppressWarnings("unchecked")
     @Override
     public <T> @Nullable T getUserData(@NotNull Key<T> key) {
-        System.out.println("get user data:"+key);
+        System.out.println("get user data:" + key);
         return (T) userdata.get(key);
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public <T> void putUserData(@NotNull Key<T> key, @Nullable T t) {
-        userdata.put(key,t);
-        System.out.println("put user data:"+key+" t:"+t);
+        userdata.put(key, t);
+        System.out.println("put user data:" + key + " t:" + t);
     }
 }

@@ -1,5 +1,7 @@
 package cn.boz.jb.plugin.floweditor.gui.utils;
 
+import com.intellij.ui.JBColor;
+
 import java.awt.Color;
 
 public class ConstantUtils {
@@ -381,6 +383,7 @@ public class ConstantUtils {
     }
 
     public Color getBtnBgActiveColor() {
+//        return JBColor.namedColor("Button.activeBgColor");
         return btnBgActiveColor;
     }
 
@@ -389,7 +392,7 @@ public class ConstantUtils {
     }
 
     public Color getBtnBarColor() {
-        return btnBarColor;
+        return JBColor.namedColor("Panel.back");
     }
 
     public void setBtnBarColor(Color btnBarColor) {
