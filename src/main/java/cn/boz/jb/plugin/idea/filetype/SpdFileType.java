@@ -11,6 +11,8 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.Icon;
 
 public class SpdFileType implements FileType {
+
+    public static final SpdFileType INSTANCE=new SpdFileType();
     @Override
     public @NonNls @NotNull String getName() {
         return "Spd";
