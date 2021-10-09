@@ -4,7 +4,8 @@
     <vendor email="1173626291@qq.com" url="http://blog.csdn.net/blueboz">Blueboz.Chen</vendor>
 
     <description><![CDATA[
-    This is an Spd editor plugin,Which support features such as flow viewer,flow edit,flow image export ,save.
+    This is an Spd editor plugin,Which support features such as flow viewer,flow editor,flow image export ,flow save.
+
     ]]></description>
     <version>1.0.0</version>
     <change-notes>
@@ -20,16 +21,30 @@
         <fileEditorProvider implementation="cn.boz.jb.plugin.idea.fileeditor.MyFileEditorProvider"
                             id="myFileEditorProvider" order="last">
         </fileEditorProvider>
-        <toolWindow factoryClass="cn.boz.jb.plugin.idea.toolwindow.MyToolWindowFactory" id="myToolwindow"  anchor="right" order="last"></toolWindow>
-        <fileType name="spd editor" extensions="spd" implementationClass="cn.boz.jb.plugin.idea.filetype.SpdFileType"></fileType>
+        <toolWindow factoryClass="cn.boz.jb.plugin.idea.toolwindow.MyToolWindowFactory" id="myToolwindow" anchor="right"
+                    order="last"></toolWindow>
+        <fileType name="Spd" extensions="spd"
+                  implementationClass="cn.boz.jb.plugin.idea.filetype.SpdFileType"></fileType>
+        <themeProvider id="765ee155-7b8d-48a4-808a-834f80b2d6dc" path="/spdtheme.theme.json"/>
     </extensions>
-
 
     <actions>
         <!-- Add your actions here -->
-        <action class="cn.boz.jb.plugin.addbom.AddBomAction" id="addBomAction" description="添加UTF-8 BOM" text="AddBom" icon="SpdEditorIcons.BOM_16_ICON">
-            <add-to-group group-id="ProjectViewPopupMenu" anchor="before" relative-to-action="EditorPaste"></add-to-group>
+        <action class="cn.boz.jb.plugin.addbom.AddBomAction" id="addBomAction" description="添加UTF-8 BOM" text="AddBom"
+                icon="SpdEditorIcons.BOM_16_ICON">
+            <add-to-group group-id="ProjectViewPopupMenu" anchor="before"
+                          relative-to-action="EditorPaste"></add-to-group>
         </action>
+        <group id="spdgroup">
+            <action class="cn.boz.jb.plugin.idea.action.MyAction" text="AddBom" icon="SpdEditorIcons.BOM_ICON"
+                    description="Add Bom" id="addBomAction"></action>
+        </group>
+
+        <action class="cn.boz.jb.plugin.idea.action.NewSpdFileAction" id="NewSpdFile" text="NewSpdFile"
+                icon="SpdEditorIcons.FLOW_16_ICON" description="new Spd file">
+            <add-to-group group-id="NewGroup" anchor="last"></add-to-group>
+        </action>
+
     </actions>
 
 

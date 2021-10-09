@@ -12,12 +12,15 @@ import com.intellij.util.messages.MessageBus;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class MyFileEditorProvider implements FileEditorProvider, DumbAware {
+    private static Map<VirtualFile, FileEditor> fileEditorMap = new HashMap<>();
+
     @Override
     public boolean accept(@NotNull Project project, @NotNull VirtualFile virtualFile) {
-//        MessageBus messageBus = project.getMessageBus();
-//        messageBus.connect().subscribe(VirtualFileManager.VFS_CHANGES);
-        if(virtualFile.getFileType() instanceof SpdFileType){
+        if (virtualFile.getFileType() instanceof SpdFileType) {
             return true;
         }
         return false;
@@ -25,7 +28,7 @@ public class MyFileEditorProvider implements FileEditorProvider, DumbAware {
 
     @Override
     public @NotNull FileEditor createEditor(@NotNull Project project, @NotNull VirtualFile virtualFile) {
-        return new MyFileEditor(virtualFile);
+        return new MyFileEditor(project, virtualFile);
     }
 
     @Override
