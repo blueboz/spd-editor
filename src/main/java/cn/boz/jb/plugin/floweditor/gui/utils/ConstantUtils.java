@@ -392,7 +392,8 @@ public class ConstantUtils {
     }
 
     public Color getBtnBarColor() {
-        return JBColor.namedColor("Panel.back");
+        return btnBarColor;
+//        return JBColor.namedColor("Panel.back");
     }
 
     public void setBtnBarColor(Color btnBarColor) {

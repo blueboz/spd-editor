@@ -15,8 +15,9 @@ import org.jetbrains.annotations.NotNull;
 import javax.swing.Icon;
 
 public class NewSpdFileAction extends CreateFileFromTemplateAction implements DumbAware {
+
     public NewSpdFileAction() {
-        super("new Spd File", "", null);
+        super("Spd File", "", null);
     }
 
     public NewSpdFileAction(@NlsActions.ActionText String text, @NlsActions.ActionDescription String description, Icon icon) {
@@ -25,14 +26,13 @@ public class NewSpdFileAction extends CreateFileFromTemplateAction implements Du
 
     @Override
     protected void buildDialog(@NotNull Project project, @NotNull PsiDirectory psiDirectory, CreateFileFromTemplateDialog.@NotNull Builder builder) {
-        builder.setTitle("Spd File")
-                .addKind("New Spd File", SpdEditorIcons.FLOW_16_ICON, "Spd Process.spd.ft");
-//        FileTemplateManager.getDefaultInstance().
+        builder.setTitle("New Spd File")
+                .addKind("Spd File", SpdEditorIcons.FLOW_16_ICON, "Spd Process.spd");
     }
 
     @Override
     protected @NlsContexts.Command String getActionName(PsiDirectory psiDirectory, @NonNls @NotNull String s, @NonNls String s1) {
-        return "new Spd file";
+        return "Spd file";
     }
 
 

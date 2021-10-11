@@ -72,102 +72,106 @@ public class TemplateLoaderImpl implements TemplateLoader {
 
             Map<String, Object> processMap = new HashMap<>();
             Element process = definitions.element("process");
-            processDefinition.setId(attributeValue(process.attribute("id")));
-            processDefinition.setName(attributeValue(process.attribute("name")));
+            if (process != null) {
 
-            List<Element> processs = process.elements();
-            for (Element p : processs) {
-                String eName = p.getName();
-                String id = p.attribute("id").getValue();
-                String name = p.attribute("name").getValue();
-                Element showp = (Element) diagramMap.get(id);
-                if ("startEvent".equals(eName)) {
-                    StartEvent startEvent = new StartEvent();
-                    setCircleBridge(startEvent, id, name);
-                    setBound(startEvent, readBounds(showp).get(0));
-                    processMap.put(id, startEvent);
-                } else if ("endEvent".equals(eName)) {
-                    EndEvent endEvent = new EndEvent();
-                    setCircleBridge(endEvent, id, name);
-                    setBound(endEvent, readBounds(showp).get(0));
-                    processMap.put(id, endEvent);
-                } else if ("serviceTask".equals(eName)) {
 
-                    ServiceTask serviceTask = new ServiceTask();
-                    setRectBridge(serviceTask, id, name);
-                    serviceTask.setExpression(attributeValue(p.attribute("expression")));
-                    serviceTask.setListener(attributeValue(p.attribute("listener")));
-                    setBound(serviceTask, readBounds(showp).get(0));
-                    processMap.put(id, serviceTask);
-                } else if ("sequenceFlow".equals(eName)) {
-                    SequenceFlow sequenceFlow = new SequenceFlow();
-                    setLineBridge(sequenceFlow, id, name);
-                    sequenceFlow.setSourceRef(attributeValue(p.attribute("sourceRef")));
-                    sequenceFlow.setTargetRef(attributeValue(p.attribute("targetRef")));
-                    sequenceFlow.setConditionExpression(attributeValue(p.attribute("conditionExpression")));
+                processDefinition.setId(attributeValue(process.attribute("id")));
+                processDefinition.setName(attributeValue(process.attribute("name")));
 
-                    List<WayPoint> wayPoints = readWaypoint(showp);
-                    for (WayPoint wayPoint : wayPoints) {
-                        sequenceFlow.getPoints().add(new HiPoint(wayPoint.getX(), wayPoint.getY()));
+                List<Element> processs = process.elements();
+                for (Element p : processs) {
+                    String eName = p.getName();
+                    String id = p.attribute("id").getValue();
+                    String name = p.attribute("name").getValue();
+                    Element showp = (Element) diagramMap.get(id);
+                    if ("startEvent".equals(eName)) {
+                        StartEvent startEvent = new StartEvent();
+                        setCircleBridge(startEvent, id, name);
+                        setBound(startEvent, readBounds(showp).get(0));
+                        processMap.put(id, startEvent);
+                    } else if ("endEvent".equals(eName)) {
+                        EndEvent endEvent = new EndEvent();
+                        setCircleBridge(endEvent, id, name);
+                        setBound(endEvent, readBounds(showp).get(0));
+                        processMap.put(id, endEvent);
+                    } else if ("serviceTask".equals(eName)) {
+
+                        ServiceTask serviceTask = new ServiceTask();
+                        setRectBridge(serviceTask, id, name);
+                        serviceTask.setExpression(attributeValue(p.attribute("expression")));
+                        serviceTask.setListener(attributeValue(p.attribute("listener")));
+                        setBound(serviceTask, readBounds(showp).get(0));
+                        processMap.put(id, serviceTask);
+                    } else if ("sequenceFlow".equals(eName)) {
+                        SequenceFlow sequenceFlow = new SequenceFlow();
+                        setLineBridge(sequenceFlow, id, name);
+                        sequenceFlow.setSourceRef(attributeValue(p.attribute("sourceRef")));
+                        sequenceFlow.setTargetRef(attributeValue(p.attribute("targetRef")));
+                        sequenceFlow.setConditionExpression(attributeValue(p.attribute("conditionExpression")));
+
+                        List<WayPoint> wayPoints = readWaypoint(showp);
+                        for (WayPoint wayPoint : wayPoints) {
+                            sequenceFlow.getPoints().add(new HiPoint(wayPoint.getX(), wayPoint.getY()));
+                        }
+                        Element labelElement = showp.element("Label");
+                        if (labelElement != null) {
+                            Bound bound = readBounds(labelElement).get(0);
+                            Label label = new Label(bound.getX(), bound.getY(), bound.getWidth(), bound.getHeight(), name);
+                            //建立双向绑定
+                            sequenceFlow.setLabel(label);
+                            label.setBoundLine(sequenceFlow);
+                        } else {
+                            Label label = new Label(10, 0, 0, 0, name);
+                            //建立双向绑定
+                            sequenceFlow.setLabel(label);
+                            label.setBoundLine(sequenceFlow);
+                        }
+                        processMap.put(id, sequenceFlow);
+                    } else if ("exclusiveGateway".equals(eName)) {
+                        ExclusiveGateway exclusiveGateway = new ExclusiveGateway();
+                        exclusiveGateway.setId(id);
+                        exclusiveGateway.setName(name);
+
+                        setBound(exclusiveGateway, readBounds(showp).get(0));
+                        processMap.put(id, exclusiveGateway);
+
+                    } else if ("foreachGateway".equals(eName)) {
+                        ForeachGateway foreachGateway = new ForeachGateway();
+                        foreachGateway.setId(id);
+                        foreachGateway.setName(name);
+
+                        setBound(foreachGateway, readBounds(showp).get(0));
+                        processMap.put(id, foreachGateway);
+
+                    } else if ("parallelGateway".equals(eName)) {
+                        ParallelGateway parallelGateway = new ParallelGateway();
+                        parallelGateway.setId(id);
+                        parallelGateway.setName(name);
+
+                        setBound(parallelGateway, readBounds(showp).get(0));
+                        processMap.put(id, parallelGateway);
+
+                    } else if ("userTask".equals(eName)) {
+                        UserTask userTask = new UserTask();
+                        setRectBridge(userTask, id, name);
+                        userTask.setBussinesId(attributeValue(p.attribute("bussinesId")));
+                        userTask.setBussinesKey(attributeValue(p.attribute("bussinesKey")));
+                        userTask.setBussinesDescrition(attributeValue(p.attribute("bussinesDescrition")));
+                        userTask.setRights(attributeValue(p.attribute("rights")));
+                        userTask.setExpression(attributeValue(p.attribute("expression")));
+                        userTask.setEventListener(attributeValue(p.attribute("eventListener")));
+                        userTask.setValidSecond(attributeValue(p.attribute("validSecond")));
+                        userTask.setOpenSecond(attributeValue(p.attribute("openSecond")));
+                        setBound(userTask, readBounds(showp).get(0));
+                        processMap.put(id, userTask);
+                    } else if ("callActivity".equals(eName)) {
+                        CallActivity callActivity = new CallActivity();
+                        setRectBridge(callActivity, id, name);
+                        callActivity.setCalledElement(attributeValue(p.attribute("calledElement")));
+                        setBound(callActivity, readBounds(showp).get(0));
+                        processMap.put(id, callActivity);
+
                     }
-                    Element labelElement = showp.element("Label");
-                    if (labelElement != null) {
-                        Bound bound = readBounds(labelElement).get(0);
-                        Label label = new Label(bound.getX(), bound.getY(), bound.getWidth(), bound.getHeight(), name);
-                        //建立双向绑定
-                        sequenceFlow.setLabel(label);
-                        label.setBoundLine(sequenceFlow);
-                    } else {
-                        Label label = new Label(10, 0, 0, 0, name);
-                        //建立双向绑定
-                        sequenceFlow.setLabel(label);
-                        label.setBoundLine(sequenceFlow);
-                    }
-                    processMap.put(id, sequenceFlow);
-                } else if ("exclusiveGateway".equals(eName)) {
-                    ExclusiveGateway exclusiveGateway = new ExclusiveGateway();
-                    exclusiveGateway.setId(id);
-                    exclusiveGateway.setName(name);
-
-                    setBound(exclusiveGateway, readBounds(showp).get(0));
-                    processMap.put(id, exclusiveGateway);
-
-                } else if ("foreachGateway".equals(eName)) {
-                    ForeachGateway foreachGateway = new ForeachGateway();
-                    foreachGateway.setId(id);
-                    foreachGateway.setName(name);
-
-                    setBound(foreachGateway, readBounds(showp).get(0));
-                    processMap.put(id, foreachGateway);
-
-                } else if ("parallelGateway".equals(eName)) {
-                    ParallelGateway parallelGateway = new ParallelGateway();
-                    parallelGateway.setId(id);
-                    parallelGateway.setName(name);
-
-                    setBound(parallelGateway, readBounds(showp).get(0));
-                    processMap.put(id, parallelGateway);
-
-                } else if ("userTask".equals(eName)) {
-                    UserTask userTask = new UserTask();
-                    setRectBridge(userTask, id, name);
-                    userTask.setBussinesId(attributeValue(p.attribute("bussinesId")));
-                    userTask.setBussinesKey(attributeValue(p.attribute("bussinesKey")));
-                    userTask.setBussinesDescrition(attributeValue(p.attribute("bussinesDescrition")));
-                    userTask.setRights(attributeValue(p.attribute("rights")));
-                    userTask.setExpression(attributeValue(p.attribute("expression")));
-                    userTask.setEventListener(attributeValue(p.attribute("eventListener")));
-                    userTask.setValidSecond(attributeValue(p.attribute("validSecond")));
-                    userTask.setOpenSecond(attributeValue(p.attribute("openSecond")));
-                    setBound(userTask, readBounds(showp).get(0));
-                    processMap.put(id, userTask);
-                } else if ("callActivity".equals(eName)) {
-                    CallActivity callActivity = new CallActivity();
-                    setRectBridge(callActivity, id, name);
-                    callActivity.setCalledElement(attributeValue(p.attribute("calledElement")));
-                    setBound(callActivity, readBounds(showp).get(0));
-                    processMap.put(id, callActivity);
-
                 }
             }
 
@@ -196,7 +200,6 @@ public class TemplateLoaderImpl implements TemplateLoader {
         } catch (DocumentException e) {
             throw e;
         } catch (Exception e) {
-
             throw e;
         }
 
