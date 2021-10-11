@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions>
+    <process>
+        <userTask id="userTask1" name="User Task"/>
+        <endEvent id="endevent1" name="End"/>
+        <startEvent id="startevent1" name="Start"/>
+        <sequenceFlow id="flow1" name="to User Task" sourceRef="startevent1" targetRef="userTask1"/>
+        <sequenceFlow id="flow2" name="to End" sourceRef="userTask1" targetRef="endevent1"/>
+    </process>
+    <Diagram id="Diagram_null">
+        <Shape Element="userTask1" id="Shape_userTask1">
+            <Bounds x="209" y="171" width="105" height="55"/>
+        </Shape>
+        <Shape Element="endevent1" id="Shape_endevent1">
+            <Bounds x="244" y="344" width="35" height="35"/>
+        </Shape>
+        <Shape Element="startevent1" id="Shape_startevent1">
+            <Bounds x="244" y="58" width="35" height="35"/>
+        </Shape>
+        <Edge Element="flow1" id="Shape_flow1">
+            <Waypoint x="262" y="93"/>
+            <Waypoint x="262" y="171"/>
+        </Edge>
+        <Edge Element="flow2" id="Shape_flow2">
+            <Waypoint x="262" y="226"/>
+            <Waypoint x="262" y="344"/>
+        </Edge>
+    </Diagram>
+</definitions>

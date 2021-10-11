@@ -1184,9 +1184,12 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
 
     @Override
     public void mouseClicked(MouseEvent e) {
+
         if (e.getButton() != MouseEvent.BUTTON1) {
             return;
         }
+
+        fireSavedListener();
 
         if (whitespacePressing) {
             return;
@@ -1202,6 +1205,7 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
                 shape.init(point);
                 addShape(shape);
                 repaint();
+
             } catch (InstantiationException | NoSuchMethodException | InvocationTargetException | IllegalAccessException instantiationException) {
                 instantiationException.printStackTrace();
             }

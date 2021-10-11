@@ -46,7 +46,7 @@ println "${project.rootDir}"
 
 patchPluginXml {
     changeNotes = """
-    - icon color change with theme.
+     icon color change with theme.
       """
 }
 test {
