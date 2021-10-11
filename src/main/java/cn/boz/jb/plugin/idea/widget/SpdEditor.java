@@ -32,6 +32,7 @@ import javax.swing.JScrollBar;
 import javax.swing.Timer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -49,10 +50,12 @@ public class SpdEditor extends JComponent implements MouseListener {
     JBPanel<JBPanel> jbPanelJBPanel;
     DefaultTableModel defaultTableModel;
 
-    JBScrollPane jbPropertyScroll;
+    private JBScrollPane jbPropertyScroll;
 
-    JBScrollPane jbMenuScroll;
-    JPanel menu;
+    private JBScrollPane jbMenuScroll;
+    private JPanel menu;
+    private JPanel menuContainer;
+
 
     public SpdEditor() {
         this.setLayout(new BorderLayout());
@@ -112,12 +115,16 @@ public class SpdEditor extends JComponent implements MouseListener {
         menu.setBackground(ConstantUtils.getInstance().getBtnBarColor());
         processMenu(menu);
 
-//        jbMenuScroll.setViewportView(menu);
-//        add(jbMenuScroll, BorderLayout.NORTH);
+        jbMenuScroll.setViewportView(menu);
+        add(jbMenuScroll, BorderLayout.NORTH);
 
-        DefaultActionGroup group = (DefaultActionGroup) ActionManager.getInstance().getAction("spdgroup");
-        ActionToolbar spdToolbar = ActionManager.getInstance().createActionToolbar("SpdEditor", group, true);
-        spdToolbar.setTargetComponent(this);
+//        DefaultActionGroup group = (DefaultActionGroup) ActionManager.getInstance().getAction("spdgroup");
+//        ActionToolbar spdToolbar = ActionManager.getInstance().createActionToolbar("SpdEditor", group, true);
+//        menuContainer = new JPanel();
+//        menuContainer.setPreferredSize(new Dimension(0,30));
+//        spdToolbar.setTargetComponent(menuContainer);
+//        menuContainer.add(spdToolbar.getComponent());
+//        add(menuContainer,BorderLayout.NORTH);
 
     }
 

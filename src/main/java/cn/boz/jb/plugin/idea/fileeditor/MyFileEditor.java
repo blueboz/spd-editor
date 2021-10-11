@@ -114,7 +114,7 @@ public class MyFileEditor implements FileEditor {
     @SuppressWarnings("unchecked")
     @Override
     public <T> @Nullable T getUserData(@NotNull Key<T> key) {
-        System.out.println("get user data:" + key);
+//        System.out.println("get user data:" + key);
         return (T) userdata.get(key);
     }
 
@@ -122,6 +122,6 @@ public class MyFileEditor implements FileEditor {
     @Override
     public <T> void putUserData(@NotNull Key<T> key, @Nullable T t) {
         userdata.put(key, t);
-        System.out.println("put user data:" + key + " t:" + t);
+//        System.out.println("put user data:" + key + " t:" + t);
     }
 }

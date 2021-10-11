@@ -4,12 +4,16 @@
     <vendor email="1173626291@qq.com" url="http://blog.csdn.net/blueboz">Blueboz.Chen</vendor>
 
     <description><![CDATA[
-    This is an Spd editor plugin,Which support features such as flow viewer,flow editor,flow image export ,flow save.
-
+    This is an Spd editor plugin,Which support features such as flow viewer,Flow editor,Flow image export,flow save And Soon.
+     <b>1.Use this plugin start with right key on the project file or directory</b><br>
+     <b>2.New->Spd File.</b><br>
+     <b>3.Input any filename that you want.</b><br>
+     <b>4.Have fun!</b><br>
     ]]></description>
     <version>1.0.0</version>
     <change-notes>
         support edit for spd file.which is activiti like editor .this is the first version .
+
     </change-notes>
 
     <!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html
@@ -22,8 +26,8 @@
         <fileEditorProvider implementation="cn.boz.jb.plugin.idea.fileeditor.MyFileEditorProvider"
                             id="myFileEditorProvider" order="last">
         </fileEditorProvider>
-        <toolWindow factoryClass="cn.boz.jb.plugin.idea.toolwindow.MyToolWindowFactory" id="myToolwindow" anchor="right"
-                    order="last"></toolWindow>
+<!--        <toolWindow factoryClass="cn.boz.jb.plugin.idea.toolwindow.MyToolWindowFactory" id="myToolwindow" anchor="right"-->
+<!--                    order="last"></toolWindow>-->
         <fileType name="Spd" extensions="spd"
                   implementationClass="cn.boz.jb.plugin.idea.filetype.SpdFileType"></fileType>
         <themeProvider id="765ee155-7b8d-48a4-808a-834f80b2d6dc" path="/spdtheme.theme.json"/>
@@ -42,8 +46,8 @@
                     description="Add Bom" id="addBomAction"></action>
         </group>
 
-        <action class="cn.boz.jb.plugin.idea.action.NewSpdFileAction" id="NewSpdFile" text="NewSpdFile"
-                icon="SpdEditorIcons.FLOW_16_ICON" description="new Spd file">
+        <action class="cn.boz.jb.plugin.idea.action.NewSpdFileAction" id="NewSpdFile" text="Spd File"
+                icon="SpdEditorIcons.FLOW_16_ICON" description="Spd File">
             <add-to-group group-id="NewGroup" anchor="last"></add-to-group>
         </action>
 
