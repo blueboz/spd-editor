@@ -47,6 +47,7 @@ println "${project.rootDir}"
 patchPluginXml {
     changeNotes = """
      icon color change with theme.
+     fixed addbom action problems
       """
 }
 test {
