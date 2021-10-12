@@ -41,10 +41,7 @@
             <add-to-group group-id="ProjectViewPopupMenu" anchor="before"
                           relative-to-action="EditorPaste"></add-to-group>
         </action>
-        <group id="spdgroup">
-            <action class="cn.boz.jb.plugin.idea.action.MyAction" text="AddBom" icon="SpdEditorIcons.BOM_ICON"
-                    description="Add Bom" id="addBomAction"></action>
-        </group>
+
 
         <action class="cn.boz.jb.plugin.idea.action.NewSpdFileAction" id="NewSpdFile" text="Spd File"
                 icon="SpdEditorIcons.FLOW_16_ICON" description="Spd File">
