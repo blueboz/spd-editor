@@ -77,8 +77,8 @@ tasks.whenTaskAdded { task ->
 publishPlugin {
     channels = ['beta']
 //    channels = ['Stable']
-//    token = System.getenv("ORG_GRADLE_PROJECT_intellijPublishToken")
-    token = "perm:Y2hlbndlaXRpYW5n.OTItNDc3MA==.yRcJmYWU09Teim5uGyvRaWLkW9XwSl"
+    token = System.getenv("ORG_GRADLE_PROJECT_intellijPublishToken")
+//    token = ""
 
 }
 
