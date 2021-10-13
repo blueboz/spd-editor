@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'org.example'
-version '1.0.4'
+version '1.0.5'
 
 sourceCompatibility = 1.11
 
@@ -46,8 +46,9 @@ println "${project.rootDir}"
 
 patchPluginXml {
     changeNotes = """
-     icon color change with theme.
-     fixed addbom action problems
+     Icon color change with theme.
+     Fixed addbom action problems.
+     Fixed button click problems.
       """
 }
 test {
@@ -76,7 +77,8 @@ tasks.whenTaskAdded { task ->
 publishPlugin {
     channels = ['beta']
 //    channels = ['Stable']
-
 //    token = System.getenv("ORG_GRADLE_PROJECT_intellijPublishToken")
     token = "perm:Y2hlbndlaXRpYW5n.OTItNDc3MA==.yRcJmYWU09Teim5uGyvRaWLkW9XwSl"
+
 }
+

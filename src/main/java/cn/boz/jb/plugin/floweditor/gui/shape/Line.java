@@ -723,4 +723,6 @@ public class Line implements Restorable, Comparable, PropertyObject {
     public Property[] getPropertyEditors() {
         return PropertyObject.super.getPropertyEditors();
     }
+
+
 }

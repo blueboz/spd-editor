@@ -153,7 +153,7 @@ public class UserTask extends RectBridge {
     @Override
     public Property[] getPropertyEditors() {
         Property[] ps = new Property[]{
-                new TextFieldProperty("bussinesKey", this),
+                new TextFieldProperty("name", this),
                 new TextFieldProperty("bussinesId", this),
                 new TextFieldProperty("bussinesDescrition", this),
                 new TextFieldProperty("rights", this),

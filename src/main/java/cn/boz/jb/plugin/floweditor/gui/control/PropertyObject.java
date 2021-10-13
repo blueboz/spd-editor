@@ -8,4 +8,6 @@ public interface PropertyObject {
         Property[] ps = new Property[0];
         return ps;
     }
+
+
 }

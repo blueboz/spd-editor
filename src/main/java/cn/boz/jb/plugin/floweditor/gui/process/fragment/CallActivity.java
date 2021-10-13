@@ -81,6 +81,7 @@ public class CallActivity extends RectBridge {
     @Override
     public Property[] getPropertyEditors() {
         Property[] ps = new Property[]{
+                new TextFieldProperty("name", this),
                 new TextFieldProperty("calledElement", this),
         };
         return ps;

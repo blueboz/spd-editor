@@ -93,6 +93,7 @@ public class ServiceTask extends RectBridge {
     @Override
     public Property[] getPropertyEditors() {
         Property[] ps = new Property[]{
+                new TextFieldProperty("name", this),
                 new TextAreaProperty("expression", this),
                 new TextFieldProperty("listener", this),
         };

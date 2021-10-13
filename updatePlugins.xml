@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  The <plugins> element contains the description of the plugins available at this repository. Required.
+-->
+<plugins>
+    <!--
+      Each <plugin> element describes one plugin in the repository. Required.
+      id - used by JetBrains IDEs to uniquely identify a plugin. Required. Must match <id> in plugin.xml
+      url - path to download the plugin JAR/ZIP file. Required. Must be HTTPS
+      version - version of this plugin. Required. Must match <version> in plugin.xml
+    -->
+    <plugin id="cn.boz.jb.plugin.spd-editor" url="http://21.96.60.156:16789/jetbrainsPlugins/spd-editor-1.0.4.zip"
+            version="1.0.4" date="1628504557000" downloads="1558" size="9828740" updatedDate="1634039622000">
+        <!--
+          The <idea-version> element must match the same element in plugin.xml. Required.
+        -->
+        <idea-version since-build="212.5080" until-build="212.*"/>
+        <name>必装 （安装顺序-4） CGB个人流水线</name>
+        <version>1.0.9</version>
+        <vendor email="" url="http://21.96.7.164">研发中心 效能中心 持续集成</vendor>
+        <description><html><p>个人流水线插件</p><p>联系人：李金华（2937）胡世伟（2929）</p><p>IDEA一站式开发者门户插件，开发端个人流水线插件实现编译、代码扫描、启动服务、自动化测试等集成环节一体化，并有机组合成个人流水线。开发端个人流水线集成过程数据上传（实时或脱机异步）至持续集成平台个人流水线模块，依据当前版本分支或特性分支的合版情况，建立版本流水线与个人流水线联系，实现开发及测试端到端的发布流水线。通过开发者门户插件提供可配置、线上化、标准化、一键式的流程调度能力，为开发测集成提供标准的集成流程、集成数据线上化、建立开发端集成与部署版本的联系。最终，实现开发端部分复杂的跨平台、跨工具操作简化与效率提升；建立开发阶段与测试阶段的集成关系，为后续质量度量改进提供优质的基础数据支持；助力测试左移、为SIT测试环境提供更高质量的可交付版本。<a href="http://21.96.16.99:8090/pages/viewpage.action?pageId=96650406">详见知识库</a></p><br/></html></description>
+        <change-notes><p><a href="http://21.96.16.99:8090/pages/viewpage.action?pageId=102248392">变更记录</a></p><ul><li>1.0.9</li><ul><li>1、修复自动化测试不显示简易案例的问题</li><li>2、修复个人流水线只启用代码扫描步骤时，扫描出来的部分规则结果闪退。</li></ul><li>1.0.8</li><ul><li>1、新增查询复合案例的子案例执行进度和详情的功能</li></ul><li>1.0.7</li><ul><li>1、修复自动化测试无法勾选复合案例的问题</li><li>2、修复本地启动服务的状态与持续集成平台上的状态不一致的问题</li><li>3、修复启动服务为最后一个步骤时，工单执行结束，但是启动服务步骤不会终止问题</li></ul></ul></change-notes>
+        <idea-version/>
+        <rating>5</rating>
+    </plugin>
+</plugins>

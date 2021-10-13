@@ -4,6 +4,8 @@ import cn.boz.jb.plugin.floweditor.gui.widget.MyTable;
 
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 
@@ -15,6 +17,8 @@ public abstract class Property {
     private Object operatedObj;
     private String displayProperyName;
     private Integer rowHeight;
+    private PropertyChangeListener propertyChangeListener;
+
 
     public Integer getRowHeight() {
         if (rowHeight == null) {
@@ -88,6 +92,18 @@ public abstract class Property {
 
     }
 
+
+    public Property(String propertyName, Object operatedObj, PropertyChangeListener propertyChangeListener) {
+        this.propertyName = propertyName;
+        this.operatedObj = operatedObj;
+        this.valueRender = new JLabel();
+        this.propertyRender = new JLabel();
+        valueRender.setAutoscrolls(false);
+        propertyRender.setAutoscrolls(false);
+        this.propertyChangeListener = propertyChangeListener;
+
+    }
+
     public Property(String propertyName, String displayProperyName, Object operatedObj) {
         this.displayProperyName = displayProperyName;
         this.propertyName = propertyName;
@@ -158,16 +174,24 @@ public abstract class Property {
             Field field = getFieldOfClass(operatedObj.getClass(), propertyName);
             if (field != null) {
                 field.setAccessible(true);
+                Object oldValue = field.get(operatedObj);
+                Object newValue = null;
                 if (value instanceof String) {
                     String result = (String) value;
                     result = result.replace("\n", "#LEY#");
                     result = result.replace("\"", "&quot;");
                     result = result.replace(">", "&gt;");
                     result = result.replace("<", "&lt;");
-                    field.set(operatedObj, result);
-
+                    newValue = result;
                 } else {
-                    field.set(operatedObj, value);
+                    newValue = value;
+                }
+
+                field.set(operatedObj, value);
+                //触发属性改变监听器
+                if (this.propertyChangeListener != null) {
+                    PropertyChangeEvent propertyChangeEvent = new PropertyChangeEvent(operatedObj, propertyName, oldValue, newValue);
+                    this.propertyChangeListener.propertyChange(propertyChangeEvent);
                 }
             }
         } catch (IllegalAccessException e) {
