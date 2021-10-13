@@ -4,10 +4,10 @@ buildscript {
         maven {
             it.allowInsecureProtocol(true)
             allowInsecureProtocol true
-            url 'http://21.97.49.36:80/artifactory/fms-maven-virtual'
+            url 'repository url'
             credentials {
-                username = "chenweidian-yfzx"
-                password = "Chen@2020"
+                username = ""
+                password = ""
             }
         }
         mavenCentral()
@@ -18,10 +18,10 @@ repositories {
     mavenLocal()
     maven {
         allowInsecureProtocol true
-        url 'http://21.97.49.36:80/artifactory/fms-maven-virtual'
+        url 'repository url'
         credentials {
-            username = "chenweidian-yfzx"
-            password = "Chen@2020"
+            username = ""
+            password = ""
         }
     }
     mavenCentral()
