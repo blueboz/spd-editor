@@ -35,7 +35,8 @@ public class SequenceFlow extends LineBridge {
         this.targetRef = targetRef;
     }
 
-    public SequenceFlow(){}
+    public SequenceFlow() {
+    }
 
     public String getConditionExpression() {
         return conditionExpression;
@@ -45,7 +46,7 @@ public class SequenceFlow extends LineBridge {
         this.conditionExpression = conditionExpression;
     }
 
-    public Element buildProcessNode(){
+    public Element buildProcessNode() {
         Element element = DocumentHelper.createElement("sequenceFlow");
         element.addAttribute("id", this.getId());
         element.addAttribute("name", this.getName());
@@ -57,24 +58,24 @@ public class SequenceFlow extends LineBridge {
 
     public Element buildDiagramNode() {
         Element edge = DocumentHelper.createElement("Edge");
-        edge.addAttribute("Element",this.getId());
-        edge.addAttribute("id","Shape_"+this.getId());
+        edge.addAttribute("Element", this.getId());
+        edge.addAttribute("id", "Shape_" + this.getId());
 
         for (HiPoint point : this.getAllPointWithStartEnd()) {
             Element waypoint = edge.addElement("Waypoint");
-            waypoint.addAttribute("x", String.valueOf((int)Math.ceil(point.x)));
-            waypoint.addAttribute("y", String.valueOf((int)Math.ceil(point.y)));
+            waypoint.addAttribute("x", String.valueOf((int) Math.ceil(point.x)));
+            waypoint.addAttribute("y", String.valueOf((int) Math.ceil(point.y)));
         }
         //是否输出label是取决于模式
 
         Label label = this.getLabel();
-        if(label!=null&&label.visiable()){
+        if (label != null && label.visiable()) {
             Element lb = edge.addElement("Label");
             Element bound = lb.addElement("Bounds");
-            bound.addAttribute("height", String.valueOf((int)Math.ceil(label.getHeight())));
-            bound.addAttribute("width", String.valueOf((int)Math.ceil(label.getWidth())));
-            bound.addAttribute("x", String.valueOf((int)Math.ceil(label.getX())));
-            bound.addAttribute("y", String.valueOf((int)Math.ceil(label.getY())));
+            bound.addAttribute("height", String.valueOf((int) Math.ceil(label.getHeight())));
+            bound.addAttribute("width", String.valueOf((int) Math.ceil(label.getWidth())));
+            bound.addAttribute("x", String.valueOf((int) Math.ceil(label.getX())));
+            bound.addAttribute("y", String.valueOf((int) Math.ceil(label.getY())));
         }
         return edge;
     }
@@ -87,12 +88,13 @@ public class SequenceFlow extends LineBridge {
 
     /**
      * 初始化的必要操作
+     *
      * @param startShape
      * @param endShape
      */
     @Override
     public void init(Shape startShape, Shape endShape) {
-        super.init(startShape,endShape);
+        super.init(startShape, endShape);
         this.setSourceRef(startShape.getId());
         this.setTargetRef(endShape.getId());
     }
@@ -100,7 +102,10 @@ public class SequenceFlow extends LineBridge {
     @Override
     public Property[] getPropertyEditors() {
         Property[] ps = new Property[]{
-                new TextFieldProperty("name", this),
+                new TextFieldProperty("name", this, (ctx) -> {
+                    Label label = this.getLabel();
+                    label.setText((String) ctx.getNewValue());
+                }),
                 new TextFieldProperty("conditionExpression", this),
         };
         return ps;

@@ -5,6 +5,7 @@ import cn.boz.jb.plugin.floweditor.gui.property.Property;
 
 import javax.swing.JComponent;
 import javax.swing.JTextField;
+import java.beans.PropertyChangeListener;
 
 //通过
 public class TextFieldProperty extends Property {
@@ -13,10 +14,15 @@ public class TextFieldProperty extends Property {
 
 
     public TextFieldProperty(String propertyName, Object operatedObj) {
-        super(propertyName,operatedObj);
+        super(propertyName, operatedObj);
     }
-    public TextFieldProperty(String propertyName,String displayPropertyName, Object operatedObj) {
-        super(propertyName,displayPropertyName,operatedObj);
+
+    public TextFieldProperty(String propertyName, String displayPropertyName, Object operatedObj) {
+        super(propertyName, displayPropertyName, operatedObj);
+    }
+
+    public TextFieldProperty(String propertyName, Object operatedObj, PropertyChangeListener listener) {
+        super(propertyName, operatedObj,listener);
     }
 
     @Override

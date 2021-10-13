@@ -185,11 +185,6 @@ public class Button extends JComponent implements MouseListener, MouseMotionList
 
     @Override
     public void mouseClicked(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
         if (e.getButton() != MouseEvent.BUTTON1) {
             return;
         }
@@ -224,6 +219,11 @@ public class Button extends JComponent implements MouseListener, MouseMotionList
         }
         this.press = true;
         repaint();
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+
     }
 
     @Override
