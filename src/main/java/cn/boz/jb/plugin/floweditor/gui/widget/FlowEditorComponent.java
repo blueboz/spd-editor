@@ -130,41 +130,6 @@ public class FlowEditorComponent extends JComponent implements MouseListener {
         save.addMouseListener(this);
         menu.add(save);
 
-        Button theme = new Button(FontUtils.sun(), false, "theme");
-        theme.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (e.getButton() != MouseEvent.BUTTON1) {
-                    return;
-                }
-                String title = theme.getTitle();
-                if (title.equals(FontUtils.sun())) {
-                    theme.setTitle(FontUtils.moon());
-                } else if (title.equals(FontUtils.moon())) {
-                    theme.setTitle(FontUtils.paint());
-                } else if (title.equals(FontUtils.paint())) {
-                    theme.setTitle(FontUtils.sun());
-                }
-                title = theme.getTitle();
-                if (title.equals(FontUtils.sun())) {
-                    ConstantUtils.getInstance().setColorModeLight();
-                    menu.setBackground(ConstantUtils.getInstance().getBtnBarColor());
-                    repaint();
-                } else if (title.equals(FontUtils.moon())) {
-                    ConstantUtils.getInstance().setColorModeDark();
-                    menu.setBackground(ConstantUtils.getInstance().getBtnBarColor());
-                    repaint();
-                } else if (title.equals(FontUtils.paint())) {
-                    ConstantUtils.getInstance().setColorfulMode();
-                    menu.setBackground(ConstantUtils.getInstance().getBtnBarColor());
-                    repaint();
-                }
-                super.mouseClicked(e);
-            }
-        });
-        theme.addMouseListener(this);
-        menu.add(theme);
-
         Button trash = new Button(FontUtils.trash(), false, "trash");
         trash.addMouseListener(this);
         menu.add(trash);
@@ -173,7 +138,6 @@ public class FlowEditorComponent extends JComponent implements MouseListener {
 
         label.addMouseListener(this);
         menu.add(label);
-
 
         menu.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
         menu.setBorder(null);

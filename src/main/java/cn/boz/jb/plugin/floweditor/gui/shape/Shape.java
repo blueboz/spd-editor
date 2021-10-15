@@ -49,10 +49,6 @@ public class Shape implements Restorable, Resizable, Alignable, Attachable,Clone
     //作为以下线段的尾
     public List<Line> tailOfLine = new ArrayList<>();
     //你可以设置颜色，不设置将采用默认的颜色
-    protected Color backgroundColor;//= new Color(136, 136, 136, 158);
-    protected Color foregroundColor;//= new Color(136, 136, 136, 158);
-    protected Color activeBackgroundColor;//= new Color(78, 226, 255, 158);
-    protected Color activeForegroundColor;//= new Color(78, 226, 255, 158);
 
 
     //边框属性
@@ -80,13 +76,7 @@ public class Shape implements Restorable, Resizable, Alignable, Attachable,Clone
 
     }
 
-    public Shape(double x, double y, Color c) {
-        this.x = x;
-        this.y = y;
-        this.width = 30;
-        this.height = 30;
-        this.backgroundColor = c;
-    }
+
 
     public Shape(double x, double y) {
         this.x = x;
@@ -103,14 +93,6 @@ public class Shape implements Restorable, Resizable, Alignable, Attachable,Clone
         this.height = height;
     }
 
-    public Shape(double x, double y, double width, double height, Color c) {
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
-        this.backgroundColor = c;
-
-    }
 
 
     /**
@@ -370,8 +352,7 @@ public class Shape implements Restorable, Resizable, Alignable, Attachable,Clone
     public void drawContent(ChartPanel chartPanel) {
         //根据不同的状态，修改背景透视的颜色
         Rect rect = this.toRect();
-        chartPanel.fillRect(rect.getX(), rect.getY(), rect.getW(), rect.getH());
-        drawInnerBorder(chartPanel, this, borderWidth, borderStyle, borderColor);
+        chartPanel.fillRoundRect(rect.getX(), rect.getY(), rect.getW(), rect.getH(),5,5);
 
     }
 
@@ -390,11 +371,12 @@ public class Shape implements Restorable, Resizable, Alignable, Attachable,Clone
             chartPanel.markStroke();
             chartPanel.setColor(bColor);
             chartPanel.setStroke(ShapeUtils.getStoke(bw, bstyle));
-            chartPanel.drawRectBorder(rect.getX(), rect.getY(), rect.getW(), rect.getH());
+            chartPanel.drawRoundBorder(rect.getX(), rect.getY(), rect.getW(), rect.getH(),5,5);
             chartPanel.resetStroke();
             chartPanel.resetColor();
         }
     }
+
 
     /**
      * 描边
@@ -433,10 +415,8 @@ public class Shape implements Restorable, Resizable, Alignable, Attachable,Clone
      * @param chartPanel
      */
     public void drawShape(ChartPanel chartPanel) {
-
         chartPanel.markColor();
         //根据不同的状态，修改背景透视的颜色
-
         chartPanel.setColor(getBackgroundColor());
         this.drawContent(chartPanel);
         chartPanel.resetColor();
@@ -473,20 +453,16 @@ public class Shape implements Restorable, Resizable, Alignable, Attachable,Clone
                 Rect br = Shape.getResizeRect(ShapePos.BOTTOM_RIGHT, shapeOfResizeing);
                 chartPanel.fillRect(br.getX(), br.getY(), br.getW(), br.getH());
                 chartPanel.resetColor();
-                drawBorder(chartPanel, shapeOfResizeing, resizingBorderWidth, resizingBorderStyle, ConstantUtils.getInstance().getShapeResizingBorderColor());
+                if(!this.focusing) {
+                    drawBorder(chartPanel, shapeOfResizeing, resizingBorderWidth, resizingBorderStyle, ConstantUtils.getInstance().getShapeResizingBorderColor());
+                }
             } else {
-                drawBorder(chartPanel, shapeOfResizeing, hoverBoarderWidth, hoverBorderStyle, ConstantUtils.getInstance().getChartPanelHoverBorderColor());
+                if(!this.focusing){
+                    drawBorder(chartPanel, shapeOfResizeing, hoverBoarderWidth, hoverBorderStyle, ConstantUtils.getInstance().getChartPanelHoverBorderColor());
+                }
             }
-
         }
-
         this.drawAlign(chartPanel);
-
-
-
-//        chartPanel.drawString(this.getX(), this.getY()-20, this.getWidth(), this.getHeight(), this.getId());
-
-
     }
 
 
@@ -1043,22 +1019,13 @@ public class Shape implements Restorable, Resizable, Alignable, Attachable,Clone
      */
     public Color getForegroundColor() {
         if (this.draging || this.resizing) {
-            if(activeForegroundColor!=null){
-                return activeForegroundColor;
-            }
             return ConstantUtils.getInstance().getShapeActiveForegroundColor();
         } else {
-
-            if (foregroundColor != null) {
-                return foregroundColor;
-            }
             return ConstantUtils.getInstance().getShapeForegroundColor();
         }
     }
 
-    //多彩颜色模式下的颜色
-    private Color colorfullModeCalcedColor=null;
-    private Color colorfullModeCalcedActiveColor=null;
+
 
     /**
      * 获取控件的填充颜色
@@ -1066,47 +1033,11 @@ public class Shape implements Restorable, Resizable, Alignable, Attachable,Clone
      * @return
      */
     public Color getBackgroundColor() {
-        if(ConstantUtils.getInstance().getColorModeCurrent()==ConstantUtils.COLOR_MODE_RANDOM){
-            if(colorfullModeCalcedColor==null){
-                Random random = new Random();
-                colorfullModeCalcedColor= RandomColorUtils.getInstance().getRandomColor();
-//                colorfullModeCalcedColor= new Color(random.nextInt(255),random.nextInt(255),random.nextInt(255)).brighter();
-                colorfullModeCalcedActiveColor=colorfullModeCalcedColor.brighter();
-            }
-            if (this.draging || this.resizing) {
-                return colorfullModeCalcedActiveColor;
-            }else{
-                return colorfullModeCalcedColor;
-
-            }
-        }
         if (this.draging || this.resizing) {
-            if (activeBackgroundColor != null) {
-                return backgroundColor;
-            }
             return ConstantUtils.getInstance().getShapeActiveBackgroundColor();
         } else {
-            if (backgroundColor != null) {
-                return backgroundColor;
-            }
             return ConstantUtils.getInstance().getShapeBackgroundColor();
         }
-    }
-
-    public void setActiveBackgroundColor(Color activeBackgroundColor) {
-        this.activeBackgroundColor = activeBackgroundColor;
-    }
-
-    public void setActiveForegroundColor(Color activeForegroundColor) {
-        this.activeForegroundColor = activeForegroundColor;
-    }
-
-    public void setForegroundColor(Color foregroundColor) {
-        this.foregroundColor = foregroundColor;
-    }
-
-    public void setBackgroundColor(Color backgroundColor) {
-        this.backgroundColor = backgroundColor;
     }
 
     public boolean isMousePressing() {
@@ -1183,10 +1114,7 @@ public class Shape implements Restorable, Resizable, Alignable, Attachable,Clone
     @Override
     public Object clone() throws CloneNotSupportedException {
         Shape shape = new Shape(this.x,this.y,this.width,this.height);
-        shape.setActiveBackgroundColor(this.activeBackgroundColor);
-        shape.setActiveForegroundColor(this.activeForegroundColor);
-        shape.setBackgroundColor(this.backgroundColor);
-        shape.setForegroundColor(this.foregroundColor);
+
         shape.setName(this.name);
         return shape;
     }

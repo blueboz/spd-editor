@@ -199,44 +199,6 @@ public class SpdEditor extends JComponent implements MouseListener {
         photo.addMouseListener(this);
         menuPanel.add(photo);
 
-        Button save = new Button(FontUtils.save(), false, "save");
-        save.addMouseListener(this);
-        menuPanel.add(save);
-
-        Button theme = new Button(FontUtils.sun(), false, "theme");
-        theme.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (e.getButton() != MouseEvent.BUTTON1) {
-                    return;
-                }
-                String title = theme.getTitle();
-                if (title.equals(FontUtils.sun())) {
-                    theme.setTitle(FontUtils.moon());
-                } else if (title.equals(FontUtils.moon())) {
-                    theme.setTitle(FontUtils.paint());
-                } else if (title.equals(FontUtils.paint())) {
-                    theme.setTitle(FontUtils.sun());
-                }
-                title = theme.getTitle();
-                if (title.equals(FontUtils.sun())) {
-                    ConstantUtils.getInstance().setColorModeLight();
-                    menuPanel.setBackground(ConstantUtils.getInstance().getBtnBarColor());
-                    repaint();
-                } else if (title.equals(FontUtils.moon())) {
-                    ConstantUtils.getInstance().setColorModeDark();
-                    menuPanel.setBackground(ConstantUtils.getInstance().getBtnBarColor());
-                    repaint();
-                } else if (title.equals(FontUtils.paint())) {
-                    ConstantUtils.getInstance().setColorfulMode();
-                    menuPanel.setBackground(ConstantUtils.getInstance().getBtnBarColor());
-                    repaint();
-                }
-                super.mouseClicked(e);
-            }
-        });
-        theme.addMouseListener(this);
-        menuPanel.add(theme);
 
         Button trash = new Button(FontUtils.trash(), false, "trash");
         trash.addMouseListener(this);
@@ -250,8 +212,7 @@ public class SpdEditor extends JComponent implements MouseListener {
 
         FlowLayout flowLayout = new FlowLayout(FlowLayout.LEFT, 0, 0);
         menuPanel.setLayout(flowLayout);
-//        menuPanel.setMaximumSize(new Dimension(0,40));
-//        menuPanel.setPreferredSize(new Dimension(0,50));
+
         menuPanel.setBorder(null);
     }
 
@@ -352,14 +313,6 @@ public class SpdEditor extends JComponent implements MouseListener {
                 break;
             case "photo":
                 chartPanel.export();
-                break;
-            case "save":
-//                chartPanel.save();
-                chartPanel.fireSavedListener();
-                break;
-            case "theme":
-
-
                 break;
             case "label":
 

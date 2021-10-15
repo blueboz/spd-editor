@@ -15,20 +15,12 @@ public class Circle extends Shape {
 
     }
 
-    public Circle(double x, double y, Color c) {
-        super(x, y, c);
-    }
-
     public Circle(double x, double y) {
         super(x, y);
     }
 
     public Circle(double x, double y, double width, double height) {
         super(x, y, width, height);
-    }
-
-    public Circle(double x, double y, double width, double height, Color c) {
-        super(x, y, width, height, c);
     }
 
     @Override

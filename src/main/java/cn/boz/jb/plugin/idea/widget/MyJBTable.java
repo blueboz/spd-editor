@@ -109,7 +109,7 @@ public class MyJBTable extends JBTable implements ShapeSelectedListener {
 
     public class MyTableModel extends AbstractTableModel {
 
-        private String columnNames[] = new String[]{"属性名", "属性值"};
+        private String columnNames[] = new String[]{"Property", "Value"};
 
 
         @Override

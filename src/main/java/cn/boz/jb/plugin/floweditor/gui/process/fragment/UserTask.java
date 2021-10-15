@@ -109,10 +109,7 @@ public class UserTask extends RectBridge {
         usertask.setY(this.y);
         usertask.setWidth(this.width);
         usertask.setHeight(this.height);
-        usertask.setActiveBackgroundColor(this.activeBackgroundColor);
-        usertask.setActiveForegroundColor(this.activeForegroundColor);
-        usertask.setBackgroundColor(this.backgroundColor);
-        usertask.setForegroundColor(this.foregroundColor);
+
         usertask.setName(this.name);
         usertask.setExpression(this.expression);
         return usertask;

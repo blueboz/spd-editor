@@ -27,6 +27,7 @@ import cn.boz.jb.plugin.floweditor.gui.utils.NumberUtils;
 import cn.boz.jb.plugin.floweditor.gui.utils.ShapePos;
 import cn.boz.jb.plugin.floweditor.gui.utils.ShapeUtils;
 import cn.boz.jb.plugin.idea.listener.ProcessSaveListener;
+import com.intellij.ui.JBColor;
 
 import javax.imageio.ImageIO;
 import javax.swing.JComponent;
@@ -173,6 +174,8 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
 
     //触发drag事件就会置位true
     private boolean dragFlag = false;
+    //图形拖动的控制标志位
+    private boolean dragging = false;
 
 
     public ChartPanel() {
@@ -408,6 +411,12 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
         g2d.drawLine(doubleToInt(topleft.x) + ox, doubleToInt(topleft.y) + oy, doubleToInt(bottomRight.x) + ox2, doubleToInt(bottomRight.y) + oy2);
     }
 
+    /**
+     * 四舍五入般转换
+     *
+     * @param val
+     * @return
+     */
     public int doubleToInt(double val) {
         return (int) Math.round(val);
     }
@@ -419,9 +428,8 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
     public void fillRect(double x, double y, double w, double h) {
         HiPoint point = translatePoint(x, y);
         Size size = translateSize(w, h);
-        Graphics2D g2d = (Graphics2D) this.currentGraphic;
-//        g2d.fillRect(doubleToInt(point.x), doubleToInt(point.y), doubleToInt(size.getW()), doubleToInt(size.getH()));
-        g2d.fillRoundRect(doubleToInt(point.x), doubleToInt(point.y), doubleToInt(size.getW()), doubleToInt(size.getH()), 10, 10);
+        Graphics2D g2d = this.currentGraphic;
+        g2d.fillRect(doubleToInt(point.x), doubleToInt(point.y), doubleToInt(size.getW()), doubleToInt(size.getH()));
     }
 
     /**
@@ -430,8 +438,10 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
     public void fillRoundRect(double x, double y, double w, double h, int aw, int ah) {
         HiPoint point = translatePoint(x, y);
         Size size = translateSize(w, h);
-        Graphics2D g2d = (Graphics2D) this.currentGraphic;
-        g2d.fillRoundRect(doubleToInt(point.x), doubleToInt(point.y), doubleToInt(size.getW()), doubleToInt(size.getH()), aw, ah);
+        Graphics2D g2d = this.currentGraphic;
+        Size asize = translateSize(aw, ah);
+
+        g2d.fillRoundRect(doubleToInt(point.x), doubleToInt(point.y), doubleToInt(size.getW()), doubleToInt(size.getH()), doubleToInt(asize.getW()), doubleToInt(asize.getH()));
     }
 
     /**
@@ -456,6 +466,24 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
         Size size = translateSize(w, h);
         Graphics2D g2d = (Graphics2D) currentGraphic;
         g2d.drawRect(doubleToInt(point.x) - 1, doubleToInt(point.y) - 1, doubleToInt(size.getW()) + 1, doubleToInt(size.getH()) + 1);
+    }
+
+    /**
+     * 描边
+     *
+     * @param x
+     * @param y
+     * @param w
+     * @param h
+     * @param ar
+     * @param ah
+     */
+    public void drawRoundBorder(double x, double y, double w, double h, double ar, double ah) {
+        HiPoint point = translatePoint(x, y);
+        Size size = translateSize(w, h);
+        Graphics2D g2d = currentGraphic;
+        Size asize = translateSize(ar, ah);
+        g2d.drawRoundRect(doubleToInt(point.x) - 1, doubleToInt(point.y) - 1, doubleToInt(size.getW()) + 1, doubleToInt(size.getH()) + 1, doubleToInt(asize.getW()), doubleToInt(asize.getH()));
     }
 
     /**
@@ -644,6 +672,7 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
         drawDebug();
         //绘制耗损性能情况
 //        drawOccupation();
+
         g.dispose();
     }
 
@@ -712,6 +741,9 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
 
     private void drawDragShape() {
         Graphics2D g2d = this.currentGraphic;
+        if(!dragging){
+            return;
+        }
 
         if (dragPressObj != null) {
             markColor();
@@ -766,17 +798,16 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
     private void drawTotalBoard() {
         Graphics2D g2d = this.currentGraphic;
         markColor();
+
         g2d.setColor(ConstantUtils.getInstance().getChartPanelBoardColor());
-//        drawShadow(0, 0, boardSize.getW(), boardSize.getH());
         fillRect(0, 0, boardSize.getW(), boardSize.getH());
         resetColor();
     }
 
     private void drawBoard() {
-        Graphics2D g2d = (Graphics2D) this.currentGraphic;
+        Graphics2D g2d = this.currentGraphic;
         markColor();
         g2d.setColor(ConstantUtils.getInstance().getChartPanelBoardColor());
-//        drawShadow(0, 0, boardSize.getW(), boardSize.getH());
         fillRect(0, 0, boardSize.getW(), boardSize.getH());
         resetColor();
     }
@@ -885,14 +916,14 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
             g.setColor(shape.getBackgroundColor());
             if (shape.isHover()) {
                 g.fillRect(x, y, offsetright, lineheight);
-                g.setColor(new Color(255, 255, 255));
+                g.setColor(new Color(102, 102, 102));
             }
             g.drawString(String.format("x:%.2f y:%.2f w:%.2f h:%.2f", shape.getX(), shape.getY(), shape.getWidth(), shape.getHeight()), x, y + 12);
             y += lineheight;
             g.setColor(shape.getBackgroundColor());
             if (shape.isHover()) {
                 g.fillRect(x, y, offsetright, lineheight);
-                g.setColor(new Color(255, 255, 255));
+                g.setColor(new Color(102, 102, 102));
             }
             g.drawString(String.format("drg:%s res:%s hov:%s foc:%s", shape.isDraging() ? 1 : 0, shape.isResizing() ? 1 : 0, shape.isHover() ? 1 : 0, shape.isFocusing() ? 1 : 0), x, y + 12);
             y += lineheight;
@@ -900,7 +931,7 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
 
             if (shape.isHover()) {
                 g.fillRect(x, y, offsetright, lineheight);
-                g.setColor(new Color(255, 255, 255));
+                g.setColor(new Color(102, 102, 102));
             }
             g.drawString(String.format("align:%s", NumberUtils.binaryFormat(shape.getAlign(), 16)), x, y + 12);
             y += lineheight;
@@ -1541,6 +1572,7 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
         if (e.getButton() != MouseEvent.BUTTON1) {
             return;
         }
+        dragging=false;
         if (whitespacePressing || ctrlPressing) {
             return;
         }
@@ -1928,7 +1960,7 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
      */
     @Override
     public void mouseDragged(MouseEvent e) {
-
+        this.dragging = true;
         dragFlag = true;
 
         if (ctrlPressing) {
@@ -2081,9 +2113,10 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
         double vVertical = LineUtils.calcCrossAngleOfTwoLine(prev, new HiPoint(finalX, finalY), new HiPoint(0, 0), new HiPoint(0, 1000));
         double degHorizoncal = LineUtils.transferToDeg(vHorizontal);
         double degVertical = LineUtils.transferToDeg(vVertical);
-        if (degHorizoncal < 5 || 180 - degHorizoncal < 5) {
+        double degAllow=2.5;
+        if (degHorizoncal < degAllow || 180 - degHorizoncal < degAllow) {
             finalY = prev.y;
-        } else if (degVertical < 5 || 180 - degVertical < 5) {
+        } else if (degVertical < degAllow || 180 - degVertical < degAllow) {
             finalX = prev.x;
         }
 
@@ -2098,9 +2131,9 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
         double ndegHorizoncal = LineUtils.transferToDeg(nvHorizontal);
         double ndegVertical = LineUtils.transferToDeg(nvVertical);
 
-        if (ndegHorizoncal < 5 || 180 - ndegHorizoncal < 5) {
+        if (ndegHorizoncal < degAllow || 180 - ndegHorizoncal < degAllow) {
             finalY = next.y;
-        } else if (ndegVertical < 5 || 180 - ndegVertical < 5) {
+        } else if (ndegVertical < degAllow || 180 - ndegVertical < degAllow) {
             finalX = next.x;
         }
 
