@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'cn.boz'
-version '1.0.7'
+version '1.0.7.212.5080'
 
 sourceCompatibility = 1.11
 
@@ -36,8 +36,8 @@ sourceSets {
 intellij {
 //    version = '2021.2.1'
 //    localPath = '/Volumes/Mac/App/IntelliJ IDEA.app'
-//    localPath = 'F:\\App\\JetBrains\\IntelliJ IDEA 2021.2.1'
-    localPath = 'D:\\App\\ideaIU-2020'
+    localPath = 'F:\\App\\JetBrains\\IntelliJ IDEA 2021.2.1'
+//    localPath = 'D:\\App\\ideaIU-2020'
 //    instrumentCode = false
 //    sandboxDir.set("${project.rootDir}/.sandbox")
     sandboxDir = "${project.rootDir}/.sandbox"
