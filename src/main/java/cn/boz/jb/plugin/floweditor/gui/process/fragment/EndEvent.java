@@ -30,10 +30,7 @@ public class EndEvent extends CircleBridge {
         endEvent.setY(this.y);
         endEvent.setWidth(this.width);
         endEvent.setHeight(this.height);
-        endEvent.setActiveBackgroundColor(this.activeBackgroundColor);
-        endEvent.setActiveForegroundColor(this.activeForegroundColor);
-        endEvent.setBackgroundColor(this.backgroundColor);
-        endEvent.setForegroundColor(this.foregroundColor);
+
         endEvent.setName(this.name);
         return endEvent;
     }

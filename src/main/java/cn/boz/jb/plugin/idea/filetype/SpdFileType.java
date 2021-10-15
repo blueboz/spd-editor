@@ -1,8 +1,7 @@
 package cn.boz.jb.plugin.idea.filetype;
 
 import com.intellij.openapi.fileTypes.FileType;
-import com.intellij.openapi.util.NlsContexts;
-import com.intellij.openapi.util.NlsSafe;
+import com.intellij.openapi.vfs.VirtualFile;
 import icons.SpdEditorIcons;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
@@ -19,12 +18,12 @@ public class SpdFileType implements FileType {
     }
 
     @Override
-    public @NlsContexts.Label @NotNull String getDescription() {
+    public  @NotNull String getDescription() {
         return "Erayt Flow";
     }
 
     @Override
-    public @NlsSafe @NotNull String getDefaultExtension() {
+    public  @NotNull String getDefaultExtension() {
         return "spd";
     }
 
@@ -37,5 +36,15 @@ public class SpdFileType implements FileType {
     @Override
     public boolean isBinary() {
         return false;
+    }
+
+    @Override
+    public boolean isReadOnly() {
+        return false;
+    }
+
+    @Override
+    public @Nullable String getCharset(@NotNull VirtualFile virtualFile, byte @NotNull [] bytes) {
+        return null;
     }
 }

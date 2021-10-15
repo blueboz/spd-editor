@@ -42,10 +42,7 @@ public class CallActivity extends RectBridge {
         callActivity.setY(this.y);
         callActivity.setWidth(this.width);
         callActivity.setHeight(this.height);
-        callActivity.setActiveBackgroundColor(this.activeBackgroundColor);
-        callActivity.setActiveForegroundColor(this.activeForegroundColor);
-        callActivity.setBackgroundColor(this.backgroundColor);
-        callActivity.setForegroundColor(this.foregroundColor);
+
         callActivity.setName(this.name);
         callActivity.setCalledElement(this.calledElement);
         return callActivity;

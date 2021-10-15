@@ -34,10 +34,7 @@ public class ParallelGateway extends PrismaticBridge implements Gateway {
         parallelGateway.setY(this.y);
         parallelGateway.setWidth(this.width);
         parallelGateway.setHeight(this.height);
-        parallelGateway.setActiveBackgroundColor(this.activeBackgroundColor);
-        parallelGateway.setActiveForegroundColor(this.activeForegroundColor);
-        parallelGateway.setBackgroundColor(this.backgroundColor);
-        parallelGateway.setForegroundColor(this.foregroundColor);
+
         parallelGateway.setName(this.name);
         return parallelGateway;
     }

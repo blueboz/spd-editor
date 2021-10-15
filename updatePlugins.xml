@@ -10,7 +10,7 @@
       version - version of this plugin. Required. Must match <version> in plugin.xml
     -->
     <plugin id="cn.boz.jb.plugin.spd-editor" url="http://21.96.60.156:16789/jetbrainsPlugins/spd-editor-1.0.4.zip"
-            version="1.0.4" date="1628504557000" downloads="1558" size="9828740" updatedDate="1634039622000">
+            version="1.0.6" date="1628504557000" downloads="1558" size="9828740" updatedDate="1634039622000">
         <!--
           The <idea-version> element must match the same element in plugin.xml. Required.
         -->

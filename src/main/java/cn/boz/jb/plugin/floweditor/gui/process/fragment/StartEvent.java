@@ -31,10 +31,7 @@ public class StartEvent extends CircleBridge {
         startEvent.setY(this.y);
         startEvent.setWidth(this.width);
         startEvent.setHeight(this.height);
-        startEvent.setActiveBackgroundColor(this.activeBackgroundColor);
-        startEvent.setActiveForegroundColor(this.activeForegroundColor);
-        startEvent.setBackgroundColor(this.backgroundColor);
-        startEvent.setForegroundColor(this.foregroundColor);
+
         startEvent.setName(this.name);
         return startEvent;
     }

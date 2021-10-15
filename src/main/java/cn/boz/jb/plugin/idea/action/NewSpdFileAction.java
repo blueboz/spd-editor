@@ -2,11 +2,8 @@ package cn.boz.jb.plugin.idea.action;
 
 import com.intellij.ide.actions.CreateFileFromTemplateAction;
 import com.intellij.ide.actions.CreateFileFromTemplateDialog;
-import com.intellij.ide.fileTemplates.FileTemplateManager;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.NlsActions;
-import com.intellij.openapi.util.NlsContexts;
 import com.intellij.psi.PsiDirectory;
 import icons.SpdEditorIcons;
 import org.jetbrains.annotations.NonNls;
@@ -20,7 +17,7 @@ public class NewSpdFileAction extends CreateFileFromTemplateAction implements Du
         super("Spd File", "", null);
     }
 
-    public NewSpdFileAction(@NlsActions.ActionText String text, @NlsActions.ActionDescription String description, Icon icon) {
+    public NewSpdFileAction(String text, String description, Icon icon) {
         super(text, description, icon);
     }
 
@@ -31,7 +28,7 @@ public class NewSpdFileAction extends CreateFileFromTemplateAction implements Du
     }
 
     @Override
-    protected @NlsContexts.Command String getActionName(PsiDirectory psiDirectory, @NonNls @NotNull String s, @NonNls String s1) {
+    protected String getActionName(PsiDirectory psiDirectory, @NonNls @NotNull String s, @NonNls String s1) {
         return "Spd file";
     }
 

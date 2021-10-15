@@ -1,0 +1,168 @@
+{
+  "name": "SpdEditor",
+  "fixed": false,
+  "ui": [
+    {
+      "key": "ChartPanel.boardBackground",
+      "description": "The border for my component. Not used anymore.",
+      "deprecated": false,
+      "source": "cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel"
+    },
+    {
+      "key": "ChartPanel.shapeActiveBackground",
+      "description": "The border for my component. Not used anymore.",
+      "deprecated": false,
+      "source": "cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel"
+    },
+    {
+      "key": "ChartPanel.shapeActiveForeground",
+      "description": "The border for my component. Not used anymore.",
+      "deprecated": false,
+      "source": "cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel"
+    },
+    {
+      "key": "ChartPanel.shapeBackground",
+      "description": "The border for my component. Not used anymore.",
+      "deprecated": false,
+      "source": "cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel"
+    },
+    {
+      "key": "ChartPanel.shapeForegroundColor",
+      "description": "The border for my component. Not used anymore.",
+      "deprecated": false,
+      "source": "cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel"
+    },
+    {
+      "key": "ChartPanel.chartPanelBoard",
+      "description": "The border for my component. Not used anymore.",
+      "deprecated": false,
+      "source": "cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel"
+    },
+    {
+      "key": "ChartPanel.chartPanelHoverBorder",
+      "description": "The border for my component. Not used anymore.",
+      "deprecated": false,
+      "source": "cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel"
+    },
+    {
+      "key": "ChartPanel.chartPanelFlowLineActive",
+      "description": "The border for my component. Not used anymore.",
+      "deprecated": false,
+      "source": "cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel"
+    },
+    {
+      "key": "ChartPanel.chartPanelFlowLineHover",
+      "description": "The border for my component. Not used anymore.",
+      "deprecated": false,
+      "source": "cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel"
+    },
+    {
+      "key": "ChartPanel.chartPanelFlowLineFill",
+      "description": "The border for my component. Not used anymore.",
+      "deprecated": false,
+      "source": "cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel"
+    },
+    {
+      "key": "ChartPanel.chartPanelNewFlowLineFill",
+      "description": "The border for my component. Not used anymore.",
+      "deprecated": false,
+      "source": "cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel"
+    },
+    {
+      "key": "ChartPanel.chartPanelBackgroundOdd",
+      "description": "The border for my component. Not used anymore.",
+      "deprecated": false,
+      "source": "cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel"
+    },
+    {
+      "key": "ChartPanel.chartPanelBackgroundEven",
+      "description": "The border for my component. Not used anymore.",
+      "deprecated": false,
+      "source": "cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel"
+    },
+    {
+      "key": "ChartPanel.alignLine",
+      "description": "The border for my component. Not used anymore.",
+      "deprecated": false,
+      "source": "cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel"
+    },
+    {
+      "key": "ChartPanel.shapeResizingBorder",
+      "description": "The border for my component. Not used anymore.",
+      "deprecated": false,
+      "source": "cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel"
+    },
+    {
+      "key": "ChartPanel.shapeResizingCtlDot",
+      "description": "The border for my component. Not used anymore.",
+      "deprecated": false,
+      "source": "cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel"
+    },
+    {
+      "key": "ChartPanel.chartPanelDraggingShape",
+      "description": "The border for my component. Not used anymore.",
+      "deprecated": false,
+      "source": "cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel"
+    },
+    {
+      "key": "ChartPanel.chartPanelNewShapeInvalid",
+      "description": "The border for my component. Not used anymore.",
+      "deprecated": false,
+      "source": "cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel"
+    },
+    {
+      "key": "ChartPanel.chartPanelNewShapeValid",
+      "description": "The border for my component. Not used anymore.",
+      "deprecated": false,
+      "source": "cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel"
+    },
+    {
+      "key": "BtnBar.btn",
+      "description": "The border for my component. Not used anymore.",
+      "deprecated": false,
+      "source": "cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel"
+    },
+    {
+      "key": "BtnBar.btnBar",
+      "description": "The border for my component. Not used anymore.",
+      "deprecated": false,
+      "source": "cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel"
+    },
+    {
+      "key": "BtnBar.btnBar",
+      "description": "The border for my component. Not used anymore.",
+      "deprecated": false,
+      "source": "cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel"
+    },
+    {
+      "key": "BtnBar.btnHover",
+      "description": "The border for my component. Not used anymore.",
+      "deprecated": false,
+      "source": "cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel"
+    },
+    {
+      "key": "BtnBar.btnActive",
+      "description": "The border for my component. Not used anymore.",
+      "deprecated": false,
+      "source": "cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel"
+    },
+    {
+      "key": "BtnBar.btnBg",
+      "description": "The border for my component. Not used anymore.",
+      "deprecated": false,
+      "source": "cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel"
+    },
+    {
+      "key": "BtnBar.btnBgHover",
+      "description": "The border for my component. Not used anymore.",
+      "deprecated": false,
+      "source": "cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel"
+    },
+    {
+      "key": "BtnBar.btnBgActiver",
+      "description": "The border for my component. Not used anymore.",
+      "deprecated": false,
+      "source": "cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel"
+    }
+  ]
+}

@@ -33,10 +33,7 @@ public class ExclusiveGateway extends PrismaticBridge implements Gateway {
         exclusiveGateway.setY(this.y);
         exclusiveGateway.setWidth(this.width);
         exclusiveGateway.setHeight(this.height);
-        exclusiveGateway.setActiveBackgroundColor(this.activeBackgroundColor);
-        exclusiveGateway.setActiveForegroundColor(this.activeForegroundColor);
-        exclusiveGateway.setBackgroundColor(this.backgroundColor);
-        exclusiveGateway.setForegroundColor(this.foregroundColor);
+
         exclusiveGateway.setName(this.name);
 //        foreachGateway.setExpression(this.expression);
         return exclusiveGateway;

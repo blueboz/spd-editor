@@ -34,10 +34,7 @@ public class ForeachGateway extends PrismaticBridge implements Gateway {
         foreachGateway.setY(this.y);
         foreachGateway.setWidth(this.width);
         foreachGateway.setHeight(this.height);
-        foreachGateway.setActiveBackgroundColor(this.activeBackgroundColor);
-        foreachGateway.setActiveForegroundColor(this.activeForegroundColor);
-        foreachGateway.setBackgroundColor(this.backgroundColor);
-        foreachGateway.setForegroundColor(this.foregroundColor);
+
         foreachGateway.setName(this.name);
         return foreachGateway;
     }

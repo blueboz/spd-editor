@@ -20,17 +20,16 @@
     <depends>com.intellij.modules.platform</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <internalFileTemplate name="Spd Process" ></internalFileTemplate>
+        <internalFileTemplate name="Spd Process"></internalFileTemplate>
         <!-- Add your extensions here -->
         <fileEditorProvider implementation="cn.boz.jb.plugin.idea.fileeditor.MyFileEditorProvider"
                             id="myFileEditorProvider" order="last">
         </fileEditorProvider>
-<!--        <toolWindow factoryClass="cn.boz.jb.plugin.idea.toolwindow.MyToolWindowFactory" id="myToolwindow" anchor="right"-->
-<!--                    order="last"></toolWindow>-->
+        <!--        <toolWindow factoryClass="cn.boz.jb.plugin.idea.toolwindow.MyToolWindowFactory" id="myToolwindow" anchor="right"-->
+        <!--                    order="last"></toolWindow>-->
         <fileType name="Spd" extensions="spd"
                   implementationClass="cn.boz.jb.plugin.idea.filetype.SpdFileType"></fileType>
-        <themeProvider id="765ee155-7b8d-48a4-808a-834f80b2d6dc" path="/spdtheme.theme.json"/>
-
+        <themeMetadataProvider path="/META-INF/SpdEditor.themeMetadata.json"/>
     </extensions>
 
     <actions>

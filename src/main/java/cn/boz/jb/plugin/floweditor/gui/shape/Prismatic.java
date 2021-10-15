@@ -17,9 +17,6 @@ public class Prismatic extends Shape {
     public Prismatic(){
 
     }
-    public Prismatic(double x, double y,  Color c) {
-        super(x, y, c);
-    }
 
     public Prismatic(double x, double y) {
         super(x, y);
@@ -29,11 +26,6 @@ public class Prismatic extends Shape {
         super(x, y, width, height);
     }
 
-
-
-    public Prismatic(double x, double y, double width, double height,  Color c) {
-        super(x, y, width, height,  c);
-    }
 
     @Override
     public void drawContent(ChartPanel chartPanel) {

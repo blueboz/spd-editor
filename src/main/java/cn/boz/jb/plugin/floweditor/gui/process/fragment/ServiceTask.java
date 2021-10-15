@@ -45,10 +45,7 @@ public class ServiceTask extends RectBridge {
         serviceTask.setY(this.y);
         serviceTask.setWidth(this.width);
         serviceTask.setHeight(this.height);
-        serviceTask.setActiveBackgroundColor(this.activeBackgroundColor);
-        serviceTask.setActiveForegroundColor(this.activeForegroundColor);
-        serviceTask.setBackgroundColor(this.backgroundColor);
-        serviceTask.setForegroundColor(this.foregroundColor);
+
         serviceTask.setName(this.name);
         serviceTask.setExpression(this.expression);
         return serviceTask;
