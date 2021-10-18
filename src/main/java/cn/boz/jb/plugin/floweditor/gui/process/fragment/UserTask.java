@@ -169,7 +169,7 @@ public class UserTask extends RectBridge implements SqlAggregator {
                         "RIGHTS_, VALIDSECOND_, LISTENER_, OPENSECOND_, BUSSINESID_, TASKLISTENER_)\n" +
                         "VALUES ('%s', 'USER', '%s', '%s', null, '%s', '%s', '%s', %d, '%s', %d, '%s', null);",
                 id, this.name, this.expression, bussinesKey, bussinesDescrition, getRights(), Integer.parseInt(getValidSecond()),
-                getEventListener(), getOpenSecond(), getBussinesId());
+                getEventListener(), Integer.parseInt(getOpenSecond()), getBussinesId());
         return sql;
     }
 }
