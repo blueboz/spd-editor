@@ -229,7 +229,7 @@ public class SpdEditor extends JComponent implements MouseListener {
         Button sql = new Button(IcoMoonUtils.getSQL(), false, "sql", false);
         sql.addMouseListener(this);
         sql.setToolTipText("Sql");
-        menuPanel.add(label);
+        menuPanel.add(sql);
 
         FlowLayout flowLayout = new FlowLayout(FlowLayout.LEFT, 0, 0);
         menuPanel.setLayout(flowLayout);

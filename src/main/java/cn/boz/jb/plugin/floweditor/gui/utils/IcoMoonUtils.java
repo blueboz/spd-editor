@@ -151,11 +151,11 @@ public class IcoMoonUtils {
         return "\ue91b";
     }
 
-    public static String getUpload() {
+    public static String getSQL() {
         return "\ue91c";
     }
 
-    public static String getSQL() {
+    public static String getUpload() {
         return "\ue91d";
     }
 
