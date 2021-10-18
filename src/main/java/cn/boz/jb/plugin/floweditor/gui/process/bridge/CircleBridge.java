@@ -10,7 +10,6 @@ import org.dom4j.Element;
 
 public class CircleBridge extends Circle implements Diagram {
 
-
     @Override
     public Element buildProcessNode() {
         return null;

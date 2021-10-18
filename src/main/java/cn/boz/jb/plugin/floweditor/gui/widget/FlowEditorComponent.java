@@ -14,14 +14,12 @@ import cn.boz.jb.plugin.floweditor.gui.shape.Line;
 import cn.boz.jb.plugin.floweditor.gui.shape.Prismatic;
 import cn.boz.jb.plugin.floweditor.gui.shape.Shape;
 import cn.boz.jb.plugin.floweditor.gui.utils.ConstantUtils;
-import cn.boz.jb.plugin.floweditor.gui.utils.FontUtils;
 import cn.boz.jb.plugin.floweditor.gui.utils.IcoMoonUtils;
 
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -56,91 +54,114 @@ public class FlowEditorComponent extends JComponent implements MouseListener {
      * 处理菜单的相关细节
      */
     private void processMenu() {
-        Button flowbtn = new Button(IcoMoonUtils.getSequenceFlow(), true, "flowbtn", "oper", IcoMoonUtils.getFont());
+        Button flowbtn = new Button(IcoMoonUtils.getSequenceFlow(), true, "flowbtn", "oper");
         flowbtn.addMouseListener(this);
+        flowbtn.setToolTipText("Flow Line");
         menu.add(flowbtn);
-        Button user = new Button(IcoMoonUtils.getUserTask(), true, "user", "oper", IcoMoonUtils.getFont());
+
+        Button user = new Button(IcoMoonUtils.getUserTask(), true, "user", "oper");
+        user.setToolTipText("User Task");
         user.addMouseListener(this);
         menu.add(user);
-        Button service = new Button(IcoMoonUtils.getServiceTask(), true, "service", "oper", IcoMoonUtils.getFont());
+
+        Button service = new Button(IcoMoonUtils.getServiceTask(), true, "service", "oper");
         service.addMouseListener(this);
+        service.setToolTipText("Service Task");
         menu.add(service);
-        Button call = new Button(IcoMoonUtils.getCallActivity(), true, "call", "oper", IcoMoonUtils.getFont());
+
+        Button call = new Button(IcoMoonUtils.getCallActivity(), true, "call", "oper");
         call.addMouseListener(this);
+        call.setToolTipText("Call Activity");
         menu.add(call);
 
-        Button exclude = new Button(IcoMoonUtils.getExclusiveGateway(), true, "exclude", "oper", IcoMoonUtils.getFont());
+        Button exclude = new Button(IcoMoonUtils.getExclusiveGateway(), true, "exclude", "oper");
         exclude.addMouseListener(this);
+        exclude.setToolTipText("Exclusive Gateway");
         menu.add(exclude);
 
-        Button parallel = new Button(IcoMoonUtils.getParallelGateway(), true, "parallel", "oper", IcoMoonUtils.getFont());
+        Button parallel = new Button(IcoMoonUtils.getParallelGateway(), true, "parallel", "oper");
         parallel.addMouseListener(this);
+        parallel.setToolTipText("Parallel Gateway");
         menu.add(parallel);
 
-        Button foreach = new Button(IcoMoonUtils.getForeachGateway(), true, "foreach", "oper", IcoMoonUtils.getFont());
+        Button foreach = new Button(IcoMoonUtils.getForeachGateway(), true, "foreach", "oper");
         foreach.addMouseListener(this);
+        foreach.setToolTipText("Foreach Gateway");
         menu.add(foreach);
 
-        Button start = new Button(IcoMoonUtils.getStartEvent(), true, "start", "oper", IcoMoonUtils.getFont());
+        Button start = new Button(IcoMoonUtils.getStartEvent(), true, "start", "oper");
         start.addMouseListener(this);
+        start.setToolTipText("Start Event");
+
         menu.add(start);
 
 
-        Button end = new Button(IcoMoonUtils.getEndEvent(), true, "stop", "oper", IcoMoonUtils.getFont());
+        Button end = new Button(IcoMoonUtils.getEndEvent(), true, "stop", "oper");
         end.addMouseListener(this);
+        end.setToolTipText("End Event");
         menu.add(end);
 
 
-        Button movebtn = new Button(FontUtils.arrows(), true, "movebtn", "oper");
+        Button movebtn = new Button(IcoMoonUtils.getMove(), true, "movebtn", "oper");
         movebtn.addMouseListener(this);
+        movebtn.setToolTipText("Move");
         movebtn.setToggle(true);
         menu.add(movebtn);
-        Button handbtn = new Button(FontUtils.hand(), true, "handbtn", "oper");
+
+        Button handbtn = new Button(IcoMoonUtils.getScale(), true, "handbtn", "oper");
         handbtn.addMouseListener(this);
+        handbtn.setToolTipText("Hand");
         menu.add(handbtn);
-        Button crosshairs = new Button(FontUtils.crosshairs(), false, "crosshairs");
+
+        Button crosshairs = new Button(IcoMoonUtils.getAlign(), false, "crosshairs");
         crosshairs.addMouseListener(this);
+        crosshairs.setToolTipText("Reset");
         menu.add(crosshairs);
-//        Button winclose = new Button(FontUtils.windowclose(), false, "winclose");
-//        winclose.addMouseListener(this);
-//        menu.add(winclose);
-        Button equation = new Button(FontUtils.cube(), false, "equation");
+
+
+        Button equation = new Button(IcoMoonUtils.getEquation(), false, "equation");
         equation.addMouseListener(this);
+        equation.setToolTipText("1:1");
         menu.add(equation);
-        Button undo = new Button(FontUtils.rotateLeft(), false, "undo");
+
+        Button undo = new Button(IcoMoonUtils.getUndo(), false, "undo");
         undo.addMouseListener(this);
+        undo.setToolTipText("Undo");
         menu.add(undo);
-        Button redo = new Button(FontUtils.rotateRight(), false, "redo");
+
+        Button redo = new Button(IcoMoonUtils.getRedo(), false, "redo");
         redo.addMouseListener(this);
+        redo.setToolTipText("Redo");
         menu.add(redo);
 
-        Button erase = new Button(FontUtils.erase(), false, "erase");
+        Button erase = new Button(IcoMoonUtils.getErase(), false, "erase");
         erase.addMouseListener(this);
+        erase.setToolTipText("Erase");
         menu.add(erase);
 
-        Button load = new Button(FontUtils.load(), false, "load");
-        load.addMouseListener(this);
-        menu.add(load);
 
-        Button photo = new Button(FontUtils.photo(), false, "photo");
+        Button photo = new Button(IcoMoonUtils.getImage(), false, "photo");
         photo.addMouseListener(this);
+        photo.setToolTipText("Export");
         menu.add(photo);
 
-        Button save = new Button(FontUtils.save(), false, "save");
-        save.addMouseListener(this);
-        menu.add(save);
 
-        Button trash = new Button(FontUtils.trash(), false, "trash");
+        Button trash = new Button(IcoMoonUtils.getTrash(), false, "trash");
         trash.addMouseListener(this);
+        trash.setToolTipText("Trash");
         menu.add(trash);
 
-        Button label = new Button(FontUtils.starhalf(), false, "label", false);
-
+        Button label = new Button(IcoMoonUtils.getHText(), false, "label", false);
         label.addMouseListener(this);
+        label.setToolTipText("Label Show Switcher");
         menu.add(label);
 
-        menu.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
+
+        FlowLayout flowLayout = new FlowLayout(FlowLayout.LEFT, 0, 0);
+        menu.setLayout(flowLayout);
+
         menu.setBorder(null);
+
     }
 
 
@@ -240,17 +261,17 @@ public class FlowEditorComponent extends JComponent implements MouseListener {
             case "label":
 
                 String ttl = myButton.getTitle();
-                if (ttl.equals(FontUtils.starhalf())) {
+                if (ttl.equals(IcoMoonUtils.getHText())) {
                     ConstantUtils.getInstance().setLabelShowMode(ConstantUtils.LABEL_SHOW_FULL);
-                    myButton.setTitle(FontUtils.starfull());
+                    myButton.setTitle(IcoMoonUtils.getFText());
                     repaint();
-                } else if (ttl.equals(FontUtils.starfull())) {
+                } else if (ttl.equals(IcoMoonUtils.getFText())) {
                     ConstantUtils.getInstance().setLabelShowMode(ConstantUtils.LABEL_SHOW_NONE);
-                    myButton.setTitle(FontUtils.starempty());
+                    myButton.setTitle(IcoMoonUtils.getEText());
                     repaint();
-                } else if (ttl.equals(FontUtils.starempty())) {
+                } else if (ttl.equals(IcoMoonUtils.getEText())) {
                     ConstantUtils.getInstance().setLabelShowMode(ConstantUtils.LABEL_SHOW_ONLY_GATEWAY);
-                    myButton.setTitle(FontUtils.starhalf());
+                    myButton.setTitle(IcoMoonUtils.getHText());
                     repaint();
                 }
                 break;

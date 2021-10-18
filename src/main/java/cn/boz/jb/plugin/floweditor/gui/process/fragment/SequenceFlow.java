@@ -1,16 +1,16 @@
 package cn.boz.jb.plugin.floweditor.gui.process.fragment;
 
+import cn.boz.jb.plugin.floweditor.gui.control.FlowSqlAggregator;
 import cn.boz.jb.plugin.floweditor.gui.process.bridge.LineBridge;
 import cn.boz.jb.plugin.floweditor.gui.property.Property;
 import cn.boz.jb.plugin.floweditor.gui.property.impl.TextFieldProperty;
 import cn.boz.jb.plugin.floweditor.gui.shape.HiPoint;
 import cn.boz.jb.plugin.floweditor.gui.shape.Label;
 import cn.boz.jb.plugin.floweditor.gui.shape.Shape;
-import cn.boz.jb.plugin.floweditor.gui.utils.ConstantUtils;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 
-public class SequenceFlow extends LineBridge {
+public class SequenceFlow extends LineBridge implements FlowSqlAggregator {
     private String sourceRef;
     private String targetRef;
     private String conditionExpression;
@@ -109,5 +109,11 @@ public class SequenceFlow extends LineBridge {
                 new TextFieldProperty("conditionExpression", this),
         };
         return ps;
+    }
+
+    @Override
+    public String toSql(String processId) {
+        return String.format("INSERT INTO ENGINE_FLOW (PROCESSID_, SOURCE_, TARGET_, CONDITION_, ORDER_) " +
+                "VALUES ('%s', '%s', '%s', null, 0);", processId, this.getSourceRef(), this.getTargetRef());
     }
 }

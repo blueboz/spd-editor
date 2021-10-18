@@ -14,7 +14,7 @@ public class ThemeConstants {
     public static final Color SHAPE_FOREGROUND = JBColor.namedColor("ChartPanel.shapeForegroundColor", new JBColor(new Color(0, 0, 0), new Color(234, 234, 234)));
 
     public static final Color CHARTPANEL_HOVERBORDER = JBColor.namedColor("ChartPanel.chartPanelHoverBorder", new JBColor(new Color(0, 0, 0, 255), new Color(255, 255, 255, 255)));
-    public static final Color CHARTPANEL_FLOWLINE_ACTIVE = JBColor.namedColor("ChartPanel.chartPanelFlowLineActive", new JBColor(new Color(0, 109, 130), new Color(151, 237, 251, 255)));
+    public static final Color CHARTPANEL_FLOWLINE_ACTIVE = JBColor.namedColor("ChartPanel.chartPanelFlowLineActive", new JBColor(new Color(73, 211, 242, 181), new Color(151, 237, 251, 255)));
     public static final Color CHARTPANEL_FLOWLINE_HOVER = JBColor.namedColor("ChartPanel.chartPanelFlowLineHover", new JBColor(new Color(165, 165, 165), new Color(145, 229, 242, 255)));
     public static final Color CHARTPANEL_FLOWLINE_FILL = JBColor.namedColor("ChartPanel.chartPanelFlowLineFill", new JBColor(new Color(0, 0, 0), new Color(30, 153, 178, 255)));
 

@@ -22,11 +22,15 @@ sourceSets {
     main {
         resources {
             exclude 'PingFang*.ttf'
+            exclude 'fontawesome-webfont.ttf'
             exclude 'README.md'
             exclude 'import.zip'
             exclude 'background.jpeg'
             exclude 'README.md'
             exclude 'rebel.xml'
+            exclude 'icomoon/icomoon.eot'
+            exclude 'icomoon/icomoon.svg'
+            exclude 'icomoon/icomoon.woff'
         }
     }
 }

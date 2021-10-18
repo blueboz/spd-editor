@@ -2,7 +2,7 @@ package cn.boz.jb.plugin.floweditor.gui.widget;
 
 import cn.boz.jb.plugin.floweditor.gui.listener.ToggleListener;
 import cn.boz.jb.plugin.floweditor.gui.utils.ConstantUtils;
-import cn.boz.jb.plugin.floweditor.gui.utils.FontUtils;
+import cn.boz.jb.plugin.floweditor.gui.utils.IcoMoonUtils;
 
 import javax.swing.JComponent;
 import javax.swing.Timer;
@@ -16,8 +16,6 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -37,7 +35,7 @@ public class Button extends JComponent implements MouseListener, MouseMotionList
     private Integer offset = 0;
     private boolean animation;
 
-    Font font = FontUtils.FA;
+    Font font = IcoMoonUtils.getFont();
 
     public Button(String title, Boolean toggleAble, String id, String group, Font font) {
         this.group = group;
@@ -228,10 +226,10 @@ public class Button extends JComponent implements MouseListener, MouseMotionList
 
     @Override
     public void mouseReleased(MouseEvent e) {
+        this.press = false;
         if (e.getButton() != MouseEvent.BUTTON1) {
             return;
         }
-        this.press = false;
         repaint();
     }
 

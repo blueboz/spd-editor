@@ -30,6 +30,7 @@
         <fileType name="Spd" extensions="spd"
                   implementationClass="cn.boz.jb.plugin.idea.filetype.SpdFileType"></fileType>
         <themeMetadataProvider path="/META-INF/SpdEditor.themeMetadata.json"/>
+        <applicationService serviceImplementation="cn.boz.jb.plugin.idea.store.SpdStateService"></applicationService>
     </extensions>
 
     <actions>
@@ -39,7 +40,6 @@
             <add-to-group group-id="ProjectViewPopupMenu" anchor="before"
                           relative-to-action="EditorPaste"></add-to-group>
         </action>
-
 
         <action class="cn.boz.jb.plugin.idea.action.NewSpdFileAction" id="NewSpdFile" text="Spd File"
                 icon="SpdEditorIcons.FLOW_16_ICON" description="Spd File">

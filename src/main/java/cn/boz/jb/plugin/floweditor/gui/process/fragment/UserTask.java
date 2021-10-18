@@ -1,5 +1,6 @@
 package cn.boz.jb.plugin.floweditor.gui.process.fragment;
 
+import cn.boz.jb.plugin.floweditor.gui.control.SqlAggregator;
 import cn.boz.jb.plugin.floweditor.gui.process.bridge.RectBridge;
 import cn.boz.jb.plugin.floweditor.gui.property.Property;
 import cn.boz.jb.plugin.floweditor.gui.property.impl.TextAreaProperty;
@@ -11,7 +12,7 @@ import cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 
-public class UserTask extends RectBridge {
+public class UserTask extends RectBridge implements SqlAggregator {
 
     protected String bussinesId;
     protected String bussinesKey;
@@ -160,5 +161,15 @@ public class UserTask extends RectBridge {
                 new TextFieldProperty("eventListener", this),
         };
         return ps;
+    }
+
+    @Override
+    public String toSql() {
+        String sql = String.format("INSERT INTO ENGINE_TASK (ID_, TYPE_, TITLE_, EXPRESSION_, RETURNVALUE_, BUSSINESKEY_, BUSSINESDESC_,\n" +
+                        "RIGHTS_, VALIDSECOND_, LISTENER_, OPENSECOND_, BUSSINESID_, TASKLISTENER_)\n" +
+                        "VALUES ('%s', 'USER', '%s', '%s', null, '%s', '%s', '%s', %d, '%s', %d, '%s', null);",
+                id, this.name, this.expression, bussinesKey, bussinesDescrition, getRights(), Integer.parseInt(getValidSecond()),
+                getEventListener(), getOpenSecond(), getBussinesId());
+        return sql;
     }
 }

@@ -1,17 +1,17 @@
 package cn.boz.jb.plugin.floweditor.gui.process.fragment;
 
+import cn.boz.jb.plugin.floweditor.gui.control.SqlAggregator;
 import cn.boz.jb.plugin.floweditor.gui.process.bridge.RectBridge;
 import cn.boz.jb.plugin.floweditor.gui.property.Property;
 import cn.boz.jb.plugin.floweditor.gui.property.impl.TextFieldProperty;
 import cn.boz.jb.plugin.floweditor.gui.shape.HiPoint;
 import cn.boz.jb.plugin.floweditor.gui.shape.Rect;
-import cn.boz.jb.plugin.floweditor.gui.utils.FontUtils;
 import cn.boz.jb.plugin.floweditor.gui.utils.IcoMoonUtils;
 import cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 
-public class CallActivity extends RectBridge {
+public class CallActivity extends RectBridge implements SqlAggregator {
 
     private String calledElement;
 
@@ -31,10 +31,11 @@ public class CallActivity extends RectBridge {
         chartPanel.markFont();
         chartPanel.setColor(getForegroundColor());
         chartPanel.setFontExt(IcoMoonUtils.getFont16());
-        chartPanel.drawString(this.getX()+1,this.getY()+1, IcoMoonUtils.getPlus());
+        chartPanel.drawString(this.getX() + 1, this.getY() + 1, IcoMoonUtils.getPlus());
         chartPanel.resetFont();
-        chartPanel.drawString(this.getX(),this.getY(),this.getWidth(),this.getHeight(),this.getName());
+        chartPanel.drawString(this.getX(), this.getY(), this.getWidth(), this.getHeight(), this.getName());
     }
+
     @Override
     public Object clone() throws CloneNotSupportedException {
         CallActivity callActivity = new CallActivity();
@@ -82,5 +83,13 @@ public class CallActivity extends RectBridge {
                 new TextFieldProperty("calledElement", this),
         };
         return ps;
+    }
+
+    @Override
+    public String toSql() {
+        return String.format("INSERT INTO ENGINE_TASK (ID_, TYPE_, TITLE_, EXPRESSION_, RETURNVALUE_, BUSSINESKEY_, BUSSINESDESC_,\n" +
+                        "RIGHTS_, VALIDSECOND_, LISTENER_, OPENSECOND_, BUSSINESID_, TASKLISTENER_)\n" +
+                        "VALUES ('%s', 'CALL', '%s', '%s', null, null, null, null, 10000, null, 60, null, null);", this.getId()
+                , this.getName(), this.getCalledElement());
     }
 }
