@@ -14,13 +14,10 @@ import cn.boz.jb.plugin.floweditor.gui.shape.Line;
 import cn.boz.jb.plugin.floweditor.gui.shape.Prismatic;
 import cn.boz.jb.plugin.floweditor.gui.shape.Shape;
 import cn.boz.jb.plugin.floweditor.gui.utils.ConstantUtils;
-import cn.boz.jb.plugin.floweditor.gui.utils.FontUtils;
 import cn.boz.jb.plugin.floweditor.gui.utils.IcoMoonUtils;
 import cn.boz.jb.plugin.floweditor.gui.widget.Button;
 import cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel;
-import com.intellij.openapi.actionSystem.ActionManager;
-import com.intellij.openapi.actionSystem.ActionToolbar;
-import com.intellij.openapi.actionSystem.DefaultActionGroup;
+import com.intellij.openapi.ui.Messages;
 import com.intellij.ui.JBSplitter;
 import com.intellij.ui.components.JBPanel;
 import com.intellij.ui.components.JBScrollBar;
@@ -32,9 +29,7 @@ import javax.swing.JScrollBar;
 import javax.swing.Timer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseWheelEvent;
@@ -129,86 +124,112 @@ public class SpdEditor extends JComponent implements MouseListener {
     }
 
     private void processMenu(JPanel menuPanel) {
-        Button flowbtn = new Button(IcoMoonUtils.getSequenceFlow(), true, "flowbtn", "oper", IcoMoonUtils.getFont());
+        Button flowbtn = new Button(IcoMoonUtils.getSequenceFlow(), true, "flowbtn", "oper");
         flowbtn.addMouseListener(this);
+        flowbtn.setToolTipText("Flow Line");
         menuPanel.add(flowbtn);
-        Button user = new Button(IcoMoonUtils.getUserTask(), true, "user", "oper", IcoMoonUtils.getFont());
+
+        Button user = new Button(IcoMoonUtils.getUserTask(), true, "user", "oper");
+        user.setToolTipText("User Task");
         user.addMouseListener(this);
         menuPanel.add(user);
-        Button service = new Button(IcoMoonUtils.getServiceTask(), true, "service", "oper", IcoMoonUtils.getFont());
+
+        Button service = new Button(IcoMoonUtils.getServiceTask(), true, "service", "oper");
         service.addMouseListener(this);
+        service.setToolTipText("Service Task");
         menuPanel.add(service);
-        Button call = new Button(IcoMoonUtils.getCallActivity(), true, "call", "oper", IcoMoonUtils.getFont());
+
+        Button call = new Button(IcoMoonUtils.getCallActivity(), true, "call", "oper");
         call.addMouseListener(this);
+        call.setToolTipText("Call Activity");
         menuPanel.add(call);
 
-        Button exclude = new Button(IcoMoonUtils.getExclusiveGateway(), true, "exclude", "oper", IcoMoonUtils.getFont());
+        Button exclude = new Button(IcoMoonUtils.getExclusiveGateway(), true, "exclude", "oper");
         exclude.addMouseListener(this);
+        exclude.setToolTipText("Exclusive Gateway");
         menuPanel.add(exclude);
 
-        Button parallel = new Button(IcoMoonUtils.getParallelGateway(), true, "parallel", "oper", IcoMoonUtils.getFont());
+        Button parallel = new Button(IcoMoonUtils.getParallelGateway(), true, "parallel", "oper");
         parallel.addMouseListener(this);
+        parallel.setToolTipText("Parallel Gateway");
         menuPanel.add(parallel);
 
-        Button foreach = new Button(IcoMoonUtils.getForeachGateway(), true, "foreach", "oper", IcoMoonUtils.getFont());
+        Button foreach = new Button(IcoMoonUtils.getForeachGateway(), true, "foreach", "oper");
         foreach.addMouseListener(this);
+        foreach.setToolTipText("Foreach Gateway");
         menuPanel.add(foreach);
 
-        Button start = new Button(IcoMoonUtils.getStartEvent(), true, "start", "oper", IcoMoonUtils.getFont());
+        Button start = new Button(IcoMoonUtils.getStartEvent(), true, "start", "oper");
         start.addMouseListener(this);
+        start.setToolTipText("Start Event");
+
         menuPanel.add(start);
 
 
-        Button end = new Button(IcoMoonUtils.getEndEvent(), true, "stop", "oper", IcoMoonUtils.getFont());
+        Button end = new Button(IcoMoonUtils.getEndEvent(), true, "stop", "oper");
         end.addMouseListener(this);
+        end.setToolTipText("End Event");
         menuPanel.add(end);
 
 
-        Button movebtn = new Button(FontUtils.arrows(), true, "movebtn", "oper");
+        Button movebtn = new Button(IcoMoonUtils.getMove(), true, "movebtn", "oper");
         movebtn.addMouseListener(this);
+        movebtn.setToolTipText("Move");
         movebtn.setToggle(true);
         menuPanel.add(movebtn);
-        Button handbtn = new Button(FontUtils.hand(), true, "handbtn", "oper");
+
+        Button handbtn = new Button(IcoMoonUtils.getScale(), true, "handbtn", "oper");
         handbtn.addMouseListener(this);
+        handbtn.setToolTipText("Hand");
         menuPanel.add(handbtn);
-        Button crosshairs = new Button(FontUtils.crosshairs(), false, "crosshairs");
+
+        Button crosshairs = new Button(IcoMoonUtils.getAlign(), false, "crosshairs");
         crosshairs.addMouseListener(this);
+        crosshairs.setToolTipText("Reset");
         menuPanel.add(crosshairs);
-//        Button winclose = new Button(FontUtils.windowclose(), false, "winclose");
-//        winclose.addMouseListener(this);
-//        menu.add(winclose);
-        Button equation = new Button(FontUtils.cube(), false, "equation");
+
+
+        Button equation = new Button(IcoMoonUtils.getEquation(), false, "equation");
         equation.addMouseListener(this);
+        equation.setToolTipText("1:1");
         menuPanel.add(equation);
-        Button undo = new Button(FontUtils.rotateLeft(), false, "undo");
+
+        Button undo = new Button(IcoMoonUtils.getUndo(), false, "undo");
         undo.addMouseListener(this);
+        undo.setToolTipText("Undo");
         menuPanel.add(undo);
-        Button redo = new Button(FontUtils.rotateRight(), false, "redo");
+
+        Button redo = new Button(IcoMoonUtils.getRedo(), false, "redo");
         redo.addMouseListener(this);
+        redo.setToolTipText("Redo");
         menuPanel.add(redo);
 
-        Button erase = new Button(FontUtils.erase(), false, "erase");
+        Button erase = new Button(IcoMoonUtils.getErase(), false, "erase");
         erase.addMouseListener(this);
+        erase.setToolTipText("Erase");
         menuPanel.add(erase);
 
-        Button load = new Button(FontUtils.load(), false, "load");
-        load.addMouseListener(this);
-        menuPanel.add(load);
 
-        Button photo = new Button(FontUtils.photo(), false, "photo");
+        Button photo = new Button(IcoMoonUtils.getImage(), false, "photo");
         photo.addMouseListener(this);
+        photo.setToolTipText("Export");
         menuPanel.add(photo);
 
 
-        Button trash = new Button(FontUtils.trash(), false, "trash");
+        Button trash = new Button(IcoMoonUtils.getTrash(), false, "trash");
         trash.addMouseListener(this);
+        trash.setToolTipText("Trash");
         menuPanel.add(trash);
 
-        Button label = new Button(FontUtils.starhalf(), false, "label", false);
-
+        Button label = new Button(IcoMoonUtils.getHText(), false, "label", false);
         label.addMouseListener(this);
+        label.setToolTipText("Label Show Switcher");
         menuPanel.add(label);
 
+        Button sql = new Button(IcoMoonUtils.getSQL(), false, "sql", false);
+        sql.addMouseListener(this);
+        sql.setToolTipText("Sql");
+        menuPanel.add(label);
 
         FlowLayout flowLayout = new FlowLayout(FlowLayout.LEFT, 0, 0);
         menuPanel.setLayout(flowLayout);
@@ -251,7 +272,6 @@ public class SpdEditor extends JComponent implements MouseListener {
                 chartPanel.setModeOfNewShape(Shape.class);
                 break;
             case "movebtn":
-
                 chartPanel.setMode(ChartPanel.MODE_DEFAULT);
                 break;
             case "user":
@@ -303,10 +323,6 @@ public class SpdEditor extends JComponent implements MouseListener {
             case "undo":
                 chartPanel.undo();
                 break;
-            case "load":
-                chartPanel.load();
-                repaint();
-                break;
             case "erase":
                 chartPanel.clear();
                 repaint();
@@ -315,21 +331,25 @@ public class SpdEditor extends JComponent implements MouseListener {
                 chartPanel.export();
                 break;
             case "label":
-
                 String ttl = myButton.getTitle();
-                if (ttl.equals(FontUtils.starhalf())) {
+                if (ttl.equals(IcoMoonUtils.getHText())) {
                     ConstantUtils.getInstance().setLabelShowMode(ConstantUtils.LABEL_SHOW_FULL);
-                    myButton.setTitle(FontUtils.starfull());
+                    myButton.setTitle(IcoMoonUtils.getFText());
                     repaint();
-                } else if (ttl.equals(FontUtils.starfull())) {
+                } else if (ttl.equals(IcoMoonUtils.getFText())) {
                     ConstantUtils.getInstance().setLabelShowMode(ConstantUtils.LABEL_SHOW_NONE);
-                    myButton.setTitle(FontUtils.starempty());
+                    myButton.setTitle(IcoMoonUtils.getEText());
                     repaint();
-                } else if (ttl.equals(FontUtils.starempty())) {
+                } else if (ttl.equals(IcoMoonUtils.getEText())) {
                     ConstantUtils.getInstance().setLabelShowMode(ConstantUtils.LABEL_SHOW_ONLY_GATEWAY);
-                    myButton.setTitle(FontUtils.starhalf());
+                    myButton.setTitle(IcoMoonUtils.getHText());
                     repaint();
                 }
+                break;
+
+            case "sql":
+                String sql=chartPanel.generateSql();
+                Messages.showInfoMessage("Sql",sql);
                 break;
             default:
                 break;

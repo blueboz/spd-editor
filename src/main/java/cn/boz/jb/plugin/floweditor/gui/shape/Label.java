@@ -4,9 +4,6 @@ import cn.boz.jb.plugin.floweditor.gui.utils.ShapeUtils;
 import cn.boz.jb.plugin.floweditor.gui.utils.StringUtils;
 import cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel;
 
-import java.awt.Color;
-import java.awt.Font;
-
 public class Label extends Shape {
 
     private Line boundLine;

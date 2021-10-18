@@ -10,19 +10,14 @@ import cn.boz.jb.plugin.floweditor.gui.hist.ShapeState;
 import cn.boz.jb.plugin.floweditor.gui.listener.ClickListener;
 import cn.boz.jb.plugin.floweditor.gui.process.Gateway;
 import cn.boz.jb.plugin.floweditor.gui.utils.ConstantUtils;
-import cn.boz.jb.plugin.floweditor.gui.utils.FontUtils;
-import cn.boz.jb.plugin.floweditor.gui.utils.RandomColorUtils;
 import cn.boz.jb.plugin.floweditor.gui.utils.ShapePos;
 import cn.boz.jb.plugin.floweditor.gui.utils.ShapeUtils;
 import cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel;
-import org.dom4j.DocumentHelper;
-import org.dom4j.Element;
 
 import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 /**
  * 图形组件

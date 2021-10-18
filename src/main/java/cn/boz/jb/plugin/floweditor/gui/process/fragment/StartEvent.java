@@ -3,13 +3,10 @@ package cn.boz.jb.plugin.floweditor.gui.process.fragment;
 import cn.boz.jb.plugin.floweditor.gui.process.bridge.CircleBridge;
 import cn.boz.jb.plugin.floweditor.gui.shape.HiPoint;
 import cn.boz.jb.plugin.floweditor.gui.shape.Rect;
-import cn.boz.jb.plugin.floweditor.gui.utils.FontUtils;
 import cn.boz.jb.plugin.floweditor.gui.utils.IcoMoonUtils;
 import cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
-
-import java.awt.Color;
 
 public class StartEvent extends CircleBridge {
 

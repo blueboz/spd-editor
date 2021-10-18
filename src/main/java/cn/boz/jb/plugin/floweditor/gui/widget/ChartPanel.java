@@ -1,7 +1,9 @@
 package cn.boz.jb.plugin.floweditor.gui.widget;
 
 import cn.boz.jb.plugin.floweditor.gui.control.Alignable;
+import cn.boz.jb.plugin.floweditor.gui.control.FlowSqlAggregator;
 import cn.boz.jb.plugin.floweditor.gui.control.PropertyObject;
+import cn.boz.jb.plugin.floweditor.gui.control.SqlAggregator;
 import cn.boz.jb.plugin.floweditor.gui.events.ShapeSelectedEvent;
 import cn.boz.jb.plugin.floweditor.gui.file.TemplateLoaderImpl;
 import cn.boz.jb.plugin.floweditor.gui.hist.BaseGroupState;
@@ -27,7 +29,6 @@ import cn.boz.jb.plugin.floweditor.gui.utils.NumberUtils;
 import cn.boz.jb.plugin.floweditor.gui.utils.ShapePos;
 import cn.boz.jb.plugin.floweditor.gui.utils.ShapeUtils;
 import cn.boz.jb.plugin.idea.listener.ProcessSaveListener;
-import com.intellij.ui.JBColor;
 
 import javax.imageio.ImageIO;
 import javax.swing.JComponent;
@@ -741,7 +742,7 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
 
     private void drawDragShape() {
         Graphics2D g2d = this.currentGraphic;
-        if(!dragging){
+        if (!dragging) {
             return;
         }
 
@@ -1572,7 +1573,7 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
         if (e.getButton() != MouseEvent.BUTTON1) {
             return;
         }
-        dragging=false;
+        dragging = false;
         if (whitespacePressing || ctrlPressing) {
             return;
         }
@@ -2113,7 +2114,7 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
         double vVertical = LineUtils.calcCrossAngleOfTwoLine(prev, new HiPoint(finalX, finalY), new HiPoint(0, 0), new HiPoint(0, 1000));
         double degHorizoncal = LineUtils.transferToDeg(vHorizontal);
         double degVertical = LineUtils.transferToDeg(vVertical);
-        double degAllow=2.5;
+        double degAllow = 2.5;
         if (degHorizoncal < degAllow || 180 - degHorizoncal < degAllow) {
             finalY = prev.y;
         } else if (degVertical < degAllow || 180 - degVertical < degAllow) {
@@ -3036,5 +3037,25 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
                 new TextFieldProperty("name", this)
         };
         return ps;
+    }
+
+    public String generateSql() {
+        StringBuilder sqlBuilder = new StringBuilder();
+        for (int i = 0; i < shapes.size(); i++) {
+            Shape shape = shapes.get(i);
+            if (shape instanceof Label) {
+                continue;
+            }
+            if (shape instanceof SqlAggregator) {
+                sqlBuilder.append(((SqlAggregator) shape).toSql());
+            }
+        }
+        for (int i = 0; i < lines.size(); i++) {
+            Line line = lines.get(i);
+            if (line instanceof FlowSqlAggregator) {
+                sqlBuilder.append(((FlowSqlAggregator) line).toSql(this.id));
+            }
+        }
+        return sqlBuilder.toString();
     }
 }

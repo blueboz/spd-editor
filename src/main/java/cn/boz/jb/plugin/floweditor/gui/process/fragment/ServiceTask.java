@@ -1,18 +1,18 @@
 package cn.boz.jb.plugin.floweditor.gui.process.fragment;
 
+import cn.boz.jb.plugin.floweditor.gui.control.SqlAggregator;
 import cn.boz.jb.plugin.floweditor.gui.process.bridge.RectBridge;
 import cn.boz.jb.plugin.floweditor.gui.property.Property;
 import cn.boz.jb.plugin.floweditor.gui.property.impl.TextAreaProperty;
 import cn.boz.jb.plugin.floweditor.gui.property.impl.TextFieldProperty;
 import cn.boz.jb.plugin.floweditor.gui.shape.HiPoint;
 import cn.boz.jb.plugin.floweditor.gui.shape.Rect;
-import cn.boz.jb.plugin.floweditor.gui.utils.FontUtils;
 import cn.boz.jb.plugin.floweditor.gui.utils.IcoMoonUtils;
 import cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 
-public class ServiceTask extends RectBridge {
+public class ServiceTask extends RectBridge implements SqlAggregator {
 
     private String expression;
     private String listener;
@@ -95,6 +95,15 @@ public class ServiceTask extends RectBridge {
                 new TextFieldProperty("listener", this),
         };
         return ps;
+    }
+
+    @Override
+    public String toSql() {
+        String sql = String.format("INSERT INTO ENGINE_TASK (ID_, TYPE_, TITLE_, EXPRESSION_, RETURNVALUE_, BUSSINESKEY_, BUSSINESDESC_,\n" +
+                        "RIGHTS_, VALIDSECOND_, LISTENER_, OPENSECOND_, BUSSINESID_, TASKLISTENER_)\n" +
+                        "VALUES ('%s', 'SERVICE', '%s', '%s', null, null, null, null, 10000, null, 60, null, '%s');",
+                getId(), getName(), getExpression(), getListener());
+        return sql;
     }
 }
 
