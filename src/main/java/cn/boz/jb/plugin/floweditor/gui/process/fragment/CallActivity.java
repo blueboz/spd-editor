@@ -87,8 +87,8 @@ public class CallActivity extends RectBridge implements SqlAggregator {
 
     @Override
     public String toSql() {
-        return String.format("INSERT INTO ENGINE_TASK (ID_, TYPE_, TITLE_, EXPRESSION_, RETURNVALUE_, BUSSINESKEY_, BUSSINESDESC_,\n" +
-                        "RIGHTS_, VALIDSECOND_, LISTENER_, OPENSECOND_, BUSSINESID_, TASKLISTENER_)\n" +
+        return String.format("INSERT INTO ENGINE_TASK (ID_, TYPE_, TITLE_, EXPRESSION_, RETURNVALUE_, BUSSINESKEY_, BUSSINESDESC_," +
+                        "RIGHTS_, VALIDSECOND_, LISTENER_, OPENSECOND_, BUSSINESID_, TASKLISTENER_)" +
                         "VALUES ('%s', 'CALL', '%s', '%s', null, null, null, null, 10000, null, 60, null, null);", this.getId()
                 , this.getName(), this.getCalledElement());
     }

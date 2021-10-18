@@ -3047,13 +3047,13 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
                 continue;
             }
             if (shape instanceof SqlAggregator) {
-                sqlBuilder.append(((SqlAggregator) shape).toSql());
+                sqlBuilder.append(((SqlAggregator) shape).toSql()+"\n");
             }
         }
         for (int i = 0; i < lines.size(); i++) {
             Line line = lines.get(i);
             if (line instanceof FlowSqlAggregator) {
-                sqlBuilder.append(((FlowSqlAggregator) line).toSql(this.id));
+                sqlBuilder.append(((FlowSqlAggregator) line).toSql(this.id)+"\n");
             }
         }
         return sqlBuilder.toString();

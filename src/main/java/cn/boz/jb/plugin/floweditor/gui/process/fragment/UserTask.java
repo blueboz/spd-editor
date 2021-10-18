@@ -165,8 +165,8 @@ public class UserTask extends RectBridge implements SqlAggregator {
 
     @Override
     public String toSql() {
-        String sql = String.format("INSERT INTO ENGINE_TASK (ID_, TYPE_, TITLE_, EXPRESSION_, RETURNVALUE_, BUSSINESKEY_, BUSSINESDESC_,\n" +
-                        "RIGHTS_, VALIDSECOND_, LISTENER_, OPENSECOND_, BUSSINESID_, TASKLISTENER_)\n" +
+        String sql = String.format("INSERT INTO ENGINE_TASK (ID_, TYPE_, TITLE_, EXPRESSION_, RETURNVALUE_, BUSSINESKEY_, BUSSINESDESC_," +
+                        "RIGHTS_, VALIDSECOND_, LISTENER_, OPENSECOND_, BUSSINESID_, TASKLISTENER_)" +
                         "VALUES ('%s', 'USER', '%s', '%s', null, '%s', '%s', '%s', %d, '%s', %d, '%s', null);",
                 id, this.name, this.expression, bussinesKey, bussinesDescrition, getRights(), Integer.parseInt(getValidSecond()),
                 getEventListener(), Integer.parseInt(getOpenSecond()), getBussinesId());
