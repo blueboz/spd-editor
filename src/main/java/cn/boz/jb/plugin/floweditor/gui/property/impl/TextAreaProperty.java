@@ -1,6 +1,7 @@
 package cn.boz.jb.plugin.floweditor.gui.property.impl;
 
 import cn.boz.jb.plugin.floweditor.gui.property.Property;
+import cn.boz.jb.plugin.floweditor.gui.property.PropertyEditorListener;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.ui.components.JBScrollPane;
 
@@ -18,10 +19,33 @@ public class TextAreaProperty extends Property {
     private JScrollPane jScrollPane;
 
     public TextAreaProperty(String propertyName, String displayPropertyName, Object operatedObj) {
-
         super(propertyName, displayPropertyName, operatedObj);
     }
 
+
+    public TextAreaProperty(String propertyName, Object operatedObj, PropertyEditorListener propertyEditorListener) {
+        super(propertyName, operatedObj,propertyEditorListener);
+        jScrollPane = new JBScrollPane();
+        textArea = new JTextArea();
+        textArea.setAutoscrolls(true);
+        textArea.setLineWrap(true);
+        jScrollPane.setViewportView(textArea);
+        MouseAdapter l = new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() >= 2) {
+                    String inputString = Messages.showMultilineInputDialog(null, null, "请录入", textArea.getText(), null, null);
+                    if(inputString!=null){
+                        textArea.setText(inputString);
+                    }
+                }
+
+                super.mouseClicked(e);
+            }
+        };
+
+        textArea.addMouseListener(l);
+    }
     public TextAreaProperty(String propertyName, Object operatedOb) {
         super(propertyName, operatedOb);
         jScrollPane = new JBScrollPane();

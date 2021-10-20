@@ -4,44 +4,20 @@ import cn.boz.jb.plugin.floweditor.gui.control.PropertyObject;
 import cn.boz.jb.plugin.floweditor.gui.events.ShapeSelectedEvent;
 import cn.boz.jb.plugin.floweditor.gui.listener.ShapeSelectedListener;
 import cn.boz.jb.plugin.floweditor.gui.property.Property;
+import cn.boz.jb.plugin.floweditor.gui.property.PropertyEditorListener;
 import com.intellij.ui.components.JBScrollPane;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import java.awt.BorderLayout;
 
-public class PropertyEditor extends JPanel implements ShapeSelectedListener {
+public class PropertyEditor extends JPanel implements ShapeSelectedListener, PropertyEditorListener {
     private PropertyObject operatedObject;
 
     public PropertyObject getOperatedObject() {
         return operatedObject;
     }
 
-    /**
-     * 正向转换
-     *
-     * @param value
-     * @return
-     */
-    public String trans(String value) {
-        if (value == null) {
-            return "";
-        }
-        return value.replace("#LEY#", "\n");
-    }
-
-    /**
-     * 反向转换
-     *
-     * @param value
-     * @return
-     */
-    public String unTrans(String value) {
-        if (value == null) {
-            return "";
-        }
-        return value.replace("\n", "#LEY#");
-    }
 
     /**
      * 更新指向对象的
@@ -54,7 +30,8 @@ public class PropertyEditor extends JPanel implements ShapeSelectedListener {
         }
         this.operatedObject = operatedObject;
         jTable.clearProperies();
-        Property[] propertyEditors = operatedObject.getPropertyEditors();
+        //怎样使得编辑器编辑的时候，会通知编辑容器呢
+        Property[] propertyEditors = operatedObject.getPropertyEditors(this);
         for (Property p : propertyEditors) {
             jTable.addProperty(p);
         }
@@ -80,5 +57,10 @@ public class PropertyEditor extends JPanel implements ShapeSelectedListener {
     public void shapeSelected(ShapeSelectedEvent shapeSelectedEvent) {
         PropertyObject selectedObject = shapeSelectedEvent.getSelectedObject();
         setOperatedObject(selectedObject);
+    }
+
+    @Override
+    public void propertyEdited(Property property, Object operatedObj, Object oldValue, Object newValue) {
+
     }
 }

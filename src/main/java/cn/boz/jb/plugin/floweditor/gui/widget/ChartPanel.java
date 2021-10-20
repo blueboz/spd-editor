@@ -14,6 +14,7 @@ import cn.boz.jb.plugin.floweditor.gui.hist.StateChange;
 import cn.boz.jb.plugin.floweditor.gui.listener.ShapeSelectedListener;
 import cn.boz.jb.plugin.floweditor.gui.process.definition.ProcessDefinition;
 import cn.boz.jb.plugin.floweditor.gui.property.Property;
+import cn.boz.jb.plugin.floweditor.gui.property.PropertyEditorListener;
 import cn.boz.jb.plugin.floweditor.gui.property.impl.TextFieldProperty;
 import cn.boz.jb.plugin.floweditor.gui.shape.HiPoint;
 import cn.boz.jb.plugin.floweditor.gui.shape.Label;
@@ -1222,7 +1223,7 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
             return;
         }
 
-        fireSavedListener();
+//        fireSavedListener();
 
         if (whitespacePressing) {
             return;
@@ -1238,6 +1239,7 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
                 shape.init(point);
                 addShape(shape);
                 repaint();
+                fireShapeSelected();
 
             } catch (InstantiationException | NoSuchMethodException | InvocationTargetException | IllegalAccessException instantiationException) {
                 instantiationException.printStackTrace();
@@ -1508,6 +1510,7 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
                 lineCursorTracker = null;
                 addLine(line);
                 repaint();
+                fireSavedListener();
             } catch (Exception ee) {
                 ee.printStackTrace();
             }
@@ -1590,7 +1593,7 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
             this.boardMoveStartPoint = null;
             this.boardMoveStartOriginPoint = null;
         }
-        fireSavedListener();
+//        fireSavedListener();
 
     }
 
@@ -1610,7 +1613,9 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
                 setIdForShape(shape);
                 shape.init(rect);
                 addShape(shape);
+                fireSavedListener();
             } catch (InstantiationException | NoSuchMethodException | InvocationTargetException | IllegalAccessException instantiationException) {
+
                 instantiationException.printStackTrace();
             }
         }
@@ -1646,10 +1651,12 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
         //记录当前resizing对象
         if (dragPressObj != null) {
             doDrag();
+            fireSavedListener();
             repaint();
         }
         if (dragLinePoint != null) {
             //记录历史操作
+            fireSavedListener();
             BaseState dragLineAfterState = dragLine.serialize();
             recordStateChange(new StateChange(dragLineStartState, dragLineAfterState));
             dragLine = null;
@@ -2601,6 +2608,7 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
      * 图形删除的操作回调函数
      */
     public void shapeDelete() {
+        boolean removed=false;
         List<Shape> collect = shapes.stream().filter(it -> it.isDraging()).collect(Collectors.toList());
         List<BaseState> befores = new ArrayList<>();
         for (Shape shape : collect) {
@@ -2614,6 +2622,7 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
                 for (Line line : headOfLine) {
                     if (lines.contains(line)) {
                         removeLine(befores, line);
+                        removed=true;
                     }
                 }
 
@@ -2622,18 +2631,27 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
                 for (Line line : tailOfLine) {
                     if (lines.contains(line)) {
                         removeLine(befores, line);
+                        removed=true;
+
                     }
                 }
                 befores.add(shape.serialize());
                 shapes.remove(shape);
+                removed=true;
+
             }
 
         }
         List<Line> ls = lines.stream().filter(it -> it.isSelected()).collect(Collectors.toList());
         for (Line li : ls) {
             removeLine(befores, li);
+            removed=true;
+
         }
         recordStateChange(new StateChange(new BaseGroupState(befores), null));
+        if(removed){
+            fireSavedListener();
+        }
     }
 
     /**
@@ -3033,7 +3051,7 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
     }
 
     @Override
-    public Property[] getPropertyEditors() {
+    public Property[] getPropertyEditors(PropertyEditorListener propertyEditor) {
         Property[] ps = new Property[]{
                 new TextFieldProperty("id", this),
                 new TextFieldProperty("name", this)

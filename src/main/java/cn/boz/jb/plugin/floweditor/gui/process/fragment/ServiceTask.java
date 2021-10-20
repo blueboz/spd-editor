@@ -3,6 +3,7 @@ package cn.boz.jb.plugin.floweditor.gui.process.fragment;
 import cn.boz.jb.plugin.floweditor.gui.control.SqlAggregator;
 import cn.boz.jb.plugin.floweditor.gui.process.bridge.RectBridge;
 import cn.boz.jb.plugin.floweditor.gui.property.Property;
+import cn.boz.jb.plugin.floweditor.gui.property.PropertyEditorListener;
 import cn.boz.jb.plugin.floweditor.gui.property.impl.TextAreaProperty;
 import cn.boz.jb.plugin.floweditor.gui.property.impl.TextFieldProperty;
 import cn.boz.jb.plugin.floweditor.gui.shape.HiPoint;
@@ -88,13 +89,21 @@ public class ServiceTask extends RectBridge implements SqlAggregator {
         this.setName("Service Task");
     }
 
+    private Property[] ps;
+
     @Override
-    public Property[] getPropertyEditors() {
-        Property[] ps = new Property[]{
-                new TextFieldProperty("name", this),
-                new TextAreaProperty("expression", this),
-                new TextFieldProperty("listener", this),
-        };
+    public Property[] getPropertyEditors(PropertyEditorListener propertyEditor) {
+        if (ps == null) {
+            synchronized (ServiceTask.class) {
+                if (ps == null) {
+                    ps = new Property[]{
+                            new TextFieldProperty("name", this,propertyEditor),
+                            new TextAreaProperty("expression", this,propertyEditor),
+                            new TextFieldProperty("listener", this,propertyEditor),
+                    };
+                }
+            }
+        }
         return ps;
     }
 
@@ -103,7 +112,7 @@ public class ServiceTask extends RectBridge implements SqlAggregator {
         String sql = String.format("INSERT INTO ENGINE_TASK (ID_, TYPE_, TITLE_, EXPRESSION_, RETURNVALUE_, BUSSINESKEY_, BUSSINESDESC_," +
                         "RIGHTS_, VALIDSECOND_, LISTENER_, OPENSECOND_, BUSSINESID_, TASKLISTENER_)" +
                         "VALUES ('%s', 'SERVICE', '%s', '%s', null, null, null, null, 10000, null, 60, null, '%s');",
-                processId+"_"+getId(), getName(), getExpression(), getListener());
+                processId + "_" + getId(), getName(), getExpression(), getListener());
         return sql;
     }
 }

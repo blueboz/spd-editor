@@ -19,6 +19,7 @@ public abstract class Property {
     private String displayProperyName;
     private Integer rowHeight;
     private PropertyChangeListener propertyChangeListener;
+    private PropertyEditorListener propertyEditorListener;
 
 
     public Integer getRowHeight() {
@@ -71,14 +72,12 @@ public abstract class Property {
     private JLabel propertyRender;
 
     public JComponent getValueRender() {
-//        valueRender.setText((String) getValue());
         valueRender.setText("<html>" + ((String) getValue()).replace("\n", "<br>") + "</html>");
         return valueRender;
     }
 
 
     public JComponent getPropertyRender() {
-//        propertyRender.setText(getPropertyName());
         propertyRender.setText("<html>" + this.getPropertyName().replace("\n", "<br>") + "</html>");
         return propertyRender;
     }
@@ -94,6 +93,17 @@ public abstract class Property {
     }
 
 
+    public Property(String propertyName, Object operatedObj, PropertyEditorListener propertyEditorListener) {
+        this.propertyName = propertyName;
+        this.operatedObj = operatedObj;
+        this.valueRender = new JLabel();
+        this.propertyRender = new JLabel();
+        valueRender.setAutoscrolls(false);
+        propertyRender.setAutoscrolls(false);
+        this.propertyEditorListener=propertyEditorListener;
+
+    }
+
     public Property(String propertyName, Object operatedObj, PropertyChangeListener propertyChangeListener) {
         this.propertyName = propertyName;
         this.operatedObj = operatedObj;
@@ -102,7 +112,6 @@ public abstract class Property {
         valueRender.setAutoscrolls(false);
         propertyRender.setAutoscrolls(false);
         this.propertyChangeListener = propertyChangeListener;
-
     }
 
     public Property(String propertyName, String displayProperyName, Object operatedObj) {
@@ -113,6 +122,16 @@ public abstract class Property {
         this.propertyRender = new JLabel();
         propertyRender.setAutoscrolls(false);
         valueRender.setAutoscrolls(false);
+    }
+    public Property(String propertyName, Object operatedObj, PropertyChangeListener listener, PropertyEditorListener propertyEditorListener) {
+        this.propertyName = propertyName;
+        this.operatedObj = operatedObj;
+        this.valueRender = new JLabel();
+        this.propertyRender = new JLabel();
+        valueRender.setAutoscrolls(false);
+        propertyRender.setAutoscrolls(false);
+        this.propertyChangeListener = listener;
+        this.propertyEditorListener=propertyEditorListener;
     }
 
 
@@ -174,6 +193,10 @@ public abstract class Property {
                 if (this.propertyChangeListener != null) {
                     PropertyChangeEvent propertyChangeEvent = new PropertyChangeEvent(operatedObj, propertyName, oldValue, newValue);
                     this.propertyChangeListener.propertyChange(propertyChangeEvent);
+                    //可能每一个属性，有自己的属性监听器,
+                }
+                if(this.propertyEditorListener!=null){
+                    propertyEditorListener.propertyEdited(this,operatedObj,oldValue,newValue);
                 }
             }
         } catch (IllegalAccessException e) {

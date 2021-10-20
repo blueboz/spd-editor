@@ -1,7 +1,9 @@
 package cn.boz.jb.plugin.floweditor.gui.process.bridge;
 
 import cn.boz.jb.plugin.floweditor.gui.process.control.Diagram;
+import cn.boz.jb.plugin.floweditor.gui.process.fragment.ParallelGateway;
 import cn.boz.jb.plugin.floweditor.gui.property.Property;
+import cn.boz.jb.plugin.floweditor.gui.property.PropertyEditorListener;
 import cn.boz.jb.plugin.floweditor.gui.property.impl.TextFieldProperty;
 import cn.boz.jb.plugin.floweditor.gui.shape.HiPoint;
 import cn.boz.jb.plugin.floweditor.gui.shape.Prismatic;
@@ -22,14 +24,14 @@ public class PrismaticBridge extends Prismatic implements Diagram {
     }
 
     @Override
-    public Element buildDiagramNode(){
+    public Element buildDiagramNode() {
         return DiagramUtils.buildDiagramNode(this);
     }
 
     @Override
-    public void init(HiPoint hiPoint){
-        this.setX(hiPoint.x-20);
-        this.setY(hiPoint.y-20);
+    public void init(HiPoint hiPoint) {
+        this.setX(hiPoint.x - 20);
+        this.setY(hiPoint.y - 20);
         this.setWidth(40);
         this.setHeight(40);
     }
@@ -42,11 +44,21 @@ public class PrismaticBridge extends Prismatic implements Diagram {
         this.setHeight(40);
     }
 
+    private Property[] ps;
+
     @Override
-    public Property[] getPropertyEditors() {
-        Property[] ps = new Property[]{
-                new TextFieldProperty("name", this),
-        };
+    public Property[] getPropertyEditors(PropertyEditorListener propertyEditor) {
+        //属性改变的时候，需要通知Chart
+        if (ps == null) {
+            synchronized (ParallelGateway.class) {
+                if (ps == null) {
+
+                    ps = new Property[]{
+                            new TextFieldProperty("name", this),
+                    };
+                }
+            }
+        }
         return ps;
     }
 }

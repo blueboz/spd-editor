@@ -4,6 +4,8 @@ import cn.boz.jb.plugin.floweditor.gui.control.PropertyObject;
 import cn.boz.jb.plugin.floweditor.gui.events.ShapeSelectedEvent;
 import cn.boz.jb.plugin.floweditor.gui.listener.ShapeSelectedListener;
 import cn.boz.jb.plugin.floweditor.gui.property.Property;
+import cn.boz.jb.plugin.floweditor.gui.property.PropertyEditorListener;
+import cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel;
 import com.intellij.ui.table.JBTable;
 
 import javax.swing.table.AbstractTableModel;
@@ -13,7 +15,7 @@ import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MyJBTable extends JBTable implements ShapeSelectedListener {
+public class MyJBTable extends JBTable implements ShapeSelectedListener, PropertyEditorListener {
 
     public static int DEFAULT_ROW_HEIGHT = 28;
     private MyJBTableCellEditor myTableCellEditor;
@@ -21,6 +23,7 @@ public class MyJBTable extends JBTable implements ShapeSelectedListener {
     private MyJBTableCellRender myTableCellRender;
     private List<Property> myProperties = new ArrayList<>();
     private PropertyObject operatedObject;
+    private ChartPanel chartPanel;
 
     public MyJBTable() {
         myTableCellEditor = new MyJBTableCellEditor();
@@ -99,11 +102,23 @@ public class MyJBTable extends JBTable implements ShapeSelectedListener {
         this.operatedObject = selectedObject;
         this.clearProperies();
 
-        Property[] propertyEditors = operatedObject.getPropertyEditors();
+        Property[] propertyEditors = operatedObject.getPropertyEditors(this);
         for (Property p : propertyEditors) {
             this.addProperty(p);
         }
         this.resetRowHeight();
+    }
+
+    @Override
+    public void propertyEdited(Property property, Object operatedObj, Object oldValue, Object newValue) {
+        if(oldValue!=newValue){
+            //触发函数回调
+            chartPanel.fireSavedListener();
+        }
+    }
+
+    public void bindChartPanel(ChartPanel chartPanel) {
+        this.chartPanel=chartPanel;
     }
 
     public class MyTableModel extends AbstractTableModel {
