@@ -9,11 +9,10 @@
      <b>2.New->Spd File.</b><br>
      <b>3.Input any filename that you want.</b><br>
     ]]></description>
-    <version>212.5080.55</version>
+    <version>201.6668.113</version>
     <change-notes>
-        support edit for spd file.which is activiti like editor .this is the first version .
     </change-notes>
-    <idea-version since-build="190.0" until-build="212.*"></idea-version>
+    <idea-version since-build="201.*" ></idea-version>
 
     <!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html
          on how to target different products -->

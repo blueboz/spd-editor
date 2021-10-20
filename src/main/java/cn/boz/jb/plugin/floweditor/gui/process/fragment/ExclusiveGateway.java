@@ -8,7 +8,6 @@ import cn.boz.jb.plugin.floweditor.gui.shape.Rect;
 import cn.boz.jb.plugin.floweditor.gui.utils.IcoMoonUtils;
 import cn.boz.jb.plugin.floweditor.gui.utils.TranslateUtils;
 import cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel;
-import org.apache.tools.ant.taskdefs.optional.i18n.Translate;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 

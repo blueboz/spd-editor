@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'cn.boz'
-version '212.5080.55'
+version '201.6668.113'
 
 sourceCompatibility = 1.11
 
@@ -42,8 +42,9 @@ sourceSets {
 intellij {
 //    version = '2021.2.1'
 //    localPath = '/Volumes/Mac/App/IntelliJ IDEA.app'
-    localPath = 'F:\\App\\JetBrains\\IntelliJ IDEA 2021.2.1'
+//    localPath = 'F:\\App\\JetBrains\\IntelliJ IDEA 2021.2.1'
 //    localPath = 'D:\\App\\ideaIU-2020'
+    localPath='F:\\App\\JetBrains\\IntelliJ IDEA 2021.1.1'
 //    instrumentCode = false
 //    sandboxDir.set("${project.rootDir}/.sandbox")
     sandboxDir = "${project.rootDir}/.sandbox"
@@ -54,14 +55,14 @@ println "${project.rootDir}"
 
 patchPluginXml {
     changeNotes = """
-     Icon color change with theme.
-     Fixed addbom action problems.
-     Fixed button click problems.
-     Theme change synchronize with internal theme .
-     UI enhancement
-     Compatible with lower version 201.*
-     Support update to db features.
-     Limit the size of release package.
+     Icon color change with theme.<br>
+     Fixed addbom action problems.<br>
+     Fixed button click problems.<br>
+     Theme change synchronize with internal theme .<br>
+     UI enhancement.<br>
+     Compatible with lower version 201.*<br>
+     Support update to db features.<br>
+     Shrink the size of release package.<br>
       """
 }
 test {
@@ -88,8 +89,8 @@ tasks.whenTaskAdded { task ->
     }
 }
 publishPlugin {
-    channels = ['beta']
-//    channels = ['Stable']
+//    channels = ['beta']
+    channels = ['Stable']
     token = System.getProperty("token")
 
 }
