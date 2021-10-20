@@ -21,6 +21,7 @@ import cn.boz.jb.plugin.floweditor.gui.shape.HiPoint;
 import cn.boz.jb.plugin.floweditor.gui.shape.Label;
 import cn.boz.jb.plugin.floweditor.gui.shape.Line;
 import cn.boz.jb.plugin.floweditor.gui.shape.Shape;
+import cn.boz.jb.plugin.floweditor.gui.utils.TranslateUtils;
 import org.dom4j.Attribute;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -81,8 +82,8 @@ public class TemplateLoaderImpl implements TemplateLoader {
                 List<Element> processs = process.elements();
                 for (Element p : processs) {
                     String eName = p.getName();
-                    String id = p.attribute("id").getValue();
-                    String name = p.attribute("name").getValue();
+                    String id = attributeValue(p.attribute("id"));
+                    String name = attributeValue(p.attribute("name"));
                     Element showp = (Element) diagramMap.get(id);
                     if ("startEvent".equals(eName)) {
                         StartEvent startEvent = new StartEvent();
@@ -98,6 +99,7 @@ public class TemplateLoaderImpl implements TemplateLoader {
 
                         ServiceTask serviceTask = new ServiceTask();
                         setRectBridge(serviceTask, id, name);
+                        //顺便翻译?
                         serviceTask.setExpression(attributeValue(p.attribute("expression")));
                         serviceTask.setListener(attributeValue(p.attribute("listener")));
                         setBound(serviceTask, readBounds(showp).get(0));
@@ -239,8 +241,7 @@ public class TemplateLoaderImpl implements TemplateLoader {
         if (attribute == null) {
             return null;
         }
-        return attribute.getValue();
-
+        return TranslateUtils.translateFromXmlString(attribute.getValue());
     }
 
     private List<WayPoint> readWaypoint(Element element) {

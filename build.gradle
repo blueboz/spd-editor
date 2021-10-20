@@ -31,6 +31,8 @@ sourceSets {
             exclude 'icomoon/icomoon.eot'
             exclude 'icomoon/icomoon.svg'
             exclude 'icomoon/icomoon.woff'
+            exclude 'flow.png'
+            exclude 'fontawesome-webfont.ttf'
         }
     }
 }
@@ -58,6 +60,8 @@ patchPluginXml {
      Theme change synchronize with internal theme .
      UI enhancement
      Compatible with lower version 201.*
+     Support update to db features.
+     Limit the size of release package.
       """
 }
 test {

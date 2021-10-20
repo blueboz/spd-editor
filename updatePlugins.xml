@@ -9,11 +9,9 @@
       url - path to download the plugin JAR/ZIP file. Required. Must be HTTPS
       version - version of this plugin. Required. Must match <version> in plugin.xml
     -->
-    <plugin id="cn.boz.jb.plugin.spd-editor" url="http://21.96.60.156:16789/jetbrainsPlugins/spd-editor-1.0.7.zip"
-            version="1.0.7"  size="641948" downloads="155465131" updatedDate="1634302164922">
-        <!--
-          The <idea-version> element must match the same element in plugin.xml. Required.
-        -->
+    <plugin id="cn.boz.jb.plugin.spd-editor" url="http://21.96.60.156:16789/jetbrainsPlugins/spd-editor-212.5080.55.zip"
+            version="212.5080.55"  size="641948" downloads="155465131" updatedDate="1634302164922">
+
         <idea-version />
         <change-notes>
             Icon color change with theme.
@@ -21,27 +19,9 @@
             Fixed button click problems.
             Theme change synchronize with internal theme .
             UI enhancement
-            Compatible with lower version 201.*
+            Compatible with idea version from 190.0 until 212.*
         </change-notes>
         <version>1.0.7</version>
-        <vendor email="1173626291@qq.com" url="http://blog.csdn.net/blueboz">Blueboz.Chen</vendor>
-        <name>Erayt Spd Editor</name>
-    </plugin>
-    <plugin id="cn.boz.jb.plugin.spd-editor" url="http://21.96.60.156:16789/jetbrainsPlugins/spd-editor-1.0.7.212.5080.zip"
-            version="1.0.7"  size="641948" downloads="155465131" updatedDate="1634302164922">
-        <!--
-          The <idea-version> element must match the same element in plugin.xml. Required.
-        -->
-        <idea-version />
-        <change-notes>
-            Icon color change with theme.
-            Fixed addbom action problems.
-            Fixed button click problems.
-            Theme change synchronize with internal theme .
-            UI enhancement
-            Compatible with lower version 201.*
-        </change-notes>
-        <version>1.0.7.212.5080</version>
         <vendor email="1173626291@qq.com" url="http://blog.csdn.net/blueboz">Blueboz.Chen</vendor>
         <name>Erayt Spd Editor</name>
     </plugin>

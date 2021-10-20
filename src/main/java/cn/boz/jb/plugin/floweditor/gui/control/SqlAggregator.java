@@ -5,5 +5,5 @@ package cn.boz.jb.plugin.floweditor.gui.control;
  */
 public interface SqlAggregator {
 
-    String toSql();
+    String toSql(String processId);
 }

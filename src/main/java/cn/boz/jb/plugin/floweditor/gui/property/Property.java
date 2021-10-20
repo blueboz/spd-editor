@@ -1,5 +1,6 @@
 package cn.boz.jb.plugin.floweditor.gui.property;
 
+import cn.boz.jb.plugin.floweditor.gui.utils.TranslateUtils;
 import cn.boz.jb.plugin.floweditor.gui.widget.MyTable;
 
 import javax.swing.JComponent;
@@ -146,14 +147,6 @@ public abstract class Property {
                 if (o == null) {
                     return "";
                 }
-                if (o instanceof String) {
-                    String result = (String) o;
-                    result = result.replace("#LEY#", "\n");
-                    result = result.replace("&quot;", "\"");
-                    result = result.replace("&gt;", ">");
-                    result = result.replace("&lt;", "<");
-                    return result;
-                }
                 return o;
             } else {
                 throw new RuntimeException(propertyName + "不存在");
@@ -175,18 +168,7 @@ public abstract class Property {
             if (field != null) {
                 field.setAccessible(true);
                 Object oldValue = field.get(operatedObj);
-                Object newValue = null;
-                if (value instanceof String) {
-                    String result = (String) value;
-                    result = result.replace("\n", "#LEY#");
-                    result = result.replace("\"", "&quot;");
-                    result = result.replace(">", "&gt;");
-                    result = result.replace("<", "&lt;");
-                    newValue = result;
-                } else {
-                    newValue = value;
-                }
-
+                Object newValue = value;
                 field.set(operatedObj, value);
                 //触发属性改变监听器
                 if (this.propertyChangeListener != null) {

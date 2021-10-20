@@ -29,6 +29,7 @@ import cn.boz.jb.plugin.floweditor.gui.utils.NumberUtils;
 import cn.boz.jb.plugin.floweditor.gui.utils.ShapePos;
 import cn.boz.jb.plugin.floweditor.gui.utils.ShapeUtils;
 import cn.boz.jb.plugin.idea.listener.ProcessSaveListener;
+import com.intellij.openapi.ui.Messages;
 
 import javax.imageio.ImageIO;
 import javax.swing.JComponent;
@@ -2977,6 +2978,7 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
 
     }
 
+
     /**
      * 触发图形选中监听器
      *
@@ -3041,19 +3043,24 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
 
     public String generateSql() {
         StringBuilder sqlBuilder = new StringBuilder();
+        if (this.id == null||this.id.trim().equals("")) {
+            Messages.showErrorDialog("流程id未设置","发生异常");
+        }
+        sqlBuilder.append("delete from ENGINE_TASK where ID_ like '" + this.id + "_%';\n");
+        sqlBuilder.append(String.format("delete from ENGINE_FLOW where PROCESSID_='%s';\n", this.id));
         for (int i = 0; i < shapes.size(); i++) {
             Shape shape = shapes.get(i);
             if (shape instanceof Label) {
                 continue;
             }
             if (shape instanceof SqlAggregator) {
-                sqlBuilder.append(((SqlAggregator) shape).toSql()+"\n");
+                sqlBuilder.append(((SqlAggregator) shape).toSql(this.id) + "\n");
             }
         }
         for (int i = 0; i < lines.size(); i++) {
             Line line = lines.get(i);
             if (line instanceof FlowSqlAggregator) {
-                sqlBuilder.append(((FlowSqlAggregator) line).toSql(this.id)+"\n");
+                sqlBuilder.append(((FlowSqlAggregator) line).toSql(this.id) + "\n");
             }
         }
         return sqlBuilder.toString();

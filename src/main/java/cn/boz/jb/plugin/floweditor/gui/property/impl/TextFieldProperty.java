@@ -10,8 +10,7 @@ import java.beans.PropertyChangeListener;
 //通过
 public class TextFieldProperty extends Property {
 
-    public JTextField textField = new JTextField();
-
+    private JTextField textField = new JTextField();
 
     public TextFieldProperty(String propertyName, Object operatedObj) {
         super(propertyName, operatedObj);

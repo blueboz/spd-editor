@@ -88,9 +88,7 @@ public class MyJBTable extends JBTable implements ShapeSelectedListener {
      * @param selectedObject
      */
     private void setOperatedObject(PropertyObject selectedObject) {
-        this.clearProperies();
         if(selectedObject==null){
-
             this.repaint();
             return ;
         }
@@ -99,6 +97,7 @@ public class MyJBTable extends JBTable implements ShapeSelectedListener {
             return;
         }
         this.operatedObject = selectedObject;
+        this.clearProperies();
 
         Property[] propertyEditors = operatedObject.getPropertyEditors();
         for (Property p : propertyEditors) {
