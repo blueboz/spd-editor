@@ -9,13 +9,13 @@
      <b>2.New->Spd File.</b><br>
      <b>3.Input any filename that you want.</b><br>
     ]]></description>
-    <version>201.6668.113</version>
+    <version>1.0.0</version>
     <change-notes>
     </change-notes>
-    <idea-version since-build="201.*" ></idea-version>
 
     <!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html
          on how to target different products -->
+    <depends>com.intellij.modules.lang</depends>
     <depends>com.intellij.modules.platform</depends>
 
     <extensions defaultExtensionNs="com.intellij">
