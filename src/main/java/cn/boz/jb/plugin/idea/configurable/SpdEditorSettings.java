@@ -2,7 +2,6 @@ package cn.boz.jb.plugin.idea.configurable;
 
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.ConfigurationException;
-import com.intellij.openapi.util.NlsContexts;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.JComponent;
@@ -15,13 +14,13 @@ public class SpdEditorSettings implements Configurable {
     private SpdEditorSettingsComp settings;
 
     @Override
-    public @NlsContexts.ConfigurableName String getDisplayName() {
+    public String getDisplayName() {
         return "SpdEditor";
     }
 
     @Override
     public @Nullable JComponent createComponent() {
-        settings= new SpdEditorSettingsComp();
+        settings = new SpdEditorSettingsComp();
         return settings.getPanel();
     }
 
