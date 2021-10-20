@@ -70,6 +70,7 @@ public class AddBomAction extends AnAction {
             WriteCommandAction.runWriteCommandAction(anActionEvent.getProject(),()->{
                 try {
                     virtualFile.setBinaryContent(baos.toByteArray());
+                    virtualFile.refresh(true,true);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

@@ -3,6 +3,7 @@ package cn.boz.jb.plugin.floweditor.gui.process.fragment;
 import cn.boz.jb.plugin.floweditor.gui.control.FlowSqlAggregator;
 import cn.boz.jb.plugin.floweditor.gui.process.bridge.LineBridge;
 import cn.boz.jb.plugin.floweditor.gui.property.Property;
+import cn.boz.jb.plugin.floweditor.gui.property.PropertyEditorListener;
 import cn.boz.jb.plugin.floweditor.gui.property.impl.TextFieldProperty;
 import cn.boz.jb.plugin.floweditor.gui.shape.HiPoint;
 import cn.boz.jb.plugin.floweditor.gui.shape.Label;
@@ -100,15 +101,22 @@ public class SequenceFlow extends LineBridge implements FlowSqlAggregator {
         this.setTargetRef(endShape.getId());
     }
 
+    private Property[] ps;
     @Override
-    public Property[] getPropertyEditors() {
-        Property[] ps = new Property[]{
-                new TextFieldProperty("name", this, (ctx) -> {
-                    Label label = this.getLabel();
-                    label.setText((String) ctx.getNewValue());
-                }),
-                new TextFieldProperty("conditionExpression", this),
-        };
+    public Property[] getPropertyEditors(PropertyEditorListener propertyEditor) {
+        if(ps==null){
+            synchronized (SequenceFlow.class){
+                if(ps==null){
+                    ps = new Property[]{
+                            new TextFieldProperty("name", this, (ctx) -> {
+                                Label label = this.getLabel();
+                                label.setText((String) ctx.getNewValue());
+                            },propertyEditor),
+                            new TextFieldProperty("conditionExpression", this,propertyEditor),
+                    };
+                }
+            }
+        }
         return ps;
     }
 

@@ -1,7 +1,9 @@
 package cn.boz.jb.plugin.floweditor.gui.property.impl;
 
 import cn.boz.jb.plugin.floweditor.gui.control.PropertyObject;
+import cn.boz.jb.plugin.floweditor.gui.process.fragment.SequenceFlow;
 import cn.boz.jb.plugin.floweditor.gui.property.Property;
+import cn.boz.jb.plugin.floweditor.gui.property.PropertyEditorListener;
 
 import javax.swing.JComponent;
 import javax.swing.JTextField;
@@ -22,6 +24,15 @@ public class TextFieldProperty extends Property {
 
     public TextFieldProperty(String propertyName, Object operatedObj, PropertyChangeListener listener) {
         super(propertyName, operatedObj,listener);
+    }
+
+    public TextFieldProperty(String propertyName, Object operatedObj, PropertyChangeListener listener, PropertyEditorListener propertyEditorListener) {
+        super(propertyName, operatedObj,listener,propertyEditorListener);
+    }
+
+    public TextFieldProperty(String propertyName, Object operatedObj, PropertyEditorListener propertyEditor) {
+        super(propertyName, operatedObj,propertyEditor);
+
     }
 
     @Override

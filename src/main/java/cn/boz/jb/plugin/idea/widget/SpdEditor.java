@@ -64,6 +64,7 @@ public class SpdEditor extends JComponent implements MouseListener, ClipboardOwn
 
         chartPanel = new ChartPanel();
         chartPanel.registerShapeSelectedListener(jbTable);
+        jbTable.bindChartPanel(chartPanel);
 
         jbPropertyScroll = new JBScrollPane();
         jbPropertyScroll.setViewportView(jbTable);

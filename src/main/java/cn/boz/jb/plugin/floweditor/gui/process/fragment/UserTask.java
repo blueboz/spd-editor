@@ -3,6 +3,7 @@ package cn.boz.jb.plugin.floweditor.gui.process.fragment;
 import cn.boz.jb.plugin.floweditor.gui.control.SqlAggregator;
 import cn.boz.jb.plugin.floweditor.gui.process.bridge.RectBridge;
 import cn.boz.jb.plugin.floweditor.gui.property.Property;
+import cn.boz.jb.plugin.floweditor.gui.property.PropertyEditorListener;
 import cn.boz.jb.plugin.floweditor.gui.property.impl.TextAreaProperty;
 import cn.boz.jb.plugin.floweditor.gui.property.impl.TextFieldProperty;
 import cn.boz.jb.plugin.floweditor.gui.shape.HiPoint;
@@ -34,7 +35,7 @@ public class UserTask extends RectBridge implements SqlAggregator {
     }
 
     public String getBussinesKey() {
-        if(bussinesKey==null){
+        if (bussinesKey == null) {
             return "";
         }
         return bussinesKey;
@@ -61,7 +62,7 @@ public class UserTask extends RectBridge implements SqlAggregator {
     }
 
     public String getExpression() {
-        if(expression==null){
+        if (expression == null) {
             return "";
         }
         return expression;
@@ -81,7 +82,7 @@ public class UserTask extends RectBridge implements SqlAggregator {
     }
 
     public String getValidSecond() {
-        if(validSecond==null||validSecond.trim().equals("")){
+        if (validSecond == null || validSecond.trim().equals("")) {
             return "0";
         }
         return validSecond;
@@ -92,7 +93,7 @@ public class UserTask extends RectBridge implements SqlAggregator {
     }
 
     public String getOpenSecond() {
-        if(openSecond==null||openSecond.trim().equals("")){
+        if (openSecond == null || openSecond.trim().equals("")) {
             return "0";
         }
         return openSecond;
@@ -161,18 +162,26 @@ public class UserTask extends RectBridge implements SqlAggregator {
         return "userTask";
     }
 
+    private Property[] ps;
+
     @Override
-    public Property[] getPropertyEditors() {
-        Property[] ps = new Property[]{
-                new TextFieldProperty("name", this),
-                new TextFieldProperty("bussinesId", this),
-                new TextFieldProperty("bussinesDescrition", this),
-                new TextFieldProperty("rights", this),
-                new TextAreaProperty("expression", this),
-                new TextFieldProperty("validSecond", this),
-                new TextFieldProperty("openSecond", this),
-                new TextFieldProperty("eventListener", this),
-        };
+    public Property[] getPropertyEditors(PropertyEditorListener propertyEditor) {
+        if (ps == null) {
+            synchronized (UserTask.class) {
+                if (ps == null) {
+                    ps = new Property[]{
+                            new TextFieldProperty("name", this,propertyEditor),
+                            new TextFieldProperty("bussinesId", this,propertyEditor),
+                            new TextFieldProperty("bussinesDescrition", this,propertyEditor),
+                            new TextFieldProperty("rights", this,propertyEditor),
+                            new TextAreaProperty("expression", this,propertyEditor),
+                            new TextFieldProperty("validSecond", this,propertyEditor),
+                            new TextFieldProperty("openSecond", this,propertyEditor),
+                            new TextFieldProperty("eventListener", this,propertyEditor),
+                    };
+                }
+            }
+        }
         return ps;
     }
 

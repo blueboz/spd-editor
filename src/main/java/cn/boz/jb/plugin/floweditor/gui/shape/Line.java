@@ -5,6 +5,7 @@ import cn.boz.jb.plugin.floweditor.gui.hist.BaseState;
 import cn.boz.jb.plugin.floweditor.gui.hist.LineState;
 import cn.boz.jb.plugin.floweditor.gui.hist.Restorable;
 import cn.boz.jb.plugin.floweditor.gui.property.Property;
+import cn.boz.jb.plugin.floweditor.gui.property.PropertyEditorListener;
 import cn.boz.jb.plugin.floweditor.gui.utils.ConstantUtils;
 import cn.boz.jb.plugin.floweditor.gui.utils.LineUtils;
 import cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel;
@@ -720,8 +721,8 @@ public class Line implements Restorable, Comparable, PropertyObject {
     }
 
     @Override
-    public Property[] getPropertyEditors() {
-        return PropertyObject.super.getPropertyEditors();
+    public Property[] getPropertyEditors(PropertyEditorListener propertyEditor) {
+        return PropertyObject.super.getPropertyEditors(propertyEditor);
     }
 
 
