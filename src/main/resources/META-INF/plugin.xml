@@ -4,7 +4,8 @@
     <vendor email="1173626291@qq.com" url="http://blog.csdn.net/blueboz">Blueboz.Chen</vendor>
 
     <description><![CDATA[
-    This is an Spd editor plugin,Which support features such as flow viewer,Flow editor,Flow image export,flow save And Soon.
+    This is an spd editor plugin,which support features such as flow viewer,Flow editor,flow image export,flow save and so on.
+    <br>
      <b>1.Use this plugin start with right key on the project file or directory</b><br>
      <b>2.New->Spd File.</b><br>
      <b>3.Input any filename that you want.</b><br>
