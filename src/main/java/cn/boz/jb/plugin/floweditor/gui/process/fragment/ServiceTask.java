@@ -8,6 +8,7 @@ import cn.boz.jb.plugin.floweditor.gui.property.impl.TextFieldProperty;
 import cn.boz.jb.plugin.floweditor.gui.shape.HiPoint;
 import cn.boz.jb.plugin.floweditor.gui.shape.Rect;
 import cn.boz.jb.plugin.floweditor.gui.utils.IcoMoonUtils;
+import cn.boz.jb.plugin.floweditor.gui.utils.TranslateUtils;
 import cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
@@ -62,10 +63,10 @@ public class ServiceTask extends RectBridge implements SqlAggregator {
     @Override
     public Element buildProcessNode() {
         Element element = DocumentHelper.createElement("serviceTask");
-        element.addAttribute("id", this.getId());
-        element.addAttribute("name", this.getName());
-        element.addAttribute("expression", this.getExpression());
-        element.addAttribute("listener", this.getListener());
+        element.addAttribute("id", TranslateUtils.translateToXmlString(this.getId()));
+        element.addAttribute("name", TranslateUtils.translateToXmlString(this.getName()));
+        element.addAttribute("expression", TranslateUtils.translateToXmlString(this.getExpression()));
+        element.addAttribute("listener", TranslateUtils.translateToXmlString(this.getListener()));
         return element;
     }
 
@@ -98,11 +99,11 @@ public class ServiceTask extends RectBridge implements SqlAggregator {
     }
 
     @Override
-    public String toSql() {
+    public String toSql(String processId) {
         String sql = String.format("INSERT INTO ENGINE_TASK (ID_, TYPE_, TITLE_, EXPRESSION_, RETURNVALUE_, BUSSINESKEY_, BUSSINESDESC_," +
                         "RIGHTS_, VALIDSECOND_, LISTENER_, OPENSECOND_, BUSSINESID_, TASKLISTENER_)" +
                         "VALUES ('%s', 'SERVICE', '%s', '%s', null, null, null, null, 10000, null, 60, null, '%s');",
-                getId(), getName(), getExpression(), getListener());
+                processId+"_"+getId(), getName(), getExpression(), getListener());
         return sql;
     }
 }

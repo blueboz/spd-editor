@@ -9,11 +9,11 @@
      <b>2.New->Spd File.</b><br>
      <b>3.Input any filename that you want.</b><br>
     ]]></description>
-    <version>1.0.0</version>
+    <version>212.5080.55</version>
     <change-notes>
         support edit for spd file.which is activiti like editor .this is the first version .
-
     </change-notes>
+    <idea-version since-build="190.0" until-build="212.*"></idea-version>
 
     <!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html
          on how to target different products -->
@@ -30,7 +30,10 @@
         <fileType name="Spd" extensions="spd"
                   implementationClass="cn.boz.jb.plugin.idea.filetype.SpdFileType"></fileType>
         <themeMetadataProvider path="/META-INF/SpdEditor.themeMetadata.json"/>
-        <applicationService serviceImplementation="cn.boz.jb.plugin.idea.store.SpdStateService"></applicationService>
+        <applicationService serviceImplementation="cn.boz.jb.plugin.idea.configurable.SpdEditorState"></applicationService>
+        <applicationConfigurable parentId="tools"  instance="cn.boz.jb.plugin.idea.configurable.SpdEditorSettings"
+                                 id="spdEditorConfigurable" displayName="Spd Editor"
+        ></applicationConfigurable>
     </extensions>
 
     <actions>

@@ -17,19 +17,25 @@ import cn.boz.jb.plugin.floweditor.gui.utils.ConstantUtils;
 import cn.boz.jb.plugin.floweditor.gui.utils.IcoMoonUtils;
 import cn.boz.jb.plugin.floweditor.gui.widget.Button;
 import cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel;
+import cn.boz.jb.plugin.idea.configurable.SpdEditorState;
+import cn.boz.jb.plugin.idea.utils.DBUtils;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.ui.JBSplitter;
-import com.intellij.ui.components.JBPanel;
 import com.intellij.ui.components.JBScrollBar;
 import com.intellij.ui.components.JBScrollPane;
+import icons.SpdEditorIcons;
 
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.Timer;
-import javax.swing.table.DefaultTableModel;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.ClipboardOwner;
+import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.Transferable;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseWheelEvent;
@@ -37,20 +43,15 @@ import java.awt.event.MouseWheelListener;
 import java.io.File;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class SpdEditor extends JComponent implements MouseListener {
+public class SpdEditor extends JComponent implements MouseListener, ClipboardOwner {
 
     ChartPanel chartPanel;
     JBSplitter jbSplitter;
     MyJBTable jbTable;
-    JBPanel<JBPanel> jbPanelJBPanel;
-    DefaultTableModel defaultTableModel;
-
     private JBScrollPane jbPropertyScroll;
 
     private JBScrollPane jbMenuScroll;
     private JPanel menu;
-    private JPanel menuContainer;
-
 
     public SpdEditor() {
         this.setLayout(new BorderLayout());
@@ -171,7 +172,6 @@ public class SpdEditor extends JComponent implements MouseListener {
         end.setToolTipText("End Event");
         menuPanel.add(end);
 
-
         Button movebtn = new Button(IcoMoonUtils.getMove(), true, "movebtn", "oper");
         movebtn.addMouseListener(this);
         movebtn.setToolTipText("Move");
@@ -180,7 +180,7 @@ public class SpdEditor extends JComponent implements MouseListener {
 
         Button handbtn = new Button(IcoMoonUtils.getScale(), true, "handbtn", "oper");
         handbtn.addMouseListener(this);
-        handbtn.setToolTipText("Hand");
+        handbtn.setToolTipText("Scale");
         menuPanel.add(handbtn);
 
         Button crosshairs = new Button(IcoMoonUtils.getAlign(), false, "crosshairs");
@@ -348,8 +348,27 @@ public class SpdEditor extends JComponent implements MouseListener {
                 break;
 
             case "sql":
-                String sql=chartPanel.generateSql();
-                Messages.showInfoMessage("Sql",sql);
+                String sql = chartPanel.generateSql();
+
+                int idx = Messages.showDialog(sql, "SQL", new String[]{"复制Sql", "更新至DB", "确定"}, 2, SpdEditorIcons.FLOW_16_ICON);
+                if (idx == 0) {
+                    Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+                    StringSelection selection = new StringSelection(sql);
+                    clipboard.setContents(selection, this);
+                } else if (idx == 1) {
+                    //更新至db
+                    SpdEditorState instance = SpdEditorState.getInstance();
+                    try {
+                        boolean b = DBUtils.executeSql(instance.jdbcUserName, instance.jdbcPassword, instance.jdbcUrl, instance.jdbcDriver, sql);
+                        if (b) {
+                            Messages.showMessageDialog("成功", "更新成功", null);
+                        }
+                    } catch (Exception ee) {
+                        Messages.showErrorDialog("发生错误", ee.getMessage());
+                    }
+                } else {
+                    //do nothing
+                }
                 break;
             default:
                 break;
@@ -374,6 +393,11 @@ public class SpdEditor extends JComponent implements MouseListener {
 
     @Override
     public void mouseExited(MouseEvent e) {
+
+    }
+
+    @Override
+    public void lostOwnership(Clipboard clipboard, Transferable contents) {
 
     }
 }

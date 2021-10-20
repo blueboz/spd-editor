@@ -4,6 +4,7 @@ import cn.boz.jb.plugin.floweditor.gui.control.PropertyObject;
 import cn.boz.jb.plugin.floweditor.gui.events.ShapeSelectedEvent;
 import cn.boz.jb.plugin.floweditor.gui.listener.ShapeSelectedListener;
 import cn.boz.jb.plugin.floweditor.gui.property.Property;
+import com.intellij.ui.components.JBScrollPane;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -70,7 +71,7 @@ public class PropertyEditor extends JPanel implements ShapeSelectedListener {
         this.chartPanel = chartPanel;
         chartPanel.registerShapeSelectedListener(this);
         jTable = new MyTable();
-        jScrollPane = new JScrollPane(jTable);
+        jScrollPane = new JBScrollPane(jTable);
         this.setLayout(new BorderLayout());
         this.add(jScrollPane, BorderLayout.CENTER);
     }

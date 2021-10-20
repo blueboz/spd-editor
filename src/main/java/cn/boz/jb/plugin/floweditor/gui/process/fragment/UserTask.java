@@ -8,6 +8,7 @@ import cn.boz.jb.plugin.floweditor.gui.property.impl.TextFieldProperty;
 import cn.boz.jb.plugin.floweditor.gui.shape.HiPoint;
 import cn.boz.jb.plugin.floweditor.gui.shape.Rect;
 import cn.boz.jb.plugin.floweditor.gui.utils.IcoMoonUtils;
+import cn.boz.jb.plugin.floweditor.gui.utils.TranslateUtils;
 import cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
@@ -33,6 +34,9 @@ public class UserTask extends RectBridge implements SqlAggregator {
     }
 
     public String getBussinesKey() {
+        if(bussinesKey==null){
+            return "";
+        }
         return bussinesKey;
     }
 
@@ -57,6 +61,9 @@ public class UserTask extends RectBridge implements SqlAggregator {
     }
 
     public String getExpression() {
+        if(expression==null){
+            return "";
+        }
         return expression;
     }
 
@@ -74,6 +81,9 @@ public class UserTask extends RectBridge implements SqlAggregator {
     }
 
     public String getValidSecond() {
+        if(validSecond==null||validSecond.trim().equals("")){
+            return "0";
+        }
         return validSecond;
     }
 
@@ -82,6 +92,9 @@ public class UserTask extends RectBridge implements SqlAggregator {
     }
 
     public String getOpenSecond() {
+        if(openSecond==null||openSecond.trim().equals("")){
+            return "0";
+        }
         return openSecond;
     }
 
@@ -119,15 +132,15 @@ public class UserTask extends RectBridge implements SqlAggregator {
     @Override
     public Element buildProcessNode() {
         Element element = DocumentHelper.createElement("userTask");
-        element.addAttribute("id", this.getId());
-        element.addAttribute("name", this.getName());
-        element.addAttribute("expression", this.getExpression());
-        element.addAttribute("bussinesDescrition", this.getBussinesDescrition());
-        element.addAttribute("rights", this.getRights());
-        element.addAttribute("validSecond", this.getValidSecond());
-        element.addAttribute("openSecond", this.getOpenSecond());
-        element.addAttribute("eventListener", this.getEventListener());
-        element.addAttribute("bussinesId", this.getBussinesId());
+        element.addAttribute("id", TranslateUtils.translateToXmlString(this.getId()));
+        element.addAttribute("name", TranslateUtils.translateToXmlString(this.getName()));
+        element.addAttribute("expression", TranslateUtils.translateToXmlString(this.getExpression()));
+        element.addAttribute("bussinesDescrition", TranslateUtils.translateToXmlString(this.getBussinesDescrition()));
+        element.addAttribute("rights", TranslateUtils.translateToXmlString(this.getRights()));
+        element.addAttribute("validSecond", TranslateUtils.translateToXmlString(this.getValidSecond()));
+        element.addAttribute("openSecond", TranslateUtils.translateToXmlString(this.getOpenSecond()));
+        element.addAttribute("eventListener", TranslateUtils.translateToXmlString(this.getEventListener()));
+        element.addAttribute("bussinesId", TranslateUtils.translateToXmlString(this.getBussinesId()));
         return element;
     }
 
@@ -164,11 +177,11 @@ public class UserTask extends RectBridge implements SqlAggregator {
     }
 
     @Override
-    public String toSql() {
+    public String toSql(String processId) {
         String sql = String.format("INSERT INTO ENGINE_TASK (ID_, TYPE_, TITLE_, EXPRESSION_, RETURNVALUE_, BUSSINESKEY_, BUSSINESDESC_," +
                         "RIGHTS_, VALIDSECOND_, LISTENER_, OPENSECOND_, BUSSINESID_, TASKLISTENER_)" +
-                        "VALUES ('%s', 'USER', '%s', '%s', null, '%s', '%s', '%s', %d, '%s', %d, '%s', null);",
-                id, this.name, this.expression, bussinesKey, bussinesDescrition, getRights(), Integer.parseInt(getValidSecond()),
+                        "VALUES ('%s', 'USER', '%s', '%s', null, '%s', '%s', '%s', %s, '%s', %d, '%s', null);",
+                processId + "_" + getId(), getName(), TranslateUtils.translateToSql(getExpression()), getBussinesKey(), getBussinesDescrition(), getRights(), Integer.parseInt(getValidSecond()),
                 getEventListener(), Integer.parseInt(getOpenSecond()), getBussinesId());
         return sql;
     }
