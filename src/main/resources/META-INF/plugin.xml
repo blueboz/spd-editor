@@ -1,4 +1,4 @@
-<idea-plugin>
+<idea-plugin require-restart="false">
     <id>cn.boz.jb.plugin.spd-editor</id>
     <name>Erayt Spd Editor</name>
     <vendor email="1173626291@qq.com" url="http://blog.csdn.net/blueboz">Blueboz.Chen</vendor>
@@ -19,8 +19,10 @@
     <depends>com.intellij.modules.lang</depends>
     <depends>com.intellij.modules.platform</depends>
 
+
+
     <extensions defaultExtensionNs="com.intellij">
-        <internalFileTemplate name="Spd Process"></internalFileTemplate>
+        <internalFileTemplate name="Spd Process"/>
         <!-- Add your extensions here -->
         <fileEditorProvider implementation="cn.boz.jb.plugin.idea.fileeditor.MyFileEditorProvider"
                             id="myFileEditorProvider" order="last">
@@ -28,26 +30,36 @@
         <!--        <toolWindow factoryClass="cn.boz.jb.plugin.idea.toolwindow.MyToolWindowFactory" id="myToolwindow" anchor="right"-->
         <!--                    order="last"></toolWindow>-->
         <fileType name="Spd" extensions="spd"
-                  implementationClass="cn.boz.jb.plugin.idea.filetype.SpdFileType"></fileType>
+                  implementationClass="cn.boz.jb.plugin.idea.filetype.SpdFileType"/>
         <themeMetadataProvider path="/META-INF/SpdEditor.themeMetadata.json"/>
-        <applicationService serviceImplementation="cn.boz.jb.plugin.idea.configurable.SpdEditorState"></applicationService>
+        <applicationService serviceImplementation="cn.boz.jb.plugin.idea.configurable.SpdEditorState"/>
         <applicationConfigurable parentId="tools"  instance="cn.boz.jb.plugin.idea.configurable.SpdEditorSettings"
-                                 id="spdEditorConfigurable" displayName="Spd Editor"
-        ></applicationConfigurable>
+                                 id="spdEditorConfigurable" displayName="Spd Editor"/>
     </extensions>
 
     <actions>
         <!-- Add your actions here -->
-        <action class="cn.boz.jb.plugin.addbom.AddBomAction" id="addBomAction" description="添加UTF-8 BOM" text="AddBom"
+        <action class="cn.boz.jb.plugin.addbom.AddBomAction" id="addBomAction" description="Add UTF-8 BOM" text="AddBom"
                 icon="SpdEditorIcons.BOM_16_ICON">
             <add-to-group group-id="ProjectViewPopupMenu" anchor="before"
-                          relative-to-action="EditorPaste"></add-to-group>
+                          relative-to-action="EditorPaste"/>
         </action>
 
         <action class="cn.boz.jb.plugin.idea.action.NewSpdFileAction" id="NewSpdFile" text="Spd File"
                 icon="SpdEditorIcons.FLOW_16_ICON" description="Spd File">
-            <add-to-group group-id="NewGroup" anchor="last"></add-to-group>
+            <add-to-group group-id="NewGroup" anchor="last"/>
         </action>
+<!--        <action id="EditorBasics.EditorIllustrationAction"-->
+<!--                class="org.intellij.sdk.editor.EditorIllustrationAction"-->
+<!--                text="Editor Replace Text"-->
+<!--                description="Replaces selected text with 'Replacement'."-->
+<!--                icon="SdkIcons.Sdk_default_icon">-->
+<!--            <add-to-group group-id="EditorPopupMenu" anchor="first"/>-->
+<!--        </action>-->
+        <action class="cn.boz.jb.plugin.idea.action.GoToMapper" id="GoToMapper" text="Go To Mapper">
+            <add-to-group group-id="EditorPopupMenu" anchor="first"></add-to-group>
+        </action>
+
 
     </actions>
 

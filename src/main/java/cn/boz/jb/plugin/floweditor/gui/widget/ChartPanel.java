@@ -1239,7 +1239,7 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
                 shape.init(point);
                 addShape(shape);
                 repaint();
-                fireShapeSelected();
+                fireSavedListener();
 
             } catch (InstantiationException | NoSuchMethodException | InvocationTargetException | IllegalAccessException instantiationException) {
                 instantiationException.printStackTrace();
