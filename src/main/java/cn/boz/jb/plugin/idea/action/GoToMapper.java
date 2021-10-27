@@ -26,7 +26,7 @@ public class GoToMapper extends BaseCodeInsightAction implements DumbAware {
                 PsiElement psiElement = psiFile.findElementAt(offset);
 //                PsiElement psiElement = PsiTreeUtil.getParentOfType(element, new Class[]{PsiFunctionalExpression.class, PsiMember.class});
 
-                PsiTreeUtil.
+//                PsiTreeUtil.
                 Language language = PsiUtilCore.getLanguageAtOffset(psiFile, offset);
                 CodeInsightActionHandler actionHandler = CodeInsightActions.GOTO_SUPER.forLanguage(language);
                 if(actionHandler!=null){
