@@ -11,21 +11,26 @@
     -->
 
 
-    <plugin id="cn.boz.jb.plugin.spd-editor" url="http://21.96.60.156:16789/jetbrainsPlugins/spd-editor-1.0.8.zip"
-            version="1.0.8"  size="641948" downloads="155465131" updatedDate="1634302164933">
-        <idea-version since-build="190.*" ></idea-version>
+    <plugin id="cn.boz.jb.plugin.spd-editor" url="http://21.96.60.156:16789/jetbrainsPlugins/spd-editor-1.0.11.zip"
+            version="1.0.11"  size="641948" downloads="155465131" updatedDate="1634302164933">
+        <idea-version since-build="200.*" ></idea-version>
         <change-notes>
-            Icon color change with theme.
-            Fixed addbom action problems.
-            Fixed button click problems.
-            Theme change synchronize with internal theme .
-            UI enhancement.
-            Compatible with lower version 201.*
-            Support update to db features.
-            Shrink the size of release package.
+            <![CDATA[
+            <b>1.0.11</b><br>
+            fixed some bugs.<br>
+            <b>1.0.10</b>
+            Icon color change with theme.<br>
+            Fixed addbom action problems.<br>
+            Fixed button click problems.<br>
+            Theme change synchronize with internal theme .<br>
+            UI enhancement.<br>
+            Compatible with lower version 201.*<br>
+            Support update to db features.<br>
+            Shrink the size of release package.<br>
+            ]]>
         </change-notes>
 
-        <version>1.0.8</version>
+        <version>1.0.11</version>
         <vendor email="1173626291@qq.com" url="http://blog.csdn.net/blueboz">Blueboz.Chen</vendor>
         <name>Erayt Spd Editor</name>
     </plugin>
