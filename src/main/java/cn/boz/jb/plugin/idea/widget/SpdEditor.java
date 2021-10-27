@@ -350,6 +350,9 @@ public class SpdEditor extends JComponent implements MouseListener, ClipboardOwn
 
             case "sql":
                 String sql = chartPanel.generateSql();
+                if(sql==null){
+                    return ;
+                }
 
                 int idx = Messages.showDialog(sql, "SQL", new String[]{"复制Sql", "更新至DB", "确定"}, 2, SpdEditorIcons.FLOW_16_ICON);
                 if (idx == 0) {

@@ -123,6 +123,6 @@ public class SequenceFlow extends LineBridge implements FlowSqlAggregator {
     @Override
     public String toSql(String processId) {
         return String.format("INSERT INTO ENGINE_FLOW (PROCESSID_, SOURCE_, TARGET_, CONDITION_, ORDER_) " +
-                "VALUES ('%s', '%s', '%s', '%s', 0);", processId, this.getSourceRef(), this.getTargetRef(),this.getConditionExpression());
+                "VALUES ('%s', '%s', '%s', '%s', 0);", processId, processId+"_"+this.getSourceRef(), processId+"_"+this.getTargetRef(),this.getConditionExpression());
     }
 }

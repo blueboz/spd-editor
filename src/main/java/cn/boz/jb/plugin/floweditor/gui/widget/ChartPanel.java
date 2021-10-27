@@ -3063,6 +3063,7 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
         StringBuilder sqlBuilder = new StringBuilder();
         if (this.id == null||this.id.trim().equals("")) {
             Messages.showErrorDialog("流程id未设置","发生异常");
+            return null;
         }
         sqlBuilder.append("delete from ENGINE_TASK where ID_ like '" + this.id + "_%';\n");
         sqlBuilder.append(String.format("delete from ENGINE_FLOW where PROCESSID_='%s';\n", this.id));
