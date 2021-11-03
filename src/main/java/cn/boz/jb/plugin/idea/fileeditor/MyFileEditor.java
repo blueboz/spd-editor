@@ -44,11 +44,16 @@ public class MyFileEditor implements FileEditor {
         spdEditor.loadFromFile(new File(virtualFile.getPath()));
         spdEditor.getChartPanel().registerProcessSaveListener((bs) -> {
             WriteCommandAction.runWriteCommandAction(project, () -> {
-                try {
-                    virtualFile.setBinaryContent(bs);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                virtualFile.refresh(true, true, new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            virtualFile.setBinaryContent(bs);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
             });
         });
     }

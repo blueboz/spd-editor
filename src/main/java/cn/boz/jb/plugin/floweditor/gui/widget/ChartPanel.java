@@ -49,6 +49,8 @@ import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.RenderingHints;
 import java.awt.Stroke;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -75,7 +77,7 @@ import java.util.stream.Collectors;
 /**
  * 流程画板面板
  */
-public class ChartPanel extends JComponent implements MouseListener, MouseMotionListener, KeyListener, MouseWheelListener, PropertyObject {
+public class ChartPanel extends JComponent implements MouseListener, MouseMotionListener, KeyListener, MouseWheelListener, PropertyObject, FocusListener {
 
     private List<ShapeSelectedListener> shapeSelectedListeners = new ArrayList<>();
     private List<ProcessSaveListener> processSaveListener = new ArrayList<>();
@@ -191,6 +193,7 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
         addKeyListener(this);
         addMouseWheelListener(this);
 
+        addFocusListener(this);
     }
 
     public int getMode() {
@@ -2472,7 +2475,6 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
     public void keyPressed(KeyEvent e) {
         int keyCode = e.getKeyCode();
         if (ctrlPressing) {
-
             if (keyCode == KeyEvent.VK_A) {
                 //Ctrl+A
                 for (Shape shape : shapes) {
@@ -2608,7 +2610,7 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
      * 图形删除的操作回调函数
      */
     public void shapeDelete() {
-        boolean removed=false;
+        boolean removed = false;
         List<Shape> collect = shapes.stream().filter(it -> it.isDraging()).collect(Collectors.toList());
         List<BaseState> befores = new ArrayList<>();
         for (Shape shape : collect) {
@@ -2622,7 +2624,7 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
                 for (Line line : headOfLine) {
                     if (lines.contains(line)) {
                         removeLine(befores, line);
-                        removed=true;
+                        removed = true;
                     }
                 }
 
@@ -2631,13 +2633,13 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
                 for (Line line : tailOfLine) {
                     if (lines.contains(line)) {
                         removeLine(befores, line);
-                        removed=true;
+                        removed = true;
 
                     }
                 }
                 befores.add(shape.serialize());
                 shapes.remove(shape);
-                removed=true;
+                removed = true;
 
             }
 
@@ -2645,11 +2647,11 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
         List<Line> ls = lines.stream().filter(it -> it.isSelected()).collect(Collectors.toList());
         for (Line li : ls) {
             removeLine(befores, li);
-            removed=true;
+            removed = true;
 
         }
         recordStateChange(new StateChange(new BaseGroupState(befores), null));
-        if(removed){
+        if (removed) {
             fireSavedListener();
         }
     }
@@ -2672,14 +2674,13 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
 
     @Override
     public void keyReleased(KeyEvent e) {
-        if (17 == e.getKeyCode()) {
-            ctrlPressing = false;
+        if (KeyEvent.VK_CONTROL == e.getKeyCode()) {
             ctrlPressing = false;
             setCursor(getCursorByMode(mode));
-        } else if (32 == e.getKeyCode()) {
+        } else if (KeyEvent.VK_SPACE == e.getKeyCode()) {
             whitespacePressing = false;
             setCursor(getCursorByMode(mode));
-        } else if (16 == e.getKeyCode()) {
+        } else if (KeyEvent.VK_SHIFT == e.getKeyCode()) {
             //shift
             if (shiftPressing) {
                 shiftPressing = false;
@@ -3061,8 +3062,8 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
 
     public String generateSql() {
         StringBuilder sqlBuilder = new StringBuilder();
-        if (this.id == null||this.id.trim().equals("")) {
-            Messages.showErrorDialog("流程id未设置","发生异常");
+        if (this.id == null || this.id.trim().equals("")) {
+            Messages.showErrorDialog("流程id未设置", "发生异常");
             return null;
         }
         sqlBuilder.append("delete from ENGINE_TASK where ID_ like '" + this.id + "_%';\n");
@@ -3083,5 +3084,17 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
             }
         }
         return sqlBuilder.toString();
+    }
+
+    @Override
+    public void focusGained(FocusEvent e) {
+        //重置状态
+        ctrlPressing=false;
+    }
+
+    @Override
+    public void focusLost(FocusEvent e) {
+        //重置
+        ctrlPressing=false;
     }
 }

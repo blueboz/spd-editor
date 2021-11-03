@@ -24,20 +24,20 @@ public class AddBomAction extends AnAction {
     @Override
     public void update(@NotNull AnActionEvent e) {
         Project project = e.getProject();
-        if(project==null){
+        if (project == null) {
             e.getPresentation().setEnabledAndVisible(false);
-            return ;
+            return;
         }
         PsiFile psiFile = e.getData(CommonDataKeys.PSI_FILE);
-        if(psiFile==null){
+        if (psiFile == null) {
             e.getPresentation().setEnabledAndVisible(false);
-            return ;
+            return;
         }
         FileType fileType = psiFile.getFileType();
         String name = fileType.getName();
-        if("Image".equals(name)){
+        if ("Image".equals(name)) {
             e.getPresentation().setEnabledAndVisible(false);
-            return ;
+            return;
         }
         e.getPresentation().setEnabledAndVisible(true);
 
@@ -49,36 +49,42 @@ public class AddBomAction extends AnAction {
         PsiFile psiFile = anActionEvent.getData(CommonDataKeys.PSI_FILE);
         VirtualFile virtualFile = psiFile.getVirtualFile();
         FileType fileType = virtualFile.getFileType();
-        if(!"SQL".equals(fileType.getName())){
+        if (!"SQL".equals(fileType.getName())) {
             int res = Messages.showYesNoCancelDialog("注意文件实际类型为" + fileType.getName() + "是否要添加BOM，可能导致文件不可用", "注意", SpdEditorIcons.WARN_64_ICON);
-            if(Messages.NO==res||Messages.CANCEL==res){
-                return ;
+            if (Messages.NO == res || Messages.CANCEL == res) {
+                return;
             }
         }
-        try {
-            InputStream inputStream = virtualFile.getInputStream();
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, virtualFile.getCharset()));
-            String line;
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            byte[] utf8bom={(byte)0xef,(byte)0xbb,(byte)0xbf};
-            baos.write(utf8bom);
-            while((line=bufferedReader.readLine())!=null){
-                baos.write(line.getBytes(StandardCharsets.UTF_8));
-                baos.write("\n".getBytes(StandardCharsets.UTF_8));
-            }
-            baos.flush();
-            WriteCommandAction.runWriteCommandAction(anActionEvent.getProject(),()->{
-                try {
-                    virtualFile.setBinaryContent(baos.toByteArray());
-                    virtualFile.refresh(true,true);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            });
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
+        //使用异步刷新然后处理的操作
+        virtualFile.refresh(true, false, () -> {
+            try {
+                InputStream inputStream = virtualFile.getInputStream();
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, virtualFile.getCharset()));
+                String line;
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                byte[] utf8bom = {(byte) 0xef, (byte) 0xbb, (byte) 0xbf};
+                baos.write(utf8bom);
+                while ((line = bufferedReader.readLine()) != null) {
+                    baos.write(line.getBytes(StandardCharsets.UTF_8));
+                    baos.write("\n".getBytes(StandardCharsets.UTF_8));
+                }
+                baos.flush();
+                WriteCommandAction.runWriteCommandAction(anActionEvent.getProject(), () -> {
+                    try {
+                        virtualFile.setBinaryContent(baos.toByteArray());
+                        virtualFile.refresh(true, true);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
 
     }
 

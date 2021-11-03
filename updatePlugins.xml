@@ -11,22 +11,26 @@
     -->
 
 
-    <plugin id="cn.boz.jb.plugin.spd-editor" url="http://21.96.60.156:16789/jetbrainsPlugins/spd-editor-1.0.11.zip"
-            version="1.0.11"  size="641948" downloads="155465131" updatedDate="1634302164933">
+    <plugin id="cn.boz.jb.plugin.spd-editor" url="http://21.96.60.156:16789/jetbrainsPlugins/spd-editor-1.0.21.zip"
+            version="1.0.12"  size="641948" downloads="155465131" updatedDate="1634302164933">
         <idea-version since-build="200.*" ></idea-version>
         <change-notes>
             <![CDATA[
+             <b>1.0.12</b><br>
+                fixed some bug while shift between two spd edit.which cause control status actived <br>
+
             <b>1.0.11</b><br>
-            fixed some bugs.<br>
+                fixed some bugs.<br>
+
             <b>1.0.10</b>
-            Icon color change with theme.<br>
-            Fixed addbom action problems.<br>
-            Fixed button click problems.<br>
-            Theme change synchronize with internal theme .<br>
-            UI enhancement.<br>
-            Compatible with lower version 201.*<br>
-            Support update to db features.<br>
-            Shrink the size of release package.<br>
+                Icon color change with theme.<br>
+                Fixed addbom action problems.<br>
+                Fixed button click problems.<br>
+                Theme change synchronize with internal theme .<br>
+                UI enhancement.<br>
+                Compatible with lower version 201.*<br>
+                Support update to db features.<br>
+                Shrink the size of release package.<br>
             ]]>
         </change-notes>
 

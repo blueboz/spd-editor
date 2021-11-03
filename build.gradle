@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'cn.boz'
-version '1.0.11'
+version '1.0.12'
 
 sourceCompatibility = 1.11
 
@@ -48,6 +48,8 @@ intellij {
 //    instrumentCode = false
 //    sandboxDir.set("${project.rootDir}/.sandbox")
     sandboxDir = "${project.rootDir}/.sandbox"
+    plugins = ['com.intellij.java']
+
 
 }
 
@@ -55,6 +57,9 @@ println "${project.rootDir}"
 
 patchPluginXml {
     changeNotes = """
+    <b>1.0.12</b><br>
+    fixed some bug while shift between two spd edit.which cause control status actived <br>
+    
     <b>1.0.11</b><br>
     fixed some bugs.<br>
     
