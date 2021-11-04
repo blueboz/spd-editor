@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'cn.boz'
-version '1.0.12'
+version '1.0.15'
 
 sourceCompatibility = 1.11
 
@@ -58,21 +58,27 @@ println "${project.rootDir}"
 patchPluginXml {
     changeNotes = """
     <b>1.0.12</b><br>
-    fixed some bug while shift between two spd edit.which cause control status actived <br>
-    fixed genrate sql bug's
+    <ul>
+        <li>fixed some bug while shift between two spd edit.which cause control status actived </li>
+        <li>fixed genrate sql bug's</li>
+    </ul>
     
     <b>1.0.11</b><br>
-    fixed some bugs.<br>
+    <ul>
+        <li>fixed some bugs.</li>
+    </ul>
     
     <b>1.0.10</b>
-     Icon color change with theme.<br>
-     Fixed addbom action problems.<br>
-     Fixed button click problems.<br>
-     Theme change synchronize with internal theme .<br>
-     UI enhancement.<br>
-     Compatible with lower version 201.*<br>
-     Support update to db features.<br>
-     Shrink the size of release package.<br>
+    <ul>
+         <li>Icon color change with theme.</li>
+         <li>Fixed addbom action problems.</li>
+         <li>Fixed button click problems.</li>
+         <li>Theme change synchronize with internal theme .</li>
+         <li>UI enhancement.</li>
+         <li>Compatible with lower version 201.*</li>
+         <li>Support update to db features.</li>
+         <li>Shrink the size of release package.</li>
+    <ul>
       """
     sinceBuild="200.*"
     untilBuild= ""

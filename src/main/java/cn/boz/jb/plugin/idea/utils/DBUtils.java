@@ -5,6 +5,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.SQLException;
@@ -67,13 +68,16 @@ public class DBUtils {
      */
     public static boolean executeSql(String jdbcUser, String jdbcPass, String jdbcUrl,String jdbcDriver, String sqls) throws MalformedURLException, SQLException, ClassNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         try (Connection connection = getConnection(jdbcUser, jdbcPass, jdbcUrl,jdbcDriver)) {
+
             String[] split = sqls.split(";");
             Statement statement = connection.createStatement();
             for (String s : split) {
-                System.out.println(s);
                 statement.addBatch(s);
             }
             statement.executeBatch();
+            //PROBLEMS's
+
+//            CallableStatement callableStatement = connection.prepareCall(sqls);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

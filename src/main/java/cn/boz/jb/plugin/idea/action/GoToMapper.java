@@ -56,13 +56,11 @@ public class GoToMapper extends AnAction {
         PsiMethod containingMethod = PsiTreeUtil.getParentOfType(element, PsiMethod.class);
         PsiClass containingClass;
         if (containingMethod == null) {
-            PsiClass psiClass = PsiTreeUtil.getParentOfType(element, PsiClass.class);
-            if (psiClass != null) {
-                String qualifiedName = psiClass.getQualifiedName();
-
+            containingClass = PsiTreeUtil.getParentOfType(element, PsiClass.class);
+            if (containingClass == null) {
+                return;
             }
             //进入类
-            return;
         } else {
             containingClass = containingMethod.getContainingClass();
         }
@@ -72,25 +70,23 @@ public class GoToMapper extends AnAction {
 
         PsiFile psiFileV = PsiManager.getInstance(project).findFile(virtualFile);
         PsiDirectory containingDirectory = psiFileV.getContainingDirectory();
+
         PsiDirectory[] subdirectories = containingDirectory.getSubdirectories();
 
-        for (PsiDirectory subdir : subdirectories) {
-            PsiFile[] psiFiles = subdir.getFiles();
-            for (PsiFile file : psiFiles) {
+        crossDirectory(containingDirectory, new DoEachPsifile() {
 
-                //遍历显然就不是一个好的方法
-                if (file.getFileType() instanceof XmlFileType) {
-                    //解析xml文件?
-                    XmlDocument document = PsiTreeUtil.getChildOfType(file, XmlDocument.class);
+            @Override
+            public boolean doPsiFile(PsiFile psiFile) {
+                if (psiFile.getFileType() instanceof XmlFileType) {
+                    XmlDocument document = PsiTreeUtil.getChildOfType(psiFile, XmlDocument.class);
                     XmlTag sqlMapMaybe = document.getRootTag();
                     if (!"sqlMap".equals(sqlMapMaybe.getName())) {
-
-                        continue;
+                        return false;
                     }
                     XmlAttribute namespace = sqlMapMaybe.getAttribute("namespace");
                     String classNameMaybe = namespace.getValue();
                     if (!classNameMaybe.equals(qualifiedName)) {
-                        continue;
+                        return false;
                     }
                     XmlElement ele = namespace;
                     if (containingMethod != null) {
@@ -112,19 +108,46 @@ public class GoToMapper extends AnAction {
                         }
                         JBPopup jbpopup = NavigationUtil.getPsiElementPopup(new PsiElement[]{ele, namespace}, "选择文件");
                         jbpopup.showCenteredInCurrentWindow(project);
+                        return true;
+
                     } else {
                         JBPopup jbpopup = NavigationUtil.getPsiElementPopup(new PsiElement[]{namespace}, "选择文件");
                         jbpopup.showCenteredInCurrentWindow(project);
+                        return true;
+
                     }
 //                    Navigatable navigatable = PsiNavigationSupport.getInstance().createNavigatable(project, virtualFile, 0);
 //                    navigatable.navigate();
-                    return;
                 }
+                return false;
             }
+        });
 
+
+
+    }
+
+    /**
+     * @param directory
+     */
+    public boolean crossDirectory(PsiDirectory directory, DoEachPsifile doer) {
+        PsiFile[] files = directory.getFiles();
+        for (PsiFile file : files) {
+            boolean b = doer.doPsiFile(file);
+            if (b == true) {
+                return true;
+            }
         }
-
-
+        //遍历完文件后再遍历目录
+        PsiDirectory[] subdirectories = directory.getSubdirectories();
+        for (PsiDirectory subdirectory : subdirectories) {
+            boolean b = crossDirectory(subdirectory, doer);
+            if (b) {
+                return true;
+            }
+        }
+        //表示本次没有遍历到，接着遍历就好了
+        return false;
     }
 
     @Override
@@ -146,4 +169,15 @@ public class GoToMapper extends AnAction {
 
 }
 
+
+interface DoEachPsifile {
+
+    /**
+     * 返回true终止后续遍历
+     *
+     * @param psiFile
+     * @return
+     */
+    public boolean doPsiFile(PsiFile psiFile);
+}
 

@@ -11,8 +11,8 @@
     -->
 
 
-    <plugin id="cn.boz.jb.plugin.spd-editor" url="http://21.96.60.156:16789/jetbrainsPlugins/spd-editor-1.0.12.zip"
-            version="1.0.12"  size="641948" downloads="155465131" updatedDate="1634302164933">
+    <plugin id="cn.boz.jb.plugin.spd-editor" url="http://21.96.60.156:16789/jetbrainsPlugins/spd-editor-1.0.15.zip"
+            version="1.0.15"  size="641948" downloads="155465131" updatedDate="1634302164933">
         <idea-version since-build="200.*" ></idea-version>
         <change-notes>
             <![CDATA[
@@ -34,7 +34,7 @@
             ]]>
         </change-notes>
 
-        <version>1.0.12</version>
+        <version>1.0.15</version>
         <vendor email="1173626291@qq.com" url="http://blog.csdn.net/blueboz">Blueboz.Chen</vendor>
         <name>Erayt Spd Editor</name>
     </plugin>
