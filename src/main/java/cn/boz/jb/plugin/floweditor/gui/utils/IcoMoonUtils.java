@@ -42,6 +42,7 @@ public class IcoMoonUtils {
         return FONT.deriveFont(Font.PLAIN, 25);
     }
 
+
     public static Font getFont36() {
         return FONT.deriveFont(Font.PLAIN, 36);
     }
@@ -85,6 +86,7 @@ public class IcoMoonUtils {
         graphics.drawString(text, 0, (int) offsety);
         return Toolkit.getDefaultToolkit().createCustomCursor(bufferedImage, new Point(16, 16), "cursor");
     }
+
 
     public static Font getFont16() {
         return FONT.deriveFont(Font.PLAIN, 16);

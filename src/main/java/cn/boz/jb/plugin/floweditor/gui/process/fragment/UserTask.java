@@ -173,6 +173,7 @@ public class UserTask extends RectBridge implements SqlAggregator {
             synchronized (UserTask.class) {
                 if (ps == null) {
                     ps = new Property[]{
+
                             new TextFieldProperty("name", this, propertyEditor),
                             new TextFieldProperty("bussinesId", this, propertyEditor),
                             new TextFieldProperty("bussinesDescrition", this, propertyEditor),
@@ -181,6 +182,7 @@ public class UserTask extends RectBridge implements SqlAggregator {
                             new TextFieldProperty("validSecond", this, propertyEditor),
                             new TextFieldProperty("openSecond", this, propertyEditor),
                             new TextFieldProperty("eventListener", this, propertyEditor),
+
                     };
                 }
             }
