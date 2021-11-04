@@ -13,7 +13,11 @@ import cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 
+import java.awt.Cursor;
+
 public class CallActivity extends RectBridge implements SqlAggregator {
+
+    public static Cursor CURSOR = IcoMoonUtils.initCursor(IcoMoonUtils.getCallActivity());
 
     private String calledElement;
 

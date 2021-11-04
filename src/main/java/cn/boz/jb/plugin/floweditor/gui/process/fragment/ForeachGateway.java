@@ -11,8 +11,11 @@ import cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 
+import java.awt.Cursor;
+
 public class ForeachGateway extends PrismaticBridge implements Gateway, SqlAggregator {
 
+    public static Cursor CURSOR = IcoMoonUtils.initCursor(IcoMoonUtils.getForeachGateway());
 
     @Override
     public void drawContent(ChartPanel chartPanel) {

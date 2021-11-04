@@ -49,6 +49,7 @@ import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.RenderingHints;
 import java.awt.Stroke;
+import java.awt.Toolkit;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
@@ -181,6 +182,8 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
     private boolean dragFlag = false;
     //图形拖动的控制标志位
     private boolean dragging = false;
+    //用于记录当前鼠标位置
+    private Point mouseCurrentPoint = null;
 
 
     public ChartPanel() {
@@ -196,6 +199,10 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
         addFocusListener(this);
     }
 
+    /**
+     * @return
+     * @
+     */
     public int getMode() {
         return mode;
     }
@@ -223,7 +230,24 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
         this.setMode(MODE_NEW_SHAPE);
         this.newShapeClass = clz;
         this.newLineClass = null;
+
     }
+
+
+    /**
+     * 带默认模式
+     * @param clz
+     * @param cursor
+     */
+    public void setModeOfNewShape(Class<? extends Shape> clz,Cursor cursor) {
+        //由于目前
+        this.setMode(MODE_NEW_SHAPE);
+        this.newShapeClass = clz;
+        this.newLineClass = null;
+        this.setCursor(cursor);
+
+    }
+
 
 
     public void setMode(int mode) {
@@ -655,7 +679,6 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
     public void paint(Graphics g) {
         super.paint(g);
         this.currentGraphic = (Graphics2D) g;
-        ;
         //设置图形去锯齿
         // activate anti aliasing for text rendering (if you want it to look nice)
         setAntiAlias();
@@ -681,6 +704,7 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
 
         g.dispose();
     }
+
 
     private void drawOccupation() {
         Runtime runtime = Runtime.getRuntime();
@@ -2219,7 +2243,8 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
                 if (posX != Shape.REL_POS_NAIL) {
                     hitx = true;
                     //最小距离只有在命中的时候，才去计算
-                    int[] pos = {Shape.REL_POS_LEFT_IN, Shape.REL_POS_LEFT_OUT, Shape.REL_POS_RIGHT_OUT, Shape.REL_POS_RIGHT_IN, Shape.REL_POS_CENTER};
+                    //其实应该优先考虑居中对齐呀
+                    int[] pos = {Shape.REL_POS_CENTER, Shape.REL_POS_LEFT_IN, Shape.REL_POS_LEFT_OUT, Shape.REL_POS_RIGHT_OUT, Shape.REL_POS_RIGHT_IN};
                     int anyhit = 0;
                     for (int po : pos) {
                         if ((posX & po) != Shape.REL_POS_NAIL) {
@@ -2237,12 +2262,11 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
             //对于最小距离进行处理
 
 
-            //FIXME 不对齐的问题或者说是对齐线不对位的问题
             if (!hity) {
                 int posY = Shape.relPosOfY(rel, moving, alignDistance);
                 if (posY != Shape.REL_POS_NAIL) {
                     hity = true;
-                    int[] pos = {Shape.REL_POS_LEFT_IN, Shape.REL_POS_LEFT_OUT, Shape.REL_POS_RIGHT_OUT, Shape.REL_POS_RIGHT_IN, Shape.REL_POS_CENTER};
+                    int[] pos = {Shape.REL_POS_CENTER, Shape.REL_POS_LEFT_IN, Shape.REL_POS_LEFT_OUT, Shape.REL_POS_RIGHT_OUT, Shape.REL_POS_RIGHT_IN};
                     int anyhit = 0;
                     for (int po : pos) {
                         //命中某一条边的情况下
@@ -2318,7 +2342,7 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
 
     @Override
     public void mouseMoved(MouseEvent e) {
-
+        this.mouseCurrentPoint = e.getPoint();
         if (whitespacePressing) {
             return;
         }
@@ -3089,12 +3113,20 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
     @Override
     public void focusGained(FocusEvent e) {
         //重置状态
-        ctrlPressing=false;
+        ctrlPressing = false;
     }
 
     @Override
     public void focusLost(FocusEvent e) {
         //重置
-        ctrlPressing=false;
+        ctrlPressing = false;
+    }
+
+    public Graphics2D getCurrentGraphic() {
+        return currentGraphic;
+    }
+
+    public void setCurrentGraphic(Graphics2D currentGraphic) {
+        this.currentGraphic = currentGraphic;
     }
 }

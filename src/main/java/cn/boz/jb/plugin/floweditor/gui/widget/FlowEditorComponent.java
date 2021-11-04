@@ -192,7 +192,8 @@ public class FlowEditorComponent extends JComponent implements MouseListener {
                 gPanel.setMode(ChartPanel.MODE_DEFAULT);
                 break;
             case "user":
-                gPanel.setModeOfNewShape(UserTask.class);
+//                gPanel.setModeOfNewShape(UserTask.class);
+                gPanel.setModeOfNewShape(UserTask.class,IcoMoonUtils.initCursor(IcoMoonUtils.getUserTask()));
                 break;
             case "handbtn":
                 gPanel.setMode(ChartPanel.MODE_MOVE);
@@ -207,25 +208,26 @@ public class FlowEditorComponent extends JComponent implements MouseListener {
                 gPanel.setModeOfNewShape(Prismatic.class);
                 break;
             case "start":
-                gPanel.setModeOfNewShape(StartEvent.class);
+                gPanel.setModeOfNewShape(StartEvent.class,IcoMoonUtils.initCursor(IcoMoonUtils.getStartEvent()));
+
                 break;
             case "stop":
-                gPanel.setModeOfNewShape(EndEvent.class);
+                gPanel.setModeOfNewShape(EndEvent.class,IcoMoonUtils.initCursor(IcoMoonUtils.getEndEvent()));
                 break;
             case "foreach":
-                gPanel.setModeOfNewShape(ForeachGateway.class);
+                gPanel.setModeOfNewShape(ForeachGateway.class,IcoMoonUtils.initCursor(IcoMoonUtils.getForeachGateway()));
                 break;
             case "parallel":
-                gPanel.setModeOfNewShape(ParallelGateway.class);
+                gPanel.setModeOfNewShape(ParallelGateway.class,IcoMoonUtils.initCursor(IcoMoonUtils.getParallelGateway()));
                 break;
             case "exclude":
-                gPanel.setModeOfNewShape(ExclusiveGateway.class);
+                gPanel.setModeOfNewShape(ExclusiveGateway.class,IcoMoonUtils.initCursor(IcoMoonUtils.getExclusiveGateway()));
                 break;
             case "call":
-                gPanel.setModeOfNewShape(CallActivity.class);
+                gPanel.setModeOfNewShape(CallActivity.class,IcoMoonUtils.initCursor(IcoMoonUtils.getCallActivity()));
                 break;
             case "service":
-                gPanel.setModeOfNewShape(ServiceTask.class);
+                gPanel.setModeOfNewShape(ServiceTask.class,IcoMoonUtils.initCursor(IcoMoonUtils.getServiceTask()));
                 break;
             case "equation":
                 gPanel.resetScale();

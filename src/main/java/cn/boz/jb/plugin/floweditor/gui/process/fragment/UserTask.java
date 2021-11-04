@@ -14,6 +14,8 @@ import cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 
+import java.awt.Cursor;
+
 public class UserTask extends RectBridge implements SqlAggregator {
 
     protected String bussinesId;
@@ -25,6 +27,7 @@ public class UserTask extends RectBridge implements SqlAggregator {
     protected String validSecond;
     protected String openSecond;
 
+    public static Cursor CURSOR = IcoMoonUtils.initCursor(IcoMoonUtils.getUserTask());
 
     public String getBussinesId() {
         return bussinesId;
@@ -170,14 +173,14 @@ public class UserTask extends RectBridge implements SqlAggregator {
             synchronized (UserTask.class) {
                 if (ps == null) {
                     ps = new Property[]{
-                            new TextFieldProperty("name", this,propertyEditor),
-                            new TextFieldProperty("bussinesId", this,propertyEditor),
-                            new TextFieldProperty("bussinesDescrition", this,propertyEditor),
-                            new TextFieldProperty("rights", this,propertyEditor),
-                            new TextAreaProperty("expression", this,propertyEditor),
-                            new TextFieldProperty("validSecond", this,propertyEditor),
-                            new TextFieldProperty("openSecond", this,propertyEditor),
-                            new TextFieldProperty("eventListener", this,propertyEditor),
+                            new TextFieldProperty("name", this, propertyEditor),
+                            new TextFieldProperty("bussinesId", this, propertyEditor),
+                            new TextFieldProperty("bussinesDescrition", this, propertyEditor),
+                            new TextFieldProperty("rights", this, propertyEditor),
+                            new TextAreaProperty("expression", this, propertyEditor),
+                            new TextFieldProperty("validSecond", this, propertyEditor),
+                            new TextFieldProperty("openSecond", this, propertyEditor),
+                            new TextFieldProperty("eventListener", this, propertyEditor),
                     };
                 }
             }

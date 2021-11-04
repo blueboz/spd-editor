@@ -42,7 +42,15 @@ public class RandomColorUtils {
         return color;
     }
 
-    private static boolean isDark(int r,int g,int b) {
+    public static boolean isDark(Color cc) {
+        int r = cc.getRed();
+        int b = cc.getBlue();
+        int g = cc.getGreen();
+        return !(r * 0.299 + g * 0.578 + b * 0.114 >= 200);
+
+    }
+
+    public static boolean isDark(int r,int g,int b) {
         return !(r * 0.299 + g * 0.578 + b * 0.114 >= 200);
 
     }

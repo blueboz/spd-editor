@@ -61,6 +61,9 @@
         <action class="cn.boz.jb.plugin.idea.action.GoToMapper" id="GoToMapper" text="Go To Mapper">
             <add-to-group group-id="EditorPopupMenu" anchor="first"></add-to-group>
         </action>
+        <action class="cn.boz.jb.plugin.idea.action.GoToDao" id="GoToDao" text="Go To Dao">
+            <add-to-group group-id="EditorPopupMenu" anchor="first"></add-to-group>
+        </action>
 
 
     </actions>
