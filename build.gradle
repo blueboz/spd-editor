@@ -41,15 +41,42 @@ sourceSets {
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
 //    version = '2021.2.1'
-    localPath = 'D:\\Program Files\\JetBrains\\IntelliJ IDEA 2021.2.1'
+//    localPath = '/Volumes/Mac/App/IntelliJ IDEA.app'
+//    localPath = 'F:\\App\\JetBrains\\IntelliJ IDEA 2021.2.1'
+//    localPath = 'D:\\App\\ideaIU-2020'
+    localPath='F:\\App\\JetBrains\\IntelliJ IDEA 2021.1.1'
+//    instrumentCode = false
+//    sandboxDir.set("${project.rootDir}/.sandbox")
+    sandboxDir = "${project.rootDir}/.sandbox"
+    plugins = ['com.intellij.java']
+
+
 }
 
 println "${project.rootDir}"
 
 patchPluginXml {
     changeNotes = """
-      Add change notes here.<br>
-      <em>most HTML tags may be used</em>"""
+    <b>1.0.12</b><br>
+    fixed some bug while shift between two spd edit.which cause control status actived <br>
+    fixed genrate sql bug's
+    
+    <b>1.0.11</b><br>
+    fixed some bugs.<br>
+    
+    <b>1.0.10</b>
+     Icon color change with theme.<br>
+     Fixed addbom action problems.<br>
+     Fixed button click problems.<br>
+     Theme change synchronize with internal theme .<br>
+     UI enhancement.<br>
+     Compatible with lower version 201.*<br>
+     Support update to db features.<br>
+     Shrink the size of release package.<br>
+      """
+    sinceBuild="200.*"
+    untilBuild= ""
+
 }
 test {
     useJUnitPlatform()

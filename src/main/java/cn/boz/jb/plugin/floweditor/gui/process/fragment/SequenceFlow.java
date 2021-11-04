@@ -102,17 +102,18 @@ public class SequenceFlow extends LineBridge implements FlowSqlAggregator {
     }
 
     private Property[] ps;
+
     @Override
     public Property[] getPropertyEditors(PropertyEditorListener propertyEditor) {
-        if(ps==null){
-            synchronized (SequenceFlow.class){
-                if(ps==null){
+        if (ps == null) {
+            synchronized (SequenceFlow.class) {
+                if (ps == null) {
                     ps = new Property[]{
                             new TextFieldProperty("name", this, (ctx) -> {
                                 Label label = this.getLabel();
                                 label.setText((String) ctx.getNewValue());
-                            },propertyEditor),
-                            new TextFieldProperty("conditionExpression", this,propertyEditor),
+                            }, propertyEditor),
+                            new TextFieldProperty("conditionExpression", this, propertyEditor),
                     };
                 }
             }
@@ -123,6 +124,10 @@ public class SequenceFlow extends LineBridge implements FlowSqlAggregator {
     @Override
     public String toSql(String processId) {
         return String.format("INSERT INTO ENGINE_FLOW (PROCESSID_, SOURCE_, TARGET_, CONDITION_, ORDER_) " +
-                "VALUES ('%s', '%s', '%s', '%s', 0);", processId, processId+"_"+this.getSourceRef(), processId+"_"+this.getTargetRef(),this.getConditionExpression());
+                        "VALUES ('%s', '%s', '%s', '%s', 0);", processId,
+                processId + "_" + this.getSourceRef(),
+                processId + "_" + this.getTargetRef(),
+                TranslateUtils.translateToSql(this.getConditionExpression()));
+
     }
 }

@@ -54,11 +54,19 @@ public class GoToMapper extends AnAction {
         }
 
         PsiMethod containingMethod = PsiTreeUtil.getParentOfType(element, PsiMethod.class);
+        PsiClass containingClass;
         if (containingMethod == null) {
+            PsiClass psiClass = PsiTreeUtil.getParentOfType(element, PsiClass.class);
+            if (psiClass != null) {
+                String qualifiedName = psiClass.getQualifiedName();
+
+            }
+            //进入类
             return;
+        } else {
+            containingClass = containingMethod.getContainingClass();
         }
-        String methodName = containingMethod.getName();
-        PsiClass containingClass = containingMethod.getContainingClass();
+
         String qualifiedName = containingClass.getQualifiedName();
 
 
@@ -67,12 +75,9 @@ public class GoToMapper extends AnAction {
         PsiDirectory[] subdirectories = containingDirectory.getSubdirectories();
 
         for (PsiDirectory subdir : subdirectories) {
-            System.out.println("----------------");
-            System.out.println(subdir.getName());
             PsiFile[] psiFiles = subdir.getFiles();
             for (PsiFile file : psiFiles) {
-                System.out.println(file.getFileType());
-                System.out.println(file.getName());
+
                 //遍历显然就不是一个好的方法
                 if (file.getFileType() instanceof XmlFileType) {
                     //解析xml文件?
@@ -88,24 +93,29 @@ public class GoToMapper extends AnAction {
                         continue;
                     }
                     XmlElement ele = namespace;
-                    while (true) {
-                        XmlTag tags = PsiTreeUtil.getNextSiblingOfType(ele, XmlTag.class);
-                        if (tags == null) {
-                            break;
-                        }
-                        ele = tags;
-                        XmlAttribute id = tags.getAttribute("id");
-                        if (id != null) {
-                            String value = id.getValue();
-                            //判断ID是否已经有了
-                            if (value.equals(methodName)) {
-                                System.out.println("yes! it's me ");
+                    if (containingMethod != null) {
+
+                        while (true) {
+                            XmlTag tags = PsiTreeUtil.getNextSiblingOfType(ele, XmlTag.class);
+                            if (tags == null) {
                                 break;
                             }
+                            ele = tags;
+                            XmlAttribute id = tags.getAttribute("id");
+                            if (id != null) {
+                                String value = id.getValue();
+                                //判断ID是否已经有了
+                                if (value.equals(containingMethod.getName())) {
+                                    break;
+                                }
+                            }
                         }
+                        JBPopup jbpopup = NavigationUtil.getPsiElementPopup(new PsiElement[]{ele, namespace}, "选择文件");
+                        jbpopup.showCenteredInCurrentWindow(project);
+                    } else {
+                        JBPopup jbpopup = NavigationUtil.getPsiElementPopup(new PsiElement[]{namespace}, "选择文件");
+                        jbpopup.showCenteredInCurrentWindow(project);
                     }
-                    JBPopup jbpopup = NavigationUtil.getPsiElementPopup(new PsiElement[]{ele}, "选择文件");
-                    jbpopup.showCenteredInCurrentWindow(project);
 //                    Navigatable navigatable = PsiNavigationSupport.getInstance().createNavigatable(project, virtualFile, 0);
 //                    navigatable.navigate();
                     return;
@@ -126,7 +136,7 @@ public class GoToMapper extends AnAction {
             FileType fileType = psiFile.getFileType();
             if (fileType instanceof JavaFileType) {
                 e.getPresentation().setEnabled(true);
-                e.getPresentation().setVisible(false);
+                e.getPresentation().setVisible(true);
             } else {
                 e.getPresentation().setEnabled(false);
                 e.getPresentation().setVisible(false);

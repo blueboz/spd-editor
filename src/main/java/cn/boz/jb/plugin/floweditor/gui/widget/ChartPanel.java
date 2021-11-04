@@ -245,6 +245,7 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
         this.newShapeClass = clz;
         this.newLineClass = null;
 
+        this.setCursor(cursor);
     }
 
 
