@@ -17,9 +17,16 @@ import cn.boz.jb.plugin.floweditor.gui.utils.ConstantUtils;
 import cn.boz.jb.plugin.floweditor.gui.utils.IcoMoonUtils;
 import cn.boz.jb.plugin.floweditor.gui.widget.Button;
 import cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel;
+import cn.boz.jb.plugin.idea.configurable.SpdEditorSettings;
+import cn.boz.jb.plugin.idea.configurable.SpdEditorSettingsComp;
 import cn.boz.jb.plugin.idea.configurable.SpdEditorState;
 import cn.boz.jb.plugin.idea.utils.DBUtils;
+import com.intellij.codeInsight.navigation.NavigationUtil;
 import com.intellij.icons.AllIcons;
+import com.intellij.ide.impl.ProjectUtil;
+import com.intellij.openapi.options.ShowSettingsUtil;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.ui.JBSplitter;
 import com.intellij.ui.components.JBScrollBar;
@@ -43,6 +50,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.io.File;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -354,12 +362,12 @@ public class SpdEditor extends JComponent implements MouseListener, ClipboardOwn
 
             case "sql":
                 List<String> sqls = chartPanel.generateSql();
-                if(sqls==null){
-                    return ;
+                if (sqls == null) {
+                    return;
                 }
 
-                String joiningSql = sqls.stream().collect(Collectors.joining(";\n"))+";";
-                int idx = Messages.showDialog(joiningSql, "SQL", new String[]{"复制Sql", "更新至DB", "确定"}, 2, SpdEditorIcons.FLOW_16_ICON);
+                String joiningSql = sqls.stream().collect(Collectors.joining(";\n")) + ";";
+                int idx = Messages.showDialog(joiningSql, "SQL", new String[]{"复制Sql", "更新至DB", "打开配置项", "确定"}, 3, SpdEditorIcons.FLOW_16_ICON);
                 if (idx == 0) {
                     Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
                     StringSelection selection = new StringSelection(joiningSql);
@@ -370,11 +378,19 @@ public class SpdEditor extends JComponent implements MouseListener, ClipboardOwn
                     try {
                         boolean b = DBUtils.executeSql(instance.jdbcUserName, instance.jdbcPassword, instance.jdbcUrl, instance.jdbcDriver, sqls);
                         if (b) {
-                            Messages.showMessageDialog("更新成功!!", "更新成功" , UIUtil.getInformationIcon());
+                            Messages.showMessageDialog("更新成功!!", "更新成功", UIUtil.getInformationIcon());
+                        }
+                    } catch (SQLException sqlException) {
+                        int selidx = Messages.showDialog("数据库连接发生错误，检查数据库配置?" + sqlException.getMessage(), "数据库错误", new String[]{"打开配置项", "取消"}, 0, UIUtil.getErrorIcon());
+                        if (selidx == 0) {
+                            ShowSettingsUtil.getInstance().showSettingsDialog(null, SpdEditorSettings.class);
                         }
                     } catch (Exception ee) {
+                        ee.printStackTrace();
                         Messages.showErrorDialog("发生错误", ee.getMessage());
                     }
+                } else if (idx == 2) {
+                    ShowSettingsUtil.getInstance().showSettingsDialog(null, SpdEditorSettings.class);
                 }
                 break;
             default:

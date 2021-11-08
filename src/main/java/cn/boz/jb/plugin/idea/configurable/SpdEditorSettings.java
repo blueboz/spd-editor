@@ -1,7 +1,10 @@
 package cn.boz.jb.plugin.idea.configurable;
 
+import com.intellij.execution.configurations.ConfigurationUtil;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.ConfigurationException;
+import com.intellij.openapi.options.ShowSettingsUtil;
+import com.intellij.pom.Navigatable;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.JComponent;
@@ -9,7 +12,7 @@ import javax.swing.JComponent;
 /**
  * 配置项编辑器
  */
-public class SpdEditorSettings implements Configurable {
+public class SpdEditorSettings implements Configurable  {
 
     private SpdEditorSettingsComp settings;
 
@@ -23,6 +26,7 @@ public class SpdEditorSettings implements Configurable {
         settings = new SpdEditorSettingsComp();
         return settings.getPanel();
     }
+
 
     @Override
     public boolean isModified() {

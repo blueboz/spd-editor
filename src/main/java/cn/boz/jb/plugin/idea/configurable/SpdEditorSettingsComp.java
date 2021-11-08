@@ -5,18 +5,23 @@ import com.intellij.ide.highlighter.ArchiveFileType;
 import com.intellij.openapi.fileChooser.FileChooserDescriptor;
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
 import com.intellij.openapi.fileTypes.FileType;
+import com.intellij.openapi.progress.ProgressManager;
+import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.ui.TextFieldWithBrowseButton;
+import com.intellij.openapi.util.Ref;
 import com.intellij.ui.components.JBLabel;
 import com.intellij.ui.components.JBPasswordField;
 import com.intellij.ui.components.JBTextField;
 import com.intellij.util.ui.FormBuilder;
+import com.intellij.util.ui.UIUtil;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class SpdEditorSettingsComp {
 
@@ -46,15 +51,21 @@ public class SpdEditorSettingsComp {
                 String jdbcPass = jdbcPassword.getText();
                 String jdbcUrl = jdbcUrlText.getText();
                 String jdbcDriverText = jdbcDriver.getText();
-                try {
-                    boolean execute = DBUtils.testConnection(jdbcUser, jdbcPass, jdbcUrl, jdbcDriverText);
-                    if (execute) {
-                        Messages.showMessageDialog("连接成功", "连接成功", null);
-                    } else {
-                        Messages.showWarningDialog("未知情况", "连接成功，但是查询是返回false,可能是sql 不兼容");
+                final Ref<Exception> exception = Ref.create();
+                ProgressManager.getInstance().runProcessWithProgressSynchronously(() -> {
+                    try {
+                        DBUtils.testConnection(jdbcUser, jdbcPass, jdbcUrl, jdbcDriverText);
+                    } catch (Exception ee) {
+                        exception.set(ee);
                     }
-                } catch (Exception ex) {
-                    Messages.showErrorDialog(ex.getMessage(), "连接失败");
+                }, "测试连接中", true, ProjectManager.getInstance().getDefaultProject());
+                if (exception.isNull()) {
+                    Messages.showMessageDialog("连接成功", "连接成功", UIUtil.getInformationIcon());
+                } else {
+                    Exception ee = exception.get();
+                    ee.printStackTrace();
+
+                    Messages.showErrorDialog("连接失败\n"+ exception.get().getMessage(), "连接失败:" );
                 }
             }
         });

@@ -1,5 +1,10 @@
 package cn.boz.jb.plugin.idea.utils;
 
+import com.intellij.codeInsight.navigation.NavigationUtil;
+import com.intellij.ide.util.PsiNavigationSupport;
+import com.intellij.openapi.options.ShowSettingsUtil;
+import com.intellij.pom.Navigatable;
+
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
@@ -48,7 +53,7 @@ public class DBUtils {
      * @return
      */
     @SuppressWarnings("unchecked")
-    public static Connection getConnection(String jdbcUser, String jdbcPass, String jdbcUrl, String jdbcDriver) throws Exception {
+    public static Connection getConnection(String jdbcUser, String jdbcPass, String jdbcUrl, String jdbcDriver) throws ClassNotFoundException, MalformedURLException, NoSuchMethodException, SQLException, InvocationTargetException, InstantiationException, IllegalAccessException {
         File file = new File(jdbcDriver);
         URLClassLoader loader = new URLClassLoader(new URL[]{file.toURI().toURL()});
         Class clazz = loader.loadClass("oracle.jdbc.driver.OracleDriver");
@@ -69,7 +74,6 @@ public class DBUtils {
      */
     public static boolean executeSql(String jdbcUser, String jdbcPass, String jdbcUrl, String jdbcDriver, List<String> sqls) throws MalformedURLException, SQLException, ClassNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         try (Connection connection = getConnection(jdbcUser, jdbcPass, jdbcUrl, jdbcDriver)) {
-
             Statement statement = connection.createStatement();
             for (String s : sqls) {
                 //非空条件判断
@@ -82,9 +86,6 @@ public class DBUtils {
             statement.close();
 
 //            CallableStatement callableStatement = connection.prepareCall(sqls);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
         }
         return true;
 
