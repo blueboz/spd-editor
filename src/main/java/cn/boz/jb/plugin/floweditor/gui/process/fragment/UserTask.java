@@ -145,6 +145,8 @@ public class UserTask extends RectBridge implements SqlAggregator {
         element.addAttribute("openSecond", TranslateUtils.translateToXmlString(this.getOpenSecond()));
         element.addAttribute("eventListener", TranslateUtils.translateToXmlString(this.getEventListener()));
         element.addAttribute("bussinesId", TranslateUtils.translateToXmlString(this.getBussinesId()));
+        element.addAttribute("bussinesKey", TranslateUtils.translateToXmlString(this.getBussinesKey()));
+
         return element;
     }
 
@@ -175,6 +177,7 @@ public class UserTask extends RectBridge implements SqlAggregator {
                     ps = new Property[]{
 
                             new TextFieldProperty("name", this, propertyEditor),
+                            new TextFieldProperty("bussinesKey", this, propertyEditor),
                             new TextFieldProperty("bussinesId", this, propertyEditor),
                             new TextFieldProperty("bussinesDescrition", this, propertyEditor),
                             new TextFieldProperty("rights", this, propertyEditor),

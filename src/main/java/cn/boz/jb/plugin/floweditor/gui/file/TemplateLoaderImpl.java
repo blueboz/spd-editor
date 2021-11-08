@@ -62,7 +62,6 @@ public class TemplateLoaderImpl implements TemplateLoader {
             Document doc = saxReader.read(filename);
             Element definitions = doc.getRootElement();
 
-
             Element diagram = definitions.element("Diagram");
             HashMap<String, Object> diagramMap = new HashMap<>();
             List<Element> diagrams = diagram.elements();
@@ -74,8 +73,6 @@ public class TemplateLoaderImpl implements TemplateLoader {
             Map<String, Object> processMap = new HashMap<>();
             Element process = definitions.element("process");
             if (process != null) {
-
-
                 processDefinition.setId(attributeValue(process.attribute("id")));
                 processDefinition.setName(attributeValue(process.attribute("name")));
 

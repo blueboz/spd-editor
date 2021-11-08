@@ -72,7 +72,10 @@ public class DBUtils {
             String[] split = sqls.split(";");
             Statement statement = connection.createStatement();
             for (String s : split) {
-                statement.addBatch(s);
+                //非空条件判断
+                if(s!=null&&!s.trim().equals("")){
+                    statement.execute(s);
+                }
             }
             statement.executeBatch();
             //PROBLEMS's
