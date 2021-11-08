@@ -290,30 +290,7 @@ public class TemplateLoaderImpl implements TemplateLoader {
         diagram.addAttribute("id", "Diagram_" + processDefinition.getId());
         //先排序
         List<Shape> shapes = processDefinition.getShapes();
-        Pattern pattern = Pattern.compile("([a-zA-Z]+)([0-9]+)(.*)");
-
-        shapes.sort((o1, o2) -> {
-            String name1 = o1.getName();
-            String name2 = o2.getName();
-            if (name1 == null) {
-                name1 = "notset1";
-            }
-            if (name2 == null) {
-                name2 = "notset1";
-            }
-            Matcher m1 = pattern.matcher(name1);
-            Matcher m2 = pattern.matcher(name2);
-            if (m1.find() && m2.find()) {
-                int i = m1.group(1).compareTo(m2.group(1));
-                if (i != 1) {
-                    return i;
-                } else {
-                    return Integer.parseInt(m1.group(2)) - Integer.parseInt(m2.group(2));
-                }
-            } else {
-                return name1.compareTo(name2);
-            }
-        });
+        shapes.sort(new ShapeComparator());
         shapes.sort(Comparator.comparing(it -> {
             if (it.getId() != null) {
                 return it.getId();
@@ -337,7 +314,7 @@ public class TemplateLoaderImpl implements TemplateLoader {
         }
 
         List<Line> lines = processDefinition.getLines();
-        lines.sort(Comparator.comparing(Line::getId));
+        lines.sort(new LineComparator());
         for (Line line : lines) {
             if (line instanceof SequenceFlow) {
                 Element pnode = ((SequenceFlow) line).buildProcessNode();
@@ -389,4 +366,60 @@ public class TemplateLoaderImpl implements TemplateLoader {
     }
 
 
+}
+
+class ShapeComparator implements Comparator<Shape> {
+    Pattern pattern = Pattern.compile("([a-zA-Z]+)([0-9]+)(.*)");
+
+    @Override
+    public int compare(Shape o1, Shape o2) {
+        String name1 = o1.getId();
+        String name2 = o2.getId();
+        if (name1 == null) {
+            name1 = "notset1";
+        }
+        if (name2 == null) {
+            name2 = "notset1";
+        }
+        Matcher m1 = pattern.matcher(name1);
+        Matcher m2 = pattern.matcher(name2);
+        if (m1.find() && m2.find()) {
+            int i = m1.group(1).compareTo(m2.group(1));
+            if (i != 0) {
+                return i;
+            } else {
+                return Integer.parseInt(m1.group(2)) - Integer.parseInt(m2.group(2));
+            }
+        } else {
+            return name1.compareTo(name2);
+        }
+    }
+}
+
+class LineComparator implements Comparator<Line> {
+    Pattern pattern = Pattern.compile("([a-zA-Z]+)([0-9]+)(.*)");
+
+    @Override
+    public int compare(Line o1, Line o2) {
+        String name1 = o1.getId();
+        String name2 = o2.getId();
+        if (name1 == null) {
+            name1 = "notset1";
+        }
+        if (name2 == null) {
+            name2 = "notset1";
+        }
+        Matcher m1 = pattern.matcher(name1);
+        Matcher m2 = pattern.matcher(name2);
+        if (m1.find() && m2.find()) {
+            int i = m1.group(1).compareTo(m2.group(1));
+            if (i != 0) {
+                return i;
+            } else {
+                return Integer.parseInt(m1.group(2)) - Integer.parseInt(m2.group(2));
+            }
+        } else {
+            return name1.compareTo(name2);
+        }
+    }
 }
