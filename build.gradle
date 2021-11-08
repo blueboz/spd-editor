@@ -57,6 +57,12 @@ println "${project.rootDir}"
 
 patchPluginXml {
     changeNotes = """
+
+    <b>1.0.18</b><br>
+    <ul>
+        <li>fixed copy flow problem's</li>
+    </ul>
+    
     <b>1.0.17</b><br>
     <ul>
         <li>fixed sqlbuild problms</li>
