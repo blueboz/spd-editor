@@ -290,11 +290,9 @@ public class TemplateLoaderImpl implements TemplateLoader {
         diagram.addAttribute("id", "Diagram_" + processDefinition.getId());
         //先排序
         List<Shape> shapes = processDefinition.getShapes();
-        Pattern pattern = Pattern.compile("(\\w+)(\\d+)");
-
+        Pattern pattern = Pattern.compile("([a-zA-Z]+)([0-9]+)(.*)");
 
         shapes.sort((o1, o2) -> {
-
             String name1 = o1.getName();
             String name2 = o2.getName();
             if (name1 == null) {
@@ -305,12 +303,15 @@ public class TemplateLoaderImpl implements TemplateLoader {
             }
             Matcher m1 = pattern.matcher(name1);
             Matcher m2 = pattern.matcher(name2);
-            int i = m1.group(0).compareTo(m2.group(0));
-            if (i != 0) {
-                return i;
+            if (m1.find() && m2.find()) {
+                int i = m1.group(1).compareTo(m2.group(1));
+                if (i != 1) {
+                    return i;
+                } else {
+                    return Integer.parseInt(m1.group(2)) - Integer.parseInt(m2.group(2));
+                }
             } else {
-                return m1.group(1).compareTo(m2.group(1));
-
+                return name1.compareTo(name2);
             }
         });
         shapes.sort(Comparator.comparing(it -> {
