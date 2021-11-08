@@ -236,10 +236,11 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
 
     /**
      * 带默认模式
+     *
      * @param clz
      * @param cursor
      */
-    public void setModeOfNewShape(Class<? extends Shape> clz,Cursor cursor) {
+    public void setModeOfNewShape(Class<? extends Shape> clz, Cursor cursor) {
         //由于目前
         this.setMode(MODE_NEW_SHAPE);
         this.newShapeClass = clz;
@@ -247,7 +248,6 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
 
         this.setCursor(cursor);
     }
-
 
 
     public void setMode(int mode) {
@@ -3084,30 +3084,35 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
         return ps;
     }
 
-    public String generateSql() {
-        StringBuilder sqlBuilder = new StringBuilder();
+    /**
+     * 生成sql脚本
+     *
+     * @return
+     */
+    public List<String> generateSql() {
+        List<String> sqls = new ArrayList<>();
         if (this.id == null || this.id.trim().equals("")) {
             Messages.showErrorDialog("流程id未设置", "发生异常");
             return null;
         }
-        sqlBuilder.append("delete from ENGINE_TASK where ID_ like '" + this.id + "_%';\n");
-        sqlBuilder.append(String.format("delete from ENGINE_FLOW where PROCESSID_='%s';\n", this.id));
+        sqls.add("delete from ENGINE_TASK where ID_ like '" + this.id + "_%'");
+        sqls.add(String.format("delete from ENGINE_FLOW where PROCESSID_='%s'", this.id));
         for (int i = 0; i < shapes.size(); i++) {
             Shape shape = shapes.get(i);
             if (shape instanceof Label) {
                 continue;
             }
             if (shape instanceof SqlAggregator) {
-                sqlBuilder.append(((SqlAggregator) shape).toSql(this.id) + "\n");
+                sqls.add(((SqlAggregator) shape).toSql(this.id));
             }
         }
         for (int i = 0; i < lines.size(); i++) {
             Line line = lines.get(i);
             if (line instanceof FlowSqlAggregator) {
-                sqlBuilder.append(((FlowSqlAggregator) line).toSql(this.id) + "\n");
+                sqls.add(((FlowSqlAggregator) line).toSql(this.id));
             }
         }
-        return sqlBuilder.toString();
+        return sqls;
     }
 
     @Override

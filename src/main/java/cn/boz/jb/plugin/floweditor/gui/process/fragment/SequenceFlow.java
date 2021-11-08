@@ -124,7 +124,7 @@ public class SequenceFlow extends LineBridge implements FlowSqlAggregator {
     @Override
     public String toSql(String processId) {
         return String.format("INSERT INTO ENGINE_FLOW (PROCESSID_, SOURCE_, TARGET_, CONDITION_, ORDER_) " +
-                        "VALUES ('%s', '%s', '%s', '%s', 0);", processId,
+                        "VALUES ('%s', '%s', '%s', '%s', 0)", processId,
                 this.getStartShape() instanceof StartEvent ? "START" : processId + "_" + this.getSourceRef(),
                 this.getEndShape() instanceof EndEvent ? "END" : processId + "_" + this.getTargetRef(),
                 TranslateUtils.translateToSql(this.getConditionExpression()));

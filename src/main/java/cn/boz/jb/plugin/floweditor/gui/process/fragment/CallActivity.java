@@ -104,7 +104,7 @@ public class CallActivity extends RectBridge implements SqlAggregator {
     public String toSql(String processId) {
         return String.format("INSERT INTO ENGINE_TASK (ID_, TYPE_, TITLE_, EXPRESSION_, RETURNVALUE_, BUSSINESKEY_, BUSSINESDESC_," +
                         "RIGHTS_, VALIDSECOND_, LISTENER_, OPENSECOND_, BUSSINESID_, TASKLISTENER_)" +
-                        "VALUES ('%s', 'CALL', '%s', '%s', null, null, null, null, 10000, null, 60, null, null);", processId + "_" + this.getId()
+                        "VALUES ('%s', 'CALL', '%s', '%s', null, null, null, null, 10000, null, 60, null, null)", processId + "_" + this.getId()
                 , this.getName(), this.getCalledElement());
     }
 }

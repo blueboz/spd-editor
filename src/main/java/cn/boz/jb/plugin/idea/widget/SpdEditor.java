@@ -19,10 +19,12 @@ import cn.boz.jb.plugin.floweditor.gui.widget.Button;
 import cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel;
 import cn.boz.jb.plugin.idea.configurable.SpdEditorState;
 import cn.boz.jb.plugin.idea.utils.DBUtils;
+import com.intellij.icons.AllIcons;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.ui.JBSplitter;
 import com.intellij.ui.components.JBScrollBar;
 import com.intellij.ui.components.JBScrollPane;
+import com.intellij.util.ui.UIUtil;
 import icons.SpdEditorIcons;
 
 import javax.swing.JComponent;
@@ -41,7 +43,9 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.io.File;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 public class SpdEditor extends JComponent implements MouseListener, ClipboardOwner {
 
@@ -349,29 +353,28 @@ public class SpdEditor extends JComponent implements MouseListener, ClipboardOwn
                 break;
 
             case "sql":
-                String sql = chartPanel.generateSql();
-                if(sql==null){
+                List<String> sqls = chartPanel.generateSql();
+                if(sqls==null){
                     return ;
                 }
 
-                int idx = Messages.showDialog(sql, "SQL", new String[]{"复制Sql", "更新至DB", "确定"}, 2, SpdEditorIcons.FLOW_16_ICON);
+                String joiningSql = sqls.stream().collect(Collectors.joining(";\n"))+";";
+                int idx = Messages.showDialog(joiningSql, "SQL", new String[]{"复制Sql", "更新至DB", "确定"}, 2, SpdEditorIcons.FLOW_16_ICON);
                 if (idx == 0) {
                     Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-                    StringSelection selection = new StringSelection(sql);
+                    StringSelection selection = new StringSelection(joiningSql);
                     clipboard.setContents(selection, this);
                 } else if (idx == 1) {
                     //更新至db
                     SpdEditorState instance = SpdEditorState.getInstance();
                     try {
-                        boolean b = DBUtils.executeSql(instance.jdbcUserName, instance.jdbcPassword, instance.jdbcUrl, instance.jdbcDriver, sql);
+                        boolean b = DBUtils.executeSql(instance.jdbcUserName, instance.jdbcPassword, instance.jdbcUrl, instance.jdbcDriver, sqls);
                         if (b) {
-                            Messages.showMessageDialog("成功", "更新成功", null);
+                            Messages.showMessageDialog("更新成功!!", "更新成功" , UIUtil.getInformationIcon());
                         }
                     } catch (Exception ee) {
                         Messages.showErrorDialog("发生错误", ee.getMessage());
                     }
-                } else {
-                    //do nothing
                 }
                 break;
             default:

@@ -10,6 +10,7 @@ import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
 import java.util.Properties;
 
 public class DBUtils {
@@ -66,22 +67,23 @@ public class DBUtils {
      * @param sqls     SQL can be split with \n
      * @return
      */
-    public static boolean executeSql(String jdbcUser, String jdbcPass, String jdbcUrl,String jdbcDriver, String sqls) throws MalformedURLException, SQLException, ClassNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        try (Connection connection = getConnection(jdbcUser, jdbcPass, jdbcUrl,jdbcDriver)) {
+    public static boolean executeSql(String jdbcUser, String jdbcPass, String jdbcUrl, String jdbcDriver, List<String> sqls) throws MalformedURLException, SQLException, ClassNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+        try (Connection connection = getConnection(jdbcUser, jdbcPass, jdbcUrl, jdbcDriver)) {
 
-            String[] split = sqls.split(";");
             Statement statement = connection.createStatement();
-            for (String s : split) {
+            for (String s : sqls) {
                 //非空条件判断
-                if(s!=null&&!s.trim().equals("")){
+                if (s != null && !s.trim().equals("")) {
                     statement.execute(s);
                 }
             }
             statement.executeBatch();
             //PROBLEMS's
+            statement.close();
 
 //            CallableStatement callableStatement = connection.prepareCall(sqls);
         } catch (Exception e) {
+            e.printStackTrace();
             throw new RuntimeException(e);
         }
         return true;
