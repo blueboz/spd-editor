@@ -130,4 +130,13 @@ public class SequenceFlow extends LineBridge implements FlowSqlAggregator {
                 TranslateUtils.translateToSql(this.getConditionExpression()));
 
     }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        SequenceFlow sequenceFlow = new SequenceFlow();
+        sequenceFlow.setConditionExpression(conditionExpression);
+        sequenceFlow.setName(name);
+//        sequenceFlow.setSourceRef();
+        return sequenceFlow;
+    }
 }

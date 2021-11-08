@@ -1,6 +1,6 @@
 package cn.boz.jb.plugin.floweditor.gui.shape;
 
-public class HiPoint {
+public class HiPoint implements Cloneable {
     public double x;
     public double y;
 
@@ -15,5 +15,11 @@ public class HiPoint {
                 "x=" + x +
                 ", y=" + y +
                 '}';
+    }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        HiPoint hiPoint = new HiPoint(x,y);
+        return hiPoint;
     }
 }

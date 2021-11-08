@@ -36,9 +36,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class TemplateLoaderImpl implements TemplateLoader {
@@ -285,8 +288,40 @@ public class TemplateLoaderImpl implements TemplateLoader {
 
         Element diagram = definitions.addElement("Diagram");
         diagram.addAttribute("id", "Diagram_" + processDefinition.getId());
+        //先排序
+        List<Shape> shapes = processDefinition.getShapes();
+        Pattern pattern = Pattern.compile("(\\w+)(\\d+)");
 
-        for (Shape shape : processDefinition.getShapes()) {
+
+        shapes.sort((o1, o2) -> {
+
+            String name1 = o1.getName();
+            String name2 = o2.getName();
+            if (name1 == null) {
+                name1 = "notset1";
+            }
+            if (name2 == null) {
+                name2 = "notset1";
+            }
+            Matcher m1 = pattern.matcher(name1);
+            Matcher m2 = pattern.matcher(name2);
+            int i = m1.group(0).compareTo(m2.group(0));
+            if (i != 0) {
+                return i;
+            } else {
+                return m1.group(1).compareTo(m2.group(1));
+
+            }
+        });
+        shapes.sort(Comparator.comparing(it -> {
+            if (it.getId() != null) {
+                return it.getId();
+            } else {
+                return "idnotsetyet";
+            }
+        }));
+
+        for (Shape shape : shapes) {
             if (shape instanceof Diagram) {
                 Diagram d = (Diagram) shape;
                 Element pNode = d.buildProcessNode();
@@ -300,7 +335,9 @@ public class TemplateLoaderImpl implements TemplateLoader {
             }
         }
 
-        for (Line line : processDefinition.getLines()) {
+        List<Line> lines = processDefinition.getLines();
+        lines.sort(Comparator.comparing(Line::getId));
+        for (Line line : lines) {
             if (line instanceof SequenceFlow) {
                 Element pnode = ((SequenceFlow) line).buildProcessNode();
                 process.add(pnode);

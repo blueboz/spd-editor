@@ -138,4 +138,11 @@ public class Label extends Shape {
         this.setWidth(rect.getW());
         this.setHeight(rect.getH());
     }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        Label label = new Label(this.x,this.y,this.width,this.height,this.text);
+        label.setName(this.getName());
+        return label;
+    }
 }

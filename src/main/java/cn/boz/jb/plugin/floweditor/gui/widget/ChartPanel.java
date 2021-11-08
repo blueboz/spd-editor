@@ -13,6 +13,12 @@ import cn.boz.jb.plugin.floweditor.gui.hist.ShapeState;
 import cn.boz.jb.plugin.floweditor.gui.hist.StateChange;
 import cn.boz.jb.plugin.floweditor.gui.listener.ShapeSelectedListener;
 import cn.boz.jb.plugin.floweditor.gui.process.definition.ProcessDefinition;
+import cn.boz.jb.plugin.floweditor.gui.process.fragment.CallActivity;
+import cn.boz.jb.plugin.floweditor.gui.process.fragment.ExclusiveGateway;
+import cn.boz.jb.plugin.floweditor.gui.process.fragment.ForeachGateway;
+import cn.boz.jb.plugin.floweditor.gui.process.fragment.ParallelGateway;
+import cn.boz.jb.plugin.floweditor.gui.process.fragment.ServiceTask;
+import cn.boz.jb.plugin.floweditor.gui.process.fragment.UserTask;
 import cn.boz.jb.plugin.floweditor.gui.property.Property;
 import cn.boz.jb.plugin.floweditor.gui.property.PropertyEditorListener;
 import cn.boz.jb.plugin.floweditor.gui.property.impl.TextFieldProperty;
@@ -65,14 +71,17 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
@@ -92,6 +101,7 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
     private LinkedList<StateChange> stateHistory = new LinkedList<>();
     private LinkedList<StateChange> undoStack = new LinkedList<>();
     private List<Shape> copyList = new ArrayList<>();
+    private List<Line> copyLines = new ArrayList<>();
     private HiPoint copyMouseStartPoint = null;
 
     public static int MODE_DEFAULT = 0;
@@ -2600,8 +2610,16 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
             shape.addXWithOffset(diffx);
             shape.addYWithOffset(diffy);
             //记录历史操作
+            setIdForShape(shape);
             shapes.add(shape);
             afters.add(shape.serialize());
+        }
+        for (Line line : copyLines) {
+            line.addXWithOffset(diffx);
+            line.addYWithOffset(diffy);
+            setIdForLine(line);
+            lines.add(line);
+            afters.add(line.serialize());
         }
         copyList.clear();
         recordStateChange(new StateChange(null, new BaseGroupState(afters)));
@@ -2612,6 +2630,8 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
         copyList.clear();
         Point location = MouseInfo.getPointerInfo().getLocation();
         copyMouseStartPoint = retranslatePoint(location);
+        //新图形，旧图形映射集合
+        Map<Shape, Shape> oldShapeNewShapeMap = new HashMap<>();
         for (Shape shape : shapes) {
             try {
                 if (shape instanceof Label) {
@@ -2620,8 +2640,36 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
                 if (!shape.isDraging()) {
                     continue;
                 }
+                //只有两端都被选中的线段有必要进行拷贝，否则均不拷贝
+                //如果某条线段已经
                 Shape clone = (Shape) shape.clone();
                 copyList.add(clone);
+                oldShapeNewShapeMap.put(shape, clone);
+            } catch (CloneNotSupportedException cloneNotSupportedException) {
+                cloneNotSupportedException.printStackTrace();
+            }
+        }
+        //如果线段被选中，同事两端的对象被选中
+        for (Line line : lines) {
+            try {
+                if (!line.isSelected()) {
+                    continue;
+                }
+                //是否添加需要查看两个绑定的图形是否被选中了
+                Shape startShape = line.getStartShape();
+                if (!oldShapeNewShapeMap.containsKey(startShape)) {
+                    continue;
+                }
+                Shape endShape = line.getEndShape();
+                if (!oldShapeNewShapeMap.containsKey(endShape)) {
+                    continue;
+                }
+                Line clone = (Line) line.clone();
+                clone.setStartShape(oldShapeNewShapeMap.get(startShape));
+                clone.setEndShape(oldShapeNewShapeMap.get(endShape));
+                clone.setSourceRef(clone.getStartShape().getName());
+                clone.setTargetRef(clone.getEndShape().getName());
+                copyLines.add(clone);
             } catch (CloneNotSupportedException cloneNotSupportedException) {
                 cloneNotSupportedException.printStackTrace();
             }

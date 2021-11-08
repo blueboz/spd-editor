@@ -20,7 +20,7 @@ import java.util.List;
 /**
  * 线段
  */
-public class Line implements Restorable, Comparable, PropertyObject {
+public class Line implements Restorable, Comparable, PropertyObject,Cloneable {
     protected String id;
     protected String name;
 
@@ -725,5 +725,37 @@ public class Line implements Restorable, Comparable, PropertyObject {
         return PropertyObject.super.getPropertyEditors(propertyEditor);
     }
 
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        Label cloneLabel = (Label) this.getLabel().clone();
+        Line cloneLine = new Line();
+        cloneLabel.setBoundLine(cloneLine);
+        cloneLine.setName(this.getName());
+        cloneLine.setLabel(cloneLabel);
 
+        LinkedList<HiPoint> points = this.points;
+        for (HiPoint point : points) {
+            cloneLine.points.add((HiPoint) point.clone());
+        }
+        //startShape与endShape未知
+        return cloneLine;
+    }
+
+    public void addXWithOffset(double diffx) {
+        for (HiPoint point : this.points) {
+            point.x+=diffx;
+            if(point.x<=0){
+                point.x=0;
+            }
+        }
+    }
+
+    public void addYWithOffset(double diffy) {
+        for (HiPoint point : this.points) {
+            point.y+=diffy;
+            if(point.y<=0){
+                point.y=0;
+            }
+        }
+    }
 }
