@@ -43,6 +43,9 @@ public class TranslateUtils {
      * @return
      */
     public static String translateToSql(String rawSql){
+        if(rawSql==null){
+            return "";
+        }
         rawSql = rawSql.replace("'", "''");
         return rawSql;
     }

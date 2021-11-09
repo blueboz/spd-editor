@@ -61,6 +61,7 @@ patchPluginXml {
     <b>1.0.18</b><br>
     <ul>
         <li>fixed copy flow problem's</li>
+        <li>fixed bug of generate sql when conditionExpression is null</li>
     </ul>
     
     <b>1.0.17</b><br>

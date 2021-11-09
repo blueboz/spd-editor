@@ -41,6 +41,9 @@ public class SequenceFlow extends LineBridge implements FlowSqlAggregator {
     }
 
     public String getConditionExpression() {
+        if(conditionExpression==null){
+            return "";
+        }
         return conditionExpression;
     }
 

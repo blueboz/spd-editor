@@ -2920,6 +2920,12 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
     }
 
 
+    /**
+     * FIXME
+     * 加载的部分逻辑可能需要修改
+     * 1.不是从file进行读取而是从VirtualFile读取
+     * 2.VirtualFile变动的时候，需要跟着变动，例如，外部修改的时候，需要及时从外部文件进行同步
+     */
     public void loadFromFile(File file) {
         try {
 
