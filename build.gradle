@@ -62,7 +62,10 @@ patchPluginXml {
     <ul>
         <li>fixed copy flow problem's</li>
         <li>fixed bug of generate sql when conditionExpression is null</li>
+        <li>support features with go to dao </li>
+        <li>support features with go to jsfile  </li>
     </ul>
+    
     
     <b>1.0.17</b><br>
     <ul>

@@ -58,12 +58,16 @@
 <!--                icon="SdkIcons.Sdk_default_icon">-->
 <!--            <add-to-group group-id="EditorPopupMenu" anchor="first"/>-->
 <!--        </action>-->
-        <action class="cn.boz.jb.plugin.idea.action.GoToMapper" id="GoToMapper" text="Go To Mapper">
+        <group>
+            <action class="cn.boz.jb.plugin.idea.action.GoToMapper" id="GoToMapper" text="Go To Mapper">
+            </action>
+            <action class="cn.boz.jb.plugin.idea.action.GoToDao" id="GoToDao" text="Go To Dao">
+            </action>
+            <action class="cn.boz.jb.plugin.idea.action.GoToJsFile" id="GoToJs" text="Go To JS">
+            </action>
             <add-to-group group-id="EditorPopupMenu" anchor="first"></add-to-group>
-        </action>
-        <action class="cn.boz.jb.plugin.idea.action.GoToDao" id="GoToDao" text="Go To Dao">
-            <add-to-group group-id="EditorPopupMenu" anchor="first"></add-to-group>
-        </action>
+        </group>
+<!--        GoToJsFile-->
 
 
     </actions>
