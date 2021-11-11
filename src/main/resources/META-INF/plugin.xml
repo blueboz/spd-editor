@@ -18,7 +18,12 @@
          on how to target different products -->
     <depends>com.intellij.modules.lang</depends>
     <depends>com.intellij.modules.platform</depends>
+    <depends>JavaScript</depends>
+<!--    <depends>com.intellij.modules.java-capable</depends>-->
     <depends>com.intellij.java</depends>
+<!--    <depends>JavaScriptLanguage</depends>-->
+
+
 
 
 
@@ -63,7 +68,7 @@
             </action>
             <action class="cn.boz.jb.plugin.idea.action.GoToDao" id="GoToDao" text="Go To Dao">
             </action>
-            <action class="cn.boz.jb.plugin.idea.action.GoToJsFile" id="GoToJs" text="Go To JS">
+            <action class="cn.boz.jb.plugin.idea.action.GoToRefFile" id="GoToRef" text="Go To Ref">
             </action>
             <add-to-group group-id="EditorPopupMenu" anchor="first"></add-to-group>
         </group>

@@ -44,11 +44,12 @@ intellij {
 //    localPath = '/Volumes/Mac/App/IntelliJ IDEA.app'
 //    localPath = 'F:\\App\\JetBrains\\IntelliJ IDEA 2021.2.1'
 //    localPath = 'D:\\App\\ideaIU-2020'
-    localPath='F:\\App\\JetBrains\\IntelliJ IDEA 2021.1.1'
+    localPath = 'F:\\App\\JetBrains\\IntelliJ IDEA 2021.1.1'
 //    instrumentCode = false
 //    sandboxDir.set("${project.rootDir}/.sandbox")
     sandboxDir = "${project.rootDir}/.sandbox"
-    plugins = ['com.intellij.java']
+    plugins = ['com.intellij.java','JavaScriptLanguage','DatabaseTools']
+
 
 
 }
@@ -103,8 +104,8 @@ patchPluginXml {
          <li>Shrink the size of release package.</li>
     <ul>
       """
-    sinceBuild="200.*"
-    untilBuild= ""
+    sinceBuild = "200.*"
+    untilBuild = ""
 
 }
 test {

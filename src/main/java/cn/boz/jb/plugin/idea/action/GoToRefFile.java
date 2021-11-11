@@ -3,6 +3,9 @@ package cn.boz.jb.plugin.idea.action;
 import com.intellij.codeInsight.navigation.NavigationUtil;
 import com.intellij.ide.highlighter.HtmlFileType;
 import com.intellij.ide.highlighter.JavaFileType;
+import com.intellij.ide.highlighter.XmlFileType;
+import com.intellij.lang.javascript.JavaScriptFileType;
+import com.intellij.lang.javascript.psi.JSLiteralExpression;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
@@ -24,7 +27,7 @@ import java.io.File;
 /**
  * 用于
  */
-public class GoToJsFile extends AnAction {
+public class GoToRefFile extends AnAction {
     @Override
     public void actionPerformed(@NotNull AnActionEvent anActionEvent) {
         Editor editor = anActionEvent.getData(CommonDataKeys.EDITOR);
@@ -35,16 +38,21 @@ public class GoToJsFile extends AnAction {
         int offset = editor.getCaretModel().getOffset();
         Project project = anActionEvent.getData(CommonDataKeys.PROJECT);
 
-        PsiElement element = psiFile.findElementAt(offset);
-        XmlAttribute parentOfType = PsiTreeUtil.getParentOfType(element, XmlAttribute.class);
-        if (parentOfType != null) {
-            PsiElement pareddnt = element.getParent();
-            //才有继续处理的必要
+        FileType fileType = psiFile.getFileType();
+        if (fileType instanceof JavaFileType) {
+            PsiElement element = psiFile.findElementAt(offset);
+        } else if (fileType instanceof XmlFileType) {
+            PsiElement element = psiFile.findElementAt(offset);
+            XmlAttribute parentOfType = PsiTreeUtil.getParentOfType(element, XmlAttribute.class);
+            if (parentOfType != null) {
+                PsiElement pareddnt = element.getParent();
+                //才有继续处理的必要
 
-            XmlAttribute attribute = (XmlAttribute) parentOfType;
-            String name = attribute.getName();
-            String value = attribute.getValue();
-            if ("data-main".equals(name)) {
+                XmlAttribute attribute = (XmlAttribute) parentOfType;
+//            String name = attribute.getName();
+                String value = attribute.getValue();
+                //dont limit
+//            if ("data-main".equals(name)) {
                 PsiDirectory directory = psiFile.getContainingDirectory();
 //                PsiFile file = directory.findFile(value);
                 //RelatiePalce
@@ -52,12 +60,16 @@ public class GoToJsFile extends AnAction {
                 String[] split = value.split("\\?");
                 VirtualFile fileByRelativePath = psiFile.getVirtualFile().getParent().findFileByRelativePath(split[0]);
 
-                PsiFile targetJsFile = PsiManager.getInstance(project).findFile(fileByRelativePath);
+                if (fileByRelativePath != null) {
 
-                JBPopup jbpopup = NavigationUtil.getPsiElementPopup(new PsiElement[]{targetJsFile}, "选择文件");
-                jbpopup.showCenteredInCurrentWindow(project);
-                return;
+                    PsiFile targetJsFile = PsiManager.getInstance(project).findFile(fileByRelativePath);
+
+                    JBPopup jbpopup = NavigationUtil.getPsiElementPopup(new PsiElement[]{targetJsFile}, "选择文件");
+                    jbpopup.showCenteredInCurrentWindow(project);
+                    return;
+                }
             }
+
         }
         //parent must be data-main
 
@@ -70,12 +82,12 @@ public class GoToJsFile extends AnAction {
         boolean b = editor != null && psiFile != null;
         if (b) {
             FileType fileType = psiFile.getFileType();
-            if (fileType instanceof HtmlFileType) {
+            if (fileType instanceof HtmlFileType || fileType instanceof JavaScriptFileType) {
                 e.getPresentation().setEnabled(true);
                 e.getPresentation().setVisible(true);
             } else {
-                e.getPresentation().setEnabled(false);
-                e.getPresentation().setVisible(false);
+                e.getPresentation().setEnabled(true);
+                e.getPresentation().setVisible(true);
             }
         }
     }
