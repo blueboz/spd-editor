@@ -1,16 +1,12 @@
 package cn.boz.jb.plugin.idea.utils;
 
-import com.intellij.codeInsight.navigation.NavigationUtil;
-import com.intellij.ide.util.PsiNavigationSupport;
-import com.intellij.openapi.options.ShowSettingsUtil;
-import com.intellij.pom.Navigatable;
+import cn.boz.jb.plugin.idea.configurable.SpdEditorState;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.SQLException;
@@ -45,6 +41,10 @@ public class DBUtils {
         }
     }
 
+    public static Connection getConnection(SpdEditorState state) throws MalformedURLException, SQLException, ClassNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+        return getConnection(state.jdbcUserName, state.jdbcPassword, state.jdbcUrl, state.jdbcDriver);
+    }
+
 
     /**
      * @param jdbcUser
@@ -54,8 +54,13 @@ public class DBUtils {
      */
     @SuppressWarnings("unchecked")
     public static Connection getConnection(String jdbcUser, String jdbcPass, String jdbcUrl, String jdbcDriver) throws ClassNotFoundException, MalformedURLException, NoSuchMethodException, SQLException, InvocationTargetException, InstantiationException, IllegalAccessException {
-        File file = new File(jdbcDriver);
-        URLClassLoader loader = new URLClassLoader(new URL[]{file.toURI().toURL()});
+        String[] driverpaths = jdbcDriver.split(";");
+        URL[] urls = new URL[driverpaths.length];
+        for (int i = 0; i < driverpaths.length; i++) {
+            String driverpath = driverpaths[i];
+            urls[i] = new File(driverpath).toURI().toURL();
+        }
+        URLClassLoader loader = new URLClassLoader(urls);
         Class clazz = loader.loadClass("oracle.jdbc.driver.OracleDriver");
         Driver driver = (Driver) clazz.getDeclaredConstructor().newInstance();
         Properties p = new Properties();

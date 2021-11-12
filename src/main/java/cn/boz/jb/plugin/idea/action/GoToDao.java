@@ -1,7 +1,6 @@
 package cn.boz.jb.plugin.idea.action;
 
 import com.intellij.codeInsight.navigation.NavigationUtil;
-import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.ide.highlighter.XmlFileType;
 import com.intellij.lang.jvm.JvmMethod;
 import com.intellij.openapi.actionSystem.AnAction;
@@ -14,23 +13,15 @@ import com.intellij.openapi.ui.popup.JBPopup;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiManager;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.search.FilenameIndex;
+import com.intellij.psi.impl.source.xml.XmlFileImpl;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.search.GlobalSearchScopes;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtil;
-import com.intellij.psi.util.PsiUtilCore;
 import com.intellij.psi.xml.XmlAttribute;
-import com.intellij.psi.xml.XmlDocument;
 import com.intellij.psi.xml.XmlElement;
 import com.intellij.psi.xml.XmlFile;
 import com.intellij.psi.xml.XmlTag;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -61,8 +52,7 @@ public class GoToDao extends AnAction {
             return;
         }
 
-
-        XmlTag sqlMapMaybe = PsiTreeUtil.getTopmostParentOfType(element, XmlTag.class);
+        XmlTag sqlMapMaybe = ((XmlFileImpl) element.getContainingFile()).getRootTag();
         XmlAttribute namespace = sqlMapMaybe.getAttribute("namespace");
         String classNameMaybe = namespace.getValue();
         if (classNameMaybe != null) {
@@ -79,31 +69,30 @@ public class GoToDao extends AnAction {
             while (true) {
                 XmlTag tg = PsiTreeUtil.getParentOfType(ele, XmlTag.class);
                 if (tg == null) {
-                    JBPopup jbpopup = NavigationUtil.getPsiElementPopup(new PsiElement[]{aClass}, "选择文件");
-                    jbpopup.showCenteredInCurrentWindow(project);
+                    NavigationUtil.activateFileWithPsiElement(aClass);
                     return;
                 }
                 String name = tg.getName();
                 if (namelist.contains(name)) {
                     XmlAttribute methodName = tg.getAttribute("id");
                     //导航到Java类与其方法
-//                    FilenameIndex.getFileByNa
                     String value = methodName.getValue();
-//                    GlobalSearchScope scopeRestrictedByFileTypes = GlobalSearchScope.getScopeRestrictedByFileTypes(GlobalSearchScope.allScope(project), JavaFileType.INSTANCE);
                     JvmMethod[] methodsByName = aClass.findMethodsByName(value);
                     if (methodsByName.length > 0) {
-
                         PsiElement[] psiElements = new PsiElement[methodsByName.length];
                         for (int i = 0; i < methodsByName.length; i++) {
                             psiElements[i] = methodsByName[i].getSourceElement();
                         }
-                        JBPopup jbpopup = NavigationUtil.getPsiElementPopup(psiElements, "选择文件");
-                        jbpopup.showCenteredInCurrentWindow(project);
+                        if(psiElements.length>1){
+                            JBPopup jbpopup = NavigationUtil.getPsiElementPopup(psiElements, "选择文件");
+                            jbpopup.showCenteredInCurrentWindow(project);
+                        }else{
+                            //直接跳过去了
+                            NavigationUtil.activateFileWithPsiElement(psiElements[0]);
+                        }
                         return;
                     } else {
-
-                        JBPopup jbpopup = NavigationUtil.getPsiElementPopup(new PsiElement[]{aClass}, "选择文件");
-                        jbpopup.showCenteredInCurrentWindow(project);
+                        NavigationUtil.activateFileWithPsiElement(aClass);
                         return;
                     }
                 }

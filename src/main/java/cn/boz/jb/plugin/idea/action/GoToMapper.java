@@ -1,5 +1,6 @@
 package cn.boz.jb.plugin.idea.action;
 
+import com.intellij.codeInsight.hint.HintManager;
 import com.intellij.codeInsight.navigation.NavigationUtil;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.ide.highlighter.XmlFileType;
@@ -9,7 +10,6 @@ import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.popup.JBPopup;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiDirectory;
@@ -61,9 +61,8 @@ public class GoToMapper extends AnAction {
         PsiFile psiFileV = PsiManager.getInstance(project).findFile(virtualFile);
         PsiDirectory containingDirectory = psiFileV.getContainingDirectory();
 
-        PsiDirectory[] subdirectories = containingDirectory.getSubdirectories();
 
-        crossDirectory(containingDirectory, new DoEachPsifile() {
+        boolean b = crossDirectory(containingDirectory, new DoEachPsifile() {
 
             @Override
             public boolean doPsiFile(PsiFile psiFile) {
@@ -79,10 +78,9 @@ public class GoToMapper extends AnAction {
                         return false;
                     }
                     XmlElement ele = namespace;
+                    XmlAttribute targetAttribute=null;
                     if (containingMethod != null) {
-
                         while (true) {
-
                             XmlTag tags = PsiTreeUtil.getNextSiblingOfType(ele, XmlTag.class);
                             if (tags == null) {
                                 break;
@@ -93,27 +91,30 @@ public class GoToMapper extends AnAction {
                                 String value = id.getValue();
                                 //判断ID是否已经有了
                                 if (value.equals(containingMethod.getName())) {
+                                    targetAttribute=id;
                                     break;
                                 }
                             }
                         }
-                        JBPopup jbpopup = NavigationUtil.getPsiElementPopup(new PsiElement[]{ele, namespace}, "选择文件");
-                        jbpopup.showCenteredInCurrentWindow(project);
+                        if(targetAttribute!=null){
+                            NavigationUtil.activateFileWithPsiElement(targetAttribute.getValueElement());
+                        }else{
+                            NavigationUtil.activateFileWithPsiElement(ele);
+                        }
                         return true;
 
                     } else {
-                        JBPopup jbpopup = NavigationUtil.getPsiElementPopup(new PsiElement[]{namespace}, "选择文件");
-                        jbpopup.showCenteredInCurrentWindow(project);
+                        NavigationUtil.activateFileWithPsiElement(namespace);
                         return true;
 
                     }
-//                    Navigatable navigatable = PsiNavigationSupport.getInstance().createNavigatable(project, virtualFile, 0);
-//                    navigatable.navigate();
                 }
                 return false;
             }
         });
-
+        if(!b){
+            HintManager.getInstance().showErrorHint(editor, "Cannot find declaration to go to");
+        }
 
 
     }
