@@ -145,7 +145,6 @@ public class SpdEditorSettingsComp {
         return jdbcDriverStrings.toString();
     }
 
-    @SuppressWarnings("uncheck")
     public void setJdbcDriver(String jdbcDriver) {
         this.jdbcDriverListModel.clear();
         if (jdbcDriver != null) {

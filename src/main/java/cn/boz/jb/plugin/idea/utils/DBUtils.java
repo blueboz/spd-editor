@@ -9,12 +9,28 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.sql.Connection;
 import java.sql.Driver;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 public class DBUtils {
+
+    private static final DBUtils INST = new DBUtils();
+
+    private DBUtils() {
+        //应该怎么初始化，作为一个Service?
+    }
+
+    public static DBUtils getInstance() {
+        return INST;
+    }
 
     /**
      * 测试连接
@@ -94,5 +110,50 @@ public class DBUtils {
         }
         return true;
 
+    }
+
+    public List<Map<String, Object>> queryEngineActionOutputIdMatch(Connection connection, String actionId) throws Exception {
+        try (PreparedStatement preparedStatement = connection.prepareStatement("select * from ENGINE_ACTIONOUTPUT where ACTIONID_ =?")) {
+            preparedStatement.setString(1, actionId);
+            return queryForList(preparedStatement);
+        }
+    }
+
+    public List<Map<String, Object>> queryEngineActionInputIdMatch(Connection connection, String actionId) throws Exception {
+        try (PreparedStatement preparedStatement = connection.prepareStatement("select * from ENGINE_ACTIONINPUT where ACTIONID_ =?")) {
+            preparedStatement.setString(1, actionId);
+            return queryForList(preparedStatement);
+        }
+    }
+
+    public List<Map<String, Object>> queryEngineActionIdMatch(Connection connection, String actionId) throws Exception {
+        try (PreparedStatement preparedStatement = connection.prepareStatement("select * from engine_action where id_ = ?")) {
+            preparedStatement.setString(1, actionId);
+            return queryForList(preparedStatement);
+        }
+    }
+
+    public List<Map<String, Object>> queryEngineActionWithIdLike(Connection connection, String actionId) throws Exception {
+        try (PreparedStatement preparedStatement = connection.prepareStatement("select * from engine_action where id_ like ?")) {
+            preparedStatement.setString(1, "%" + actionId + "%");
+            return queryForList(preparedStatement);
+        }
+    }
+
+    private List<Map<String, Object>> queryForList(PreparedStatement preparedStatement) throws SQLException {
+        List<Map<String, Object>> datas = new ArrayList<>();
+        ResultSet resultSet = preparedStatement.executeQuery();
+        ResultSetMetaData metaData = resultSet.getMetaData();
+        int columnCount = metaData.getColumnCount();
+        while (resultSet.next()) {
+            Map<String, Object> resdata = new HashMap<String, Object>();
+            for (int i = 1; i <= columnCount; i++) {
+                String columnName = metaData.getColumnName(i);
+                Object object = resultSet.getObject(i);
+                resdata.put(columnName, object);
+            }
+            datas.add(resdata);
+        }
+        return datas;
     }
 }
