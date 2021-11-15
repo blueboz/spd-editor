@@ -206,7 +206,7 @@ public class GoToRefFile extends AnAction {
             } else {
                 ele = (XmlElement) element;
             }
-            List<String> namelist = Stream.of("select", "update", "insert", "delete").collect(Collectors.toList());
+            List<String> namelist = List.of("select", "update", "insert", "delete");
             while (true) {
                 XmlTag tg = PsiTreeUtil.getParentOfType(ele, XmlTag.class);
                 if (tg == null) {
@@ -246,10 +246,6 @@ public class GoToRefFile extends AnAction {
         }
         return false;
     }
-
-    private EngineActionDialog temporyDialog;
-
-    private JBPopup popup;
     /**
      * 跳转到Engine Action
      *
@@ -315,9 +311,9 @@ public class GoToRefFile extends AnAction {
 
         if (!engineActionRef.isNull()) {
             EngineActionDataContainer container = engineActionRef.get();
-            temporyDialog = new EngineActionDialog(container.getEngineAction(), container.getEngineActionInput(), container.getEngineActionOutput());
+            var temporyDialog = new EngineActionDialog(container.getEngineAction(), container.getEngineActionInput(), container.getEngineActionOutput());
 
-            popup = JBPopupFactory.getInstance()
+            var popup = JBPopupFactory.getInstance()
                     .createComponentPopupBuilder(temporyDialog, null)
                     .setCancelOnClickOutside(true)
                     .setRequestFocus(true)
