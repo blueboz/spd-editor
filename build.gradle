@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'cn.boz'
-version '1.0.18'
+version '1.0.19'
 
 sourceCompatibility = 1.11
 
@@ -55,6 +55,15 @@ intellij {
 
 patchPluginXml {
     changeNotes = """
+
+
+    <b>1.0.19</b><br>
+    <ul>
+        <li>combine goto dao,goto js action into goto ref action</li>
+        <li>support goto ref action </li>
+        <li>support goto engine action </li>
+    </ul>
+    
 
     <b>1.0.18</b><br>
     <ul>
