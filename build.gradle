@@ -116,10 +116,11 @@ patchPluginXml {
 }
 test {
     useTestNG()
-    include 'cn/boz/test/*'
-    filter{
-        includeTestsMatching("test")
-    }
+    exclude '*'
+//    include 'cn/boz/test/*'
+//    filter{
+//        includeTestsMatching("test")
+//    }
 
 }
 

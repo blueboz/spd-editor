@@ -11,11 +11,18 @@
     -->
 
 
-    <plugin id="cn.boz.jb.plugin.spd-editor" url="http://21.96.60.156:16789/jetbrainsPlugins/spd-editor-1.0.18.zip"
-            version="1.0.18"  size="641948" downloads="155465131" updatedDate="1634302164933">
+    <plugin id="cn.boz.jb.plugin.spd-editor" url="http://21.96.60.156:16789/jetbrainsPlugins/spd-editor-1.0.19.zip"
+            version="1.0.19"  size="641948" downloads="155465131" updatedDate="1634302164933">
         <idea-version since-build="200.*" ></idea-version>
         <change-notes>
             <![CDATA[
+             <b>1.0.19</b><br>
+            <ul>
+                <li>combine goto dao,goto js action into goto ref action</li>
+                <li>support goto ref action </li>
+                <li>support goto engine action </li>
+            </ul>
+
             <b>1.0.18</b><br>
             <ul>
                 <li>fixed copy flow problem's</li>
@@ -58,7 +65,7 @@
             ]]>
         </change-notes>
 
-        <version>1.0.18</version>
+        <version>1.0.19</version>
         <vendor email="1173626291@qq.com" url="http://blog.csdn.net/blueboz">Blueboz.Chen</vendor>
         <name>Erayt Spd Editor</name>
     </plugin>

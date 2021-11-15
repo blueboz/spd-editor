@@ -41,6 +41,7 @@ import com.intellij.psi.xml.XmlDocument;
 import com.intellij.psi.xml.XmlElement;
 import com.intellij.psi.xml.XmlFile;
 import com.intellij.psi.xml.XmlTag;
+import io.netty.util.internal.SuppressJava6Requirement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -246,8 +247,9 @@ public class GoToRefFile extends AnAction {
         return false;
     }
 
-    private EngineActionDialog myFramw;
+    private EngineActionDialog temporyDialog;
 
+    private JBPopup popup;
     /**
      * 跳转到Engine Action
      *
@@ -255,6 +257,7 @@ public class GoToRefFile extends AnAction {
      * @param value
      * @return
      */
+    @SuppressWarnings("unchecked")
     private boolean tryToGotoAction(Project project, String value) {
         if (value == null) {
             return false;
@@ -265,7 +268,7 @@ public class GoToRefFile extends AnAction {
 
         DBUtils instance = DBUtils.getInstance();
         Ref<Boolean> result = new Ref<>();
-        Ref<EngineActionDialog> popupRef = new Ref<>();
+        Ref<EngineActionDataContainer> engineActionRef = new Ref<>();
         Ref<List<String>> ids = new Ref<>();
         ProgressManager.getInstance().runProcessWithProgressSynchronously(() -> {
 
@@ -279,9 +282,7 @@ public class GoToRefFile extends AnAction {
                     String id_ = (String) engineAction.get("ID_");
                     List<Map<String, Object>> actionInputs = instance.queryEngineActionInputIdMatch(connection, id_);
                     List<Map<String, Object>> actionOutputs = instance.queryEngineActionOutputIdMatch(connection, id_);
-                    myFramw = new EngineActionDialog(engineAction, actionInputs, actionOutputs);
-                    popupRef.set(myFramw);
-
+                    engineActionRef.set(new EngineActionDataContainer(engineAction,actionInputs,actionOutputs));
                 } else {
                     List<String> ids_ = actions.stream().map(it -> (String) it.get("ID_")).collect(Collectors.toList());
                     ids.set(ids_);
@@ -310,34 +311,38 @@ public class GoToRefFile extends AnAction {
             }
 
 
-        }, "数据获取中...", true, ProjectManager.getInstance().getDefaultProject());
+        }, "Loading...", true, ProjectManager.getInstance().getDefaultProject());
 
-        if (!popupRef.isNull()) {
+        if (!engineActionRef.isNull()) {
+            EngineActionDataContainer container = engineActionRef.get();
+            temporyDialog = new EngineActionDialog(container.getEngineAction(), container.getEngineActionInput(), container.getEngineActionOutput());
 
-            EngineActionDialog myFramw = popupRef.get();
-            JBPopup popup = JBPopupFactory.getInstance().createComponentPopupBuilder(myFramw, null)
+            popup = JBPopupFactory.getInstance()
+                    .createComponentPopupBuilder(temporyDialog, null)
                     .setCancelOnClickOutside(true)
-                    .setFocusable(true)
                     .setRequestFocus(true)
+                    .setFocusable(true)
                     .createPopup();
+
             popup.showInFocusCenter();
             return true;
         }
 
-
         if (!ids.isNull()) {
-            BaseListPopupStep selPopup = new BaseListPopupStep("action", ids.get()) {
+            @SuppressWarnings("unchecked")
+            BaseListPopupStep selPopup = new BaseListPopupStep<String>("action", ids.get()) {
 
                 @Override
-                public @Nullable PopupStep<?> onChosen(Object selectedValue, boolean finalChoice) {
+                public @Nullable PopupStep<?> onChosen(String selectedValue, boolean finalChoice) {
                     if (finalChoice) {
                         return doFinalStep(() -> doRun(selectedValue));
                     }
                     return PopupStep.FINAL_CHOICE;
                 }
 
-                private void doRun(Object selectedValue) {
-                    tryToGotoAction(project, (String) selectedValue);
+                private void doRun(String selectedValue) {
+
+                        tryToGotoAction(project, (String) selectedValue);
                 }
 
             };

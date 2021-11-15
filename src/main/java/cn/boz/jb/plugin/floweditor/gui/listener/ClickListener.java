@@ -1,9 +1,9 @@
 package cn.boz.jb.plugin.floweditor.gui.listener;
 
-import java.awt.Event;
+import java.awt.event.MouseEvent;
 
 public interface ClickListener {
 
-    void onClick(Event event);
+    void onClick(MouseEvent event);
 
 }

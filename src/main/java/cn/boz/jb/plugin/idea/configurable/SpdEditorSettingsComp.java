@@ -40,7 +40,7 @@ public class SpdEditorSettingsComp {
 
     private JBList jdbcDriverList;
 
-    private DefaultListModel jdbcDriverListModel;
+    private DefaultListModel<String> jdbcDriverListModel;
 
     private static final FileTypeDescriptor JAR_DESCRIPTOR =
             new FileTypeDescriptor("select jdbc driver", ".jar", ".JAR");
@@ -82,7 +82,7 @@ public class SpdEditorSettingsComp {
             public void mouseClicked(MouseEvent e) {
                 //测试连接的时候，需要执行的操作
                 String jdbcUser = jdbcUsername.getText();
-                String jdbcPass = jdbcPassword.getText();
+                String jdbcPass = jdbcPassword.getPassword().toString();
                 String jdbcUrl = jdbcUrlText.getText();
                 String jdbcDriverText = getJdbcDriver();
                 final Ref<Exception> exception = Ref.create();
@@ -92,14 +92,14 @@ public class SpdEditorSettingsComp {
                     } catch (Exception ee) {
                         exception.set(ee);
                     }
-                }, "测试连接中", true, ProjectManager.getInstance().getDefaultProject());
+                }, "Testing Connection", true, ProjectManager.getInstance().getDefaultProject());
                 if (exception.isNull()) {
-                    Messages.showMessageDialog("连接成功", "连接成功", UIUtil.getInformationIcon());
+                    Messages.showMessageDialog("Connection Success", "Connection Success", UIUtil.getInformationIcon());
                 } else {
                     Exception ee = exception.get();
                     ee.printStackTrace();
 
-                    Messages.showErrorDialog("连接失败\n" + exception.get().getMessage(), "连接失败:");
+                    Messages.showErrorDialog("Connection Failed\n" + exception.get().getMessage(), "Connection Fail");
                 }
             }
         });
@@ -131,11 +131,11 @@ public class SpdEditorSettingsComp {
         spdEditorState.jdbcDriver = getJdbcDriver();
         spdEditorState.jdbcUrl = this.jdbcUrlText.getText();
         spdEditorState.jdbcUserName = this.jdbcUsername.getText();
-        spdEditorState.jdbcPassword = this.jdbcPassword.getText();
+        spdEditorState.jdbcPassword = this.jdbcPassword.getPassword().toString();
     }
 
+    @SuppressWarnings("unchecked")
     public String getJdbcDriver() {
-        Enumeration elements = jdbcDriverListModel.elements();
         StringBuilder jdbcDriverStrings = new StringBuilder();
         for (int i = 0; i < jdbcDriverListModel.size(); i++) {
             jdbcDriverStrings.append(jdbcDriverListModel.get(i));
@@ -180,7 +180,7 @@ public class SpdEditorSettingsComp {
         if (!spdEditorState.jdbcUserName.equals(this.jdbcUsername.getText())) {
             return true;
         }
-        if (!spdEditorState.jdbcPassword.equals(this.jdbcPassword.getText())) {
+        if (!spdEditorState.jdbcPassword.equals(this.jdbcPassword.getPassword().toString())) {
             return true;
         }
         return false;

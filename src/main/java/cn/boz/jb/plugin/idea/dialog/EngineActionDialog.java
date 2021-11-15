@@ -36,6 +36,7 @@ public class EngineActionDialog extends JComponent {
     private JLabel actionOutputLabel;
     private DefaultTableModel outputModel;
 
+
     public EngineActionDialog(Map<String, Object> engineAction, List<Map<String, Object>> engineActionInput, List<Map<String, Object>> engineActionOutput) {
         String id = (String) engineAction.get("ID_");
         String namespace = (String) engineAction.get("NAMESPACE_");
@@ -44,7 +45,6 @@ public class EngineActionDialog extends JComponent {
         myLayoutManager = new MyLayoutManager();
 
         this.setLayout(myLayoutManager);
-//        this.getContentPane().setLayout(myLayoutManager);
 
         actionIdLabel = new JLabel("actionId:");
         actionIdTextField = new JTextField();

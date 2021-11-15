@@ -64,7 +64,7 @@ public class Shape implements Restorable, Resizable, Alignable, Attachable,Clone
     protected int resizingBorderWidth = 1;
 
     //缩放的时候，控制点的颜色
-    private List<ClickListener> clickListeners = new ArrayList<ClickListener>();
+    private List<ClickListener> clickListeners = new ArrayList<>();
     //鼠标击中的状态
     protected boolean mousePressing;
     //控件得到焦点的状态
