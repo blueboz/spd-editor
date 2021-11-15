@@ -25,9 +25,6 @@
 
 
 
-
-
-
     <extensions defaultExtensionNs="com.intellij">
         <internalFileTemplate name="Spd Process"/>
         <!-- Add your extensions here -->
@@ -64,11 +61,7 @@
 <!--            <add-to-group group-id="EditorPopupMenu" anchor="first"/>-->
 <!--        </action>-->
         <group>
-            <action class="cn.boz.jb.plugin.idea.action.GoToMapper" id="GoToMapper" text="Go To Mapper">
-            </action>
-            <action class="cn.boz.jb.plugin.idea.action.GoToDao" id="GoToDao" text="Go To Dao">
-            </action>
-            <action class="cn.boz.jb.plugin.idea.action.GoToRefFile" id="GoToRef" text="Go To Ref">
+            <action class="cn.boz.jb.plugin.idea.action.GoToRefFile" id="GoToRef" text="Go To Ref" icon="SpdEditorIcons.REF_16_ICON">
             </action>
             <add-to-group group-id="EditorPopupMenu" anchor="first"></add-to-group>
         </group>
