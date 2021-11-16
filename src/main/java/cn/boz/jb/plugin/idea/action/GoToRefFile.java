@@ -327,7 +327,6 @@ public class GoToRefFile extends AnAction {
         if (!ids.isNull()) {
             @SuppressWarnings("unchecked")
             BaseListPopupStep selPopup = new BaseListPopupStep<String>("action", ids.get()) {
-
                 @Override
                 public @Nullable PopupStep<?> onChosen(String selectedValue, boolean finalChoice) {
                     if (finalChoice) {
@@ -337,14 +336,15 @@ public class GoToRefFile extends AnAction {
                 }
 
                 private void doRun(String selectedValue) {
-
-                        tryToGotoAction(project, (String) selectedValue);
+                    tryToGotoAction(project, (String) selectedValue);
                 }
 
             };
 
+            //过滤框
             selPopup.isSelectable(true);
-            ListPopup listPopup = JBPopupFactory.getInstance().createListPopup(selPopup);
+            ListPopup listPopup = JBPopupFactory.getInstance()
+                    .createListPopup(selPopup);
             listPopup.showInFocusCenter();
             return true;
         }

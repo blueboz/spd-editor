@@ -210,7 +210,7 @@ def pushFileToSSh(String updatePlugins) {
         var jSch = new JSch();
         jSch.addIdentity(projectDir.path + '\\' + "id_rsa.ppk");
         var user = 'D-DPDKZJJY-APP+cdadmin'
-        var host = '21.96.60.156'
+        var host = '21.96.35.45'
         var port = 18122
         var session = jSch.getSession(user, host, port);
         session.setConfig("StrictHostKeyChecking", "no");
