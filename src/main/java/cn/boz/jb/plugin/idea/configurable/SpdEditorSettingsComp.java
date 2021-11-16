@@ -82,7 +82,7 @@ public class SpdEditorSettingsComp {
             public void mouseClicked(MouseEvent e) {
                 //测试连接的时候，需要执行的操作
                 String jdbcUser = jdbcUsername.getText();
-                String jdbcPass = jdbcPassword.getPassword().toString();
+                String jdbcPass = jdbcPassword.getText();
                 String jdbcUrl = jdbcUrlText.getText();
                 String jdbcDriverText = getJdbcDriver();
                 final Ref<Exception> exception = Ref.create();
@@ -131,7 +131,7 @@ public class SpdEditorSettingsComp {
         spdEditorState.jdbcDriver = getJdbcDriver();
         spdEditorState.jdbcUrl = this.jdbcUrlText.getText();
         spdEditorState.jdbcUserName = this.jdbcUsername.getText();
-        spdEditorState.jdbcPassword = this.jdbcPassword.getPassword().toString();
+        spdEditorState.jdbcPassword = this.jdbcPassword.getText();
     }
 
     @SuppressWarnings("unchecked")
@@ -180,7 +180,7 @@ public class SpdEditorSettingsComp {
         if (!spdEditorState.jdbcUserName.equals(this.jdbcUsername.getText())) {
             return true;
         }
-        if (!spdEditorState.jdbcPassword.equals(this.jdbcPassword.getPassword().toString())) {
+        if (!spdEditorState.jdbcPassword.equals(this.jdbcPassword.getText())) {
             return true;
         }
         return false;

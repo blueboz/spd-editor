@@ -145,7 +145,7 @@ runIde {
     autoReloadPlugins = false
 }
 
-task "boztask" {
+task "publishPluginLocal" {
 //    dependsOn compileJava
     doLast {
         var cn=patchPluginXml.changeNotes.getOrNull()
