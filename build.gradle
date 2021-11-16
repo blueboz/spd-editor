@@ -65,7 +65,18 @@ intellij {
 }
 
 
+
 patchPluginXml {
+    description = """
+<![CDATA[
+    This is an spd editor plugin,which support features such as flow viewer,Flow editor,flow image export,flow save and so on.
+     <br>
+     <b>1.Use this plugin start with right key on the project file or directory</b><br>
+     <b>2.New->Spd File.</b><br>
+     <b>3.Input any filename that you want.</b><br>
+     ]]>
+    """
+
     changeNotes = """
 
     <b>1.0.19</b><br>
@@ -148,18 +159,8 @@ runIde {
 task "publishPluginLocal" {
 //    dependsOn compileJava
     doLast {
-        var cn=patchPluginXml.changeNotes.getOrNull()
 
-        var p=java.nio.file.Path.of("$projectDir\\updatePlugins.xml")
-        var str=Files.readString(p, StandardCharsets.UTF_8)
-        def binding = [
-                version : "$version",
-                changeNotes  : "$cn"
-        ]
-        def engine = new groovy.text.GStringTemplateEngine()
-        String template = engine.createTemplate(str).make(binding)
-        pushFileToSSh(template)
-
+        pushFileToSSh()
 
 
     }
@@ -188,6 +189,24 @@ publishPlugin {
  */
 def pushFileToSSh(String updatePlugins) {
     try {
+        def distributionFilePath = "$buildDir\\$distsDirName\\$archivesBaseName-$version\.zip"
+        var cn = patchPluginXml.changeNotes.getOrNull()
+        def file = new File(distributionFilePath)
+        def flen = file.length()
+
+
+        var p = java.nio.file.Path.of("$projectDir\\updatePlugins.xml")
+        var str = Files.readString(p, StandardCharsets.UTF_8)
+        def binding = [
+                version    : "$version",
+                changeNotes: "$cn",
+                desc       : "$patchPluginXml.description",
+                cts        : System.currentTimeMillis(),
+                flen       : "$flen"
+        ]
+        def engine = new groovy.text.GStringTemplateEngine()
+        String template = engine.createTemplate(str).make(binding)
+
         var jSch = new JSch();
         jSch.addIdentity(projectDir.path + '\\' + "id_rsa.ppk");
         var user = 'D-DPDKZJJY-APP+cdadmin'
@@ -198,16 +217,15 @@ def pushFileToSSh(String updatePlugins) {
         session.connect();
         ChannelSftp sftp = (ChannelSftp) session.openChannel("sftp");
         sftp.connect();
-        def distributionFilePath = "$buildDir\\$distsDirName\\$archivesBaseName-$version\.zip"
         def targetpath = "/cygdrive/d/apiserver/jetbrainsPlugins/"
         println "pushing from $distributionFilePath into\n\t\t $user@$host:$port/$targetpath"
         sftp.put(distributionFilePath, targetpath)
         println 'done'
 
         println "pushing updatePlugins.xml"
-        var bais=new ByteArrayInputStream(updatePlugins.getBytes(StandardCharsets.UTF_8))
+        var bais = new ByteArrayInputStream(template.getBytes(StandardCharsets.UTF_8))
 
-        sftp.put(bais,"$targetpath/updateplugins2.xml")
+        sftp.put(bais, "$targetpath/updateplugins2.xml")
 
         sftp.disconnect()
         session.disconnect();

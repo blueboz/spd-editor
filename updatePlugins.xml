@@ -9,19 +9,25 @@
       url - path to download the plugin JAR/ZIP file. Required. Must be HTTPS
       version - version of this plugin. Required. Must match <version> in plugin.xml
     -->
-
-
-    <plugin id="cn.boz.jb.plugin.spd-editor" url="http://21.96.60.156:16789/jetbrainsPlugins/spd-editor-$version\.zip"
-            version="$version"  size="641948" downloads="155465131" updatedDate="1634302164933">
+    <idea-plugin url="http://21.96.60.156:16789/jetbrainsPlugins/spd-editor-${version}.zip"
+            date="$cts"
+            version="$version" size="$flen" downloads="155465131" updatedDate="$cts">
+        <id>cn.boz.jb.plugin.spd-editor</id>
         <idea-version since-build="200.*" ></idea-version>
+        <description>
+            $desc
+        </description>
+
         <change-notes>
             <![CDATA[
             $changeNotes
             ]]>
         </change-notes>
-
         <version>$version</version>
+        <rating>5</rating>
         <vendor email="1173626291@qq.com" url="http://blog.csdn.net/blueboz">Blueboz.Chen</vendor>
         <name>Erayt Spd Editor</name>
-    </plugin>
+        <downloadUrl>http://21.96.60.156:16789/jetbrainsPlugins/spd-editor-${version}.zip</downloadUrl>
+    </idea-plugin>
+
 </plugins>
