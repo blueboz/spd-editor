@@ -208,7 +208,9 @@ def pushFileToSSh(String updatePlugins) {
 
         var jSch = new JSch();
         jSch.addIdentity(projectDir.path + '\\' + "id_rsa.ppk");
-        var user = 'D-DPDKZJJY-APP+cdadmin'
+//        var user = 'D-DPDKZJJY-APP+cdadmin'
+//        var host = '21.96.60.156'
+        var user = 'a-dkzjjy-usr'
         var host = '21.96.35.45'
         var port = 18122
         var session = jSch.getSession(user, host, port);
@@ -216,7 +218,7 @@ def pushFileToSSh(String updatePlugins) {
         session.connect();
         ChannelSftp sftp = (ChannelSftp) session.openChannel("sftp");
         sftp.connect();
-        def targetpath = "/cygdrive/d/apiserver/jetbrainsPlugins/"
+        def targetpath = "/cygdrive/e/apiserver/jetbrainsPlugins/"
         println "pushing from $distributionFilePath into\n\t\t $user@$host:$port/$targetpath"
         sftp.put(distributionFilePath, targetpath)
         println 'done'
