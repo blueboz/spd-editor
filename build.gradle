@@ -84,9 +84,9 @@ patchPluginXml {
         <li>combine goto dao,goto js action into goto ref action</li>
         <li>support goto ref action </li>
         <li>support goto engine action </li>
+        <li>fixing addbom action bug's</li>
     </ul>
     
-
     <b>1.0.18</b><br>
     <ul>
         <li>fixed copy flow problem's</li>
@@ -94,7 +94,6 @@ patchPluginXml {
         <li>support features with go to dao </li>
         <li>support features with go to jsfile  </li>
     </ul>
-    
     
     <b>1.0.17</b><br>
     <ul>

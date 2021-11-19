@@ -43,11 +43,16 @@
 
     <actions>
         <!-- Add your actions here -->
-        <action class="cn.boz.jb.plugin.addbom.AddBomAction" id="addBomAction" description="Add UTF-8 BOM" text="AddBom"
-                icon="SpdEditorIcons.BOM_16_ICON">
+        <group>
+            <action class="cn.boz.jb.plugin.addbom.RemoveBomAction" id="removeBomAction" description="Remove UTF-8 BOM" text="DelBom"
+                    icon="SpdEditorIcons.BOM_16_ICON">
+            </action>
+            <action class="cn.boz.jb.plugin.addbom.AddBomAction" id="addBomAction" description="Add UTF-8 BOM" text="AddBom"
+                    icon="SpdEditorIcons.BOM_16_ICON">
+            </action>
             <add-to-group group-id="ProjectViewPopupMenu" anchor="before"
                           relative-to-action="EditorPaste"/>
-        </action>
+        </group>
 
         <action class="cn.boz.jb.plugin.idea.action.NewSpdFileAction" id="NewSpdFile" text="Spd File"
                 icon="SpdEditorIcons.FLOW_16_ICON" description="Spd File">

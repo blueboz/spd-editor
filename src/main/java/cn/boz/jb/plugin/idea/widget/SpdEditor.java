@@ -366,7 +366,7 @@ public class SpdEditor extends JComponent implements MouseListener, ClipboardOwn
                     return;
                 }
 
-                String joiningSql = sqls.stream().collect(Collectors.joining(";\n")) + ";";
+                String joiningSql = sqls.stream().map(sql-> sql.replace("\n","")).collect(Collectors.joining(";\n")) + ";";
                 int idx = Messages.showDialog(joiningSql, "SQL", new String[]{"复制Sql", "更新至DB", "打开配置项", "确定"}, 3, SpdEditorIcons.FLOW_16_ICON);
                 if (idx == 0) {
                     Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
