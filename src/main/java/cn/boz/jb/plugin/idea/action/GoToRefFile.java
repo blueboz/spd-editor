@@ -41,7 +41,6 @@ import com.intellij.psi.xml.XmlDocument;
 import com.intellij.psi.xml.XmlElement;
 import com.intellij.psi.xml.XmlFile;
 import com.intellij.psi.xml.XmlTag;
-import io.netty.util.internal.SuppressJava6Requirement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -52,10 +51,9 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
- * 用于
+ * 用于导航到指定文件
  */
 public class GoToRefFile extends AnAction {
     @Override
@@ -325,8 +323,10 @@ public class GoToRefFile extends AnAction {
         }
 
         if (!ids.isNull()) {
+            List<String> actionSorted = ids.get().stream().sorted().collect(Collectors.toList());
+
             @SuppressWarnings("unchecked")
-            BaseListPopupStep selPopup = new BaseListPopupStep<String>("action", ids.get()) {
+            BaseListPopupStep selPopup = new BaseListPopupStep<String>("action", actionSorted) {
                 @Override
                 public @Nullable PopupStep<?> onChosen(String selectedValue, boolean finalChoice) {
                     if (finalChoice) {
