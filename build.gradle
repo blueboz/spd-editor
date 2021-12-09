@@ -56,7 +56,7 @@ intellij {
 //    localPath = 'F:\\App\\JetBrains\\IntelliJ IDEA 2021.2.1'
 //    localPath = 'D:\\App\\ideaIU-2020'
     localPath = 'F:\\App\\JetBrains\\IntelliJ IDEA 2021.1.1'
-//    instrumentCode = false
+    instrumentCode = false
 //    sandboxDir.set("${project.rootDir}/.sandbox")
     sandboxDir = "${project.rootDir}/.sandbox"
     plugins = ['com.intellij.java', 'JavaScriptLanguage', 'DatabaseTools']
@@ -152,7 +152,7 @@ tasks.withType(JavaCompile) {
 }
 
 runIde {
-    autoReloadPlugins = false
+    autoReloadPlugins = true
 }
 
 task "publishPluginLocal" {
