@@ -12,11 +12,12 @@ import javax.swing.JButton;
 
 public class MyToolWindowFactory implements ToolWindowFactory {
 
+    MyToolWindow myToolWindow;
     @Override
     public void createToolWindowContent(@NotNull Project project, @NotNull ToolWindow toolWindow) {
-        JButton btn = new JButton("this is ");
+        myToolWindow = new MyToolWindow();
         ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
-        Content title = contentFactory.createContent(btn, "title", false);
+        Content title = contentFactory.createContent(myToolWindow, "菜单树", false);
         toolWindow.getContentManager().addContent(title);
     }
 }

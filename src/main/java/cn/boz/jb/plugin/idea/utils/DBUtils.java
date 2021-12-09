@@ -4,6 +4,7 @@ import cn.boz.jb.plugin.idea.configurable.SpdEditorState;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
+import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -110,6 +111,29 @@ public class DBUtils {
         }
         return true;
 
+    }
+
+    public List<Map<String, Object>> queryEcasAppl(Connection connection  ) throws Exception {
+        try (PreparedStatement preparedStatement = connection.prepareStatement("select * from ECAS_APPL")) {
+            return queryForList(preparedStatement);
+        }
+    }
+
+    public List<Map<String, Object>> queryTopMenuOfApp(Connection connection, BigDecimal applid) throws Exception {
+        try (PreparedStatement preparedStatement = connection.prepareStatement("select * from ECAS_MENU where parent is null and applid=?")) {
+            preparedStatement.setBigDecimal(1, applid);
+            return queryForList(preparedStatement);
+        }
+    }
+
+    public List<Map<String, Object>> queryMenuOfAppMenu(Connection connection,BigDecimal parentId, BigDecimal applid) throws Exception {
+        try (PreparedStatement preparedStatement = connection.prepareStatement("select * from ECAS_MENU where parent =? and applid=?")) {
+            System.out.println("parent:"+parentId+" appid:"+applid);
+
+            preparedStatement.setBigDecimal(1, parentId);
+            preparedStatement.setBigDecimal(2, applid);
+            return queryForList(preparedStatement);
+        }
     }
 
     public List<Map<String, Object>> queryEngineActionOutputIdMatch(Connection connection, String actionId) throws Exception {

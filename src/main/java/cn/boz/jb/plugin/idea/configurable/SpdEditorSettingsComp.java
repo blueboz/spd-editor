@@ -6,7 +6,6 @@ import com.intellij.openapi.fileChooser.FileTypeDescriptor;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.ui.TextFieldWithBrowseButton;
 import com.intellij.openapi.util.Ref;
 import com.intellij.ui.ToolbarDecorator;
 import com.intellij.ui.components.JBLabel;
@@ -16,13 +15,9 @@ import com.intellij.ui.components.JBTextField;
 import com.intellij.util.ui.FormBuilder;
 import com.intellij.util.ui.UIUtil;
 
-import javax.swing.DefaultListModel;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JPanel;
+import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.Enumeration;
 
 public class SpdEditorSettingsComp {
 
@@ -82,6 +77,7 @@ public class SpdEditorSettingsComp {
             public void mouseClicked(MouseEvent e) {
                 //测试连接的时候，需要执行的操作
                 String jdbcUser = jdbcUsername.getText();
+                @SuppressWarnings("all")
                 String jdbcPass = jdbcPassword.getText();
                 String jdbcUrl = jdbcUrlText.getText();
                 String jdbcDriverText = getJdbcDriver();

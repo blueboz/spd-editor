@@ -23,6 +23,7 @@ import com.intellij.openapi.ui.popup.JBPopup;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.openapi.ui.popup.ListPopup;
 import com.intellij.openapi.ui.popup.PopupStep;
+import com.intellij.openapi.ui.popup.SpeedSearchFilter;
 import com.intellij.openapi.ui.popup.util.BaseListPopupStep;
 import com.intellij.openapi.util.Ref;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -41,6 +42,7 @@ import com.intellij.psi.xml.XmlDocument;
 import com.intellij.psi.xml.XmlElement;
 import com.intellij.psi.xml.XmlFile;
 import com.intellij.psi.xml.XmlTag;
+import icons.SpdEditorIcons;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -243,6 +245,7 @@ public class GoToRefFile extends AnAction {
             }
         }
         return false;
+
     }
     /**
      * 跳转到Engine Action
@@ -326,7 +329,7 @@ public class GoToRefFile extends AnAction {
             List<String> actionSorted = ids.get().stream().sorted().collect(Collectors.toList());
 
             @SuppressWarnings("unchecked")
-            BaseListPopupStep selPopup = new BaseListPopupStep<String>("action", actionSorted) {
+            BaseListPopupStep selPopup = new BaseListPopupStep<String>("action", actionSorted, SpdEditorIcons.ACTION_16_ICON) {
                 @Override
                 public @Nullable PopupStep<?> onChosen(String selectedValue, boolean finalChoice) {
                     if (finalChoice) {
@@ -336,9 +339,18 @@ public class GoToRefFile extends AnAction {
                 }
 
                 private void doRun(String selectedValue) {
+                    //选择的值可以进行跳转
                     tryToGotoAction(project, (String) selectedValue);
                 }
 
+                @Override
+                public SpeedSearchFilter<String> getSpeedSearchFilter() {
+                    return super.getSpeedSearchFilter();
+                }
+
+                public boolean isSpeedSearchEnabled() {
+                    return true;
+                }
             };
 
             //过滤框

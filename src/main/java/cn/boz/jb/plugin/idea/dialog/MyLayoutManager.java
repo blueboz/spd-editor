@@ -1,19 +1,26 @@
 package cn.boz.jb.plugin.idea.dialog;
 
+import javax.swing.JLabel;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.LayoutManager;
 
 public class MyLayoutManager implements LayoutManager {
+
+
     @Override
     public void addLayoutComponent(String name, Component comp) {
         System.out.println("setting bound");
         comp.setBounds(0, 0, 40, 40);
     }
 
+
     @Override
     public void removeLayoutComponent(Component comp) {
+
 
     }
 

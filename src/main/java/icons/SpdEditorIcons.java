@@ -14,6 +14,8 @@ public class SpdEditorIcons {
     public static Icon FLOW_16_ICON = icon("/icons/flow.svg");
     public static Icon FLOW_GRAY_16_ICON = icon("/icons/flowgray.svg");
     public static Icon REF_16_ICON = icon("/icons/ref.svg");
+    public static Icon ACTION_16_ICON = icon("/icons/action16.svg");
+    public static Icon ACTION_32_ICON = icon("/icons/action32.svg");
 
 
     static Icon icon(String path) {
