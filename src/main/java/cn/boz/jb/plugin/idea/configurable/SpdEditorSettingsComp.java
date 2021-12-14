@@ -12,6 +12,7 @@ import com.intellij.ui.components.JBLabel;
 import com.intellij.ui.components.JBList;
 import com.intellij.ui.components.JBPasswordField;
 import com.intellij.ui.components.JBTextField;
+import com.intellij.ui.tabs.JBTabs;
 import com.intellij.util.ui.FormBuilder;
 import com.intellij.util.ui.UIUtil;
 
@@ -43,7 +44,7 @@ public class SpdEditorSettingsComp {
 
     @SuppressWarnings("unchecked")
     public SpdEditorSettingsComp() {
-
+        JBTabs tabs;
         jdbcPassword = new JBPasswordField();
         jdbcUrlText = new JBTextField();
         jdbcUsername = new JBTextField();

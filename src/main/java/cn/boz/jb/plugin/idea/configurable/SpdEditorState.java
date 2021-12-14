@@ -22,6 +22,9 @@ public class SpdEditorState implements PersistentStateComponent<SpdEditorState> 
 
     public String jdbcDriver="";
 
+    //自动保存，默认为false
+    public boolean autoSave=false;
+
     public SpdEditorState() {
 
     }

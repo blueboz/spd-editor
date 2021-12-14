@@ -20,4 +20,6 @@ public class MyToolWindowFactory implements ToolWindowFactory {
         Content title = contentFactory.createContent(myToolWindow, "菜单树", false);
         toolWindow.getContentManager().addContent(title);
     }
+
+
 }

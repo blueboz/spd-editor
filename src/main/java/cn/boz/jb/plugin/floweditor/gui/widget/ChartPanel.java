@@ -35,6 +35,8 @@ import cn.boz.jb.plugin.floweditor.gui.utils.LineUtils;
 import cn.boz.jb.plugin.floweditor.gui.utils.NumberUtils;
 import cn.boz.jb.plugin.floweditor.gui.utils.ShapePos;
 import cn.boz.jb.plugin.floweditor.gui.utils.ShapeUtils;
+import cn.boz.jb.plugin.idea.configurable.SpdEditorSettings;
+import cn.boz.jb.plugin.idea.configurable.SpdEditorState;
 import cn.boz.jb.plugin.idea.listener.ProcessSaveListener;
 import com.intellij.openapi.ui.Messages;
 
@@ -1276,7 +1278,9 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
                 shape.init(point);
                 addShape(shape);
                 repaint();
-                fireSavedListener();
+                if(SpdEditorState.getInstance().autoSave){
+                    fireSavedListener();
+                }
 
             } catch (InstantiationException | NoSuchMethodException | InvocationTargetException | IllegalAccessException instantiationException) {
                 instantiationException.printStackTrace();
@@ -1547,7 +1551,9 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
                 lineCursorTracker = null;
                 addLine(line);
                 repaint();
-                fireSavedListener();
+                if(SpdEditorState.getInstance().autoSave){
+                    fireSavedListener();
+                }
             } catch (Exception ee) {
                 ee.printStackTrace();
             }
@@ -1650,7 +1656,9 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
                 setIdForShape(shape);
                 shape.init(rect);
                 addShape(shape);
-                fireSavedListener();
+                if(SpdEditorState.getInstance().autoSave){
+                    fireSavedListener();
+                }
             } catch (InstantiationException | NoSuchMethodException | InvocationTargetException | IllegalAccessException instantiationException) {
 
                 instantiationException.printStackTrace();
@@ -1688,12 +1696,16 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
         //记录当前resizing对象
         if (dragPressObj != null) {
             doDrag();
-            fireSavedListener();
+            if(SpdEditorState.getInstance().autoSave){
+                fireSavedListener();
+            }
             repaint();
         }
         if (dragLinePoint != null) {
             //记录历史操作
-            fireSavedListener();
+            if(SpdEditorState.getInstance().autoSave){
+                fireSavedListener();
+            }
             BaseState dragLineAfterState = dragLine.serialize();
             recordStateChange(new StateChange(dragLineStartState, dragLineAfterState));
             dragLine = null;
@@ -1908,7 +1920,9 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
         }
         recalcBoard();
         repaint();
-        fireSavedListener();
+        if(SpdEditorState.getInstance().autoSave){
+            fireSavedListener();
+        }
 
     }
 
@@ -1984,7 +1998,9 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
         recalcBoard();
 
         repaint();
-        fireSavedListener();
+        if(SpdEditorState.getInstance().autoSave){
+            fireSavedListener();
+        }
 
     }
 
@@ -2724,7 +2740,9 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
         }
         recordStateChange(new StateChange(new BaseGroupState(befores), null));
         if (removed) {
-            fireSavedListener();
+            if(SpdEditorState.getInstance().autoSave){
+                fireSavedListener();
+            }
         }
     }
 
