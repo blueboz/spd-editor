@@ -10,12 +10,13 @@ public class LineUtils {
 
     /**
      * 给定线段的起点与终点，然后，给定某个点到起点的距离，求对应某个点的坐标
-     * @param left 起始点
-     * @param right 终止点
+     *
+     * @param left   起始点
+     * @param right  终止点
      * @param offset 偏移起始点的偏移量
      * @return
      */
-    public static HiPoint calcCrossPointOfSpecificDistance(HiPoint left,HiPoint right,double offset){
+    public static HiPoint calcCrossPointOfSpecificDistance(HiPoint left, HiPoint right, double offset) {
         //(x2-x1)²+(y2-y1)²=t²
         //(x1-x)²-(y1-y)²=distance²
         //(x2-x)²-(y2-y)²=(t-distance)²
@@ -25,12 +26,13 @@ public class LineUtils {
         //δy=y2-y1
         //d/(δx²+δy²)^½*δx=δx'
         //d/(δx²+δy²)^½*δy=δy'
-        double deltax= right.x-left.x;
-        double deltay= right.y-left.y;
-        double offsetx=offset/Math.sqrt(deltax*deltax+deltay*deltay)*deltax;
-        double offsety=offset/Math.sqrt(deltax*deltax+deltay*deltay)*deltay;
-        return new HiPoint(left.x+offsetx,left.y+offsety);
+        double deltax = right.x - left.x;
+        double deltay = right.y - left.y;
+        double offsetx = offset / Math.sqrt(deltax * deltax + deltay * deltay) * deltax;
+        double offsety = offset / Math.sqrt(deltax * deltax + deltay * deltay) * deltay;
+        return new HiPoint(left.x + offsetx, left.y + offsety);
     }
+
     /**
      * 计算两个线段的夹角以p1->p2为指向
      *
@@ -52,15 +54,36 @@ public class LineUtils {
     }
 
     /**
+     * 返回的是一个轴的向量,正值表示正方向
+     *
+     * @param l1p1
+     * @param l1p2
+     * @param l2p1
+     * @param l2p2
+     * @return a1a2 x a3a4
+     * (x1,y1) x (x2,y2)
+     * =x1*y2-y1*x2 z
+     */
+    public static double calcCrossDirectionOfTwoLine(HiPoint l1p1, HiPoint l1p2, HiPoint l2p1, HiPoint l2p2) {
+        double l1x = l1p2.x - l1p1.x;
+        double l1y = l1p2.y - l1p1.y;
+        double l2x = l2p2.x - l2p1.x;
+        double l2y = l2p2.y - l2p1.y;
+        return l1x * l2y - l1y * l2x;
+    }
+
+
+    /**
      * 计算线段与椭圆的交点坐标
-     * @param lineStartPoint 线段起点
-     * @param lineEndPoint 线段终点
-     * @param ovelCenter 椭圆中心点
+     *
+     * @param lineStartPoint        线段起点
+     * @param lineEndPoint          线段终点
+     * @param ovelCenter            椭圆中心点
      * @param horizontalWidthOfOvel 椭圆水平宽度
-     * @param verticalWidthOfOvel 椭圆垂直高度
+     * @param verticalWidthOfOvel   椭圆垂直高度
      * @return
      */
-    public static HiPoint calcCrossPointWithOvel(HiPoint lineStartPoint,HiPoint lineEndPoint,HiPoint ovelCenter,double horizontalWidthOfOvel,double verticalWidthOfOvel){
+    public static HiPoint calcCrossPointWithOvel(HiPoint lineStartPoint, HiPoint lineEndPoint, HiPoint ovelCenter, double horizontalWidthOfOvel, double verticalWidthOfOvel) {
         double[] sincos = LineUtils.calcCrossAngleWithXAxis(lineStartPoint, lineEndPoint);
         if (sincos[1] == 0 || sincos[0] == 0) {
             //任意轴垂直均可使用此公式
@@ -72,8 +95,8 @@ public class LineUtils {
             double dx = a * b / Math.sqrt(b * b + a * a * (sincos[0] * sincos[0]) / (sincos[1] * sincos[1]));
             double dy = a * b * Math.abs(sincos[0] / sincos[1]) / Math.sqrt(b * b + a * a * (sincos[0] * sincos[0] / (sincos[1] * sincos[1])));
             //偏移量与圆中心指向外部方向正余弦值保持一致以及
-            dx=dx*(sincos[1]>0?1:-1);
-            dy=dy*(sincos[0]>0?1:-1);
+            dx = dx * (sincos[1] > 0 ? 1 : -1);
+            dy = dy * (sincos[0] > 0 ? 1 : -1);
             return new HiPoint(ovelCenter.x + dx, ovelCenter.y + dy);
         }
     }
@@ -171,12 +194,13 @@ public class LineUtils {
 
     /**
      * 两点之间的
+     *
      * @param p1 点一
      * @param p2 点二
      * @return
      */
-    public static double distance(HiPoint p1,HiPoint p2){
-        return Math.sqrt(Math.pow(p1.x- p2.x,2)+Math.pow(p1.y-p2.y,2));
+    public static double distance(HiPoint p1, HiPoint p2) {
+        return Math.sqrt(Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2));
     }
 
     /**
@@ -200,7 +224,6 @@ public class LineUtils {
         }
         return null;
     }
-
 
 
 }

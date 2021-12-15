@@ -20,6 +20,8 @@ import cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel;
 import cn.boz.jb.plugin.idea.configurable.SpdEditorSettings;
 import cn.boz.jb.plugin.idea.configurable.SpdEditorState;
 import cn.boz.jb.plugin.idea.utils.DBUtils;
+import com.intellij.notification.NotificationGroupManager;
+import com.intellij.notification.NotificationType;
 import com.intellij.openapi.options.ShowSettingsUtil;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.ui.JBSplitter;
@@ -29,6 +31,7 @@ import com.intellij.util.ui.UIUtil;
 import icons.SpdEditorIcons;
 
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.Timer;
@@ -64,9 +67,10 @@ public class SpdEditor extends JComponent implements MouseListener, ClipboardOwn
 
     public SpdEditor() {
         this.setLayout(new BorderLayout());
-        jbSplitter = new JBSplitter(false, 0.8f);
+        jbSplitter = new JBSplitter(false);
         jbSplitter.setShowDividerControls(true);
         jbSplitter.setShowDividerIcon(true);
+        jbSplitter.setSplitterProportionKey("spdEditorPropotion");
         add(jbSplitter, BorderLayout.CENTER);
 
         jbTable = new MyJBTable();
@@ -130,11 +134,12 @@ public class SpdEditor extends JComponent implements MouseListener, ClipboardOwn
 //        spdToolbar.setTargetComponent(menuContainer);
 //        menuContainer.add(spdToolbar.getComponent());
 //        add(menuContainer,BorderLayout.NORTH);
-        this.addFocusListener(this);
+        chartPanel.addFocusListener(this);
 
     }
 
-    Button automation=null;
+    private Button automation = null;
+    private JLabel fileChangeHint = null;
 
     private void processMenu(JPanel menuPanel) {
         Button flowbtn = new Button(IcoMoonUtils.getSequenceFlow(), true, "flowbtn", "oper");
@@ -243,11 +248,11 @@ public class SpdEditor extends JComponent implements MouseListener, ClipboardOwn
         sql.setToolTipText("Sql");
         menuPanel.add(sql);
 
-        if(SpdEditorState.getInstance().autoSave){
+        if (SpdEditorState.getInstance().autoSave) {
             automation = new Button(IcoMoonUtils.getAutomation(), false, "automation", true);
             automation.addMouseListener(this);
             automation.setToolTipText("Disable AutoSave");
-        }else{
+        } else {
             automation = new Button(IcoMoonUtils.getManual(), false, "automation", false);
             automation.addMouseListener(this);
             automation.setToolTipText("Enable AutoSave");
@@ -259,12 +264,24 @@ public class SpdEditor extends JComponent implements MouseListener, ClipboardOwn
         save.setToolTipText("保存");
         menuPanel.add(save);
 
+        fileChangeHint = new JLabel("文件未更改");
+        menuPanel.add(fileChangeHint);
 
 
         FlowLayout flowLayout = new FlowLayout(FlowLayout.LEFT, 0, 0);
         menuPanel.setLayout(flowLayout);
 
         menuPanel.setBorder(null);
+        chartPanel.addChangeListener((cp) -> {
+            int currentHistoryHash = cp.getCurrentHistoryHash();
+            int topHistoryHash = cp.getTopHistoryHash();
+//            System.out.println("top:"+topHistoryHash+" current:"+currentHistoryHash);
+            if(topHistoryHash==currentHistoryHash){
+                this.fileChangeHint.setText("文件未更改");
+            }else{
+                this.fileChangeHint.setText("文件已经更改");
+            }
+        });
     }
 
 
@@ -352,10 +369,14 @@ public class SpdEditor extends JComponent implements MouseListener, ClipboardOwn
                 break;
             case "undo":
                 chartPanel.undo();
+
                 break;
             case "erase":
-                chartPanel.clear();
-                repaint();
+                int result = Messages.showYesNoDialog("ERASE CAN NOT BE UNDO!", "WARNNING", Messages.getWarningIcon());
+                if (result == Messages.OK) {
+                    chartPanel.clear();
+                    repaint();
+                }
                 break;
             case "photo":
                 chartPanel.export();
@@ -367,13 +388,25 @@ public class SpdEditor extends JComponent implements MouseListener, ClipboardOwn
                 String automation = myButton.getTitle();
                 if (automation.equals(IcoMoonUtils.getAutomation())) {
                     myButton.setTitle(IcoMoonUtils.getManual());
-                    SpdEditorState.getInstance().autoSave=false;
+                    SpdEditorState.getInstance().autoSave = false;
                     myButton.setToolTipText("Enable AutoSave");
+
+                    NotificationGroupManager.getInstance()
+                            .getNotificationGroup("Spd Editor")
+                            .createNotification("disable auto save spd editor", NotificationType.INFORMATION).notify(null);
                     repaint();
                 } else if (automation.equals(IcoMoonUtils.getManual())) {
-                    SpdEditorState.getInstance().autoSave=true;
+                    SpdEditorState.getInstance().autoSave = true;
                     myButton.setTitle(IcoMoonUtils.getAutomation());
+
                     myButton.setToolTipText("Disable AutoSave");
+                    NotificationGroupManager.getInstance()
+                            .getNotificationGroup("Spd Editor")
+                            .createNotification("enable auto save spd editor", NotificationType.INFORMATION).notify(null);
+
+//                    private static final NotificationGroup BP_NOTIFICATION_GROUP = NotificationGroupManager.getInstance().getNotificationGroup("Breakpoint hit");
+
+
                     repaint();
                 }
                 break;
@@ -400,7 +433,7 @@ public class SpdEditor extends JComponent implements MouseListener, ClipboardOwn
                     return;
                 }
 
-                String joiningSql = sqls.stream().map(sql-> sql.replace("\n","")).collect(Collectors.joining(";\n")) + ";";
+                String joiningSql = sqls.stream().map(sql -> sql.replace("\n", "")).collect(Collectors.joining(";\n")) + ";";
                 int idx = Messages.showDialog(joiningSql, "SQL", new String[]{"复制Sql", "更新至DB", "打开配置项", "确定"}, 3, SpdEditorIcons.FLOW_16_ICON);
                 if (idx == 0) {
                     Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
@@ -460,12 +493,16 @@ public class SpdEditor extends JComponent implements MouseListener, ClipboardOwn
 
     @Override
     public void focusGained(FocusEvent e) {
-        if(SpdEditorState.getInstance().autoSave){
-            automation.setTitle(IcoMoonUtils.getAutomation());
-            automation.setToolTipText("Disable AutoSave");
-        } else if (automation.equals(IcoMoonUtils.getManual())) {
-            automation.setTitle(IcoMoonUtils.getManual());
-            automation.setToolTipText("Enable AutoSave");
+        if (SpdEditorState.getInstance().autoSave) {
+            if (!automation.getTitle().equals(IcoMoonUtils.getAutomation())) {
+                automation.setTitle(IcoMoonUtils.getAutomation());
+                automation.setToolTipText("Disable AutoSave");
+            }
+        } else {
+            if (!automation.getTitle().equals(IcoMoonUtils.getManual())) {
+                automation.setTitle(IcoMoonUtils.getManual());
+                automation.setToolTipText("Enable AutoSave");
+            }
         }
 
     }

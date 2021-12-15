@@ -18,13 +18,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MyFileEditorProvider implements FileEditorProvider, DumbAware {
-    private static Map<VirtualFile, FileEditor> fileEditorMap = new HashMap<>();
 
     @Override
     public boolean accept(@NotNull Project project, @NotNull VirtualFile virtualFile) {
         if (virtualFile.getFileType() instanceof SpdFileType) {
             return true;
-
         }
         return false;
     }
@@ -41,21 +39,7 @@ public class MyFileEditorProvider implements FileEditorProvider, DumbAware {
 
     @Override
     public @NotNull FileEditorPolicy getPolicy() {
-        return FileEditorPolicy.HIDE_DEFAULT_EDITOR;
+        return FileEditorPolicy.PLACE_BEFORE_DEFAULT_EDITOR;
     }
 
-    @Override
-    public @NotNull FileEditorState readState(@NotNull Element sourceElement, @NotNull Project project, @NotNull VirtualFile file) {
-        return FileEditorProvider.super.readState(sourceElement, project, file);
-    }
-
-    @Override
-    public void writeState(@NotNull FileEditorState state, @NotNull Project project, @NotNull Element targetElement) {
-        FileEditorProvider.super.writeState(state, project, targetElement);
-    }
-
-    @Override
-    public void disposeEditor(@NotNull FileEditor editor) {
-        FileEditorProvider.super.disposeEditor(editor);
-    }
 }

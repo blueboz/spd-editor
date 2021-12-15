@@ -29,7 +29,7 @@
         <internalFileTemplate name="Spd Process"/>
         <!-- Add your extensions here -->
         <fileEditorProvider implementation="cn.boz.jb.plugin.idea.fileeditor.MyFileEditorProvider"
-                            id="myFileEditorProvider" order="last">
+                            id="myFileEditorProvider" order="last" >
         </fileEditorProvider>
         <toolWindow factoryClass="cn.boz.jb.plugin.idea.toolwindow.MyToolWindowFactory" id="EcasMenu" anchor="right"
                     order="last" ></toolWindow>
@@ -39,6 +39,8 @@
         <applicationService serviceImplementation="cn.boz.jb.plugin.idea.configurable.SpdEditorState"/>
         <applicationConfigurable parentId="tools"  instance="cn.boz.jb.plugin.idea.configurable.SpdEditorSettings"
                                  id="spdEditorConfigurable" displayName="Spd Editor"/>
+        <notificationGroup id="Spd Editor" displayType="BALLOON"/>
+
     </extensions>
 
     <actions>

@@ -60,13 +60,11 @@ public class MyFileEditor implements FileEditor {
 
     @Override
     public @NotNull JComponent getComponent() {
-        System.out.println("get componentb");
         return spdEditor;
     }
 
     @Override
     public @Nullable JComponent getPreferredFocusedComponent() {
-        System.out.println("get prefered focusedComponent");
 
         return spdEditor.getChartPanel();
     }
@@ -88,7 +86,9 @@ public class MyFileEditor implements FileEditor {
 
     @Override
     public boolean isModified() {
-        return spdEditor.isModified();
+        System.out.println("is modify");
+        boolean modified = spdEditor.isModified();
+        return modified;
     }
 
     @Override
@@ -110,6 +110,7 @@ public class MyFileEditor implements FileEditor {
 
     @Override
     public @Nullable FileEditorLocation getCurrentLocation() {
+
         return null;
     }
 

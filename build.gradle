@@ -81,6 +81,8 @@ patchPluginXml {
     <b>1.0.20</b><br>
     <ul>
         <li>fixed auto save problem's</li>
+        <li>ecas menu incubation</li>
+        <li>fixed some bug's</li>
     </ul>
 
     <b>1.0.19</b><br>
