@@ -16,7 +16,7 @@ plugins {
 }
 
 group 'cn.boz'
-version '1.0.19'
+version '1.0.20'
 
 
 sourceCompatibility = 1.11

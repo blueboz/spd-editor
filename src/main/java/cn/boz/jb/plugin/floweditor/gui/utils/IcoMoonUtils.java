@@ -208,8 +208,19 @@ public class IcoMoonUtils {
         return "\ue91c";
     }
 
-    public static String getUpload() {
-        return "\ue91d";
+    public static String getSave() {
+        return "\ue91e";
     }
 
+    /**
+     * 自动化保存
+     * @return
+     */
+    public static String getAutomation() {
+        return "\ue91f";
+    }
+
+    public static String getManual() {
+        return "\ue924";
+    }
 }

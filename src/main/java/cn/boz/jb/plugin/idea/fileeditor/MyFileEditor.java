@@ -103,7 +103,6 @@ public class MyFileEditor implements FileEditor {
 
     @Override
     public void removePropertyChangeListener(@NotNull PropertyChangeListener propertyChangeListener) {
-        System.out.println(propertyChangeListener);
     }
 
     @Override

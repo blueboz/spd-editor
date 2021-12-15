@@ -45,6 +45,8 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.ClipboardOwner;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseWheelEvent;
@@ -55,7 +57,8 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-public class SpdEditor extends JComponent implements MouseListener, ClipboardOwner {
+public class SpdEditor extends JComponent implements MouseListener, ClipboardOwner, FocusListener {
+
 
     ChartPanel chartPanel;
     JBSplitter jbSplitter;
@@ -134,8 +137,11 @@ public class SpdEditor extends JComponent implements MouseListener, ClipboardOwn
 //        spdToolbar.setTargetComponent(menuContainer);
 //        menuContainer.add(spdToolbar.getComponent());
 //        add(menuContainer,BorderLayout.NORTH);
+        this.addFocusListener(this);
 
     }
+
+    Button automation=null;
 
     private void processMenu(JPanel menuPanel) {
         Button flowbtn = new Button(IcoMoonUtils.getSequenceFlow(), true, "flowbtn", "oper");
@@ -244,6 +250,24 @@ public class SpdEditor extends JComponent implements MouseListener, ClipboardOwn
         sql.setToolTipText("Sql");
         menuPanel.add(sql);
 
+        if(SpdEditorState.getInstance().autoSave){
+            automation = new Button(IcoMoonUtils.getAutomation(), false, "automation", true);
+            automation.addMouseListener(this);
+            automation.setToolTipText("Disable AutoSave");
+        }else{
+            automation = new Button(IcoMoonUtils.getManual(), false, "automation", false);
+            automation.addMouseListener(this);
+            automation.setToolTipText("Enable AutoSave");
+        }
+        menuPanel.add(automation);
+
+        Button save = new Button(IcoMoonUtils.getSave(), false, "save", false);
+        save.addMouseListener(this);
+        save.setToolTipText("保存");
+        menuPanel.add(save);
+
+
+
         FlowLayout flowLayout = new FlowLayout(FlowLayout.LEFT, 0, 0);
         menuPanel.setLayout(flowLayout);
 
@@ -343,6 +367,23 @@ public class SpdEditor extends JComponent implements MouseListener, ClipboardOwn
             case "photo":
                 chartPanel.export();
                 break;
+            case "save":
+                chartPanel.fireSavedListener();
+                break;
+            case "automation":
+                String automation = myButton.getTitle();
+                if (automation.equals(IcoMoonUtils.getAutomation())) {
+                    myButton.setTitle(IcoMoonUtils.getManual());
+                    SpdEditorState.getInstance().autoSave=false;
+                    myButton.setToolTipText("Enable AutoSave");
+                    repaint();
+                } else if (automation.equals(IcoMoonUtils.getManual())) {
+                    SpdEditorState.getInstance().autoSave=true;
+                    myButton.setTitle(IcoMoonUtils.getAutomation());
+                    myButton.setToolTipText("Disable AutoSave");
+                    repaint();
+                }
+                break;
             case "label":
                 String ttl = myButton.getTitle();
                 if (ttl.equals(IcoMoonUtils.getHText())) {
@@ -421,6 +462,23 @@ public class SpdEditor extends JComponent implements MouseListener, ClipboardOwn
 
     @Override
     public void lostOwnership(Clipboard clipboard, Transferable contents) {
+
+    }
+
+    @Override
+    public void focusGained(FocusEvent e) {
+        if(SpdEditorState.getInstance().autoSave){
+            automation.setTitle(IcoMoonUtils.getAutomation());
+            automation.setToolTipText("Disable AutoSave");
+        } else if (automation.equals(IcoMoonUtils.getManual())) {
+            automation.setTitle(IcoMoonUtils.getManual());
+            automation.setToolTipText("Enable AutoSave");
+        }
+
+    }
+
+    @Override
+    public void focusLost(FocusEvent e) {
 
     }
 }
