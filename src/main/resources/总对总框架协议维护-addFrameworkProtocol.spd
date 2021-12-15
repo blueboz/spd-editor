@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions>
+    <process id="addFrameworkProtocol" name="addFrameworkProtocol">
+        <endEvent id="endevent1" name="End"/>
+        <endEvent id="endevent2" name="End"/>
+        <exclusiveGateway id="exclusivegateway1" name="For Gateway"/>
+        <exclusiveGateway id="exclusivegateway2" name="For Gateway"/>
+        <exclusiveGateway id="exclusivegateway3" name="For Gateway"/>
+        <serviceTask id="servicetask1" name="交易落地" expression="frameworkProtoService.addOrModifyFrameworkProto(CONTEXT);" listener=""/>
+        <startEvent id="startevent1" name="Start"/>
+        <userTask id="userTask1" name="总行审核" expression="{&amp;quot;open&amp;quot; : &amp;quot;../intbank/FrameworkProtoMasterFlow.html&amp;quot;,#LEY#&amp;quot;oktoafterinput&amp;quot; : &amp;quot;frameworkProtocalControlMaster.do?doneType=ok&amp;quot;,#LEY#&amp;quot;refusetoinput&amp;quot; : &amp;quot;frameworkProtocalControlMaster.do?doneType=refuse&amp;quot;,#LEY#&amp;quot;title&amp;quot;:&amp;quot;总行审核&amp;quot;,#LEY#&amp;quot;width&amp;quot;:600,#LEY#&amp;quot;height&amp;quot;:600#LEY#}" bussinesDescrition="${description}" rights="checkFwProtoMstRight" validSecond="-1" openSecond="-1" eventListener="" bussinesId="${businessNo}" bussinesKey="frameworkProto"/>
+        <userTask id="userTask2" name="分行经办修改" expression="{&amp;quot;open&amp;quot; : &amp;quot;../intbank/FrameworkProtoBranchFlow.html&amp;quot;,#LEY#&amp;quot;oktomastercheck&amp;quot; : &amp;quot;frameworkProtocalControlBranch.do?doneType=ok&amp;quot;,#LEY#&amp;quot;discard&amp;quot; : &amp;quot;frameworkProtocalControlBranch.do?doneType=refuse&amp;quot;,#LEY#&amp;quot;title&amp;quot;:&amp;quot;经办修改&amp;quot;,#LEY#&amp;quot;width&amp;quot;:600,#LEY#&amp;quot;height&amp;quot;:600#LEY#}" bussinesDescrition="${description}" rights="checkFwProtoReRight" validSecond="-1" openSecond="-1" eventListener="" bussinesId="${businessNo}" bussinesKey="frameworkProto"/>
+        <userTask id="userTask3" name="事后经办" expression="{&amp;quot;open&amp;quot; : &amp;quot;../intbank/FrameworkProtoBranchFlow.html?modify=false&amp;domReadonly=true&amp;quot;,#LEY#&amp;quot;oktoover&amp;quot; : &amp;quot;frameworkProtocalControlBranch.do?doneType=ok&amp;quot;,#LEY#&amp;quot;discardtoover&amp;quot; : &amp;quot;frameworkProtocalControlBranch.do?doneType=refuse&amp;quot;,#LEY#&amp;quot;title&amp;quot;:&amp;quot;事后经办&amp;quot;,#LEY#&amp;quot;width&amp;quot;:600,#LEY#&amp;quot;height&amp;quot;:600#LEY#}" bussinesDescrition="${description}" rights="checkFwProtoReRight" validSecond="-1" openSecond="-1" eventListener="" bussinesId="${businessNo}" bussinesKey="frameworkProto"/>
+        <sequenceFlow id="flow1" name="to User Task" sourceRef="startevent1" targetRef="userTask1" conditionExpression=""/>
+        <sequenceFlow id="flow2" name="to For Gateway" sourceRef="userTask1" targetRef="exclusivegateway1" conditionExpression=""/>
+        <sequenceFlow id="flow3" name="to 分行经办修改" sourceRef="exclusivegateway1" targetRef="userTask2" conditionExpression="doneType=='refuse'"/>
+        <sequenceFlow id="flow6" name="to User Task" sourceRef="exclusivegateway1" targetRef="userTask3" conditionExpression="doneType=='ok'"/>
+        <sequenceFlow id="flow7" name="to For Gateway" sourceRef="userTask3" targetRef="exclusivegateway2" conditionExpression=""/>
+        <sequenceFlow id="flow8" name="to End" sourceRef="exclusivegateway2" targetRef="endevent1" conditionExpression="doneType=='refuse'"/>
+        <sequenceFlow id="flow9" name="to Service Task" sourceRef="exclusivegateway2" targetRef="servicetask1" conditionExpression="doneType=='ok'"/>
+        <sequenceFlow id="flow10" name="to End" sourceRef="servicetask1" targetRef="endevent1" conditionExpression=""/>
+        <sequenceFlow id="flow11" name="to For Gateway" sourceRef="userTask2" targetRef="exclusivegateway3" conditionExpression=""/>
+        <sequenceFlow id="flow12" name="to 总行审核" sourceRef="exclusivegateway3" targetRef="userTask1" conditionExpression="doneType=='ok'"/>
+        <sequenceFlow id="flow13" name="to End" sourceRef="exclusivegateway3" targetRef="endevent2" conditionExpression="doneType=='refuse'"/>
+    </process>
+    <Diagram id="Diagram_addFrameworkProtocol">
+        <Shape Element="endevent1" id="Shape_endevent1">
+            <Bounds x="159" y="801" width="35" height="35"/>
+        </Shape>
+        <Shape Element="endevent2" id="Shape_endevent2">
+            <Bounds x="429" y="48" width="35" height="35"/>
+        </Shape>
+        <Shape Element="exclusivegateway1" id="Shape_exclusivegateway1">
+            <Bounds x="156" y="366" width="40" height="40"/>
+        </Shape>
+        <Shape Element="exclusivegateway2" id="Shape_exclusivegateway2">
+            <Bounds x="156" y="670" width="40" height="40"/>
+        </Shape>
+        <Shape Element="exclusivegateway3" id="Shape_exclusivegateway3">
+            <Bounds x="426" y="185" width="40" height="40"/>
+        </Shape>
+        <Shape Element="servicetask1" id="Shape_servicetask1">
+            <Bounds x="394" y="663" width="105" height="55"/>
+        </Shape>
+        <Shape Element="startevent1" id="Shape_startevent1">
+            <Bounds x="158" y="48" width="35" height="35"/>
+        </Shape>
+        <Shape Element="userTask1" id="Shape_userTask1">
+            <Bounds x="123" y="178" width="105" height="55"/>
+        </Shape>
+        <Shape Element="userTask2" id="Shape_userTask2">
+            <Bounds x="394" y="359" width="105" height="55"/>
+        </Shape>
+        <Shape Element="userTask3" id="Shape_userTask3">
+            <Bounds x="124" y="537" width="105" height="55"/>
+        </Shape>
+        <Edge Element="flow1" id="Shape_flow1">
+            <Waypoint x="176" y="83"/>
+            <Waypoint x="176" y="178"/>
+        </Edge>
+        <Edge Element="flow2" id="Shape_flow2">
+            <Waypoint x="176" y="233"/>
+            <Waypoint x="176" y="367"/>
+        </Edge>
+        <Edge Element="flow3" id="Shape_flow3">
+            <Waypoint x="196" y="387"/>
+            <Waypoint x="394" y="387"/>
+            <Label>
+                <Bounds height="19" width="102" x="10" y="0"/>
+            </Label>
+        </Edge>
+        <Edge Element="flow6" id="Shape_flow6">
+            <Waypoint x="177" y="406"/>
+            <Waypoint x="177" y="537"/>
+            <Label>
+                <Bounds height="19" width="81" x="10" y="0"/>
+            </Label>
+        </Edge>
+        <Edge Element="flow7" id="Shape_flow7">
+            <Waypoint x="177" y="592"/>
+            <Waypoint x="177" y="671"/>
+        </Edge>
+        <Edge Element="flow8" id="Shape_flow8">
+            <Waypoint x="177" y="710"/>
+            <Waypoint x="177" y="802"/>
+            <Label>
+                <Bounds height="19" width="44" x="10" y="0"/>
+            </Label>
+        </Edge>
+        <Edge Element="flow9" id="Shape_flow9">
+            <Waypoint x="196" y="691"/>
+            <Waypoint x="394" y="691"/>
+            <Label>
+                <Bounds height="19" width="99" x="-20" y="9"/>
+            </Label>
+        </Edge>
+        <Edge Element="flow10" id="Shape_flow10">
+            <Waypoint x="447" y="718"/>
+            <Waypoint x="447" y="819"/>
+            <Waypoint x="194" y="819"/>
+        </Edge>
+        <Edge Element="flow11" id="Shape_flow11">
+            <Waypoint x="447" y="359"/>
+            <Waypoint x="447" y="225"/>
+        </Edge>
+        <Edge Element="flow12" id="Shape_flow12">
+            <Waypoint x="427" y="206"/>
+            <Waypoint x="228" y="206"/>
+            <Label>
+                <Bounds height="19" width="74" x="10" y="0"/>
+            </Label>
+        </Edge>
+        <Edge Element="flow13" id="Shape_flow13">
+            <Waypoint x="447" y="186"/>
+            <Waypoint x="447" y="83"/>
+            <Label>
+                <Bounds height="19" width="44" x="10" y="0"/>
+            </Label>
+        </Edge>
+    </Diagram>
+</definitions>
