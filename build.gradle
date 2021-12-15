@@ -78,6 +78,10 @@ patchPluginXml {
     """
 
     changeNotes = """
+    <b>1.0.20</b><br>
+    <ul>
+        <li>fixed auto save problem's</li>
+    </ul>
 
     <b>1.0.19</b><br>
     <ul>

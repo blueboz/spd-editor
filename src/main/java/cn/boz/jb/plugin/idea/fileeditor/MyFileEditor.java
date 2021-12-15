@@ -60,11 +60,14 @@ public class MyFileEditor implements FileEditor {
 
     @Override
     public @NotNull JComponent getComponent() {
+        System.out.println("get componentb");
         return spdEditor;
     }
 
     @Override
     public @Nullable JComponent getPreferredFocusedComponent() {
+        System.out.println("get prefered focusedComponent");
+
         return spdEditor.getChartPanel();
     }
 

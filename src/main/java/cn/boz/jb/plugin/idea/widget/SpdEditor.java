@@ -90,7 +90,6 @@ public class SpdEditor extends JComponent implements MouseListener, ClipboardOwn
         jbMenuScroll = new JBScrollPane();
         jbMenuScroll.setVerticalScrollBarPolicy(JBScrollPane.VERTICAL_SCROLLBAR_NEVER);
         JBScrollBar jbScrollBar = new JBScrollBar();
-//        jbScrollBar.setPreferredSize(new Dimension(0,4));
 
         jbMenuScroll.setHorizontalScrollBar(jbScrollBar);
         jbMenuScroll.addMouseWheelListener(new MouseWheelListener() {

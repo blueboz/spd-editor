@@ -49,15 +49,6 @@ public class SpdEditorSettingsComp {
         jdbcUrlText = new JBTextField();
         jdbcUsername = new JBTextField();
 
-//        FileChooserDescriptor chooserDescriptor = FileChooserDescriptorFactory.createSingleFileDescriptor().withFileFilter(file -> {
-//            FileType fileType = file.getFileType();
-//            if (fileType instanceof ArchiveFileType) {
-//                return true;
-//            }
-//            return false;
-//        });
-
-
         //包装器
         jdbcDriverListModel = new DefaultListModel();
         jdbcDriverList = new JBList<>(jdbcDriverListModel);
