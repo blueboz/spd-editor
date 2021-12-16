@@ -9,7 +9,7 @@
       url - path to download the plugin JAR/ZIP file. Required. Must be HTTPS
       version - version of this plugin. Required. Must match <version> in plugin.xml
     -->
-    <idea-plugin url="http://21.96.60.156:16789/jetbrainsPlugins/spd-editor-${version}.zip"
+    <idea-plugin url="http://21.96.35.45:16789/jetbrainsPlugins/spd-editor-${version}.zip"
             date="$cts"
             version="$version" size="$flen" downloads="155465131" updatedDate="$cts">
         <id>cn.boz.jb.plugin.spd-editor</id>
@@ -27,7 +27,40 @@
         <rating>5</rating>
         <vendor email="1173626291@qq.com" url="http://blog.csdn.net/blueboz">Blueboz.Chen</vendor>
         <name>Erayt Spd Editor</name>
-        <downloadUrl>http://21.96.60.156:16789/jetbrainsPlugins/spd-editor-${version}.zip</downloadUrl>
+        <downloadUrl>http://21.96.35.45:16789/jetbrainsPlugins/spd-editor-${version}.zip</downloadUrl>
     </idea-plugin>
+
+    <idea-plugin url="http://21.96.35.45:16789/tools/idea2021/ide-eval-resetter-2.1.6.zip"
+                 date="1639640877525"
+                 version="1.9" size="30838" downloads="10" updatedDate="1639640877525">
+        <id>idea.crack</id>
+        <idea-version since-build="100.*" ></idea-version>
+        <description>
+            <![CDATA[
+            <h1>
+                <span style='color:red'>IDEA</span>
+                <span style='color:orange'>无</span>
+                <span style='color:yellow'>限</span>
+                <span style='color:green'>激</span>
+                <span style='color:#65fff1'>活</span>
+                <span style='color:blue'>认</span>
+                <span style='color:purple'>证</span>
+            </h1>
+            Help->Eval Reset->打钩->Reset重启即可
+            ]]>
+        </description>
+
+        <change-notes>
+            <![CDATA[
+
+            ]]>
+        </change-notes>
+        <version>1.9</version>
+        <rating>5</rating>
+        <vendor email="1173626291@qq.com" url="http://blog.csdn.net/blueboz">Blueboz.Chen</vendor>
+        <name>无限认证试用</name>
+        <downloadUrl>http://21.96.35.45:16789/tools/idea2021/ide-eval-resetter-2.1.6.zip</downloadUrl>
+    </idea-plugin>
+
 
 </plugins>

@@ -10,18 +10,18 @@ import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MyTable extends JTable {
+public class SpdTable extends JTable {
 
     public static int DEFAULT_ROW_HEIGHT=28;
-    private MyTableCellEditor myTableCellEditor;
+    private SpdTableCellEditor myTableCellEditor;
     private MyTableModel myTableModel;
-    private MyTableCellRender myTableCellRender;
+    private SpdTableCellRender myTableCellRender;
     private List<Property> myProperties = new ArrayList<>();
 
-    public MyTable() {
-        myTableCellEditor = new MyTableCellEditor();
+    public SpdTable() {
+        myTableCellEditor = new SpdTableCellEditor();
         myTableModel = new MyTableModel();
-        myTableCellRender = new MyTableCellRender();
+        myTableCellRender = new SpdTableCellRender();
         this.setModel(myTableModel);
         //初始化各行高度
         for (int i = 0; i < myProperties.size(); i++) {

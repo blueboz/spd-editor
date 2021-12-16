@@ -8,7 +8,7 @@ import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
 import java.awt.Component;
 
-public class MyTableCellRender implements TableCellRenderer {
+public class SpdTableCellRender implements TableCellRenderer {
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
         Property property= (Property) value;

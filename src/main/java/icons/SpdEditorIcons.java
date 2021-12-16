@@ -16,6 +16,7 @@ public class SpdEditorIcons {
     public static Icon REF_16_ICON = icon("/icons/ref.svg");
     public static Icon ACTION_16_ICON = icon("/icons/action16.svg");
     public static Icon ACTION_32_ICON = icon("/icons/action32.svg");
+    public static Icon MENU_16_ICON = icon("/icons/menu.svg");
 
 
     static Icon icon(String path) {

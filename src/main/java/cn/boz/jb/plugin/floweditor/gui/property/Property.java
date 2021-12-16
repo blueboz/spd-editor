@@ -1,7 +1,6 @@
 package cn.boz.jb.plugin.floweditor.gui.property;
 
-import cn.boz.jb.plugin.floweditor.gui.utils.TranslateUtils;
-import cn.boz.jb.plugin.floweditor.gui.widget.MyTable;
+import cn.boz.jb.plugin.floweditor.gui.widget.SpdTable;
 
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -24,7 +23,7 @@ public abstract class Property {
 
     public Integer getRowHeight() {
         if (rowHeight == null) {
-            return MyTable.DEFAULT_ROW_HEIGHT;
+            return SpdTable.DEFAULT_ROW_HEIGHT;
         }
         return rowHeight;
     }

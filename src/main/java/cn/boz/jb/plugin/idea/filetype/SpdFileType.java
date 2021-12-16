@@ -1,6 +1,8 @@
 package cn.boz.jb.plugin.idea.filetype;
 
-import com.intellij.openapi.fileTypes.FileType;
+import com.intellij.ide.highlighter.XmlLikeFileType;
+import com.intellij.lang.Language;
+import com.intellij.lang.xml.XMLLanguage;
 import com.intellij.openapi.vfs.VirtualFile;
 import icons.SpdEditorIcons;
 import org.jetbrains.annotations.NonNls;
@@ -9,21 +11,32 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.Icon;
 
-public class SpdFileType implements FileType {
+public class SpdFileType extends XmlLikeFileType {
 
-    public static final SpdFileType INSTANCE=new SpdFileType();
+
+    public static final SpdFileType INSTANCE = new SpdFileType();
+
+    private SpdFileType() {
+        super(XMLLanguage.INSTANCE);
+    }
+
+    protected SpdFileType(Language language) {
+        super(language);
+    }
+
+
     @Override
     public @NonNls @NotNull String getName() {
         return "Spd";
     }
 
     @Override
-    public  @NotNull String getDescription() {
-        return "Erayt Flow";
+    public @NotNull String getDescription() {
+        return "Erayt Flow File";
     }
 
     @Override
-    public  @NotNull String getDefaultExtension() {
+    public @NotNull String getDefaultExtension() {
         return "spd";
     }
 
@@ -34,17 +47,8 @@ public class SpdFileType implements FileType {
     }
 
     @Override
-    public boolean isBinary() {
-        return false;
-    }
-
-    @Override
     public boolean isReadOnly() {
         return false;
     }
 
-    @Override
-    public @Nullable String getCharset(@NotNull VirtualFile virtualFile, byte @NotNull [] bytes) {
-        return null;
-    }
 }

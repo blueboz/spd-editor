@@ -64,6 +64,7 @@ import java.awt.font.GlyphVector;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -872,7 +873,44 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
 
     }
 
+    /**
+     * 导出到文件
+     * @param selectedFile 被选中的文件
+     * @throws IOException
+     */
+    public void exportToFile(File selectedFile) throws IOException {
+        if (!selectedFile.exists()) {
+            selectedFile.createNewFile();
+        } else {
+            int opt = JOptionPane.showConfirmDialog(this,
+                    "文件已经存在，确认要覆盖?", "确认信息",
+                    JOptionPane.YES_NO_OPTION);
+            if (opt == JOptionPane.NO_OPTION) {
+                return;
+            }
+        }
 
+        double ww = boardSize.getW();
+        double hh = boardSize.getH();
+        ExportImageDialog exportImageDialog = new ExportImageDialog(1.0, ww, hh);
+        exportImageDialog.setVisible(true);
+        double initScale = exportImageDialog.getInitScale();
+        BufferedImage bufferedImage = new BufferedImage((int) Math.ceil(ww * initScale), (int) Math.ceil(hh * initScale), BufferedImage.TYPE_INT_RGB);
+        Graphics2D graphics = bufferedImage.createGraphics();
+        double x = originalPoint.x;
+        double y = originalPoint.y;
+        originalPoint.x = 0;
+        originalPoint.y = 0;
+        double scale = this.scale;
+        this.scale = initScale;
+        paintForExport(graphics);
+        this.scale = scale;
+        originalPoint.x = x;
+        originalPoint.y = y;
+
+        //确认继续操作
+        ImageIO.write(bufferedImage, "jpg", selectedFile);
+    }
     /**
      * 导出为图片
      */
@@ -888,41 +926,8 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
             if (selectedFile == null) {
                 return;
             }
-            if (!selectedFile.exists()) {
-                selectedFile.createNewFile();
-            } else {
-                int opt = JOptionPane.showConfirmDialog(this,
-                        "文件已经存在，确认要覆盖?", "确认信息",
-                        JOptionPane.YES_NO_OPTION);
-                if (opt == JOptionPane.NO_OPTION) {
-                    return;
-                }
-            }
 
-
-//
-
-            double ww = boardSize.getW();
-            double hh = boardSize.getH();
-            ExportImageDialog exportImageDialog = new ExportImageDialog(1.0, ww, hh);
-            exportImageDialog.setVisible(true);
-            double initScale = exportImageDialog.getInitScale();
-            BufferedImage bufferedImage = new BufferedImage((int) Math.ceil(ww * initScale), (int) Math.ceil(hh * initScale), BufferedImage.TYPE_INT_RGB);
-            Graphics2D graphics = bufferedImage.createGraphics();
-            double x = originalPoint.x;
-            double y = originalPoint.y;
-            originalPoint.x = 0;
-            originalPoint.y = 0;
-            double scale = this.scale;
-            this.scale = initScale;
-            paintForExport(graphics);
-            this.scale = scale;
-            originalPoint.x = x;
-            originalPoint.y = y;
-
-            //确认继续操作
-            ImageIO.write(bufferedImage, "jpg", selectedFile);
-
+            exportToFile(selectedFile);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -1926,30 +1931,33 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
 
     /**
      * 获取历史记录条目的数量
+     *
      * @return
      */
-    public int getHistorySize(){
+    public int getHistorySize() {
         return stateHistory.size();
     }
 
     /**
      * 获取最后一个元素的hash
+     *
      * @return
      */
-    public int getTopHistoryHash(){
-        if(stateHistory.size()==0){
+    public int getTopHistoryHash() {
+        if (stateHistory.size() == 0) {
             return 0;
         }
         return stateHistory.getFirst().hashCode();
     }
-    public int getCurrentHistoryHash(){
+
+    public int getCurrentHistoryHash() {
         return currentHistoryHash;
     }
 
     /**
      * 触发图形改变监听器
      */
-    private void triggerChartChangeListener(){
+    private void triggerChartChangeListener() {
         chartChangeListenerList.forEach(l -> l.doChartChange(this));
     }
 
@@ -2944,7 +2952,7 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
         repaint();
     }
 
-    private int currentHistoryHash=0;
+    private int currentHistoryHash = 0;
 
 
     /**
@@ -2987,17 +2995,15 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
         TemplateLoaderImpl.getInstance().saveToFile(processDefinition, selectedFile.getAbsolutePath());
     }
 
-
     /**
-     * FIXME
-     * 加载的部分逻辑可能需要修改
-     * 1.不是从file进行读取而是从VirtualFile读取
-     * 2.VirtualFile变动的时候，需要跟着变动，例如，外部修改的时候，需要及时从外部文件进行同步
+     * 从字符串中进行加载
+     *
+     * @param inputStream
      */
-    public void loadFromFile(File file) {
+    public void loadFromInputStream(InputStream inputStream) {
         try {
 
-            ProcessDefinition processDefinition = TemplateLoaderImpl.getInstance().loadFromFile(file.toURI().toString());
+            ProcessDefinition processDefinition = TemplateLoaderImpl.getInstance().loadFromInputStream(inputStream);
             if (processDefinition == null) {
                 JOptionPane.showMessageDialog(this, "所选文件格式有误");
                 return;
@@ -3020,7 +3026,18 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "解析时候发生异常:" + e.getMessage());
         }
+    }
 
+
+    /**
+     * FIXME
+     * 加载的部分逻辑可能需要修改
+     * 1.不是从file进行读取而是从VirtualFile读取
+     * 2.VirtualFile变动的时候，需要跟着变动，例如，外部修改的时候，需要及时从外部文件进行同步
+     */
+    public void loadFromFile(File file) {
+
+        loadFromFile(file);
     }
 
     /**
@@ -3266,4 +3283,6 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
     public void addChangeListener(ChartChangeListener changeListener) {
         chartChangeListenerList.add(changeListener);
     }
+
+
 }

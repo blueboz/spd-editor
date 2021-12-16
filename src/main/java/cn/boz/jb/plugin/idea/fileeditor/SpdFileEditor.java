@@ -1,7 +1,6 @@
 package cn.boz.jb.plugin.idea.fileeditor;
 
 import cn.boz.jb.plugin.idea.widget.SpdEditor;
-import com.intellij.openapi.application.Application;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.fileEditor.FileEditor;
 import com.intellij.openapi.fileEditor.FileEditorLocation;
@@ -20,7 +19,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MyFileEditor implements FileEditor {
+public class SpdFileEditor implements FileEditor {
 
     private VirtualFile virtualFile;
     private Project project;
@@ -37,11 +36,12 @@ public class MyFileEditor implements FileEditor {
         this.spdEditor = spdEditor;
     }
 
-    public MyFileEditor(Project project, VirtualFile virtualFile) {
+    public SpdFileEditor(Project project, VirtualFile virtualFile) {
         this.virtualFile = virtualFile;
         this.project = project;
-        spdEditor = new SpdEditor();
-        spdEditor.loadFromFile(new File(virtualFile.getPath()));
+        spdEditor = new SpdEditor(virtualFile);
+//        spdEditor.loadFromFile(new File(virtualFile.getPath()));
+        spdEditor.load();
         spdEditor.getChartPanel().registerProcessSaveListener((bs) -> {
             WriteCommandAction.runWriteCommandAction(project, () -> {
                 virtualFile.refresh(true, true, new Runnable() {
@@ -71,7 +71,7 @@ public class MyFileEditor implements FileEditor {
 
     @Override
     public @Nls(capitalization = Nls.Capitalization.Title) @NotNull String getName() {
-        return "钿哥的流程编辑器";
+        return "Spd Editor";
     }
 
     @Override
@@ -86,9 +86,7 @@ public class MyFileEditor implements FileEditor {
 
     @Override
     public boolean isModified() {
-        System.out.println("is modify");
-        boolean modified = spdEditor.isModified();
-        return modified;
+        return spdEditor.isModified();
     }
 
     @Override

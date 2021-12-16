@@ -24,6 +24,7 @@ import com.intellij.notification.NotificationGroupManager;
 import com.intellij.notification.NotificationType;
 import com.intellij.openapi.options.ShowSettingsUtil;
 import com.intellij.openapi.ui.Messages;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.ui.JBSplitter;
 import com.intellij.ui.components.JBScrollBar;
 import com.intellij.ui.components.JBScrollPane;
@@ -34,6 +35,7 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
+import javax.swing.JSeparator;
 import javax.swing.Timer;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -48,7 +50,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
-import java.io.File;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -56,16 +58,17 @@ import java.util.stream.Collectors;
 
 public class SpdEditor extends JComponent implements MouseListener, ClipboardOwner, FocusListener {
 
-
     ChartPanel chartPanel;
     JBSplitter jbSplitter;
     MyJBTable jbTable;
     private JBScrollPane jbPropertyScroll;
 
     private JBScrollPane jbMenuScroll;
+    private VirtualFile virtualFile;
     private JPanel menu;
 
-    public SpdEditor() {
+    public SpdEditor(VirtualFile virtualFile) {
+        this.virtualFile = virtualFile;
         this.setLayout(new BorderLayout());
         jbSplitter = new JBSplitter(false);
         jbSplitter.setShowDividerControls(true);
@@ -134,7 +137,13 @@ public class SpdEditor extends JComponent implements MouseListener, ClipboardOwn
 //        spdToolbar.setTargetComponent(menuContainer);
 //        menuContainer.add(spdToolbar.getComponent());
 //        add(menuContainer,BorderLayout.NORTH);
+//        ActionManager instance = ActionManager.getInstance();
+//        instance.createActionPopupMenu("SpdEditorMenu",)
+//        DumbAwareAction dumbAwareAction = new DumbAwareAction();
+//        AnAction anAction = new AnAction();
+
         chartPanel.addFocusListener(this);
+
 
     }
 
@@ -200,6 +209,9 @@ public class SpdEditor extends JComponent implements MouseListener, ClipboardOwn
         handbtn.setToolTipText("Scale");
         menuPanel.add(handbtn);
 
+        JSeparator jSeparator = new JSeparator();
+        jSeparator.setOrientation(JSeparator.HORIZONTAL);
+        menuPanel.add(jSeparator);
         Button crosshairs = new Button(IcoMoonUtils.getAlign(), false, "crosshairs");
         crosshairs.addMouseListener(this);
         crosshairs.setToolTipText("Reset");
@@ -249,7 +261,7 @@ public class SpdEditor extends JComponent implements MouseListener, ClipboardOwn
         menuPanel.add(sql);
 
         if (SpdEditorState.getInstance().autoSave) {
-            automation = new Button(IcoMoonUtils.getAutomation(), false, "automation", true);
+            automation = new Button(IcoMoonUtils.getAutomation(), false, "automation", false);
             automation.addMouseListener(this);
             automation.setToolTipText("Disable AutoSave");
         } else {
@@ -261,10 +273,15 @@ public class SpdEditor extends JComponent implements MouseListener, ClipboardOwn
 
         Button save = new Button(IcoMoonUtils.getSave(), false, "save", false);
         save.addMouseListener(this);
-        save.setToolTipText("保存");
+        save.setToolTipText("Save");
         menuPanel.add(save);
 
-        fileChangeHint = new JLabel("文件未更改");
+        Button reload = new Button(IcoMoonUtils.getReload(), false, "reload", false);
+        reload.addMouseListener(this);
+        reload.setToolTipText("Reload");
+        menuPanel.add(reload);
+
+        fileChangeHint = new JLabel("File Not Change");
         menuPanel.add(fileChangeHint);
 
 
@@ -275,19 +292,14 @@ public class SpdEditor extends JComponent implements MouseListener, ClipboardOwn
         chartPanel.addChangeListener((cp) -> {
             int currentHistoryHash = cp.getCurrentHistoryHash();
             int topHistoryHash = cp.getTopHistoryHash();
-//            System.out.println("top:"+topHistoryHash+" current:"+currentHistoryHash);
-            if(topHistoryHash==currentHistoryHash){
-                this.fileChangeHint.setText("文件未更改");
-            }else{
-                this.fileChangeHint.setText("文件已经更改");
+            if (topHistoryHash == currentHistoryHash) {
+                this.fileChangeHint.setText("File Not Change");
+            } else {
+                this.fileChangeHint.setText("File Changed!");
             }
         });
     }
 
-
-    public void loadFromFile(File file) {
-        chartPanel.loadFromFile(file);
-    }
 
     public boolean isModified() {
         return chartPanel.isModified();
@@ -369,13 +381,20 @@ public class SpdEditor extends JComponent implements MouseListener, ClipboardOwn
                 break;
             case "undo":
                 chartPanel.undo();
-
                 break;
             case "erase":
                 int result = Messages.showYesNoDialog("ERASE CAN NOT BE UNDO!", "WARNNING", Messages.getWarningIcon());
                 if (result == Messages.OK) {
                     chartPanel.clear();
                     repaint();
+                }
+                break;
+            case "reload":
+                try {
+                    chartPanel.loadFromInputStream(this.virtualFile.getInputStream());
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                    Messages.showErrorDialog("something wrong happen", ex.getMessage());
                 }
                 break;
             case "photo":
@@ -403,10 +422,6 @@ public class SpdEditor extends JComponent implements MouseListener, ClipboardOwn
                     NotificationGroupManager.getInstance()
                             .getNotificationGroup("Spd Editor")
                             .createNotification("enable auto save spd editor", NotificationType.INFORMATION).notify(null);
-
-//                    private static final NotificationGroup BP_NOTIFICATION_GROUP = NotificationGroupManager.getInstance().getNotificationGroup("Breakpoint hit");
-
-
                     repaint();
                 }
                 break;
@@ -510,5 +525,18 @@ public class SpdEditor extends JComponent implements MouseListener, ClipboardOwn
     @Override
     public void focusLost(FocusEvent e) {
 
+    }
+
+    /**
+     * 重新从文件中进行加载
+     */
+    public void load() {
+        byte[] bytes = new byte[0];
+        try {
+            this.chartPanel.loadFromInputStream(virtualFile.getInputStream());
+        } catch (IOException e) {
+            Messages.showErrorDialog("Something wrong happen", e.getMessage());
+            e.printStackTrace();
+        }
     }
 }

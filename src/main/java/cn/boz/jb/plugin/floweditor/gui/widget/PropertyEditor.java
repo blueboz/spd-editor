@@ -39,14 +39,14 @@ public class PropertyEditor extends JPanel implements ShapeSelectedListener, Pro
 
     private ChartPanel chartPanel;
 
-    private MyTable jTable;
+    private SpdTable jTable;
 
     private JScrollPane jScrollPane;
 
     public PropertyEditor(ChartPanel chartPanel) {
         this.chartPanel = chartPanel;
         chartPanel.registerShapeSelectedListener(this);
-        jTable = new MyTable();
+        jTable = new SpdTable();
 //        jScrollPane = new JBScrollPane(jTable);
         jScrollPane = new JScrollPane(jTable);
         this.setLayout(new BorderLayout());

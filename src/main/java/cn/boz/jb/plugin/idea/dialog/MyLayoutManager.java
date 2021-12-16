@@ -13,7 +13,7 @@ public class MyLayoutManager implements LayoutManager {
 
     @Override
     public void addLayoutComponent(String name, Component comp) {
-        System.out.println("setting bound");
+//        System.out.println("setting bound");
         comp.setBounds(0, 0, 40, 40);
     }
 
@@ -33,7 +33,7 @@ public class MyLayoutManager implements LayoutManager {
             allheight += preferredSize.getHeight();
         }
         allheight += thick * components.length;
-        System.out.println("mi" + allheight);
+//        System.out.println("mi" + allheight);
 
         return new Dimension(715, allheight);
     }
@@ -48,7 +48,7 @@ public class MyLayoutManager implements LayoutManager {
 
     @Override
     public void layoutContainer(Container parent) {
-        System.out.println("layout" + initialOffsetY);
+//        System.out.println("layout" + initialOffsetY);
         int width = parent.getWidth();
         int height = parent.getHeight();
         Component[] components = parent.getComponents();
@@ -75,7 +75,7 @@ public class MyLayoutManager implements LayoutManager {
             accy += preferredSize.height;
             accy += thick / 2;
         }
-        System.out.println(accy + "-->" + height);
+//        System.out.println(accy + "-->" + height);
         parent.setSize(width, accy);
 
     }

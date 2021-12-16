@@ -128,7 +128,7 @@ public class DBUtils {
 
     public List<Map<String, Object>> queryMenuOfAppMenu(Connection connection,BigDecimal parentId, BigDecimal applid) throws Exception {
         try (PreparedStatement preparedStatement = connection.prepareStatement("select * from ECAS_MENU where parent =? and applid=?")) {
-            System.out.println("parent:"+parentId+" appid:"+applid);
+//            System.out.println("parent:"+parentId+" appid:"+applid);
 
             preparedStatement.setBigDecimal(1, parentId);
             preparedStatement.setBigDecimal(2, applid);

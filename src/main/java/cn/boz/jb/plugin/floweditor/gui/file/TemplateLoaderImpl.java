@@ -32,8 +32,12 @@ import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -56,13 +60,12 @@ public class TemplateLoaderImpl implements TemplateLoader {
         return INSTANCE;
     }
 
-    @Override
-    public ProcessDefinition loadFromFile(String filename) throws DocumentException {
+    public ProcessDefinition loadFromInputStream(InputStream inputStream) throws DocumentException {
         try {
             ProcessDefinition processDefinition = new ProcessDefinition();
 
             SAXReader saxReader = new SAXReader();
-            Document doc = saxReader.read(filename);
+            Document doc = saxReader.read(inputStream);
             Element definitions = doc.getRootElement();
 
             Element diagram = definitions.element("Diagram");
@@ -204,8 +207,16 @@ public class TemplateLoaderImpl implements TemplateLoader {
         } catch (Exception e) {
             throw e;
         }
+    }
 
-
+    @Override
+    public ProcessDefinition loadFromFile(String filename) throws DocumentException {
+        try {
+            return loadFromInputStream(new FileInputStream(new File(filename)));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
     }
 
 

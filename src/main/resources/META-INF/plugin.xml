@@ -19,25 +19,25 @@
     <depends>com.intellij.modules.lang</depends>
     <depends>com.intellij.modules.platform</depends>
     <depends>JavaScript</depends>
-<!--    <depends>com.intellij.modules.java-capable</depends>-->
+    <!--    <depends>com.intellij.modules.java-capable</depends>-->
     <depends>com.intellij.java</depends>
-<!--    <depends>JavaScriptLanguage</depends>-->
-
+    <depends>com.intellij.database</depends>
+    <!--    <depends>JavaScriptLanguage</depends>-->
 
 
     <extensions defaultExtensionNs="com.intellij">
         <internalFileTemplate name="Spd Process"/>
         <!-- Add your extensions here -->
-        <fileEditorProvider implementation="cn.boz.jb.plugin.idea.fileeditor.MyFileEditorProvider"
-                            id="myFileEditorProvider" order="last" >
+        <fileEditorProvider implementation="cn.boz.jb.plugin.idea.fileeditor.SpdFileEditorProvider"
+                            id="myFileEditorProvider" order="last">
         </fileEditorProvider>
         <toolWindow factoryClass="cn.boz.jb.plugin.idea.toolwindow.MyToolWindowFactory" id="EcasMenu" anchor="right"
-                    order="last" ></toolWindow>
+                    order="last" icon="SpdEditorIcons.MENU_16_ICON"/>
         <fileType name="Spd" extensions="spd"
-                  implementationClass="cn.boz.jb.plugin.idea.filetype.SpdFileType"/>
+                  implementationClass="cn.boz.jb.plugin.idea.filetype.SpdFileType" language="XML"/>
         <themeMetadataProvider path="/META-INF/SpdEditor.themeMetadata.json"/>
         <applicationService serviceImplementation="cn.boz.jb.plugin.idea.configurable.SpdEditorState"/>
-        <applicationConfigurable parentId="tools"  instance="cn.boz.jb.plugin.idea.configurable.SpdEditorSettings"
+        <applicationConfigurable parentId="tools" instance="cn.boz.jb.plugin.idea.configurable.SpdEditorSettings"
                                  id="spdEditorConfigurable" displayName="Spd Editor"/>
         <notificationGroup id="Spd Editor" displayType="BALLOON"/>
 
@@ -46,10 +46,12 @@
     <actions>
         <!-- Add your actions here -->
         <group>
-            <action class="cn.boz.jb.plugin.addbom.RemoveBomAction" id="removeBomAction" description="Remove UTF-8 BOM" text="DelBom"
+            <action class="cn.boz.jb.plugin.addbom.RemoveBomAction" id="removeBomAction" description="Remove UTF-8 BOM"
+                    text="DelBom"
                     icon="SpdEditorIcons.BOM_16_ICON">
             </action>
-            <action class="cn.boz.jb.plugin.addbom.AddBomAction" id="addBomAction" description="Add UTF-8 BOM" text="AddBom"
+            <action class="cn.boz.jb.plugin.addbom.AddBomAction" id="addBomAction" description="Add UTF-8 BOM"
+                    text="AddBom"
                     icon="SpdEditorIcons.BOM_16_ICON">
             </action>
             <add-to-group group-id="ProjectViewPopupMenu" anchor="before"
@@ -60,21 +62,27 @@
                 icon="SpdEditorIcons.FLOW_16_ICON" description="Spd File">
             <add-to-group group-id="NewGroup" anchor="last"/>
         </action>
-<!--        <action id="EditorBasics.EditorIllustrationAction"-->
-<!--                class="org.intellij.sdk.editor.EditorIllustrationAction"-->
-<!--                text="Editor Replace Text"-->
-<!--                description="Replaces selected text with 'Replacement'."-->
-<!--                icon="SdkIcons.Sdk_default_icon">-->
-<!--            <add-to-group group-id="EditorPopupMenu" anchor="first"/>-->
-<!--        </action>-->
+        <!--        <action id="EditorBasics.EditorIllustrationAction"-->
+        <!--                class="org.intellij.sdk.editor.EditorIllustrationAction"-->
+        <!--                text="Editor Replace Text"-->
+        <!--                description="Replaces selected text with 'Replacement'."-->
+        <!--                icon="SdkIcons.Sdk_default_icon">-->
+        <!--            <add-to-group group-id="EditorPopupMenu" anchor="first"/>-->
+        <!--        </action>-->
         <group>
-            <action class="cn.boz.jb.plugin.idea.action.GoToRefFile" id="GoToRef" text="Go To Ref" icon="SpdEditorIcons.REF_16_ICON">
+            <action class="cn.boz.jb.plugin.idea.action.GoToRefFile" id="GoToRef" text="Go To Ref"
+                    icon="SpdEditorIcons.REF_16_ICON">
             </action>
             <add-to-group group-id="EditorPopupMenu" anchor="first"></add-to-group>
         </group>
-<!--        GoToJsFile-->
+        <!--        GoToJsFile-->
 
 
+        <group id="spdengineactiondlggroup">
+            <action class="cn.boz.jb.plugin.idea.dialog.GotoScriptAction" id="gotoscriptaction" text="gotoscript"
+                    icon="AllIcons.Actions.ShowCode">
+            </action>
+        </group>
     </actions>
 
 </idea-plugin>

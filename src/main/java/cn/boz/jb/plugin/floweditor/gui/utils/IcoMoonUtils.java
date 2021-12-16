@@ -223,4 +223,12 @@ public class IcoMoonUtils {
     public static String getManual() {
         return "\ue924";
     }
+
+    /**
+     * 从磁盘刷新
+     * @return
+     */
+    public static String getReload() {
+        return "\ue921";
+    }
 }

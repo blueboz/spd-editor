@@ -283,10 +283,8 @@ public class GoToRefFile extends AnAction {
                 } else {
                     List<String> ids_ = actions.stream().map(it -> (String) it.get("ID_")).collect(Collectors.toList());
                     ids.set(ids_);
-
                     //多选框
                 }
-
 
                 //进行连接
             } catch (MalformedURLException e) {
@@ -312,13 +310,21 @@ public class GoToRefFile extends AnAction {
 
         if (!engineActionRef.isNull()) {
             EngineActionDataContainer container = engineActionRef.get();
+
+//            SearchEverywhereManager seManager = SearchEverywhereManager.getInstance(project);
+//            ProjectManager projectManager = ProjectManager.getInstance();
+//            ActionManager instance1 = ActionManager.getInstance();
+//            ActionGroup emptyGroup = ActionGroup.EMPTY_GROUP;
+//            instance1.createActionToolbar("功能","",)
+
             var temporyDialog = new EngineActionDialog(container.getEngineAction(), container.getEngineActionInput(), container.getEngineActionOutput());
 
             var popup = JBPopupFactory.getInstance()
                     .createComponentPopupBuilder(temporyDialog, null)
-                    .setCancelOnClickOutside(true)
+//                    .setCancelOnClickOutside(true)
                     .setRequestFocus(true)
                     .setFocusable(true)
+                    .setCancelOnOtherWindowOpen(true)
                     .createPopup();
 
             popup.showInFocusCenter();

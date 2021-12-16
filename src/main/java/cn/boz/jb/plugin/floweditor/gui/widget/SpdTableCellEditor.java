@@ -10,7 +10,7 @@ import javax.swing.table.TableCellEditor;
 import java.awt.Component;
 import java.util.EventObject;
 
-public class MyTableCellEditor implements TableCellEditor {
+public class SpdTableCellEditor implements TableCellEditor {
     private EventListenerList listenerList = new EventListenerList();
 
     private JTable table;
