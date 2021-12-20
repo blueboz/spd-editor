@@ -12,15 +12,17 @@ import com.intellij.ui.components.JBLabel;
 import com.intellij.ui.components.JBList;
 import com.intellij.ui.components.JBPasswordField;
 import com.intellij.ui.components.JBTextField;
-import com.intellij.ui.tabs.JBTabs;
 import com.intellij.util.ui.FormBuilder;
 import com.intellij.util.ui.UIUtil;
 
-import javax.swing.*;
+import javax.swing.DefaultListModel;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class SpdEditorSettingsComp {
+public class SpdEditorDBSettingsComp {
 
     private JBTextField jdbcUrlText;
 
@@ -28,7 +30,6 @@ public class SpdEditorSettingsComp {
 
     private JBPasswordField jdbcPassword;
 
-//    private TextFieldWithBrowseButton jdbcDriver;
 
     private JButton testConnection;
 
@@ -43,8 +44,7 @@ public class SpdEditorSettingsComp {
 
 
     @SuppressWarnings("unchecked")
-    public SpdEditorSettingsComp() {
-        JBTabs tabs;
+    public SpdEditorDBSettingsComp() {
         jdbcPassword = new JBPasswordField();
         jdbcUrlText = new JBTextField();
         jdbcUsername = new JBTextField();
@@ -109,12 +109,14 @@ public class SpdEditorSettingsComp {
         return mainComponent;
     }
 
+
+
     public JComponent getPreferredFocusedComponent() {
         return jdbcUrlText;
     }
 
     public void apply() {
-        SpdEditorState spdEditorState = SpdEditorState.getInstance();
+        SpdEditorDBState spdEditorState = SpdEditorDBState.getInstance();
 
         spdEditorState.jdbcDriver = getJdbcDriver();
         spdEditorState.jdbcUrl = this.jdbcUrlText.getText();
@@ -144,7 +146,7 @@ public class SpdEditorSettingsComp {
     }
 
     public void reset() {
-        SpdEditorState spdEditorState = SpdEditorState.getInstance();
+        SpdEditorDBState spdEditorState = SpdEditorDBState.getInstance();
         setJdbcDriver(spdEditorState.jdbcDriver);
         this.jdbcUrlText.setText(spdEditorState.jdbcUrl);
         this.jdbcUsername.setText(spdEditorState.jdbcUserName);
@@ -158,7 +160,7 @@ public class SpdEditorSettingsComp {
      * @return
      */
     public boolean isModified() {
-        SpdEditorState spdEditorState = SpdEditorState.getInstance();
+        SpdEditorDBState spdEditorState = SpdEditorDBState.getInstance();
         if (!spdEditorState.jdbcDriver.equals(this.getJdbcDriver())) {
             return true;
         }

@@ -36,9 +36,12 @@
         <fileType name="Spd" extensions="spd"
                   implementationClass="cn.boz.jb.plugin.idea.filetype.SpdFileType" language="XML"/>
         <themeMetadataProvider path="/META-INF/SpdEditor.themeMetadata.json"/>
-        <applicationService serviceImplementation="cn.boz.jb.plugin.idea.configurable.SpdEditorState"/>
-        <applicationConfigurable parentId="tools" instance="cn.boz.jb.plugin.idea.configurable.SpdEditorSettings"
-                                 id="spdEditorConfigurable" displayName="Spd Editor"/>
+        <applicationService serviceImplementation="cn.boz.jb.plugin.idea.configurable.SpdEditorDBState"/>
+        <applicationService serviceImplementation="cn.boz.jb.plugin.idea.configurable.SpdEditorNormState"/>
+        <applicationConfigurable parentId="tools" instance="cn.boz.jb.plugin.idea.configurable.SpdEditorDBSettings"
+                                 id="spdEditorConfigurable" displayName="SpdEditor"/>
+        <applicationConfigurable parentId="spdEditorConfigurable" instance="cn.boz.jb.plugin.idea.configurable.SpdEditorNormSettings"
+                                 id="spdEditorConfigurableConfig" displayName="BasicConfig"/>
         <notificationGroup id="Spd Editor" displayType="BALLOON"/>
 
     </extensions>

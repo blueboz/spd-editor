@@ -1,6 +1,6 @@
 package cn.boz.jb.plugin.idea.action;
 
-import cn.boz.jb.plugin.idea.configurable.SpdEditorState;
+import cn.boz.jb.plugin.idea.configurable.SpdEditorDBState;
 import cn.boz.jb.plugin.idea.dialog.EngineActionDialog;
 import cn.boz.jb.plugin.idea.utils.DBUtils;
 import com.intellij.codeInsight.hint.HintManager;
@@ -269,7 +269,7 @@ public class GoToRefFile extends AnAction {
         Ref<List<String>> ids = new Ref<>();
         ProgressManager.getInstance().runProcessWithProgressSynchronously(() -> {
 
-            try (Connection connection = instance.getConnection(SpdEditorState.getInstance());
+            try (Connection connection = instance.getConnection(SpdEditorDBState.getInstance());
             ) {
                 List<Map<String, Object>> actions = instance.queryEngineActionWithIdLike(connection, value);
                 if (actions.size() == 0) {

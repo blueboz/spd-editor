@@ -1,6 +1,7 @@
 package cn.boz.jb.plugin.idea.toolwindow;
 
 import cn.boz.jb.plugin.floweditor.gui.utils.StringUtils;
+import cn.boz.jb.plugin.idea.configurable.SpdEditorNormState;
 import cn.boz.jb.plugin.idea.dialog.MyLayoutManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
@@ -265,7 +266,12 @@ public class AddMenuDialog extends DialogWrapper {
                     }
 
                     private void doRun(VirtualFile selectedValue) {
-                        urlt.setText(selectedValue.getPath());
+                        SpdEditorNormState instance = SpdEditorNormState.getInstance();
+                        if (StringUtils.isBlank(instance.webroot)) {
+                            urlt.setText(String.valueOf(selectedValue.getPath()));
+                        } else {
+                            urlt.setText(String.valueOf(selectedValue.getPath()).replace(instance.webroot.replace("\\","/"), ""));
+                        }
                         urlt.setBackground(null);
                         PsiFile psiFile = PsiManager.getInstance(ProjectManager.getInstance().getDefaultProject()).findFile(selectedValue);
 
@@ -378,10 +384,14 @@ public class AddMenuDialog extends DialogWrapper {
      */
     public String toSql() {
         String sql = "INSERT INTO ECAS_MENU (APPLID, MENUID, NAME, LVL, URL, PARENT, IMG, ISCHILD, GROUPID) " +
-                "VALUES (" + applidt.getText() + ", " + menuidt.getText() + ", '" + name.getText() + "', "
+                "VALUES (" + applidt.getText() + ", "
+                + menuidt.getText() + ", '"
+                + namet.getText() + "', "
                 + lvlt.getText() + ", '"
-                + urlt.getText() + "', " + parentt.getText() + ", '"
-                + imgt.getText() + "', " + ischildt.getText() + ", "
+                + urlt.getText() + "', "
+                + parentt.getText() + ", '"
+                + imgt.getText() + "', "
+                + ischildt.getText() + ", "
                 + groupidt.getText() + ")";
         return sql;
     }

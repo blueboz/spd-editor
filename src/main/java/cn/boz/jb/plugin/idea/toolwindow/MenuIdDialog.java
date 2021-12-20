@@ -1,16 +1,11 @@
 package cn.boz.jb.plugin.idea.toolwindow;
 
-import cn.boz.jb.plugin.idea.configurable.SpdEditorState;
+import cn.boz.jb.plugin.idea.configurable.SpdEditorDBState;
 import cn.boz.jb.plugin.idea.utils.DBUtils;
-import com.intellij.codeInsight.hint.HintManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.DialogWrapper;
-import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.ui.popup.JBPopup;
 import com.intellij.openapi.ui.popup.util.PopupUtil;
 import com.intellij.ui.components.JBScrollPane;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -45,8 +40,8 @@ public class MenuIdDialog extends JComponent {
     public static final String ITEM_OCCUPY = "occupy";
 
     public static final String ITEM_FREE = "free";
-    private int cpageNum = SpdEditorState.getInstance().pageNum;
-    private int pageSize = SpdEditorState.getInstance().pageSize;
+    private int cpageNum = SpdEditorDBState.getInstance().pageNum;
+    private int pageSize = SpdEditorDBState.getInstance().pageSize;
     private Connection connection;
 
     private DBUtils instance;
@@ -76,7 +71,7 @@ public class MenuIdDialog extends JComponent {
         JPanel jPanel = new JPanel();
         JScrollPane panel = new JBScrollPane();
 
-        connection = DBUtils.getConnection(SpdEditorState.getInstance());
+        connection = DBUtils.getConnection(SpdEditorDBState.getInstance());
         instance = DBUtils.getInstance();
 
         tableModel = new DefaultTableModel();
@@ -164,7 +159,7 @@ public class MenuIdDialog extends JComponent {
                 } else {
                     cpageNum = ((Double) value).intValue();
                 }
-                SpdEditorState.getInstance().pageNum = cpageNum;
+                SpdEditorDBState.getInstance().pageNum = cpageNum;
                 load();
             }
         });
@@ -178,7 +173,7 @@ public class MenuIdDialog extends JComponent {
                 } else {
                     pageSize = ((Double) value).intValue();
                 }
-                SpdEditorState.getInstance().pageSize = pageSize;
+                SpdEditorDBState.getInstance().pageSize = pageSize;
                 load();
             }
         });

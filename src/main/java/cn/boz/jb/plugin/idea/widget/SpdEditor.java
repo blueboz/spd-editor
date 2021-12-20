@@ -17,8 +17,8 @@ import cn.boz.jb.plugin.floweditor.gui.utils.ConstantUtils;
 import cn.boz.jb.plugin.floweditor.gui.utils.IcoMoonUtils;
 import cn.boz.jb.plugin.floweditor.gui.widget.Button;
 import cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel;
-import cn.boz.jb.plugin.idea.configurable.SpdEditorSettings;
-import cn.boz.jb.plugin.idea.configurable.SpdEditorState;
+import cn.boz.jb.plugin.idea.configurable.SpdEditorDBSettings;
+import cn.boz.jb.plugin.idea.configurable.SpdEditorDBState;
 import cn.boz.jb.plugin.idea.utils.DBUtils;
 import com.intellij.notification.NotificationGroupManager;
 import com.intellij.notification.NotificationType;
@@ -260,7 +260,7 @@ public class SpdEditor extends JComponent implements MouseListener, ClipboardOwn
         sql.setToolTipText("Sql");
         menuPanel.add(sql);
 
-        if (SpdEditorState.getInstance().autoSave) {
+        if (SpdEditorDBState.getInstance().autoSave) {
             automation = new Button(IcoMoonUtils.getAutomation(), false, "automation", false);
             automation.addMouseListener(this);
             automation.setToolTipText("Disable AutoSave");
@@ -407,7 +407,7 @@ public class SpdEditor extends JComponent implements MouseListener, ClipboardOwn
                 String automation = myButton.getTitle();
                 if (automation.equals(IcoMoonUtils.getAutomation())) {
                     myButton.setTitle(IcoMoonUtils.getManual());
-                    SpdEditorState.getInstance().autoSave = false;
+                    SpdEditorDBState.getInstance().autoSave = false;
                     myButton.setToolTipText("Enable AutoSave");
 
                     NotificationGroupManager.getInstance()
@@ -415,7 +415,7 @@ public class SpdEditor extends JComponent implements MouseListener, ClipboardOwn
                             .createNotification("disable auto save spd editor", NotificationType.INFORMATION).notify(null);
                     repaint();
                 } else if (automation.equals(IcoMoonUtils.getManual())) {
-                    SpdEditorState.getInstance().autoSave = true;
+                    SpdEditorDBState.getInstance().autoSave = true;
                     myButton.setTitle(IcoMoonUtils.getAutomation());
 
                     myButton.setToolTipText("Disable AutoSave");
@@ -456,7 +456,7 @@ public class SpdEditor extends JComponent implements MouseListener, ClipboardOwn
                     clipboard.setContents(selection, this);
                 } else if (idx == 1) {
                     //更新至db
-                    SpdEditorState instance = SpdEditorState.getInstance();
+                    SpdEditorDBState instance = SpdEditorDBState.getInstance();
                     try {
                         boolean b = DBUtils.executeSql(instance.jdbcUserName, instance.jdbcPassword, instance.jdbcUrl, instance.jdbcDriver, sqls);
                         if (b) {
@@ -465,14 +465,14 @@ public class SpdEditor extends JComponent implements MouseListener, ClipboardOwn
                     } catch (SQLException sqlException) {
                         int selidx = Messages.showDialog("数据库连接发生错误，检查数据库配置?" + sqlException.getMessage(), "数据库错误", new String[]{"打开配置项", "取消"}, 0, UIUtil.getErrorIcon());
                         if (selidx == 0) {
-                            ShowSettingsUtil.getInstance().showSettingsDialog(null, SpdEditorSettings.class);
+                            ShowSettingsUtil.getInstance().showSettingsDialog(null, SpdEditorDBSettings.class);
                         }
                     } catch (Exception ee) {
                         ee.printStackTrace();
                         Messages.showErrorDialog("发生错误", ee.getMessage());
                     }
                 } else if (idx == 2) {
-                    ShowSettingsUtil.getInstance().showSettingsDialog(null, SpdEditorSettings.class);
+                    ShowSettingsUtil.getInstance().showSettingsDialog(null, SpdEditorDBSettings.class);
                 }
                 break;
             default:
@@ -508,7 +508,7 @@ public class SpdEditor extends JComponent implements MouseListener, ClipboardOwn
 
     @Override
     public void focusGained(FocusEvent e) {
-        if (SpdEditorState.getInstance().autoSave) {
+        if (SpdEditorDBState.getInstance().autoSave) {
             if (!automation.getTitle().equals(IcoMoonUtils.getAutomation())) {
                 automation.setTitle(IcoMoonUtils.getAutomation());
                 automation.setToolTipText("Disable AutoSave");

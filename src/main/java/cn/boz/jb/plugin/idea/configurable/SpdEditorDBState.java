@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
  * 这个Service是用于关于state的存取容器,其实际内容需要
  */
 @State(name = "cn.boz.jb.plugin.idea.configurable.SpdEditorState", storages = {@Storage("spdeditor.xml")})
-public class SpdEditorState implements PersistentStateComponent<SpdEditorState> {
+public class SpdEditorDBState implements PersistentStateComponent<SpdEditorDBState> {
 
     public String jdbcUrl="";
 
@@ -28,24 +28,24 @@ public class SpdEditorState implements PersistentStateComponent<SpdEditorState> 
     public int pageNum=0;
     public int pageSize=400;
 
-    public SpdEditorState() {
+    public SpdEditorDBState() {
 
     }
 
 
     @Override
-    public @Nullable SpdEditorState getState() {
+    public @Nullable SpdEditorDBState getState() {
         return this;
     }
 
     @Override
-    public void loadState(@NotNull SpdEditorState spdState) {
+    public void loadState(@NotNull SpdEditorDBState spdState) {
         XmlSerializerUtil.copyBean(spdState, this);
 
     }
 
-    public static SpdEditorState getInstance() {
-        return ApplicationManager.getApplication().getService(SpdEditorState.class);
+    public static SpdEditorDBState getInstance() {
+        return ApplicationManager.getApplication().getService(SpdEditorDBState.class);
     }
 
 

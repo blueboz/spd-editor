@@ -1,10 +1,7 @@
 package cn.boz.jb.plugin.idea.configurable;
 
-import com.intellij.execution.configurations.ConfigurationUtil;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.ConfigurationException;
-import com.intellij.openapi.options.ShowSettingsUtil;
-import com.intellij.pom.Navigatable;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.JComponent;
@@ -12,18 +9,18 @@ import javax.swing.JComponent;
 /**
  * 配置项编辑器
  */
-public class SpdEditorSettings implements Configurable  {
+public class SpdEditorDBSettings implements Configurable  {
 
-    private SpdEditorSettingsComp settings;
+    private SpdEditorDBSettingsComp settings;
 
     @Override
     public String getDisplayName() {
-        return "SpdEditor";
+        return "SpdEditorDBConfig";
     }
 
     @Override
     public @Nullable JComponent createComponent() {
-        settings = new SpdEditorSettingsComp();
+        settings = new SpdEditorDBSettingsComp();
         return settings.getPanel();
     }
 

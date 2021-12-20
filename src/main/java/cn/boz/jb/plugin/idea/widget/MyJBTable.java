@@ -6,7 +6,7 @@ import cn.boz.jb.plugin.floweditor.gui.listener.ShapeSelectedListener;
 import cn.boz.jb.plugin.floweditor.gui.property.Property;
 import cn.boz.jb.plugin.floweditor.gui.property.PropertyEditorListener;
 import cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel;
-import cn.boz.jb.plugin.idea.configurable.SpdEditorState;
+import cn.boz.jb.plugin.idea.configurable.SpdEditorDBState;
 import com.intellij.ui.table.JBTable;
 
 import javax.swing.table.AbstractTableModel;
@@ -114,7 +114,7 @@ public class MyJBTable extends JBTable implements ShapeSelectedListener, Propert
     public void propertyEdited(Property property, Object operatedObj, Object oldValue, Object newValue) {
         if(oldValue!=newValue){
             //触发函数回调
-            if(SpdEditorState.getInstance().autoSave){
+            if(SpdEditorDBState.getInstance().autoSave){
                 chartPanel.fireSavedListener();
             }
         }

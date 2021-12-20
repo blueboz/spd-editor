@@ -1,7 +1,7 @@
 package cn.boz.jb.plugin.idea.utils;
 
 import cn.boz.jb.plugin.floweditor.gui.utils.StringUtils;
-import cn.boz.jb.plugin.idea.configurable.SpdEditorState;
+import cn.boz.jb.plugin.idea.configurable.SpdEditorDBState;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
@@ -59,7 +59,7 @@ public class DBUtils {
         }
     }
 
-    public static Connection getConnection(SpdEditorState state) throws MalformedURLException, SQLException, ClassNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+    public static Connection getConnection(SpdEditorDBState state) throws MalformedURLException, SQLException, ClassNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         return getConnection(state.jdbcUserName, state.jdbcPassword, state.jdbcUrl, state.jdbcDriver);
     }
 
