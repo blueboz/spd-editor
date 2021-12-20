@@ -57,6 +57,12 @@ public class GotoScriptAction extends AnAction implements DumbAware {
                         }
 
                     }else{
+                        if (selectedValue.contains("=")) {
+                            selectedValue = selectedValue.split("=")[1];
+                        }
+                        if(selectedValue.contains("(")){
+                            selectedValue = selectedValue.split("\\(")[0];
+                        }
                         Project defaultProject = ProjectManager.getInstance().getDefaultProject();
 
                         SearchEverywhereManager instance = SearchEverywhereManager.getInstance(defaultProject);
@@ -66,14 +72,7 @@ public class GotoScriptAction extends AnAction implements DumbAware {
                     }
                 }
             });
-
-
-            engineActionDialog.setFocusable(false);
-            search.showInFocusCenter();
-
-
+            search.showInCenterOf(engineActionDialog);
         }
-
-
     }
 }

@@ -25,6 +25,9 @@ public class SpdEditorState implements PersistentStateComponent<SpdEditorState> 
     //自动保存，默认为false
     public boolean autoSave=false;
 
+    public int pageNum=0;
+    public int pageSize=400;
+
     public SpdEditorState() {
 
     }

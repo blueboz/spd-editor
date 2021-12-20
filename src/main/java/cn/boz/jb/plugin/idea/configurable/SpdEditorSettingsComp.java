@@ -70,7 +70,7 @@ public class SpdEditorSettingsComp {
                 //测试连接的时候，需要执行的操作
                 String jdbcUser = jdbcUsername.getText();
                 @SuppressWarnings("all")
-                String jdbcPass = jdbcPassword.getText();
+                String jdbcPass = new String(jdbcPassword.getPassword());
                 String jdbcUrl = jdbcUrlText.getText();
                 String jdbcDriverText = getJdbcDriver();
                 final Ref<Exception> exception = Ref.create();
@@ -119,7 +119,7 @@ public class SpdEditorSettingsComp {
         spdEditorState.jdbcDriver = getJdbcDriver();
         spdEditorState.jdbcUrl = this.jdbcUrlText.getText();
         spdEditorState.jdbcUserName = this.jdbcUsername.getText();
-        spdEditorState.jdbcPassword = this.jdbcPassword.getText();
+        spdEditorState.jdbcPassword = new String(this.jdbcPassword.getPassword());
     }
 
     @SuppressWarnings("unchecked")
@@ -168,7 +168,7 @@ public class SpdEditorSettingsComp {
         if (!spdEditorState.jdbcUserName.equals(this.jdbcUsername.getText())) {
             return true;
         }
-        if (!spdEditorState.jdbcPassword.equals(this.jdbcPassword.getText())) {
+        if (!spdEditorState.jdbcPassword.equals(new String(this.jdbcPassword.getPassword()))) {
             return true;
         }
         return false;

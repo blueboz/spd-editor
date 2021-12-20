@@ -1,5 +1,6 @@
 package cn.boz.jb.plugin.idea.utils;
 
+import cn.boz.jb.plugin.floweditor.gui.utils.StringUtils;
 import cn.boz.jb.plugin.idea.configurable.SpdEditorState;
 
 import java.io.File;
@@ -107,13 +108,77 @@ public class DBUtils {
             //PROBLEMS's
             statement.close();
 
-//            CallableStatement callableStatement = connection.prepareCall(sqls);
         }
         return true;
 
     }
 
-    public List<Map<String, Object>> queryEcasAppl(Connection connection  ) throws Exception {
+    public void executeSql(Connection connection, String sql) throws Exception {
+        try (Statement statement = connection.createStatement();) {
+            statement.execute(sql);
+        }
+    }
+
+
+    /**
+     * 查询Ecas 菜单唯一键
+     *
+     * @param connection
+     * @param pageNum
+     * @param pageSize
+     * @param dbLinkYD01Name
+     * @param dbLinkYD03Name
+     * @return
+     * @throws Exception
+     */
+    public List<Map<String, Object>> queryEcasMenuIdUniq(Connection connection, int pageNum, int pageSize, String dbLinkYD01Name, String dbLinkYD03Name, Integer applid) throws Exception {
+        if (StringUtils.isBlank(dbLinkYD01Name)) {
+            dbLinkYD01Name = "";
+        }
+        if (StringUtils.isBlank(dbLinkYD03Name)) {
+            dbLinkYD03Name = "";
+        }
+        if (applid == null) {
+            applid = 999;
+        }
+
+        String sql = "with numlist as (\n" +
+                "    SELECT rownum + " + pageNum * pageSize + " rn\n" +
+                "    FROM dual\n" +
+                "    CONNECT BY 1 = 1\n" +
+                "           and rownum < " + pageSize + "\n" +
+                "),\n" +
+                "     dev as (\n" +
+                "         select *\n" +
+                "         from ECAS_MENU\n" +
+                "         where applid = " + applid + "\n" +
+                "     ),\n" +
+                "\n" +
+                "     yd01m as (\n" +
+                "         select *\n" +
+                "         from ECAS_MENU" + dbLinkYD01Name + "\n" +
+                "         where applid = " + applid + "\n" +
+                "     ),\n" +
+                "     yd03m as (\n" +
+                "         select *\n" +
+                "         from ECAS_MENU" + dbLinkYD03Name + "\n" +
+                "         where applid = " + applid + "\n" +
+                "     )\n" +
+                "select r.rn, dev.menuid \"dev\", yd01m.menuid \"yd01\", yd03m.menuid \"yd03\"\n" +
+                "from numlist r,\n" +
+                "     dev ,\n" +
+                "     yd01m,\n" +
+                "     yd03m\n" +
+                "where dev.menuid(+) = r.rn\n" +
+                "  and yd01m.menuid (+) = r.rn\n" +
+                "  and yd03m.menuid(+) = r.rn\n" +
+                "order by rn";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            return queryForList(preparedStatement);
+        }
+    }
+
+    public List<Map<String, Object>> queryEcasAppl(Connection connection) throws Exception {
         try (PreparedStatement preparedStatement = connection.prepareStatement("select * from ECAS_APPL")) {
             return queryForList(preparedStatement);
         }
@@ -126,7 +191,7 @@ public class DBUtils {
         }
     }
 
-    public List<Map<String, Object>> queryMenuOfAppMenu(Connection connection,BigDecimal parentId, BigDecimal applid) throws Exception {
+    public List<Map<String, Object>> queryMenuOfAppMenu(Connection connection, BigDecimal parentId, BigDecimal applid) throws Exception {
         try (PreparedStatement preparedStatement = connection.prepareStatement("select * from ECAS_MENU where parent =? and applid=?")) {
 //            System.out.println("parent:"+parentId+" appid:"+applid);
 

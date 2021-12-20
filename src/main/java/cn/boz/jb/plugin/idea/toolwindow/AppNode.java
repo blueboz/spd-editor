@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class AppNode extends NodeData {
-    public AppNode(Map nodeData) {
+    public AppNode(Map<String,Object> nodeData) {
         super(nodeData);
     }
 

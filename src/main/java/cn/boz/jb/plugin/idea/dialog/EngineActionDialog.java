@@ -1,24 +1,13 @@
 package cn.boz.jb.plugin.idea.dialog;
 
-import com.intellij.database.DatabaseToolWindowFactory;
-import com.intellij.ide.DataManager;
 import com.intellij.openapi.actionSystem.ActionGroup;
-import com.intellij.openapi.actionSystem.ActionGroupUtil;
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.ActionToolbar;
 import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.CommonDataKeys;
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.actionSystem.DataKey;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
-import com.intellij.openapi.util.Key;
-import com.intellij.openapi.util.UserDataHolder;
-import com.intellij.openapi.util.UserDataHolderBase;
-import org.jetbrains.annotations.NotNull;
+import com.intellij.ui.components.JBScrollPane;
 
-import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
@@ -27,7 +16,6 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import java.awt.Dimension;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -81,11 +69,10 @@ public class EngineActionDialog extends JComponent {
     private JLabel actionOutputLabel;
     private DefaultTableModel outputModel;
 
-    public static final Key ENGINE_ACTION_DLG=Key.create("Spd_EngineActionDialog");
     public EngineActionDialog(Map<String, Object> engineAction, List<Map<String, Object>> engineActionInput, List<Map<String, Object>> engineActionOutput) {
-        this.engineAction=engineAction;
-        this.engineActionInput=engineActionInput;
-        this.engineActionOutput=engineActionOutput;
+        this.engineAction = engineAction;
+        this.engineActionInput = engineActionInput;
+        this.engineActionOutput = engineActionOutput;
         String id = (String) engineAction.get("ID_");
         String namespace = (String) engineAction.get("NAMESPACE_");
         String actionscript = (String) engineAction.get("ACTIONSCRIPT_");
@@ -120,8 +107,8 @@ public class EngineActionDialog extends JComponent {
         actionInputTable = new JTable(tableModel) {
         };
 
-        ProjectManager projectManager = ProjectManager.getInstance();
-        Project defaultProject = projectManager.getDefaultProject();
+//        ProjectManager projectManager = ProjectManager.getInstance();
+//        Project defaultProject = projectManager.getDefaultProject();
 
 
         actionInputPanel = new JScrollPane(actionInputTable);
@@ -136,18 +123,15 @@ public class EngineActionDialog extends JComponent {
         }
         actionOutputTable = new JTable(outputModel) {
         };
-        actionOutputPanel = new JScrollPane(actionOutputTable);
+        actionOutputPanel = new JBScrollPane(actionOutputTable);
         actionOutputPanel.setPreferredSize(new Dimension(0, 200));
         ActionManager instance = ActionManager.getInstance();
-        ActionGroup actionGroup= (ActionGroup) instance.getAction("spdengineactiondlggroup");
+        ActionGroup actionGroup = (ActionGroup) instance.getAction("spdengineactiondlggroup");
         ActionToolbar spd_tb = instance.createActionToolbar("spd tb", actionGroup, true);
-        List<AnAction> actions = spd_tb.getActions();
 
         JComponent gotoactionScript = spd_tb.getComponent();
 
 
-
-//        DataManager.getInstance().
         this.add(actionIdLabel);
         this.add(actionIdTextField);
         this.add(namespaceLabel);
@@ -159,22 +143,6 @@ public class EngineActionDialog extends JComponent {
         this.add(actionInputPanel);
         this.add(actionOutputLabel);
         this.add(actionOutputPanel);
-
-        HashMap<String, Object> datamap = new HashMap<>();
-        datamap.put("engineAction",engineAction);
-        datamap.put("engineActionInput",engineActionInput);
-        datamap.put("engineActionOutput",engineActionOutput);
-        DataContext dataContext = DataManager.getInstance().getDataContext(this);
-        DataKey<Object> engineDialog = DataKey.create("engineDialog");
-
-
-
-//        DataContext ctx = DataManager.getInstance().getDataContext(this);
-//        val project = CommonDataKeys.PROJECT.getData(DataManager.getInstance().getDataContext(myLink))
-//        UserDataHolder userDataHolder;
-
-        ENGINE_ACTION_DLG.set((UserDataHolder) dataContext,datamap);
-
 
 
         this.setFocusable(true);

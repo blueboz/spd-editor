@@ -8,16 +8,15 @@ import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
 import org.jetbrains.annotations.NotNull;
 
-import javax.swing.JButton;
+public class EcasMenuToolWindowFactory implements ToolWindowFactory {
 
-public class MyToolWindowFactory implements ToolWindowFactory {
+    private EcasMenuToolWindow myToolWindow;
 
-    MyToolWindow myToolWindow;
     @Override
     public void createToolWindowContent(@NotNull Project project, @NotNull ToolWindow toolWindow) {
-        myToolWindow = new MyToolWindow();
+        myToolWindow = new EcasMenuToolWindow();
         ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
-        Content title = contentFactory.createContent(myToolWindow, "菜单树", false);
+        Content title = contentFactory.createContent(myToolWindow, "Ecas Menu Tree", false);
         toolWindow.getContentManager().addContent(title);
     }
 

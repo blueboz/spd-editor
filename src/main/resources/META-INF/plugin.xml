@@ -31,7 +31,7 @@
         <fileEditorProvider implementation="cn.boz.jb.plugin.idea.fileeditor.SpdFileEditorProvider"
                             id="myFileEditorProvider" order="last">
         </fileEditorProvider>
-        <toolWindow factoryClass="cn.boz.jb.plugin.idea.toolwindow.MyToolWindowFactory" id="EcasMenu" anchor="right"
+        <toolWindow factoryClass="cn.boz.jb.plugin.idea.toolwindow.EcasMenuToolWindowFactory" id="EcasMenu" anchor="right"
                     order="last" icon="SpdEditorIcons.MENU_16_ICON"/>
         <fileType name="Spd" extensions="spd"
                   implementationClass="cn.boz.jb.plugin.idea.filetype.SpdFileType" language="XML"/>

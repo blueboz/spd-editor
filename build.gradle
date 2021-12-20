@@ -78,6 +78,7 @@ patchPluginXml {
     """
 
     changeNotes = """
+
     <b>1.0.20</b><br>
     <ul>
         <li>fixed auto save problem's</li>
@@ -143,7 +144,7 @@ patchPluginXml {
 }
 test {
     useTestNG()
-    exclude '*'
+//    exclude '*'
 //    include 'cn/boz/test/*'
 //    filter{
 //        includeTestsMatching("test")

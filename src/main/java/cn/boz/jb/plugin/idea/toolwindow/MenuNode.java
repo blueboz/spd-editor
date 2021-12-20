@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class MenuNode extends NodeData {
-    public MenuNode(Map nodeData) {
+    public MenuNode(Map<String,Object> nodeData) {
         super(nodeData);
     }
 
