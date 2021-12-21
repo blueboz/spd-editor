@@ -81,10 +81,15 @@
         <!--        GoToJsFile-->
 
 
-        <group id="spdengineactiondlggroup">
+        <group id="spd.engineaction.dlg.group">
             <action class="cn.boz.jb.plugin.idea.dialog.GotoScriptAction" id="gotoscriptaction" text="gotoscript"
                     icon="AllIcons.Actions.ShowCode">
             </action>
+        </group>
+        <group id="spd.menuid.spanel.group">
+            <action class="cn.boz.jb.plugin.idea.toolwindow.PrevPageAction" icon="AllIcons.Actions.Play_back"></action>
+<!--            <action class="cn.boz.jb.plugin.idea.toolwindow.PageRangeAction" icon="AllIcons.Actions.FindAndShowNextMatches"></action>-->
+            <action class="cn.boz.jb.plugin.idea.toolwindow.NextPageAction" icon="AllIcons.Actions.Play_forward"></action>
         </group>
     </actions>
 

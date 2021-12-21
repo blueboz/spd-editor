@@ -126,7 +126,7 @@ public class EngineActionDialog extends JComponent {
         actionOutputPanel = new JBScrollPane(actionOutputTable);
         actionOutputPanel.setPreferredSize(new Dimension(0, 200));
         ActionManager instance = ActionManager.getInstance();
-        ActionGroup actionGroup = (ActionGroup) instance.getAction("spdengineactiondlggroup");
+        ActionGroup actionGroup = (ActionGroup) instance.getAction("spd.engineaction.dlg.group");
         ActionToolbar spd_tb = instance.createActionToolbar("spd tb", actionGroup, true);
 
         JComponent gotoactionScript = spd_tb.getComponent();

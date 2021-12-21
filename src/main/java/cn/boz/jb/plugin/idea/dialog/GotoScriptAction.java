@@ -4,7 +4,6 @@ import com.intellij.ide.actions.searcheverywhere.SearchEverywhereManager;
 import com.intellij.ide.actions.searcheverywhere.SearchEverywhereManagerImpl;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
@@ -15,7 +14,7 @@ import com.intellij.openapi.ui.popup.util.BaseListPopupStep;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.awt.Component;
+import javax.swing.SwingUtilities;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -26,9 +25,9 @@ import java.util.stream.Collectors;
 public class GotoScriptAction extends AnAction implements DumbAware {
     @Override
     public void actionPerformed(@NotNull AnActionEvent anActionEvent) {
-        Component data = anActionEvent.getData(PlatformDataKeys.CONTEXT_COMPONENT);
+        EngineActionDialog data = (EngineActionDialog) SwingUtilities.getAncestorOfClass(EngineActionDialog.class, anActionEvent.getInputEvent().getComponent());
         if (data instanceof EngineActionDialog) {
-            EngineActionDialog engineActionDialog = (EngineActionDialog) data;
+            EngineActionDialog engineActionDialog = data;
             Map<String, Object> engineAction = engineActionDialog.getEngineAction();
             String actionscript = (String) engineAction.get("ACTIONSCRIPT_");
             String[] split = actionscript.split("[\n;]");

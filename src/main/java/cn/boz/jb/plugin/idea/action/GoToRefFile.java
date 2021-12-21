@@ -247,6 +247,9 @@ public class GoToRefFile extends AnAction {
         return false;
 
     }
+
+    private JBPopup popup;
+    private EngineActionDialog temporyDialog;
     /**
      * 跳转到Engine Action
      *
@@ -262,16 +265,24 @@ public class GoToRefFile extends AnAction {
         if (!value.contains(".do")) {
             return false;
         }
+        if (value.contains("?")) {
+            ///只取问号前面部分
+            value = value.split("\\?")[0];
+        }
+        if(value.contains("/")){
+            value = value.split("/")[1];
+        }
 
         DBUtils instance = DBUtils.getInstance();
         Ref<Boolean> result = new Ref<>();
         Ref<EngineActionDataContainer> engineActionRef = new Ref<>();
         Ref<List<String>> ids = new Ref<>();
+        final String query=value;
         ProgressManager.getInstance().runProcessWithProgressSynchronously(() -> {
 
             try (Connection connection = instance.getConnection(SpdEditorDBState.getInstance());
             ) {
-                List<Map<String, Object>> actions = instance.queryEngineActionWithIdLike(connection, value);
+                List<Map<String, Object>> actions = instance.queryEngineActionWithIdLike(connection, query);
                 if (actions.size() == 0) {
                     result.set(false);
                 } else if (actions.size() == 1) {
@@ -279,7 +290,7 @@ public class GoToRefFile extends AnAction {
                     String id_ = (String) engineAction.get("ID_");
                     List<Map<String, Object>> actionInputs = instance.queryEngineActionInputIdMatch(connection, id_);
                     List<Map<String, Object>> actionOutputs = instance.queryEngineActionOutputIdMatch(connection, id_);
-                    engineActionRef.set(new EngineActionDataContainer(engineAction,actionInputs,actionOutputs));
+                    engineActionRef.set(new EngineActionDataContainer(engineAction, actionInputs, actionOutputs));
                 } else {
                     List<String> ids_ = actions.stream().map(it -> (String) it.get("ID_")).collect(Collectors.toList());
                     ids.set(ids_);
@@ -311,15 +322,9 @@ public class GoToRefFile extends AnAction {
         if (!engineActionRef.isNull()) {
             EngineActionDataContainer container = engineActionRef.get();
 
-//            SearchEverywhereManager seManager = SearchEverywhereManager.getInstance(project);
-//            ProjectManager projectManager = ProjectManager.getInstance();
-//            ActionManager instance1 = ActionManager.getInstance();
-//            ActionGroup emptyGroup = ActionGroup.EMPTY_GROUP;
-//            instance1.createActionToolbar("功能","",)
+            temporyDialog = new EngineActionDialog(container.getEngineAction(), container.getEngineActionInput(), container.getEngineActionOutput());
 
-            var temporyDialog = new EngineActionDialog(container.getEngineAction(), container.getEngineActionInput(), container.getEngineActionOutput());
-
-            var popup = JBPopupFactory.getInstance()
+            popup = JBPopupFactory.getInstance()
                     .createComponentPopupBuilder(temporyDialog, null)
 //                    .setCancelOnClickOutside(true)
                     .setRequestFocus(true)

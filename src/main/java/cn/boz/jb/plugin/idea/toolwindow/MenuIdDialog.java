@@ -2,6 +2,14 @@ package cn.boz.jb.plugin.idea.toolwindow;
 
 import cn.boz.jb.plugin.idea.configurable.SpdEditorDBState;
 import cn.boz.jb.plugin.idea.utils.DBUtils;
+import com.intellij.database.DatabaseBundle;
+import com.intellij.database.psi.DataSourceManager;
+import com.intellij.database.settings.DatabaseSettings;
+import com.intellij.database.view.ui.DataSourceManagerDialog;
+import com.intellij.openapi.actionSystem.ActionGroup;
+import com.intellij.openapi.actionSystem.ActionManager;
+import com.intellij.openapi.actionSystem.ActionToolbar;
+import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.ui.popup.JBPopup;
 import com.intellij.openapi.ui.popup.util.PopupUtil;
 import com.intellij.ui.components.JBScrollPane;
@@ -26,6 +34,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.math.BigDecimal;
@@ -64,7 +73,7 @@ public class MenuIdDialog extends JComponent {
         }
         this.setLayout(new BorderLayout());
         this.add(component, BorderLayout.CENTER);
-        this.setPreferredSize(new Dimension(400, 800));
+        this.setPreferredSize(new Dimension(600, 800));
     }
 
     private JPanel createComponent() throws Exception {
@@ -120,8 +129,6 @@ public class MenuIdDialog extends JComponent {
         panel.setViewportView(jTable);
         jPanel.setLayout(new BorderLayout());
 
-        JToolBar jToolBar = new JToolBar();
-        jToolBar.setFloatable(false);
         JLabel currentPageLabel = new JLabel("page:");
         currentPageSpin = new JSpinner();
         currentPageModel = new SpinnerNumberModel(cpageNum, 0, 200, 1);
@@ -132,8 +139,8 @@ public class MenuIdDialog extends JComponent {
         pageSizeModel = new SpinnerNumberModel(pageSize, 0, 1000, 1);
         pageSizeSpin.setModel(pageSizeModel);
 
-        JButton prev = new JButton("<<");
-        JButton next = new JButton(">>");
+        JButton prev = new JButton("Prev");
+        JButton next = new JButton("Next");
         prev.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -177,12 +184,13 @@ public class MenuIdDialog extends JComponent {
                 load();
             }
         });
-        jToolBar.add(currentPageLabel);
-        jToolBar.add(currentPageSpin);
-        jToolBar.add(pageSizeLabel);
-        jToolBar.add(pageSizeSpin);
-        jToolBar.add(prev);
-        jToolBar.add(next);
+        JComponent toolbarContainer = new JPanel();
+        toolbarContainer.add(currentPageLabel);
+        toolbarContainer.add(currentPageSpin);
+        toolbarContainer.add(pageSizeLabel);
+        toolbarContainer.add(pageSizeSpin);
+//        toolbarContainer.add(prev);
+//        toolbarContainer.add(next);
 
         jTable.addMouseListener(new MouseAdapter() {
 
@@ -203,7 +211,14 @@ public class MenuIdDialog extends JComponent {
         });
 
         jPanel.add(panel, BorderLayout.CENTER);
-        jPanel.add(jToolBar, BorderLayout.SOUTH);
+        ActionManager instance = ActionManager.getInstance();
+
+        ActionGroup actionGroup = (ActionGroup) instance.getAction("spd.menuid.spanel.group");
+        ActionToolbar spd_tb = instance.createActionToolbar("spd tb", actionGroup, true);
+        JComponent tableNavigator = spd_tb.getComponent();
+
+        toolbarContainer.add(tableNavigator);
+        jPanel.add(toolbarContainer, BorderLayout.SOUTH);
 
 
         return jPanel;
@@ -251,4 +266,19 @@ public class MenuIdDialog extends JComponent {
 
     }
 
+    public void loadPrevPage() {
+        currentPageModel.setValue(cpageNum - 1);
+
+//        cpageNum--;
+//        SpdEditorDBState.getInstance().pageNum = cpageNum;
+//        load();
+    }
+
+    public void loadNextPage() {
+//        cpageNum++;
+//        SpdEditorDBState.getInstance().pageNum = cpageNum;
+//        load();
+        currentPageModel.setValue(cpageNum + 1);
+
+    }
 }
