@@ -11,7 +11,7 @@
     -->
     <idea-plugin url="http://21.96.35.45:16789/jetbrainsPlugins/spd-editor-${version}.zip"
             date="$cts"
-            version="$version" size="$flen" downloads="155465131" updatedDate="$cts">
+            version="$version" size="$flen" downloads="155465131" updatedDate="$cts"  require-restart="false">
         <id>cn.boz.jb.plugin.spd-editor</id>
         <idea-version since-build="200.*" ></idea-version>
         <description>
