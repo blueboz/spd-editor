@@ -250,6 +250,7 @@ public class GoToRefFile extends AnAction {
 
     private JBPopup popup;
     private EngineActionDialog temporyDialog;
+
     /**
      * 跳转到Engine Action
      *
@@ -269,18 +270,19 @@ public class GoToRefFile extends AnAction {
             ///只取问号前面部分
             value = value.split("\\?")[0];
         }
-        if(value.contains("/")){
-            value = value.split("/")[1];
+        if (value.contains("/")) {
+            //a/b/c.do
+            value = value.substring(value.lastIndexOf("/") + 1);
         }
 
         DBUtils instance = DBUtils.getInstance();
         Ref<Boolean> result = new Ref<>();
         Ref<EngineActionDataContainer> engineActionRef = new Ref<>();
         Ref<List<String>> ids = new Ref<>();
-        final String query=value;
+        final String query = value;
         ProgressManager.getInstance().runProcessWithProgressSynchronously(() -> {
 
-            try (Connection connection = instance.getConnection(SpdEditorDBState.getInstance());
+            try (Connection connection = DBUtils.getConnection(SpdEditorDBState.getInstance());
             ) {
                 List<Map<String, Object>> actions = instance.queryEngineActionWithIdLike(connection, query);
                 if (actions.size() == 0) {
