@@ -26,7 +26,7 @@ plugins {
 }
 
 group 'cn.boz'
-version '1.0.21'
+version '1.0.22'
 
 
 sourceCompatibility = 1.11
@@ -96,7 +96,13 @@ patchPluginXml {
     """
 
     changeNotes = """
-  <b>1.0.21</b><br>
+
+    <b>1.0.22</b><br>
+    <ul>
+        <li>fixed foreach gateway lackof expression error</li>
+    </ul>
+    
+    <b>1.0.21</b><br>
     <ul>
         <li>Ecas menu Operator</li>
     </ul>
@@ -201,7 +207,7 @@ tasks.whenTaskAdded { task ->
         task.enabled = false
     }
 
-    if (task.name.equals("buildSearchableOptions")) {
+    if (task.name.contains("buildSearchableOptions")) {
         task.enabled = false
     }
 }

@@ -144,6 +144,7 @@ public class TemplateLoaderImpl implements TemplateLoader {
                         ForeachGateway foreachGateway = new ForeachGateway();
                         foreachGateway.setId(id);
                         foreachGateway.setName(name);
+                        foreachGateway.setExpression(attributeValue(p.attribute("expression")));
 
                         setBound(foreachGateway, readBounds(showp).get(0));
                         processMap.put(id, foreachGateway);

@@ -76,6 +76,7 @@
             <action class="cn.boz.jb.plugin.idea.action.GoToRefFile" id="GoToRef" text="Go To Ref"
                     icon="SpdEditorIcons.REF_16_ICON">
             </action>
+            <action class="cn.boz.jb.plugin.idea.codedef.action.AddCodeDefAction" id="AddCodeDef" text="Add Code Def" icon="AllIcons.General.Add"></action>
             <add-to-group group-id="EditorPopupMenu" anchor="first"></add-to-group>
         </group>
         <!--        GoToJsFile-->
@@ -92,5 +93,6 @@
             <action class="cn.boz.jb.plugin.idea.toolwindow.NextPageAction" icon="AllIcons.Actions.Play_forward"></action>
         </group>
     </actions>
+
 
 </idea-plugin>

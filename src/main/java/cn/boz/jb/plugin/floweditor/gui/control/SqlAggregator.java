@@ -6,4 +6,12 @@ package cn.boz.jb.plugin.floweditor.gui.control;
 public interface SqlAggregator {
 
     String toSql(String processId);
+
+    default String getStringOrNull(String str) {
+        if (str == null) {
+            return "null";
+        } else {
+            return "'" + str + "'";
+        }
+    }
 }
