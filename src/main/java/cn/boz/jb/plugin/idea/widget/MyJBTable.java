@@ -12,6 +12,7 @@ import com.intellij.ui.table.JBTable;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
 import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +37,8 @@ public class MyJBTable extends JBTable implements ShapeSelectedListener, Propert
             this.setRowHeight(i, myProperties.get(i).getRowHeight());
         }
         this.getTableHeader().setPreferredSize(new Dimension(0, DEFAULT_ROW_HEIGHT));
+//        this.getColumnModel().getColumn(0).setMaxWidth(180);
+
 
     }
 
@@ -167,6 +170,7 @@ public class MyJBTable extends JBTable implements ShapeSelectedListener, Propert
             Property property = myProperties.get(rowIndex);
             property.setValue(aValue);
         }
+
     }
 
 }

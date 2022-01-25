@@ -1,7 +1,9 @@
 package cn.boz.jb.plugin.floweditor.gui.property.impl;
 
+import cn.boz.jb.plugin.floweditor.gui.property.InputLongTextDialog;
 import cn.boz.jb.plugin.floweditor.gui.property.Property;
 import cn.boz.jb.plugin.floweditor.gui.property.PropertyEditorListener;
+import com.intellij.openapi.ui.DialogBuilder;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.ui.components.JBScrollPane;
 
@@ -24,7 +26,7 @@ public class TextAreaProperty extends Property {
 
 
     public TextAreaProperty(String propertyName, Object operatedObj, PropertyEditorListener propertyEditorListener) {
-        super(propertyName, operatedObj,propertyEditorListener);
+        super(propertyName, operatedObj, propertyEditorListener);
         jScrollPane = new JBScrollPane();
         textArea = new JTextArea();
         textArea.setAutoscrolls(true);
@@ -34,18 +36,20 @@ public class TextAreaProperty extends Property {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() >= 2) {
-                    String inputString = Messages.showMultilineInputDialog(null, null, "请录入", textArea.getText(), null, null);
-                    if(inputString!=null){
-                        textArea.setText(inputString);
+                    InputLongTextDialog inputLongTextDialog = new InputLongTextDialog(null, true,textArea.getText());
+                    //弹出一个大大的对话框
+                    if (inputLongTextDialog.showAndGet()) {
+                        String inputText = inputLongTextDialog.getInputText();
+                        textArea.setText(inputText);
                     }
                 }
-
                 super.mouseClicked(e);
             }
         };
 
         textArea.addMouseListener(l);
     }
+
     public TextAreaProperty(String propertyName, Object operatedOb) {
         super(propertyName, operatedOb);
         jScrollPane = new JBScrollPane();
@@ -58,7 +62,7 @@ public class TextAreaProperty extends Property {
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() >= 2) {
                     String inputString = Messages.showMultilineInputDialog(null, null, "请录入", textArea.getText(), null, null);
-                    if(inputString!=null){
+                    if (inputString != null) {
                         textArea.setText(inputString);
                     }
                 }

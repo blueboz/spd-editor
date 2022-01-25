@@ -28,7 +28,7 @@ public class SpdTable extends JTable {
             this.setRowHeight(i, myProperties.get(i).getRowHeight());
         }
         this.getTableHeader().setPreferredSize(new Dimension(0,DEFAULT_ROW_HEIGHT));
-
+        this.getColumnModel().getColumn(0).setPreferredWidth(30);
     }
 
 
