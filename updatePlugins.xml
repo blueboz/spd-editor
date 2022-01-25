@@ -62,5 +62,53 @@
         <downloadUrl>http://21.96.35.45:16789/tools/idea2021/ide-eval-resetter-2.1.6.zip</downloadUrl>
     </idea-plugin>
 
+    <idea-plugin xmlns:xi="http://www.w3.org/2001/XInclude" url="http://21.96.35.45:16789/jetbrainsPlugins/IdeaVim.zip">
+        <name>IdeaVim</name>
+        <id>IdeaVIM</id>
+        <change-notes><![CDATA[<h3>Features:</h3>
+    <ul>
+      <li>Support <code>:global</code> and <code>:vglobal</code> commands <a
+          href="https://youtrack.jetbrains.com/issue/VIM-831">VIM-831</a>, <a
+          href="https://youtrack.jetbrains.com/issue/VIM-832">VIM-832</a></li>
+      <li>Support <code>vim-indent-object</code> extension <a
+          href="https://youtrack.jetbrains.com/issue/VIM-1151">VIM-1151</a> | <a
+          href="https://github.com/michaeljsmith/vim-indent-object">vim-indent-object</a></li>
+      <li>Support <code>:print</code> command</li>
+    </ul>
+
+    <h3>Fixes:</h3>
+    <ul>
+      <li><a href="https://youtrack.jetbrains.com/issue/VIM-2308">VIM-2308</a> Go to next tab doesn't move scrolling</li>
+    </ul>
+
+    <h3>Merged PRs:</h3>
+    <ul>
+      <li><a href="https://github.com/JetBrains/ideavim/pull/261">261</a> by <a href="https://github.com/sharat87">Shrikant
+        Sharat Kandula</a>: New extension: Indentation based text objects
+      </li>
+      <li><a href="https://github.com/JetBrains/ideavim/pull/308">308</a> by <a href="https://github.com/citizenmatt">Matt
+        Ellis</a>: Fix unnecessary caret movement when switching tabs
+      </li>
+    </ul>]]></change-notes>
+        <description><![CDATA[<p>Vim emulation plugin for IntelliJ Platform-based IDEs.</p>
+      <br/>
+      <p>IdeaVim supports many Vim features including normal/insert/visual modes, motion keys, deletion/changing,
+      marks, registers, some Ex commands, Vim regexps, configuration via ~/.ideavimrc, macros, Vim plugins, etc.</p>
+      <br/>
+      <p>See also:</p>
+      <ul>
+        <li><a href="https://github.com/JetBrains/ideavim">GitHub repository</a>: documentation and contributing</li>
+        <li><a href="https://youtrack.jetbrains.com/issues/VIM">Issue tracker</a>: feature requests and bug reports</li>
+      </ul>]]></description>
+        <version>0.68</version>
+        <vendor>JetBrains</vendor>
+        <!-- Please search for "[VERSION UPDATE]" in project in case you update the since-build version -->
+        <!-- Check for [Version Update] tag in YouTrack as well -->
+        <idea-version since-build="202.5103.13" />
+        <!-- Mark the plugin as compatible with RubyMine and other products based on the IntelliJ platform -->
+        <downloadUrl>http://21.96.35.45:16789/jetbrainsPlugins/IdeaVim.zip</downloadUrl>
+
+    </idea-plugin>
+
 
 </plugins>
