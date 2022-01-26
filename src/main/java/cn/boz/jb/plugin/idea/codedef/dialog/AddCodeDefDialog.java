@@ -1,9 +1,7 @@
 package cn.boz.jb.plugin.idea.codedef.dialog;
 
 import cn.boz.jb.plugin.idea.dialog.MyLayoutManager;
-import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.EmptyActionGroup;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.ui.AnActionButton;
