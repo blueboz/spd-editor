@@ -11,8 +11,11 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.JComponent;
 import javax.swing.JTextArea;
+import javax.swing.SwingUtilities;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.GraphicsEnvironment;
+import java.awt.Rectangle;
 
 public class InputLongTextDialog extends DialogWrapper {
 
@@ -30,11 +33,13 @@ public class InputLongTextDialog extends DialogWrapper {
         this.textArea = new JTextArea();
 
 
-
         textArea.setText(inputText);
         textArea.setAutoscrolls(true);
         jScrollPane = new JBScrollPane(textArea);
-        jScrollPane.setPreferredSize(new Dimension(800, 600));
+
+        GraphicsEnvironment graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        Rectangle maxRect = graphicsEnvironment.getMaximumWindowBounds();
+        jScrollPane.setPreferredSize(new Dimension((int) (maxRect.getWidth() * .96), (int) (maxRect.getHeight() * .8)));
         init();
         ActionManager instance = ActionManager.getInstance();
         ActionGroup actionGroup = (ActionGroup) instance.getAction("spd.engineaction.dlg.group");

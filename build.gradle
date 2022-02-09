@@ -26,7 +26,7 @@ plugins {
 }
 
 group 'cn.boz'
-version '1.0.25'
+version '1.0.27'
 
 
 sourceCompatibility = 1.11
@@ -97,9 +97,10 @@ patchPluginXml {
 
     changeNotes = """
 
-    <b>1.0.22</b><br>
+    <b>1.0.27</b><br>
     <ul>
         <li>fixed foreach gateway lackof expression error</li>
+        <li>support more bigger dialog of property editor</li>
     </ul>
     
     <b>1.0.21</b><br>
@@ -207,6 +208,7 @@ tasks.whenTaskAdded { task ->
         task.enabled = false
     }
 
+//    :buildSearchableOptions
     if (task.name.contains("buildSearchableOptions")) {
         task.enabled = false
     }
