@@ -8,6 +8,7 @@ import cn.boz.jb.plugin.floweditor.gui.property.impl.TextFieldProperty;
 import cn.boz.jb.plugin.floweditor.gui.shape.HiPoint;
 import cn.boz.jb.plugin.floweditor.gui.shape.Label;
 import cn.boz.jb.plugin.floweditor.gui.shape.Shape;
+import cn.boz.jb.plugin.floweditor.gui.utils.StringUtils;
 import cn.boz.jb.plugin.floweditor.gui.utils.TranslateUtils;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
@@ -57,14 +58,16 @@ public class SequenceFlow extends LineBridge implements FlowSqlAggregator {
         element.addAttribute("name", this.getName());
         element.addAttribute("sourceRef", this.getSourceRef());
         element.addAttribute("targetRef", this.getTargetRef());
-        element.addAttribute("conditionExpression", TranslateUtils.translateToXmlString(this.getConditionExpression()));
+        if(!StringUtils.isBlank(this.getConditionExpression())){
+            element.addAttribute("conditionExpression", TranslateUtils.translateToXmlString(this.getConditionExpression()));
+        }
         return element;
     }
 
     public Element buildDiagramNode() {
         Element edge = DocumentHelper.createElement("Edge");
         edge.addAttribute("Element", this.getId());
-        edge.addAttribute("id", "Shape_" + this.getId());
+        edge.addAttribute("id", "Edge_" + this.getId());
 
         for (HiPoint point : this.getAllPointWithStartEnd()) {
             Element waypoint = edge.addElement("Waypoint");

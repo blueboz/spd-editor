@@ -1,5 +1,6 @@
 package cn.boz.jb.plugin.addbom;
 
+import cn.boz.jb.plugin.addbom.utils.XmlUtils;
 import cn.boz.jb.plugin.idea.filetype.SpdFileType;
 import com.intellij.diff.DiffContentFactory;
 import com.intellij.diff.DiffDialogHints;
@@ -10,6 +11,7 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.fileTypes.FileType;
+import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vcs.AbstractVcs;
 import com.intellij.openapi.vcs.ProjectLevelVcsManager;
@@ -22,6 +24,7 @@ import com.intellij.openapi.vcs.impl.VcsBackgroundableActions;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import com.intellij.vcsUtil.VcsUtil;
+import org.dom4j.DocumentException;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -33,7 +36,7 @@ import java.util.List;
 public class FileDiffHistoryAction extends AnAction {
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
-        final VirtualFile file = VcsContextUtil.selectedFile(e.getDataContext());
+        final VirtualFile file =e.getData(CommonDataKeys.VIRTUAL_FILE);
         final Project project = (e.getProject());
         final AbstractVcs vcs = (ProjectLevelVcsManager.getInstance(project).getVcsFor(file));
 
@@ -47,14 +50,16 @@ public class FileDiffHistoryAction extends AnAction {
                     selected -> {
                         DiffContentFactory contentFactory = DiffContentFactory.getInstance();
                         try {
-                            DocumentContent left = contentFactory.create(new String(file.contentsToByteArray(true)), SpdFileType.INSTANCE);
-                            DocumentContent right = contentFactory.create(new String(selected.loadContent()), SpdFileType.INSTANCE);
-                            MutableDiffRequestChain mutableDiffRequestChain = new MutableDiffRequestChain(left, null, right);
+                            DocumentContent left = contentFactory.create(new String(XmlUtils.readXmlAndSortAndFormat(file.contentsToByteArray(true))), SpdFileType.INSTANCE);
+                            DocumentContent right = contentFactory.create(new String(XmlUtils.readXmlAndSortAndFormat(selected.loadContent())), SpdFileType.INSTANCE);
+                            MutableDiffRequestChain mutableDiffRequestChain = new MutableDiffRequestChain(left,  right);
                             DiffManager.getInstance().showDiff(project, mutableDiffRequestChain, DiffDialogHints.DEFAULT);
                         } catch (IOException ex) {
                             ex.printStackTrace();
                         } catch (VcsException ex) {
                             ex.printStackTrace();
+                        } catch (DocumentException documentException) {
+                            documentException.printStackTrace();
                         }
 
                     }, true);
@@ -77,9 +82,9 @@ public class FileDiffHistoryAction extends AnAction {
         }
 
         String name = psiFile.getVirtualFile().getName();
-        if(!name.endsWith(".spd")){
+        if (!name.endsWith(".spd")) {
             e.getPresentation().setEnabledAndVisible(false);
-            return ;
+            return;
         }
         e.getPresentation().setEnabledAndVisible(true);
     }

@@ -16,7 +16,7 @@ import java.util.List;
 public class XmlUtils {
 
 
-    public byte[] readXmlAndSortAndFormat(byte[] bs) throws DocumentException, IOException {
+    public static byte[] readXmlAndSortAndFormat(byte[] bs) throws DocumentException, IOException {
         SAXReader saxReader = new SAXReader();
         Document read = saxReader.read(new ByteArrayInputStream(bs));
         Element rootElement = read.getRootElement();

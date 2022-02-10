@@ -26,7 +26,7 @@ plugins {
 }
 
 group 'cn.boz'
-version '1.0.28'
+version '1.0.34'
 
 
 sourceCompatibility = 1.11
@@ -204,6 +204,7 @@ task "publishPluginLocal" {
     }
 }
 
+tasks.getByName("buildSearchableOptions").enabled(false)
 tasks.whenTaskAdded { task ->
     if (task.name.equals("lint")) {
         task.enabled = false

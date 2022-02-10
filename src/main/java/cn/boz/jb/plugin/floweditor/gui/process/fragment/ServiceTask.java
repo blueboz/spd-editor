@@ -9,6 +9,7 @@ import cn.boz.jb.plugin.floweditor.gui.property.impl.TextFieldProperty;
 import cn.boz.jb.plugin.floweditor.gui.shape.HiPoint;
 import cn.boz.jb.plugin.floweditor.gui.shape.Rect;
 import cn.boz.jb.plugin.floweditor.gui.utils.IcoMoonUtils;
+import cn.boz.jb.plugin.floweditor.gui.utils.StringUtils;
 import cn.boz.jb.plugin.floweditor.gui.utils.TranslateUtils;
 import cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel;
 import org.dom4j.DocumentHelper;
@@ -71,7 +72,10 @@ public class ServiceTask extends RectBridge implements SqlAggregator {
         element.addAttribute("id", TranslateUtils.translateToXmlString(this.getId()));
         element.addAttribute("name", TranslateUtils.translateToXmlString(this.getName()));
         element.addAttribute("expression", TranslateUtils.translateToXmlString(this.getExpression()));
-        element.addAttribute("listener", TranslateUtils.translateToXmlString(this.getListener()));
+        //如果是空的那么就先不写入
+        if(!StringUtils.isBlank(this.getListener())){
+            element.addAttribute("listener", TranslateUtils.translateToXmlString(this.getListener()));
+        }
         return element;
     }
 

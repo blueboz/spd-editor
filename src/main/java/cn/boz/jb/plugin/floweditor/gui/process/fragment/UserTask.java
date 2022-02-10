@@ -9,10 +9,12 @@ import cn.boz.jb.plugin.floweditor.gui.property.impl.TextFieldProperty;
 import cn.boz.jb.plugin.floweditor.gui.shape.HiPoint;
 import cn.boz.jb.plugin.floweditor.gui.shape.Rect;
 import cn.boz.jb.plugin.floweditor.gui.utils.IcoMoonUtils;
+import cn.boz.jb.plugin.floweditor.gui.utils.StringUtils;
 import cn.boz.jb.plugin.floweditor.gui.utils.TranslateUtils;
 import cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
+import org.jsoup.internal.StringUtil;
 
 import java.awt.Cursor;
 
@@ -138,14 +140,16 @@ public class UserTask extends RectBridge implements SqlAggregator {
         Element element = DocumentHelper.createElement("userTask");
         element.addAttribute("id", TranslateUtils.translateToXmlString(this.getId()));
         element.addAttribute("name", TranslateUtils.translateToXmlString(this.getName()));
-        element.addAttribute("expression", TranslateUtils.translateToXmlString(this.getExpression()));
-        element.addAttribute("bussinesDescrition", TranslateUtils.translateToXmlString(this.getBussinesDescrition()));
-        element.addAttribute("rights", TranslateUtils.translateToXmlString(this.getRights()));
-        element.addAttribute("validSecond", TranslateUtils.translateToXmlString(this.getValidSecond()));
-        element.addAttribute("openSecond", TranslateUtils.translateToXmlString(this.getOpenSecond()));
-        element.addAttribute("eventListener", TranslateUtils.translateToXmlString(this.getEventListener()));
         element.addAttribute("bussinesId", TranslateUtils.translateToXmlString(this.getBussinesId()));
         element.addAttribute("bussinesKey", TranslateUtils.translateToXmlString(this.getBussinesKey()));
+        element.addAttribute("bussinesDescrition", TranslateUtils.translateToXmlString(this.getBussinesDescrition()));
+        element.addAttribute("rights", TranslateUtils.translateToXmlString(this.getRights()));
+        element.addAttribute("expression", TranslateUtils.translateToXmlString(this.getExpression()));
+        if(!StringUtils.isBlank(this.getEventListener())){
+            element.addAttribute("eventListener", TranslateUtils.translateToXmlString(this.getEventListener()));
+        }
+        element.addAttribute("validSecond", TranslateUtils.translateToXmlString(this.getValidSecond()));
+        element.addAttribute("openSecond", TranslateUtils.translateToXmlString(this.getOpenSecond()));
 
         return element;
     }
