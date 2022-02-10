@@ -80,7 +80,7 @@ public class GotoScriptAction extends AnAction implements DumbAware {
                         String allContributorsGroupId = SearchEverywhereManagerImpl.ALL_CONTRIBUTORS_GROUP_ID;
                         instance.show(allContributorsGroupId, group, anActionEvent);
                     }
-
+                    //支持另外的一种形式
                 } else {
                     if (selectedValue.contains("=")) {
                         selectedValue = selectedValue.split("=")[1];
@@ -100,4 +100,5 @@ public class GotoScriptAction extends AnAction implements DumbAware {
         });
         search.showInCenterOf(centerOf);
     }
+
 }

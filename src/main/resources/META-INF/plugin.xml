@@ -22,6 +22,7 @@
     <!--    <depends>com.intellij.modules.java-capable</depends>-->
     <depends>com.intellij.java</depends>
     <depends>com.intellij.database</depends>
+    <depends>Git4Idea</depends>
     <!--    <depends>JavaScriptLanguage</depends>-->
 
 
@@ -34,7 +35,7 @@
         <toolWindow factoryClass="cn.boz.jb.plugin.idea.toolwindow.EcasMenuToolWindowFactory" id="EcasMenu" anchor="right"
                     order="last" icon="SpdEditorIcons.MENU_16_ICON"/>
         <fileType name="Spd" extensions="spd"
-                  implementationClass="cn.boz.jb.plugin.idea.filetype.SpdFileType" language="XML"/>
+                  implementationClass="cn.boz.jb.plugin.idea.filetype.SpdFileType" language="SPD" fieldName="INSTANCE"/>
         <themeMetadataProvider path="/META-INF/SpdEditor.themeMetadata.json"/>
         <applicationService serviceImplementation="cn.boz.jb.plugin.idea.configurable.SpdEditorDBState"/>
         <applicationService serviceImplementation="cn.boz.jb.plugin.idea.configurable.SpdEditorNormState"/>
@@ -56,6 +57,10 @@
             <action class="cn.boz.jb.plugin.addbom.AddBomAction" id="addBomAction" description="Add UTF-8 BOM"
                     text="AddBom"
                     icon="SpdEditorIcons.BOM_16_ICON">
+            </action>
+            <action class="cn.boz.jb.plugin.addbom.FileDiffHistoryAction" id="myfileDiffAction" description="FileDiffHistory"
+                    text="Spd File Diff"
+                    icon="SpdEditorIcons.FLOW_16_ICON">
             </action>
             <add-to-group group-id="ProjectViewPopupMenu" anchor="before"
                           relative-to-action="EditorPaste"/>

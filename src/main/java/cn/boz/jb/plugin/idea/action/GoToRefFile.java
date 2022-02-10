@@ -3,8 +3,9 @@ package cn.boz.jb.plugin.idea.action;
 import cn.boz.jb.plugin.idea.configurable.SpdEditorDBState;
 import cn.boz.jb.plugin.idea.dialog.EngineActionDialog;
 import cn.boz.jb.plugin.idea.utils.DBUtils;
-import com.intellij.codeInsight.hint.HintManager;
 import com.intellij.codeInsight.navigation.NavigationUtil;
+import com.intellij.ide.actions.searcheverywhere.SearchEverywhereManager;
+import com.intellij.ide.actions.searcheverywhere.SearchEverywhereManagerImpl;
 import com.intellij.ide.highlighter.HtmlFileType;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.ide.highlighter.XmlFileType;
@@ -111,7 +112,11 @@ public class GoToRefFile extends AnAction {
                 return;
             }
         }
-        HintManager.getInstance().showErrorHint(editor, "Cannot find declaration to go to");
+        //try to use this function else do not use it.
+        String text = element.getText();
+        String allContributorsGroupId = SearchEverywhereManagerImpl.ALL_CONTRIBUTORS_GROUP_ID;
+        SearchEverywhereManager.getInstance(project).show(allContributorsGroupId, text, anActionEvent);
+//        HintManager.getInstance().showErrorHint(editor, "Cannot find declaration to go to");
 
     }
 

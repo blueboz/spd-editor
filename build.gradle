@@ -26,7 +26,7 @@ plugins {
 }
 
 group 'cn.boz'
-version '1.0.27'
+version '1.0.28'
 
 
 sourceCompatibility = 1.11
@@ -71,7 +71,7 @@ intellij {
     instrumentCode = false
 //    sandboxDir.set("${project.rootDir}/.sandbox")
     sandboxDir = "${project.rootDir}/.sandbox"
-    plugins = ['com.intellij.java', 'JavaScriptLanguage', 'DatabaseTools']
+    plugins = ['com.intellij.java', 'JavaScriptLanguage', 'DatabaseTools','Git4Idea']
 
     //关于databasePlugins
 //    F:\App\JetBrains\IntelliJ IDEA 2021.1.1\plugins\DatabaseTools\lib\database-impl.jar!\META-INF\DatabasePlugin.xml
@@ -97,10 +97,11 @@ patchPluginXml {
 
     changeNotes = """
 
-    <b>1.0.27</b><br>
+    <b>1.0.28</b><br>
     <ul>
         <li>fixed foreach gateway lackof expression error</li>
         <li>support more bigger dialog of property editor</li>
+        <li>support spd file diff</li>
     </ul>
     
     <b>1.0.21</b><br>
@@ -268,7 +269,6 @@ def pushFileToSSh(String updatePlugins) {
 
         sftp.put(bais, "$targetpath/updateplugins2.xml")
 
-        sftp
 
 
         sftp.disconnect()

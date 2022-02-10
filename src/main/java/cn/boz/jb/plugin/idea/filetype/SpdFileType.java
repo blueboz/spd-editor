@@ -1,9 +1,7 @@
 package cn.boz.jb.plugin.idea.filetype;
 
 import com.intellij.ide.highlighter.XmlLikeFileType;
-import com.intellij.lang.Language;
 import com.intellij.lang.xml.XMLLanguage;
-import com.intellij.openapi.vfs.VirtualFile;
 import icons.SpdEditorIcons;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
@@ -18,10 +16,6 @@ public class SpdFileType extends XmlLikeFileType {
 
     private SpdFileType() {
         super(XMLLanguage.INSTANCE);
-    }
-
-    protected SpdFileType(Language language) {
-        super(language);
     }
 
 
