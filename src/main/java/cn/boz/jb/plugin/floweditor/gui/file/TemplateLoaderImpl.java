@@ -339,10 +339,13 @@ public class TemplateLoaderImpl implements TemplateLoader {
         OutputFormat format = OutputFormat.createPrettyPrint();
 
         format.setIndent(true);
-        format.setIndentSize(4);  // 行缩进
+        format.setIndent("\t");
+//        format.setIndentSize(4);  // 行缩进
         format.setNewlines(true); // 一个结点为一行
         format.setTrimText(true); // 去重空格
         format.setPadText(true);
+        //转义
+//        format.setOmitEncoding(true);
         format.setNewLineAfterDeclaration(false);
         format.setEncoding("UTF-8");
         XMLWriter xmlWriter = new XMLWriter(outputStream, format);

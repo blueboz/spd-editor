@@ -26,7 +26,7 @@ plugins {
 }
 
 group 'cn.boz'
-version '1.0.34'
+version '1.0.35'
 
 
 sourceCompatibility = 1.11
@@ -97,7 +97,7 @@ patchPluginXml {
 
     changeNotes = """
 
-    <b>1.0.28</b><br>
+    <b>1.0.35</b><br>
     <ul>
         <li>fixed foreach gateway lackof expression error</li>
         <li>support more bigger dialog of property editor</li>

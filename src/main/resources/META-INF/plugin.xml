@@ -32,7 +32,8 @@
         <fileEditorProvider implementation="cn.boz.jb.plugin.idea.fileeditor.SpdFileEditorProvider"
                             id="myFileEditorProvider" order="last">
         </fileEditorProvider>
-        <toolWindow factoryClass="cn.boz.jb.plugin.idea.toolwindow.EcasMenuToolWindowFactory" id="EcasMenu" anchor="right"
+        <toolWindow factoryClass="cn.boz.jb.plugin.idea.toolwindow.EcasMenuToolWindowFactory" id="EcasMenu"
+                    anchor="right"
                     order="last" icon="SpdEditorIcons.MENU_16_ICON"/>
         <fileType name="Spd" extensions="spd"
                   implementationClass="cn.boz.jb.plugin.idea.filetype.SpdFileType" language="SPD" fieldName="INSTANCE"/>
@@ -41,7 +42,8 @@
         <applicationService serviceImplementation="cn.boz.jb.plugin.idea.configurable.SpdEditorNormState"/>
         <applicationConfigurable parentId="tools" instance="cn.boz.jb.plugin.idea.configurable.SpdEditorDBSettings"
                                  id="spdEditorConfigurable" displayName="SpdEditor"/>
-        <applicationConfigurable parentId="spdEditorConfigurable" instance="cn.boz.jb.plugin.idea.configurable.SpdEditorNormSettings"
+        <applicationConfigurable parentId="spdEditorConfigurable"
+                                 instance="cn.boz.jb.plugin.idea.configurable.SpdEditorNormSettings"
                                  id="spdEditorConfigurableConfig" displayName="BasicConfig"/>
         <notificationGroup id="Spd Editor" displayType="BALLOON"/>
 
@@ -58,12 +60,20 @@
                     text="AddBom"
                     icon="SpdEditorIcons.BOM_16_ICON">
             </action>
-            <action class="cn.boz.jb.plugin.addbom.FileDiffHistoryAction" id="myfileDiffAction" description="FileDiffHistory"
+            <action class="cn.boz.jb.plugin.addbom.FileDiffHistoryAction" id="myfileDiffAction"
+                    description="FileDiffHistory"
                     text="Spd File Diff"
                     icon="SpdEditorIcons.FLOW_16_ICON">
             </action>
+
             <add-to-group group-id="ProjectViewPopupMenu" anchor="before"
                           relative-to-action="EditorPaste"/>
+        </group>
+        <group id="SqlDiffAction">
+            <action class="cn.boz.jb.plugin.idea.action.SqlDiffAction" id="sqlDiffAction" description="SQLDiff"
+                    text="Sql Diff"
+                    icon="SpdEditorIcons.FLOW_16_ICON">
+            </action>
         </group>
 
         <action class="cn.boz.jb.plugin.idea.action.NewSpdFileAction" id="NewSpdFile" text="Spd File"
@@ -81,7 +91,8 @@
             <action class="cn.boz.jb.plugin.idea.action.GoToRefFile" id="GoToRef" text="Go To Ref"
                     icon="SpdEditorIcons.REF_16_ICON">
             </action>
-            <action class="cn.boz.jb.plugin.idea.codedef.action.AddCodeDefAction" id="AddCodeDef" text="Add Code Def" icon="AllIcons.General.Add"></action>
+            <action class="cn.boz.jb.plugin.idea.codedef.action.AddCodeDefAction" id="AddCodeDef" text="Add Code Def"
+                    icon="AllIcons.General.Add"></action>
             <add-to-group group-id="EditorPopupMenu" anchor="first"></add-to-group>
         </group>
         <!--        GoToJsFile-->
@@ -94,8 +105,9 @@
         </group>
         <group id="spd.menuid.spanel.group">
             <action class="cn.boz.jb.plugin.idea.toolwindow.PrevPageAction" icon="AllIcons.Actions.Play_back"></action>
-<!--            <action class="cn.boz.jb.plugin.idea.toolwindow.PageRangeAction" icon="AllIcons.Actions.FindAndShowNextMatches"></action>-->
-            <action class="cn.boz.jb.plugin.idea.toolwindow.NextPageAction" icon="AllIcons.Actions.Play_forward"></action>
+            <!--            <action class="cn.boz.jb.plugin.idea.toolwindow.PageRangeAction" icon="AllIcons.Actions.FindAndShowNextMatches"></action>-->
+            <action class="cn.boz.jb.plugin.idea.toolwindow.NextPageAction"
+                    icon="AllIcons.Actions.Play_forward"></action>
         </group>
     </actions>
 

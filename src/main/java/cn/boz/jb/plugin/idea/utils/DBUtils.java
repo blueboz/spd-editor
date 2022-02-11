@@ -113,6 +113,66 @@ public class DBUtils {
 
     }
 
+    private String listMapToCsv(List<Map<String, Object>> listmap,boolean wrap) {
+        StringBuilder result = new StringBuilder();
+        for (Map<String, Object> item : listmap) {
+            for (Map.Entry<String, Object> entry : item.entrySet()) {
+                Object value = entry.getValue();
+                if(!wrap){
+                    if(value instanceof String ){
+                        value=((String) value).replace("\n","");
+                    }
+                }
+                result.append(value);
+                result.append(" ");
+            }
+            result.append("\n");
+        }
+
+        return result.toString();
+    }
+
+
+    public  Map<String, String> fetchAndCompare(List<String> sqls, String generateQueryEngineTaskSql, String generateQueryProcessTaskSql,boolean wrap) {
+        HashMap<String, String> result = new HashMap<>();
+        try (Connection connection = getConnection(SpdEditorDBState.getInstance())) {
+            connection.setAutoCommit(false);
+            List<Map<String, Object>> engineTasksOld = queryForList(connection.prepareStatement(generateQueryEngineTaskSql));
+            List<Map<String, Object>> processOld = queryForList(connection.prepareStatement(generateQueryProcessTaskSql));
+            result.put("old", listMapToCsv(engineTasksOld,wrap) + listMapToCsv(processOld,wrap));
+            Statement statement = connection.createStatement();
+            for (String s : sqls) {
+                //非空条件判断
+                if (s != null && !s.trim().equals("")) {
+                    statement.execute(s);
+                }
+            }
+
+            List<Map<String, Object>> engineTasksNew = queryForList(connection.prepareStatement(generateQueryEngineTaskSql));
+            List<Map<String, Object>> processOldNew = queryForList(connection.prepareStatement(generateQueryProcessTaskSql));
+            connection.rollback();
+
+            result.put("new", listMapToCsv(engineTasksNew,wrap) + listMapToCsv(processOldNew,wrap));
+
+
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
     public void executeSql(Connection connection, String sql) throws Exception {
         try (Statement statement = connection.createStatement();) {
             statement.execute(sql);
@@ -245,4 +305,5 @@ public class DBUtils {
         }
         return datas;
     }
+
 }

@@ -46,4 +46,8 @@ public class SpdFileEditorProvider implements FileEditorProvider, DumbAware {
         return FileEditorPolicy.PLACE_BEFORE_DEFAULT_EDITOR;
     }
 
+    @Override
+    public void disposeEditor(@NotNull FileEditor editor) {
+        FileEditorProvider.super.disposeEditor(editor);
+    }
 }

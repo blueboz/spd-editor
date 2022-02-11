@@ -1,6 +1,7 @@
 package cn.boz.jb.plugin.idea.fileeditor;
 
 import cn.boz.jb.plugin.idea.widget.SpdEditor;
+import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.fileEditor.FileEditor;
 import com.intellij.openapi.fileEditor.FileEditorLocation;
@@ -120,7 +121,10 @@ public class SpdFileEditor implements FileEditor {
     @SuppressWarnings("unchecked")
     @Override
     public <T> @Nullable T getUserData(@NotNull Key<T> key) {
-//        System.out.println("get user data:" + key);
+        System.out.println("get user data:" + key);
+//        if(key.equals(CommonDataKeys.EDITOR)){
+//            return (T) this;
+//        }
         return (T) userdata.get(key);
     }
 
@@ -128,6 +132,6 @@ public class SpdFileEditor implements FileEditor {
     @Override
     public <T> void putUserData(@NotNull Key<T> key, @Nullable T t) {
         userdata.put(key, t);
-//        System.out.println("put user data:" + key + " t:" + t);
+        System.out.println("put user data:" + key + " t:" + t);
     }
 }
