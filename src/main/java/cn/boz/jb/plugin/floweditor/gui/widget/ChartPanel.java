@@ -3235,7 +3235,8 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
             Messages.showErrorDialog("流程id未设置", "发生异常");
             return null;
         }
-        sqls.add("delete from ENGINE_TASK where ID_ like '" + this.id + "_%'");
+        //注意使用转义字符
+        sqls.add("delete from ENGINE_TASK where ID_ like '" + this.id + "\\_%' escape '\\'");
         sqls.add(String.format("delete from ENGINE_FLOW where PROCESSID_='%s'", this.id));
         for (int i = 0; i < shapes.size(); i++) {
             Shape shape = shapes.get(i);

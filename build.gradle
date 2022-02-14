@@ -25,8 +25,10 @@ plugins {
     id 'groovy'
 }
 
+def ts = System.currentTimeMillis()
+ext['simplever'] = '1.0.35'
 group 'cn.boz'
-version '1.0.35'
+version ext['simplever'] + '.' + ts
 
 
 sourceCompatibility = 1.11
@@ -71,7 +73,7 @@ intellij {
     instrumentCode = false
 //    sandboxDir.set("${project.rootDir}/.sandbox")
     sandboxDir = "${project.rootDir}/.sandbox"
-    plugins = ['com.intellij.java', 'JavaScriptLanguage', 'DatabaseTools','Git4Idea']
+    plugins = ['com.intellij.java', 'JavaScriptLanguage', 'DatabaseTools', 'Git4Idea']
 
     //关于databasePlugins
 //    F:\App\JetBrains\IntelliJ IDEA 2021.1.1\plugins\DatabaseTools\lib\database-impl.jar!\META-INF\DatabasePlugin.xml
@@ -200,9 +202,9 @@ task "publishPluginLocal" {
 
         pushFileToSSh()
 
-
     }
 }
+
 
 tasks.getByName("buildSearchableOptions").enabled(false)
 tasks.whenTaskAdded { task ->
@@ -229,16 +231,32 @@ publishPlugin {
  */
 def pushFileToSSh(String updatePlugins) {
     try {
-        def distributionFilePath = "$buildDir\\$distsDirName\\${archivesBaseName}-${version}.zip"
+
+        def fpath = "$buildDir\\$distsDirName"
+        def fts = fileTree(fpath)
+        if(fts.size()==0){
+            System.err.println "THERE IS NOTHING FILE TO BE PUBLISH"
+            return ;
+        }
+        def distributionFilePath = fts.last()
+//        def distributionFilePath = "$buildDir\\$distsDirName\\${archivesBaseName}-${version}.zip"
+//    println 'ready to publish file'+distributionFilePath
+        def dname = distributionFilePath.name
+        def dnamerem = dname.substring(0, dname.lastIndexOf('.'))
+        def dnamets = dnamerem.substring(dnamerem.lastIndexOf('.') + 1)
+
+
+//        def distributionFilePath = "$buildDir\\$distsDirName\\${archivesBaseName}-${version}.zip"
         var cn = patchPluginXml.changeNotes.getOrNull()
-        def file = new File(distributionFilePath)
+        println 'ready to publish file' + distributionFilePath
+        def file = new File(dname)
         def flen = file.length()
 
 
         var p = java.nio.file.Path.of("$projectDir\\updatePlugins.xml")
         var str = Files.readString(p, StandardCharsets.UTF_8)
         def binding = [
-                version    : "$version",
+                version    : ext['simplever'] + '.' + "$dnamets",
                 changeNotes: "$cn",
                 desc       : "$patchPluginXml.description",
                 cts        : System.currentTimeMillis(),
@@ -261,8 +279,8 @@ def pushFileToSSh(String updatePlugins) {
         ChannelSftp sftp = (ChannelSftp) session.openChannel("sftp");
         sftp.connect();
         def targetpath = "/cygdrive/e/apiserver/jetbrainsPlugins/"
-        println "pushing from $distributionFilePath into\n\t\t $user@$host:$port/$targetpath"
-        sftp.put(distributionFilePath, targetpath)
+        println "pushing from $distributionFilePath.absolutePath into\n\t\t $user@$host:$port/$targetpath"
+        sftp.put(distributionFilePath.absolutePath, targetpath)
         println 'done'
 
         println "pushing updatePlugins.xml"
@@ -271,9 +289,10 @@ def pushFileToSSh(String updatePlugins) {
         sftp.put(bais, "$targetpath/updateplugins2.xml")
 
 
-
         sftp.disconnect()
         session.disconnect();
+        fts.each { f -> f.delete() }
+
 
     } catch (Exception e) {
         throw new RuntimeException(e)
