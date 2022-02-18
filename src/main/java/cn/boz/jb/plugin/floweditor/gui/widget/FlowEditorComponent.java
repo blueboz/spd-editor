@@ -32,7 +32,7 @@ public class FlowEditorComponent extends JComponent implements MouseListener {
 
     public FlowEditorComponent() {
         //处理图形组件
-        gPanel = new ChartPanel();
+        gPanel = new ChartPanel(null,null);
 
         //处理菜单组件
         menu = new JPanel();

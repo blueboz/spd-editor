@@ -1,6 +1,9 @@
 package cn.boz.jb.plugin.idea.fileeditor;
 
 import cn.boz.jb.plugin.idea.widget.SpdEditor;
+import com.intellij.openapi.actionSystem.ActionGroup;
+import com.intellij.openapi.actionSystem.ActionManager;
+import com.intellij.openapi.actionSystem.ActionPopupMenu;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.fileEditor.FileEditor;
@@ -40,8 +43,7 @@ public class SpdFileEditor implements FileEditor {
     public SpdFileEditor(Project project, VirtualFile virtualFile) {
         this.virtualFile = virtualFile;
         this.project = project;
-        spdEditor = new SpdEditor(virtualFile);
-//        spdEditor.loadFromFile(new File(virtualFile.getPath()));
+        spdEditor = new SpdEditor(project,virtualFile);
         spdEditor.load();
         spdEditor.getChartPanel().registerProcessSaveListener((bs) -> {
             WriteCommandAction.runWriteCommandAction(project, () -> {
@@ -57,6 +59,13 @@ public class SpdFileEditor implements FileEditor {
                 });
             });
         });
+        ActionManager instance = ActionManager.getInstance();
+
+        ActionPopupMenu sqlDiffAction = instance.createActionPopupMenu("diff", (ActionGroup) instance.getAction("SqlDiffAction"));
+        //这样
+        sqlDiffAction.setTargetComponent(this.getSpdEditor().getChartPanel());
+//        chartPanel.setComponentPopupMenu(sqlDiffAction.getComponent());
+        this.getSpdEditor().getChartPanel().setComponentPopupMenu(sqlDiffAction.getComponent());
     }
 
     @Override
@@ -97,6 +106,7 @@ public class SpdFileEditor implements FileEditor {
 
     @Override
     public void addPropertyChangeListener(@NotNull PropertyChangeListener propertyChangeListener) {
+        System.out.println("Add property ChangeListener..."+propertyChangeListener);
         //keneng
 //        PropertyChangeEvent propertyChangeEvent = new PropertyChangeEvent
 //        propertyChangeListener.propertyChange();
@@ -109,8 +119,18 @@ public class SpdFileEditor implements FileEditor {
 
     @Override
     public @Nullable FileEditorLocation getCurrentLocation() {
+        System.out.println("get current location");
+        return new FileEditorLocation() {
+            @Override
+            public @NotNull FileEditor getEditor() {
+                return SpdFileEditor.this;
+            }
 
-        return null;
+            @Override
+            public int compareTo(@NotNull FileEditorLocation o) {
+                return o.compareTo(this);
+            }
+        };
     }
 
     @Override

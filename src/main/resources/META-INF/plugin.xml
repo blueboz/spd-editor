@@ -46,6 +46,7 @@
                                  instance="cn.boz.jb.plugin.idea.configurable.SpdEditorNormSettings"
                                  id="spdEditorConfigurableConfig" displayName="BasicConfig"/>
         <notificationGroup id="Spd Editor" displayType="BALLOON"/>
+<!--        <searchEverywhereContributor implementation="cn.boz.jb.plugin.idea.widget.SpdEditor" id="searchSpdFlow" order="last" os="freebsd"></searchEverywhereContributor>-->
 
     </extensions>
 
@@ -70,10 +71,15 @@
                           relative-to-action="EditorPaste"/>
         </group>
         <group id="SqlDiffAction">
+
             <action class="cn.boz.jb.plugin.idea.action.SqlDiffAction" id="sqlDiffAction" description="SQLDiff"
                     text="Sql Diff"
-                    icon="SpdEditorIcons.FLOW_16_ICON">
+                    icon="AllIcons.Diff.Compare4LeftRight">
             </action>
+            <action class="cn.boz.jb.plugin.idea.action.GotoProcessAction" id="goToProcessAction" description="Go To Process"
+                    text="Go To Process"
+                    icon="DvcsImplIcons.Outgoing"
+            ></action>
         </group>
 
         <action class="cn.boz.jb.plugin.idea.action.NewSpdFileAction" id="NewSpdFile" text="Spd File"

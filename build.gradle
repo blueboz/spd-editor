@@ -104,6 +104,8 @@ patchPluginXml {
         <li>fixed foreach gateway lackof expression error</li>
         <li>support more bigger dialog of property editor</li>
         <li>support spd file diff</li>
+        <li>support spd db diff</li>
+        <li>support go to process</li>
     </ul>
     
     <b>1.0.21</b><br>

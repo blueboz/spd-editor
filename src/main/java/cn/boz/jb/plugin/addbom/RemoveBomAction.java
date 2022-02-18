@@ -28,6 +28,9 @@ public class RemoveBomAction extends AnAction {
             return;
         }
         VirtualFile virtualFile = e.getData(CommonDataKeys.VIRTUAL_FILE);
+        if (virtualFile == null) {
+            return;
+        }
         byte[] bom = virtualFile.getBOM();
         if (bom == null) {
             e.getPresentation().setEnabledAndVisible(false);

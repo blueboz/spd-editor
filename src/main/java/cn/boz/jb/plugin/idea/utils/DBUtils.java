@@ -136,23 +136,27 @@ public class DBUtils {
     public  Map<String, String> fetchAndCompare(List<String> sqls, String generateQueryEngineTaskSql, String generateQueryProcessTaskSql,boolean wrap) {
         HashMap<String, String> result = new HashMap<>();
         try (Connection connection = getConnection(SpdEditorDBState.getInstance())) {
-            connection.setAutoCommit(false);
-            List<Map<String, Object>> engineTasksOld = queryForList(connection.prepareStatement(generateQueryEngineTaskSql));
-            List<Map<String, Object>> processOld = queryForList(connection.prepareStatement(generateQueryProcessTaskSql));
-            result.put("old", listMapToCsv(engineTasksOld,wrap) + listMapToCsv(processOld,wrap));
-            Statement statement = connection.createStatement();
-            for (String s : sqls) {
-                //非空条件判断
-                if (s != null && !s.trim().equals("")) {
-                    statement.execute(s);
+
+            try{
+
+                connection.setAutoCommit(false);
+                List<Map<String, Object>> engineTasksOld = queryForList(connection.prepareStatement(generateQueryEngineTaskSql));
+                List<Map<String, Object>> processOld = queryForList(connection.prepareStatement(generateQueryProcessTaskSql));
+                result.put("old", listMapToCsv(engineTasksOld,wrap) + listMapToCsv(processOld,wrap));
+                Statement statement = connection.createStatement();
+                for (String s : sqls) {
+                    //非空条件判断
+                    if (s != null && !s.trim().equals("")) {
+                        statement.execute(s);
+                    }
                 }
+
+                List<Map<String, Object>> engineTasksNew = queryForList(connection.prepareStatement(generateQueryEngineTaskSql));
+                List<Map<String, Object>> processOldNew = queryForList(connection.prepareStatement(generateQueryProcessTaskSql));
+                result.put("new", listMapToCsv(engineTasksNew,wrap) + listMapToCsv(processOldNew,wrap));
+            }finally {
+                connection.rollback();
             }
-
-            List<Map<String, Object>> engineTasksNew = queryForList(connection.prepareStatement(generateQueryEngineTaskSql));
-            List<Map<String, Object>> processOldNew = queryForList(connection.prepareStatement(generateQueryProcessTaskSql));
-            connection.rollback();
-
-            result.put("new", listMapToCsv(engineTasksNew,wrap) + listMapToCsv(processOldNew,wrap));
 
 
         } catch (MalformedURLException e) {
@@ -169,6 +173,8 @@ public class DBUtils {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
             e.printStackTrace();
+        }finally {
+
         }
         return result;
     }

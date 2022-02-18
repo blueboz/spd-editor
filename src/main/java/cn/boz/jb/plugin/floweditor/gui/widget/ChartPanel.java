@@ -32,7 +32,15 @@ import cn.boz.jb.plugin.floweditor.gui.utils.ShapeUtils;
 import cn.boz.jb.plugin.idea.configurable.SpdEditorDBState;
 import cn.boz.jb.plugin.idea.listener.ChartChangeListener;
 import cn.boz.jb.plugin.idea.listener.ProcessSaveListener;
+import com.intellij.openapi.actionSystem.ActionManager;
+import com.intellij.openapi.actionSystem.AnAction;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
+import com.intellij.openapi.util.Key;
+import com.intellij.openapi.util.UserDataHolder;
+import com.intellij.openapi.vfs.VirtualFile;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.imageio.ImageIO;
 import javax.swing.JComponent;
@@ -82,12 +90,13 @@ import java.util.stream.Collectors;
 /**
  * 流程画板面板
  */
-public class ChartPanel extends JComponent implements MouseListener, MouseMotionListener, KeyListener, MouseWheelListener, PropertyObject, FocusListener {
+public class ChartPanel extends JComponent implements MouseListener, MouseMotionListener, KeyListener, MouseWheelListener, PropertyObject, FocusListener, UserDataHolder {
 
     private List<ShapeSelectedListener> shapeSelectedListeners = new ArrayList<>();
     private List<ProcessSaveListener> processSaveListener = new ArrayList<>();
     private ConstantUtils constantUtils = ConstantUtils.getInstance();
 
+    private PropertyObject selectedObject = null;
     private static boolean debug = false;
     private Graphics2D currentGraphic = null;
     private Stroke currentStroke = null;
@@ -191,8 +200,14 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
     //用于记录当前鼠标位置
     private Point mouseCurrentPoint = null;
 
+    private Project project;
 
-    public ChartPanel() {
+    private VirtualFile virtualFile;
+
+
+    public ChartPanel(Project project, VirtualFile virtualFile) {
+        this.project = project;
+        this.virtualFile = virtualFile;
         setBackground(Color.gray);
         //初始化的图形仅仅供测试
         addMouseMotionListener(this);
@@ -529,7 +544,7 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
     public void drawRectInnerBorder(double x, double y, double w, double h) {
         HiPoint point = translatePoint(x, y);
         Size size = translateSize(w, h);
-        Graphics2D g2d = (Graphics2D) currentGraphic;
+        Graphics2D g2d =  currentGraphic;
         g2d.drawRect(doubleToInt(point.x), doubleToInt(point.y), doubleToInt(size.getW()) - 1, doubleToInt(size.getH()) - 1);
     }
 
@@ -540,7 +555,7 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
     public void fillOval(double x, double y, double w, double h) {
         HiPoint point = translatePoint(x, y);
         Size size = translateSize(w, h);
-        Graphics2D g2d = (Graphics2D) currentGraphic;
+        Graphics2D g2d =  currentGraphic;
         g2d.fillOval(doubleToInt(point.x), doubleToInt(point.y), doubleToInt(size.getW()), doubleToInt(size.getH()));
     }
 
@@ -550,7 +565,7 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
     public void drawOval(double x, double y, double w, double h) {
         HiPoint point = translatePoint(x, y);
         Size size = translateSize(w, h);
-        Graphics2D g2d = (Graphics2D) currentGraphic;
+        Graphics2D g2d =  currentGraphic;
         g2d.drawOval(doubleToInt(point.x), doubleToInt(point.y), doubleToInt(size.getW()), doubleToInt(size.getH()));
     }
 
@@ -566,7 +581,7 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
         for (int i = 0; i < yPoints.length; i++) {
             ypps[i] = (int) Math.round(translateY(yPoints[i]));
         }
-        Graphics2D g2d = (Graphics2D) currentGraphic;
+        Graphics2D g2d =  currentGraphic;
         g2d.drawPolyline(xpps, ypps, nPoints);
 
     }
@@ -876,6 +891,7 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
 
     /**
      * 导出到文件
+     *
      * @param selectedFile 被选中的文件
      * @throws IOException
      */
@@ -912,6 +928,7 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
         //确认继续操作
         ImageIO.write(bufferedImage, "jpg", selectedFile);
     }
+
     /**
      * 导出为图片
      */
@@ -1258,6 +1275,13 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
     public void mouseClicked(MouseEvent e) {
 
         if (e.getButton() != MouseEvent.BUTTON1) {
+            return;
+        }
+
+        if (e.getClickCount() == 2) {
+            ActionManager instance = ActionManager.getInstance();
+            AnAction goToProcessAction = instance.getAction("goToProcessAction");
+            instance.tryToExecute(goToProcessAction, e, this, "", true);
             return;
         }
 
@@ -3170,6 +3194,7 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
     private void fireShapeSelected(PropertyObject shape) {
         ShapeSelectedEvent shapeSelectedEvent = new ShapeSelectedEvent(shape);
         shapeSelectedListeners.forEach(listener -> listener.shapeSelected(shapeSelectedEvent));
+        this.selectedObject = shape;
     }
 
     /**
@@ -3256,12 +3281,12 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
         return sqls;
     }
 
-    public String generateQueryEngineTaskSql(){
-        return "select id_, type_, title_, expression_, returnvalue_, bussineskey_, bussinesdesc_, rights_, validsecond_, listener_, opensecond_, bussinesid_, tasklistener_ from ENGINE_TASK where id_ like '"+getId()+"/_%' escape '/' order by ID_";
+    public String generateQueryEngineTaskSql() {
+        return "select id_, type_, title_, expression_, returnvalue_, bussineskey_, bussinesdesc_, rights_, validsecond_, listener_, opensecond_, bussinesid_, tasklistener_ from ENGINE_TASK where id_ like '" + getId() + "/_%' escape '/' order by ID_";
     }
 
-    public String generateQueryProcessTaskSql(){
-        return "select processid_, source_, target_, condition_, order_ from ENGINE_FLOW where PROCESSID_='"+this.getId()+"' order by SOURCE_,TARGET_";
+    public String generateQueryProcessTaskSql() {
+        return "select processid_, source_, target_, condition_, order_ from ENGINE_FLOW where PROCESSID_='" + this.getId() + "' order by SOURCE_,TARGET_";
     }
 
     @Override
@@ -3294,5 +3319,25 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
         chartChangeListenerList.add(changeListener);
     }
 
+    private Map userdata = new HashMap<>();
 
+    @Override
+    public <T> @Nullable T getUserData(@NotNull Key<T> key) {
+        System.out.println("chart panel get user data:" + key);
+        return (T) userdata.get(key);
+    }
+
+    @Override
+    public <T> void putUserData(@NotNull Key<T> key, @Nullable T t) {
+        userdata.put(key, t);
+        System.out.println("chart panel put user data:" + key + " t:" + t);
+    }
+
+    public PropertyObject getSelectedObject() {
+        return selectedObject;
+    }
+
+    public void setSelectedObject(PropertyObject selectedObject) {
+        this.selectedObject = selectedObject;
+    }
 }

@@ -19,21 +19,14 @@ import cn.boz.jb.plugin.floweditor.gui.widget.Button;
 import cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel;
 import cn.boz.jb.plugin.idea.configurable.SpdEditorDBSettings;
 import cn.boz.jb.plugin.idea.configurable.SpdEditorDBState;
-import cn.boz.jb.plugin.idea.utils.CompareUtils;
 import cn.boz.jb.plugin.idea.utils.DBUtils;
 import com.intellij.notification.NotificationGroupManager;
 import com.intellij.notification.NotificationType;
-import com.intellij.openapi.actionSystem.ActionGroup;
-import com.intellij.openapi.actionSystem.ActionManager;
-import com.intellij.openapi.actionSystem.ActionPopupMenu;
-import com.intellij.openapi.fileTypes.PlainTextFileType;
 import com.intellij.openapi.options.ShowSettingsUtil;
-import com.intellij.openapi.project.ProjectManager;
-import com.intellij.openapi.ui.JBPopupMenu;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.ui.JBSplitter;
-import com.intellij.ui.PopupMenuListenerAdapter;
 import com.intellij.ui.components.JBScrollBar;
 import com.intellij.ui.components.JBScrollPane;
 import com.intellij.util.ui.UIUtil;
@@ -41,27 +34,17 @@ import icons.SpdEditorIcons;
 
 import javax.swing.JComponent;
 import javax.swing.JLabel;
-import javax.swing.JMenu;
 import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
 import javax.swing.JScrollBar;
 import javax.swing.JSeparator;
 import javax.swing.Timer;
-import javax.swing.event.MenuEvent;
-import javax.swing.event.MenuKeyEvent;
-import javax.swing.event.MenuKeyListener;
-import javax.swing.event.MenuListener;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
-import java.awt.MenuItem;
-import java.awt.PopupMenu;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.ClipboardOwner;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
@@ -71,7 +54,6 @@ import java.awt.event.MouseWheelListener;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -86,7 +68,7 @@ public class SpdEditor extends JComponent implements MouseListener, ClipboardOwn
     private VirtualFile virtualFile;
     private JPanel menu;
 
-    public SpdEditor(VirtualFile virtualFile) {
+    public SpdEditor(Project project, VirtualFile virtualFile) {
         this.virtualFile = virtualFile;
         this.setLayout(new BorderLayout());
         jbSplitter = new JBSplitter(false);
@@ -97,7 +79,7 @@ public class SpdEditor extends JComponent implements MouseListener, ClipboardOwn
 
         jbTable = new MyJBTable();
 
-        chartPanel = new ChartPanel();
+        chartPanel = new ChartPanel(project,virtualFile);
         chartPanel.registerShapeSelectedListener(jbTable);
         jbTable.bindChartPanel(chartPanel);
 
@@ -149,60 +131,8 @@ public class SpdEditor extends JComponent implements MouseListener, ClipboardOwn
         jbMenuScroll.setViewportView(menu);
         add(jbMenuScroll, BorderLayout.NORTH);
 
-//        DefaultActionGroup group = (DefaultActionGroup) ActionManager.getInstance().getAction("spdgroup");
-//        ActionToolbar spdToolbar = ActionManager.getInstance().createActionToolbar("SpdEditor", group, true);
-//        menuContainer = new JPanel();
-//        menuContainer.setPreferredSize(new Dimension(0,30));
-//        spdToolbar.setTargetComponent(menuContainer);
-//        menuContainer.add(spdToolbar.getComponent());
-//        add(menuContainer,BorderLayout.NORTH);
-//        ActionManager instance = ActionManager.getInstance();
-//        instance.createActionPopupMenu("SpdEditorMenu",)
-//        DumbAwareAction dumbAwareAction = new DumbAwareAction();
-//        AnAction anAction = new AnAction();
-
         chartPanel.addFocusListener(this);
 
-        JBPopupMenu jbPopupMenu = new JBPopupMenu();
-        ActionManager instance = ActionManager.getInstance();
-
-
-//        JPopupMenu popupMenu = new JPopupMenu();
-//        SpdEditor spdEditor=this;
-//        JMenu jMenu = new JMenu("对比SQL");
-//        popupMenu.add(jMenu);
-//        jMenu.add("对比SQL");
-//
-//        jMenu.addMenuListener(new MenuListener() {
-//            @Override
-//            public void menuSelected(MenuEvent e) {
-//                Object source = e.getSource();
-//                System.out.println(source);
-//                ChartPanel chartPanel = spdEditor.getChartPanel();
-//                List<String> sqls = chartPanel.generateSql();
-//                Map<String,String> dataTobeCompare= DBUtils.getInstance().fetchAndCompare(sqls,chartPanel.generateQueryEngineTaskSql(),chartPanel.generateQueryProcessTaskSql());
-//                String old = dataTobeCompare.get("old");
-//                String aNew = dataTobeCompare.get("new");
-//                CompareUtils.compare(old,aNew, PlainTextFileType.INSTANCE, ProjectManager.getInstance().getDefaultProject());
-//
-//            }
-//
-//            @Override
-//            public void menuDeselected(MenuEvent e) {
-//
-//            }
-//
-//            @Override
-//            public void menuCanceled(MenuEvent e) {
-//
-//            }
-//        });
-//        chartPanel.setComponentPopupMenu(popupMenu);
-
-
-        ActionPopupMenu sqlDiffAction = instance.createActionPopupMenu("diff", (ActionGroup) instance.getAction("SqlDiffAction"));
-        sqlDiffAction.setTargetComponent(chartPanel);
-        chartPanel.setComponentPopupMenu(sqlDiffAction.getComponent());
 
     }
 
