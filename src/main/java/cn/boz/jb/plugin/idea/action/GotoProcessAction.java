@@ -67,33 +67,35 @@ public class GotoProcessAction extends AnAction {
         final String calledElement = callActivity.getCalledElement();
 
 
-        ListPopup listPopup = JBPopupFactory.getInstance().createListPopup(new BaseListPopupStep<String>("Find in project or Search Everything", "Find In Project", "Search EveryThing") {
+        ListPopup listPopup = JBPopupFactory.getInstance()
+                .createListPopup(new BaseListPopupStep<String>("Find in project or Search Everything",
+                        "Search EveryThing", "Find In Project") {
 
-            @Override
-            public @Nullable PopupStep<?> onChosen(String selectedValue, boolean finalChoice) {
-                if (finalChoice) {
-                    return doFinalStep(() -> doRun(selectedValue));
-                }
-                return PopupStep.FINAL_CHOICE;
-            }
+                    @Override
+                    public @Nullable PopupStep<?> onChosen(String selectedValue, boolean finalChoice) {
+                        if (finalChoice) {
+                            return doFinalStep(() -> doRun(selectedValue));
+                        }
+                        return PopupStep.FINAL_CHOICE;
+                    }
 
-            private void doRun(String selectedValue) {
-                if ("Find In Project".equals(selectedValue)) {
-                    SearchEverywhereManager.getInstance(anActionEvent.getProject());
-                    FindInProjectManager findInProjectManager = FindInProjectManager.getInstance(anActionEvent.getProject());
-                    FindModel findModel = new FindModel();
-                    findModel.setStringToFind("id=\"" + calledElement + "\"");
-                    findModel.setFileFilter("*.spd");
-                    FindInProjectSettings settings = FindInProjectSettings.getInstance(anActionEvent.getProject());
+                    private void doRun(String selectedValue) {
+                        if ("Find In Project".equals(selectedValue)) {
+                            SearchEverywhereManager.getInstance(anActionEvent.getProject());
+                            FindInProjectManager findInProjectManager = FindInProjectManager.getInstance(anActionEvent.getProject());
+                            FindModel findModel = new FindModel();
+                            findModel.setStringToFind("id=\"" + calledElement + "\"");
+                            findModel.setFileFilter("*.spd");
+                            FindInProjectSettings settings = FindInProjectSettings.getInstance(anActionEvent.getProject());
 
-                    findInProjectManager.findInProject(anActionEvent.getDataContext(), findModel);
-                } else {
-                    SearchEverywhereManager instance = SearchEverywhereManager.getInstance(anActionEvent.getProject());
-                    String allContributorsGroupId = SearchEverywhereManagerImpl.ALL_CONTRIBUTORS_GROUP_ID;
-                    instance.show(allContributorsGroupId, calledElement, anActionEvent);
-                }
-            }
-        });
+                            findInProjectManager.findInProject(anActionEvent.getDataContext(), findModel);
+                        } else {
+                            SearchEverywhereManager instance = SearchEverywhereManager.getInstance(anActionEvent.getProject());
+                            String allContributorsGroupId = SearchEverywhereManagerImpl.ALL_CONTRIBUTORS_GROUP_ID;
+                            instance.show(allContributorsGroupId, calledElement, anActionEvent);
+                        }
+                    }
+                });
         listPopup.showInFocusCenter();
 
 
