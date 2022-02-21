@@ -52,6 +52,14 @@ public class MyJBTable extends JBTable implements ShapeSelectedListener, Propert
         myProperties.clear();
     }
 
+    public List<Property> getMyProperties() {
+        return myProperties;
+    }
+
+    public void setMyProperties(List<Property> myProperties) {
+        this.myProperties = myProperties;
+    }
+
     public void addProperty(Property property) {
         myProperties.add(property);
     }

@@ -84,6 +84,7 @@ public class CallActivity extends RectBridge implements SqlAggregator {
 
     private Property[] ps;
 
+
     @Override
     public Property[] getPropertyEditors(PropertyEditorListener propertyEditor) {
         if (ps == null) {
@@ -99,6 +100,8 @@ public class CallActivity extends RectBridge implements SqlAggregator {
 
         return ps;
     }
+
+
 
     @Override
     public String toSql(String processId) {

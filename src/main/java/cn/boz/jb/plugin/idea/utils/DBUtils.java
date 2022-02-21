@@ -59,6 +59,11 @@ public class DBUtils {
         }
     }
 
+    public static Connection getConnection() throws MalformedURLException, SQLException, ClassNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+        SpdEditorDBState instance = SpdEditorDBState.getInstance();
+        return getConnection(instance);
+    }
+
     public static Connection getConnection(SpdEditorDBState state) throws MalformedURLException, SQLException, ClassNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         return getConnection(state.jdbcUserName, state.jdbcPassword, state.jdbcUrl, state.jdbcDriver);
     }
@@ -113,14 +118,14 @@ public class DBUtils {
 
     }
 
-    private String listMapToCsv(List<Map<String, Object>> listmap,boolean wrap) {
+    private String listMapToCsv(List<Map<String, Object>> listmap, boolean wrap) {
         StringBuilder result = new StringBuilder();
         for (Map<String, Object> item : listmap) {
             for (Map.Entry<String, Object> entry : item.entrySet()) {
                 Object value = entry.getValue();
-                if(!wrap){
-                    if(value instanceof String ){
-                        value=((String) value).replace("\n","");
+                if (!wrap) {
+                    if (value instanceof String) {
+                        value = ((String) value).replace("\n", "");
                     }
                 }
                 result.append(value);
@@ -133,16 +138,16 @@ public class DBUtils {
     }
 
 
-    public  Map<String, String> fetchAndCompare(List<String> sqls, String generateQueryEngineTaskSql, String generateQueryProcessTaskSql,boolean wrap) {
+    public Map<String, String> fetchAndCompare(List<String> sqls, String generateQueryEngineTaskSql, String generateQueryProcessTaskSql, boolean wrap) {
         HashMap<String, String> result = new HashMap<>();
         try (Connection connection = getConnection(SpdEditorDBState.getInstance())) {
 
-            try{
+            try {
 
                 connection.setAutoCommit(false);
                 List<Map<String, Object>> engineTasksOld = queryForList(connection.prepareStatement(generateQueryEngineTaskSql));
                 List<Map<String, Object>> processOld = queryForList(connection.prepareStatement(generateQueryProcessTaskSql));
-                result.put("old", listMapToCsv(engineTasksOld,wrap) + listMapToCsv(processOld,wrap));
+                result.put("old", listMapToCsv(engineTasksOld, wrap) + listMapToCsv(processOld, wrap));
                 Statement statement = connection.createStatement();
                 for (String s : sqls) {
                     //非空条件判断
@@ -153,8 +158,8 @@ public class DBUtils {
 
                 List<Map<String, Object>> engineTasksNew = queryForList(connection.prepareStatement(generateQueryEngineTaskSql));
                 List<Map<String, Object>> processOldNew = queryForList(connection.prepareStatement(generateQueryProcessTaskSql));
-                result.put("new", listMapToCsv(engineTasksNew,wrap) + listMapToCsv(processOldNew,wrap));
-            }finally {
+                result.put("new", listMapToCsv(engineTasksNew, wrap) + listMapToCsv(processOldNew, wrap));
+            } finally {
                 connection.rollback();
             }
 
@@ -173,7 +178,7 @@ public class DBUtils {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
             e.printStackTrace();
-        }finally {
+        } finally {
 
         }
         return result;
@@ -240,6 +245,20 @@ public class DBUtils {
                 "  and yd03m.menuid(+) = r.rn\n" +
                 "order by rn";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            return queryForList(preparedStatement);
+        }
+    }
+
+    /**
+     * 查询权限
+     * @param connection
+     * @param right
+     * @return
+     * @throws Exception
+     */
+    public List<Map<String, Object>> queryEngineRights(Connection connection, String right) throws Exception {
+        try (PreparedStatement preparedStatement = connection.prepareStatement("select * from ENGINE_RIGHTS where RIGHTS_ = ?")) {
+            preparedStatement.setString(1, right);
             return queryForList(preparedStatement);
         }
     }

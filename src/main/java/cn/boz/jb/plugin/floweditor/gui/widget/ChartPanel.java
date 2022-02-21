@@ -13,6 +13,9 @@ import cn.boz.jb.plugin.floweditor.gui.hist.ShapeState;
 import cn.boz.jb.plugin.floweditor.gui.hist.StateChange;
 import cn.boz.jb.plugin.floweditor.gui.listener.ShapeSelectedListener;
 import cn.boz.jb.plugin.floweditor.gui.process.definition.ProcessDefinition;
+import cn.boz.jb.plugin.floweditor.gui.process.fragment.CallActivity;
+import cn.boz.jb.plugin.floweditor.gui.process.fragment.ServiceTask;
+import cn.boz.jb.plugin.floweditor.gui.process.fragment.UserTask;
 import cn.boz.jb.plugin.floweditor.gui.property.Property;
 import cn.boz.jb.plugin.floweditor.gui.property.PropertyEditorListener;
 import cn.boz.jb.plugin.floweditor.gui.property.impl.TextFieldProperty;
@@ -1279,9 +1282,19 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
         }
 
         if (e.getClickCount() == 2) {
-            ActionManager instance = ActionManager.getInstance();
-            AnAction goToProcessAction = instance.getAction("goToProcessAction");
-            instance.tryToExecute(goToProcessAction, e, this, "", true);
+            if(getSelectedObject() instanceof CallActivity){
+                ActionManager instance = ActionManager.getInstance();
+                AnAction goToProcessAction = instance.getAction("goToProcessAction");
+                instance.tryToExecute(goToProcessAction, e, this, "", true);
+            }else if(getSelectedObject() instanceof ServiceTask){
+                ActionManager instance = ActionManager.getInstance();
+                AnAction gotoServiceTaskAction = instance.getAction("gotoServiceTaskAction");
+                instance.tryToExecute(gotoServiceTaskAction, e, this, "", true);
+            }else if(getSelectedObject() instanceof UserTask){
+                ActionManager instance = ActionManager.getInstance();
+                AnAction gotoServiceTaskAction = instance.getAction("gotoRightAction");
+                instance.tryToExecute(gotoServiceTaskAction, e, this, "", true);
+            }
             return;
         }
 

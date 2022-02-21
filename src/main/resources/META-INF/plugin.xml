@@ -46,7 +46,7 @@
                                  instance="cn.boz.jb.plugin.idea.configurable.SpdEditorNormSettings"
                                  id="spdEditorConfigurableConfig" displayName="BasicConfig"/>
         <notificationGroup id="Spd Editor" displayType="BALLOON"/>
-<!--        <searchEverywhereContributor implementation="cn.boz.jb.plugin.idea.widget.SpdEditor" id="searchSpdFlow" order="last" os="freebsd"></searchEverywhereContributor>-->
+        <!--        <searchEverywhereContributor implementation="cn.boz.jb.plugin.idea.widget.SpdEditor" id="searchSpdFlow" order="last" os="freebsd"></searchEverywhereContributor>-->
 
     </extensions>
 
@@ -76,10 +76,20 @@
                     text="Sql Diff"
                     icon="AllIcons.Diff.Compare4LeftRight">
             </action>
-            <action class="cn.boz.jb.plugin.idea.action.GotoProcessAction" id="goToProcessAction" description="Go To Process"
+            <action class="cn.boz.jb.plugin.idea.action.GotoProcessAction" id="goToProcessAction"
+                    description="Go To Process"
                     text="Go To Process"
                     icon="DvcsImplIcons.Outgoing"
             ></action>
+            <action class="cn.boz.jb.plugin.idea.action.GotoServiceTaskAction" id="gotoServiceTaskAction"
+                    description="Go To ServiceTask"
+                    text="Go To ServiceTask"
+                    icon="AllIcons.Actions.ListFiles"
+            ></action>
+            <action class="cn.boz.jb.plugin.idea.action.GotoRightAction" id="gotoRightAction"
+                    description="Go To EngineRight"
+                    text="Go To EngineRight"
+                    icon="AllIcons.Nodes.SecurityRole"></action>
         </group>
 
         <action class="cn.boz.jb.plugin.idea.action.NewSpdFileAction" id="NewSpdFile" text="Spd File"

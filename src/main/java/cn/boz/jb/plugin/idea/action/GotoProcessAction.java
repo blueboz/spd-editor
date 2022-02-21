@@ -2,32 +2,33 @@ package cn.boz.jb.plugin.idea.action;
 
 import cn.boz.jb.plugin.floweditor.gui.control.PropertyObject;
 import cn.boz.jb.plugin.floweditor.gui.process.fragment.CallActivity;
+import cn.boz.jb.plugin.floweditor.gui.process.fragment.ServiceTask;
+import cn.boz.jb.plugin.floweditor.gui.property.Property;
+import cn.boz.jb.plugin.floweditor.gui.property.impl.TextAreaProperty;
 import cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel;
-import cn.boz.jb.plugin.idea.utils.CompareUtils;
-import cn.boz.jb.plugin.idea.utils.DBUtils;
-import cn.boz.jb.plugin.idea.widget.SpdEditor;
+import cn.boz.jb.plugin.idea.widget.MyJBTable;
 import com.intellij.find.FindInProjectSettings;
-import com.intellij.find.FindManager;
 import com.intellij.find.FindModel;
 import com.intellij.find.findInProject.FindInProjectManager;
-import com.intellij.find.usages.impl.AllSearchOptions;
 import com.intellij.ide.actions.searcheverywhere.SearchEverywhereManager;
 import com.intellij.ide.actions.searcheverywhere.SearchEverywhereManagerImpl;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
-import com.intellij.openapi.fileTypes.PlainTextFileType;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.openapi.ui.popup.ListPopup;
 import com.intellij.openapi.ui.popup.PopupStep;
 import com.intellij.openapi.ui.popup.util.BaseListPopupStep;
+import com.intellij.ui.JBSplitter;
+import com.intellij.ui.components.JBScrollPane;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javax.swing.JViewport;
 import javax.swing.SwingUtilities;
+import javax.swing.table.TableCellEditor;
 import java.awt.Component;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 转到流程的Action
@@ -45,11 +46,11 @@ public class GotoProcessAction extends AnAction {
             return;
         }
         ChartPanel cp = (ChartPanel) requiredData;
-        if (!(cp.getSelectedObject() instanceof CallActivity)) {
-            anActionEvent.getPresentation().setEnabledAndVisible(false);
+        if (cp.getSelectedObject() instanceof CallActivity) {
+            anActionEvent.getPresentation().setEnabledAndVisible(true);
             return;
         }
-        anActionEvent.getPresentation().setEnabledAndVisible(true);
+        anActionEvent.getPresentation().setEnabledAndVisible(false);
     }
 
     @Override
@@ -59,13 +60,19 @@ public class GotoProcessAction extends AnAction {
             return;
         }
         ChartPanel cp = (ChartPanel) requiredData;
-        if (!(cp.getSelectedObject() instanceof CallActivity)) {
+        PropertyObject selectedObject = cp.getSelectedObject();
+        if (selectedObject instanceof CallActivity) {
+            processCallActivity(anActionEvent, cp);
             return;
         }
-        CallActivity callActivity = (CallActivity) cp.getSelectedObject();
-        //目标调用元素
-        final String calledElement = callActivity.getCalledElement();
 
+    }
+
+
+    private void processCallActivity(@NotNull AnActionEvent anActionEvent, ChartPanel cp) {
+        //目标调用元素
+        CallActivity callActivity = (CallActivity) cp.getSelectedObject();
+        final String calledElement = callActivity.getCalledElement();
 
         ListPopup listPopup = JBPopupFactory.getInstance()
                 .createListPopup(new BaseListPopupStep<String>("Find in project or Search Everything",
@@ -97,7 +104,5 @@ public class GotoProcessAction extends AnAction {
                     }
                 });
         listPopup.showInFocusCenter();
-
-
     }
 }

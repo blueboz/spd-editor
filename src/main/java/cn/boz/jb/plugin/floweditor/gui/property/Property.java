@@ -20,7 +20,6 @@ public abstract class Property {
     private PropertyChangeListener propertyChangeListener;
     private PropertyEditorListener propertyEditorListener;
 
-
     public Integer getRowHeight() {
         if (rowHeight == null) {
             return SpdTable.DEFAULT_ROW_HEIGHT;
@@ -28,11 +27,9 @@ public abstract class Property {
         return rowHeight;
     }
 
-
     public void setRowHeight(Integer rowHeight) {
         this.rowHeight = rowHeight;
     }
-
 
     public Object getOperatedObj() {
         return operatedObj;

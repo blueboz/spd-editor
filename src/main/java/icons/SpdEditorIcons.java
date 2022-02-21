@@ -18,6 +18,8 @@ public class SpdEditorIcons {
     public static Icon ACTION_32_ICON = icon("/icons/action32.svg");
     public static Icon MENU_16_ICON = icon("/icons/menu.svg");
 
+    public static Icon COMPARE_16_ICON = icon("/icons/compare.svg");
+    public static Icon PROCESS_16_ICON = icon("/icons/process.svg");
 
     static Icon icon(String path) {
         Icon icon = IconLoader.getIcon(path, SpdEditorIcons.class);
