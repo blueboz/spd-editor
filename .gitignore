@@ -2,3 +2,4 @@
 .idea
 .gradle
 .sandbox
+/src/test/java/cn/boz/test/Colorful.java
