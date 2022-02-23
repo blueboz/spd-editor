@@ -2,6 +2,7 @@ package cn.boz.jb.plugin.idea.configurable;
 
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.PersistentStateComponent;
+import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import com.intellij.util.xmlb.XmlSerializerUtil;
@@ -45,7 +46,7 @@ public class SpdEditorDBState implements PersistentStateComponent<SpdEditorDBSta
     }
 
     public static SpdEditorDBState getInstance() {
-        return ApplicationManager.getApplication().getService(SpdEditorDBState.class);
+        return ServiceManager.getService(SpdEditorDBState.class);
     }
 
 

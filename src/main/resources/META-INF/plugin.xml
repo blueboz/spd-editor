@@ -1,4 +1,4 @@
-<idea-plugin require-restart="false">
+<idea-plugin require-restart="false" allow-bundled-update="true">
     <id>cn.boz.jb.plugin.spd-editor</id>
     <name>Erayt Spd Editor</name>
     <vendor email="1173626291@qq.com" url="http://blog.csdn.net/blueboz">Blueboz.Chen</vendor>
@@ -36,10 +36,10 @@
                     anchor="right"
                     order="last" icon="SpdEditorIcons.MENU_16_ICON"/>
         <fileType name="Spd" extensions="spd"
-                  implementationClass="cn.boz.jb.plugin.idea.filetype.SpdFileType" language="SPD" fieldName="INSTANCE"/>
+                  implementationClass="cn.boz.jb.plugin.idea.filetype.SpdFileType" language="XML" fieldName="INSTANCE"/>
         <themeMetadataProvider path="/META-INF/SpdEditor.themeMetadata.json"/>
-        <applicationService serviceImplementation="cn.boz.jb.plugin.idea.configurable.SpdEditorDBState"/>
-        <applicationService serviceImplementation="cn.boz.jb.plugin.idea.configurable.SpdEditorNormState"/>
+        <projectService serviceImplementation="cn.boz.jb.plugin.idea.configurable.SpdEditorDBState"/>
+        <projectService serviceImplementation="cn.boz.jb.plugin.idea.configurable.SpdEditorNormState"/>
         <!--项目领域的数据库配置信息-->
         <projectConfigurable parentId="tools" instance="cn.boz.jb.plugin.idea.configurable.SpdEditorDBSettings"
                                  id="spdEditorConfigurable" displayName="SpdEditor"/>
