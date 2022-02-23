@@ -24,6 +24,7 @@ import com.intellij.notification.NotificationGroupManager;
 import com.intellij.notification.NotificationType;
 import com.intellij.openapi.options.ShowSettingsUtil;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.ui.JBSplitter;
@@ -462,7 +463,7 @@ public class SpdEditor extends JComponent implements MouseListener, ClipboardOwn
                         Messages.showErrorDialog("发生错误", ee.getMessage());
                     }
                 } else if (idx == 2) {
-                    ShowSettingsUtil.getInstance().showSettingsDialog(null, SpdEditorDBSettings.class);
+                    ShowSettingsUtil.getInstance().showSettingsDialog(ProjectManager.getInstance().getDefaultProject(), SpdEditorDBSettings.class);
                 }
                 break;
             default:

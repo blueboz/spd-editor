@@ -38,14 +38,14 @@
         <fileType name="Spd" extensions="spd"
                   implementationClass="cn.boz.jb.plugin.idea.filetype.SpdFileType" language="XML" fieldName="INSTANCE"/>
         <themeMetadataProvider path="/META-INF/SpdEditor.themeMetadata.json"/>
-        <projectService serviceImplementation="cn.boz.jb.plugin.idea.configurable.SpdEditorDBState"/>
-        <projectService serviceImplementation="cn.boz.jb.plugin.idea.configurable.SpdEditorNormState"/>
+        <applicationService serviceImplementation="cn.boz.jb.plugin.idea.configurable.SpdEditorDBState"/>
+        <applicationService serviceImplementation="cn.boz.jb.plugin.idea.configurable.SpdEditorNormState" />
         <!--项目领域的数据库配置信息-->
-        <projectConfigurable parentId="tools" instance="cn.boz.jb.plugin.idea.configurable.SpdEditorDBSettings"
-                                 id="spdEditorConfigurable" displayName="SpdEditor"/>
-        <projectConfigurable parentId="spdEditorConfigurable"
-                                 instance="cn.boz.jb.plugin.idea.configurable.SpdEditorNormSettings"
-                                 id="spdEditorConfigurableConfig" displayName="BasicConfig" />
+        <applicationConfigurable parentId="tools" instance="cn.boz.jb.plugin.idea.configurable.SpdEditorDBSettings"
+                             id="spdEditorConfigurable" displayName="SpdEditor" nonDefaultProject="true"/>
+        <applicationConfigurable parentId="spdEditorConfigurable"
+                             instance="cn.boz.jb.plugin.idea.configurable.SpdEditorNormSettings"
+                             id="spdEditorConfigurableConfig" displayName="BasicConfig" nonDefaultProject="true"/>
         <notificationGroup id="Spd Editor" displayType="BALLOON"/>
         <!--        <searchEverywhereContributor implementation="cn.boz.jb.plugin.idea.widget.SpdEditor" id="searchSpdFlow" order="last" os="freebsd"></searchEverywhereContributor>-->
 
@@ -71,26 +71,41 @@
             <add-to-group group-id="ProjectViewPopupMenu" anchor="before"
                           relative-to-action="EditorPaste"/>
         </group>
+
+        <action class="cn.boz.jb.plugin.idea.action.GotoProcessAction" id="goToProcessAction"
+                description="Go To Process"
+                text="Go To Process"
+                icon="DvcsImplIcons.Outgoing">
+        </action>
         <group id="SqlDiffAction">
 
             <action class="cn.boz.jb.plugin.idea.action.SqlDiffAction" id="sqlDiffAction" description="SQLDiff"
                     text="Sql Diff"
                     icon="AllIcons.Diff.Compare4LeftRight">
             </action>
-            <action class="cn.boz.jb.plugin.idea.action.GotoProcessAction" id="goToProcessAction"
-                    description="Go To Process"
-                    text="Go To Process"
-                    icon="DvcsImplIcons.Outgoing"
-            ></action>
+            <group text="Go To Process" icon="DvcsImplIcons.Outgoing" id="goToProcessGroup" description="Go To Process" popup="true"
+                   class="cn.boz.jb.plugin.idea.action.GotoProcessActionGroup">
+                <action class="cn.boz.jb.plugin.idea.action.GotoProcessSearchAction" id="goToProcessSearchAction"
+                        description="Go To Process Search"
+                        text="Go To Process Search"
+                        icon="AllIcons.Actions.Search">
+                </action>
+                <action class="cn.boz.jb.plugin.idea.action.GotoProcessFindAction" id="goToProcessFindAction"
+                        description="Go To Process Search"
+                        text="Go To Process Search"
+                        icon="AllIcons.Actions.Search">
+                </action>
+            </group>
+
             <action class="cn.boz.jb.plugin.idea.action.GotoServiceTaskAction" id="gotoServiceTaskAction"
                     description="Go To ServiceTask"
                     text="Go To ServiceTask"
                     icon="AllIcons.Actions.ListFiles"
-            ></action>
+            />
             <action class="cn.boz.jb.plugin.idea.action.GotoRightAction" id="gotoRightAction"
                     description="Go To EngineRight"
                     text="Go To EngineRight"
-                    icon="AllIcons.Nodes.SecurityRole"></action>
+                    icon="AllIcons.Nodes.SecurityRole"/>
         </group>
 
         <action class="cn.boz.jb.plugin.idea.action.NewSpdFileAction" id="NewSpdFile" text="Spd File"
@@ -126,6 +141,11 @@
             <action class="cn.boz.jb.plugin.idea.toolwindow.NextPageAction"
                     icon="AllIcons.Actions.Play_forward"></action>
         </group>
+        <action class="cn.boz.jb.plugin.idea.action.SpdDiffActionExt" icon="SpdEditorIcons.FLOW_16_ICON" text="Spd Compare With Before" id="SpdDiffActionExt" description="SpdDiff" >
+            <add-to-group group-id="VcsHistoryInternalGroup.Popup"></add-to-group>
+            <add-to-group group-id="VcsSelectionHistoryDialog.Popup"></add-to-group>
+            <add-to-group group-id="Vcs.RepositoryChangesBrowserMenu"></add-to-group>
+        </action>
     </actions>
 
 

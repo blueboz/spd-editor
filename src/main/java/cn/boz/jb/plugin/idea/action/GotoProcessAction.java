@@ -20,6 +20,7 @@ import com.intellij.openapi.ui.popup.ListPopup;
 import com.intellij.openapi.ui.popup.PopupStep;
 import com.intellij.openapi.ui.popup.util.BaseListPopupStep;
 import com.intellij.ui.JBSplitter;
+import com.intellij.ui.awt.RelativePoint;
 import com.intellij.ui.components.JBScrollPane;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -28,6 +29,9 @@ import javax.swing.JViewport;
 import javax.swing.SwingUtilities;
 import javax.swing.table.TableCellEditor;
 import java.awt.Component;
+import java.awt.Point;
+import java.awt.event.InputEvent;
+import java.awt.event.MouseEvent;
 import java.util.List;
 
 /**
@@ -103,6 +107,12 @@ public class GotoProcessAction extends AnAction {
                         }
                     }
                 });
-        listPopup.showInFocusCenter();
+        InputEvent inputEvent = anActionEvent.getInputEvent();
+        if (inputEvent instanceof MouseEvent) {
+            MouseEvent me = (MouseEvent) inputEvent;
+            listPopup.show(RelativePoint.fromScreen(me.getLocationOnScreen()));
+        } else {
+            listPopup.showInFocusCenter();
+        }
     }
 }

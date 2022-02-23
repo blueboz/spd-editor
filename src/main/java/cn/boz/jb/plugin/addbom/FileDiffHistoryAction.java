@@ -2,11 +2,13 @@ package cn.boz.jb.plugin.addbom;
 
 import cn.boz.jb.plugin.addbom.utils.XmlUtils;
 import cn.boz.jb.plugin.idea.filetype.SpdFileType;
+import cn.boz.jb.plugin.idea.utils.CompareUtils;
 import com.intellij.diff.DiffContentFactory;
 import com.intellij.diff.DiffDialogHints;
 import com.intellij.diff.DiffManager;
 import com.intellij.diff.actions.impl.MutableDiffRequestChain;
 import com.intellij.diff.contents.DocumentContent;
+import com.intellij.ide.highlighter.XmlFileType;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
@@ -50,10 +52,9 @@ public class FileDiffHistoryAction extends AnAction {
                     selected -> {
                         DiffContentFactory contentFactory = DiffContentFactory.getInstance();
                         try {
-                            DocumentContent left = contentFactory.create(new String(XmlUtils.readXmlAndSortAndFormat(file.contentsToByteArray(true))), SpdFileType.INSTANCE);
-                            DocumentContent right = contentFactory.create(new String(XmlUtils.readXmlAndSortAndFormat(selected.loadContent())), SpdFileType.INSTANCE);
-                            MutableDiffRequestChain mutableDiffRequestChain = new MutableDiffRequestChain(left,  right);
-                            DiffManager.getInstance().showDiff(project, mutableDiffRequestChain, DiffDialogHints.DEFAULT);
+                            String oldContent = new String(XmlUtils.readXmlAndSortAndFormat(file.contentsToByteArray(true)));
+                            String newContent = new String(XmlUtils.readXmlAndSortAndFormat(selected.loadContent()));
+                            CompareUtils.compare(oldContent,newContent, XmlFileType.INSTANCE,e.getProject());
                         } catch (IOException ex) {
                             ex.printStackTrace();
                         } catch (VcsException ex) {

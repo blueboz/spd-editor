@@ -2,9 +2,9 @@ package cn.boz.jb.plugin.idea.configurable;
 
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.PersistentStateComponent;
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
+import com.intellij.openapi.components.StoragePathMacros;
 import com.intellij.util.xmlb.XmlSerializerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -15,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 @State(name = "cn.boz.jb.plugin.idea.configurable.SpdEditorNormState", storages = {@Storage("spdeditor.xml")})
 public class SpdEditorNormState implements PersistentStateComponent<SpdEditorNormState> {
 
-    public String webroot="";
+    public String webroot = "";
 
     public SpdEditorNormState() {
 
@@ -34,7 +34,7 @@ public class SpdEditorNormState implements PersistentStateComponent<SpdEditorNor
     }
 
     public static SpdEditorNormState getInstance() {
-        return ServiceManager.getService(SpdEditorNormState.class);
+        return ApplicationManager.getApplication().getService(SpdEditorNormState.class);
     }
 
 

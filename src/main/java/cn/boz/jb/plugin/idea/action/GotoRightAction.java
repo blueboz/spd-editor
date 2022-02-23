@@ -3,6 +3,7 @@ package cn.boz.jb.plugin.idea.action;
 import cn.boz.jb.plugin.floweditor.gui.control.PropertyObject;
 import cn.boz.jb.plugin.floweditor.gui.process.fragment.UserTask;
 import cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel;
+import cn.boz.jb.plugin.idea.configurable.SpdEditorDBSettings;
 import cn.boz.jb.plugin.idea.dialog.EngineRightDialog;
 import cn.boz.jb.plugin.idea.utils.DBUtils;
 import com.intellij.notification.NotificationGroupManager;
@@ -10,16 +11,19 @@ import com.intellij.notification.NotificationType;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
+import com.intellij.openapi.options.ShowSettingsUtil;
 import com.intellij.openapi.progress.BackgroundTaskQueue;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.ProgressIndicatorProvider;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.progress.util.BackgroundTaskUtil;
+import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.ui.popup.BalloonBuilder;
 import com.intellij.openapi.ui.popup.JBPopup;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.util.Function;
+import icons.SpdEditorIcons;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.Component;
@@ -91,6 +95,11 @@ public class GotoRightAction extends AnAction {
                     }
                 } catch (Exception ee) {
                     ee.printStackTrace();
+                    int idx = Messages.showDialog(ee.getMessage(), "Oops!", new String[]{"Check Db Config", "Never Mind"}, 0, SpdEditorIcons.FLOW_16_ICON);
+                    if (idx == 0) {
+                        ShowSettingsUtil.getInstance().showSettingsDialog(null, SpdEditorDBSettings.class);
+                    }
+                    //数据库
                 }
             }, null);
 

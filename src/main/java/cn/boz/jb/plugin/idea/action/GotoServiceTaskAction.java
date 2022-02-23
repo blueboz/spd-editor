@@ -12,10 +12,13 @@ import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.openapi.ui.popup.ListPopup;
 import com.intellij.openapi.ui.popup.PopupStep;
 import com.intellij.openapi.ui.popup.util.BaseListPopupStep;
+import com.intellij.ui.awt.RelativePoint;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.awt.Component;
+import java.awt.event.InputEvent;
+import java.awt.event.MouseEvent;
 
 
 /**
@@ -72,7 +75,12 @@ public class GotoServiceTaskAction extends AnAction {
                         instance.show(allContributorsGroupId, selectedValue, anActionEvent);
                     }
                 });
-        listPopup.showInFocusCenter();
-
+        InputEvent inputEvent = anActionEvent.getInputEvent();
+        if (inputEvent instanceof MouseEvent) {
+            MouseEvent me = (MouseEvent) inputEvent;
+            listPopup.show(RelativePoint.fromScreen(me.getLocationOnScreen()));
+        } else {
+            listPopup.showInFocusCenter();
+        }
     }
 }

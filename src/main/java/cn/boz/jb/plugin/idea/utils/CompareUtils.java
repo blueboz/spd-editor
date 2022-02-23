@@ -17,10 +17,10 @@ public class CompareUtils {
      * @param fileType
      * @param project
      */
-    public static void compare(String leftstr, String rightStr, FileType fileType, Project project) {
+    public static void compare(String oldver, String newVer, FileType fileType, Project project) {
         DiffContentFactory contentFactory = DiffContentFactory.getInstance();
-        DocumentContent left = contentFactory.create(leftstr, fileType);
-        DocumentContent right = contentFactory.create(rightStr, fileType);
+        DocumentContent left = contentFactory.create(oldver, fileType);
+        DocumentContent right = contentFactory.create(newVer, fileType);
         MutableDiffRequestChain mutableDiffRequestChain = new MutableDiffRequestChain(left, right);
         DiffManager.getInstance().showDiff(project, mutableDiffRequestChain, DiffDialogHints.DEFAULT);
 
