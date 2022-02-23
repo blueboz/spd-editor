@@ -40,11 +40,12 @@
         <themeMetadataProvider path="/META-INF/SpdEditor.themeMetadata.json"/>
         <applicationService serviceImplementation="cn.boz.jb.plugin.idea.configurable.SpdEditorDBState"/>
         <applicationService serviceImplementation="cn.boz.jb.plugin.idea.configurable.SpdEditorNormState"/>
-        <applicationConfigurable parentId="tools" instance="cn.boz.jb.plugin.idea.configurable.SpdEditorDBSettings"
+        <!--项目领域的数据库配置信息-->
+        <projectConfigurable parentId="tools" instance="cn.boz.jb.plugin.idea.configurable.SpdEditorDBSettings"
                                  id="spdEditorConfigurable" displayName="SpdEditor"/>
-        <applicationConfigurable parentId="spdEditorConfigurable"
+        <projectConfigurable parentId="spdEditorConfigurable"
                                  instance="cn.boz.jb.plugin.idea.configurable.SpdEditorNormSettings"
-                                 id="spdEditorConfigurableConfig" displayName="BasicConfig"/>
+                                 id="spdEditorConfigurableConfig" displayName="BasicConfig" />
         <notificationGroup id="Spd Editor" displayType="BALLOON"/>
         <!--        <searchEverywhereContributor implementation="cn.boz.jb.plugin.idea.widget.SpdEditor" id="searchSpdFlow" order="last" os="freebsd"></searchEverywhereContributor>-->
 
