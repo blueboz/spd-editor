@@ -124,7 +124,7 @@ public class GoToRefFile extends AnAction {
         String text = element.getText();
         String allContributorsGroupId = SearchEverywhereManagerImpl.ALL_CONTRIBUTORS_GROUP_ID;
         SearchEverywhereManager.getInstance(project).show(allContributorsGroupId, text, anActionEvent);
-        SearchEverywhereManager searchEverywhereManager = SearchEverywhereManager.getInstance(project);
+//        SearchEverywhereManager searchEverywhereManager = SearchEverywhereManager.getInstance(project);
 //        HintManager.getInstance().showErrorHint(editor, "Cannot find declaration to go to");
 
     }

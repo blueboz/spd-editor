@@ -27,15 +27,15 @@ public class CompareUtils {
 
     }
 
-    public static void compare(String oldver, String oldTitle, String newVer, String newTitle, FileType fileType, Project project) {
+    public static void compare(String oldver, String oldTitle, String newVer, String newTitle, FileType fileType, Project project,String windowTitle) {
         DiffContentFactory contentFactory = DiffContentFactory.getInstance();
         DocumentContent left = contentFactory.create(oldver, fileType);
         DocumentContent right = contentFactory.create(newVer, fileType);
         MutableDiffRequestChain mutableDiffRequestChain = new MutableDiffRequestChain(left, right);
         mutableDiffRequestChain.setTitle1(oldTitle);
         mutableDiffRequestChain.setTitle2(newTitle);
+        mutableDiffRequestChain.setWindowTitle(windowTitle);
         DiffManager.getInstance().showDiff(project, mutableDiffRequestChain, DiffDialogHints.DEFAULT);
-
     }
 }
 

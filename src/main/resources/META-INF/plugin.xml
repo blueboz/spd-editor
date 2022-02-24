@@ -18,7 +18,7 @@
          on how to target different products -->
     <depends>com.intellij.modules.lang</depends>
     <depends>com.intellij.modules.platform</depends>
-    <depends optional="true" config-file="">JavaScript</depends>
+    <depends>JavaScript</depends>
     <!--    <depends>com.intellij.modules.java-capable</depends>-->
     <depends>com.intellij.java</depends>
     <depends>com.intellij.database</depends>
@@ -39,13 +39,13 @@
                   implementationClass="cn.boz.jb.plugin.idea.filetype.SpdFileType" language="XML" fieldName="INSTANCE"/>
         <themeMetadataProvider path="/META-INF/SpdEditor.themeMetadata.json"/>
         <applicationService serviceImplementation="cn.boz.jb.plugin.idea.configurable.SpdEditorDBState"/>
-        <applicationService serviceImplementation="cn.boz.jb.plugin.idea.configurable.SpdEditorNormState" />
+        <applicationService serviceImplementation="cn.boz.jb.plugin.idea.configurable.SpdEditorNormState"/>
         <!--项目领域的数据库配置信息-->
         <applicationConfigurable parentId="tools" instance="cn.boz.jb.plugin.idea.configurable.SpdEditorDBSettings"
-                             id="spdEditorConfigurable" displayName="SpdEditor" nonDefaultProject="true"/>
+                                 id="spdEditorConfigurable" displayName="SpdEditor" nonDefaultProject="true"/>
         <applicationConfigurable parentId="spdEditorConfigurable"
-                             instance="cn.boz.jb.plugin.idea.configurable.SpdEditorNormSettings"
-                             id="spdEditorConfigurableConfig" displayName="BasicConfig" nonDefaultProject="true"/>
+                                 instance="cn.boz.jb.plugin.idea.configurable.SpdEditorNormSettings"
+                                 id="spdEditorConfigurableConfig" displayName="BasicConfig" nonDefaultProject="true"/>
         <notificationGroup id="Spd Editor" displayType="BALLOON"/>
         <!--        <searchEverywhereContributor implementation="cn.boz.jb.plugin.idea.widget.SpdEditor" id="searchSpdFlow" order="last" os="freebsd"></searchEverywhereContributor>-->
 
@@ -79,11 +79,12 @@
         </action>
         <group id="SqlDiffAction">
 
-            <action class="cn.boz.jb.plugin.idea.action.SqlDiffAction" id="sqlDiffAction" description="SQLDiff"
+            <action class="cn.boz.jb.plugin.idea.action.SpdSqlDiffAction" id="sqlDiffAction" description="SQLDiff"
                     text="Sql Diff"
                     icon="AllIcons.Diff.Compare4LeftRight">
             </action>
-            <group text="Go To Process" icon="DvcsImplIcons.Outgoing" id="goToProcessGroup" description="Go To Process" popup="true"
+            <group text="Go To Process" icon="DvcsImplIcons.Outgoing" id="goToProcessGroup" description="Go To Process"
+                   popup="true"
                    class="cn.boz.jb.plugin.idea.action.GotoProcessActionGroup">
                 <action class="cn.boz.jb.plugin.idea.action.GotoProcessSearchAction" id="goToProcessSearchAction"
                         description="Go To Process Search"
@@ -141,12 +142,17 @@
             <action class="cn.boz.jb.plugin.idea.toolwindow.NextPageAction"
                     icon="AllIcons.Actions.Play_forward"></action>
         </group>
-        <action class="cn.boz.jb.plugin.idea.action.SpdDiffActionExt" icon="SpdEditorIcons.FLOW_16_ICON" text="Spd Compare With Before" id="SpdDiffActionExt" description="SpdDiff" >
+        <action class="cn.boz.jb.plugin.idea.action.FileHistoryDiffAction" icon="SpdEditorIcons.FLOW_16_ICON"
+                text="Spd Compare With Before" id="SpdDiffActionExt" description="SpdDiff">
+            <add-to-group group-id="Vcs.FileHistory.ContextMenu"></add-to-group>
+        </action>
+        <action class="cn.boz.jb.plugin.idea.action.RepositoryChangeDiffAction" icon="SpdEditorIcons.FLOW_16_ICON"
+                text="Spd Compare" id="RepoChangeSpdCompare" description="SpdDiff">
             <add-to-group group-id="VcsHistoryInternalGroup.Popup"></add-to-group>
             <add-to-group group-id="VcsSelectionHistoryDialog.Popup"></add-to-group>
             <add-to-group group-id="Vcs.RepositoryChangesBrowserMenu"></add-to-group>
-            <add-to-group group-id="Vcs.FileHistory.ContextMenu"></add-to-group>
         </action>
+
     </actions>
 
 

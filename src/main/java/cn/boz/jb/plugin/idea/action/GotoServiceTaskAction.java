@@ -3,6 +3,7 @@ package cn.boz.jb.plugin.idea.action;
 import cn.boz.jb.plugin.floweditor.gui.control.PropertyObject;
 import cn.boz.jb.plugin.floweditor.gui.process.fragment.ServiceTask;
 import cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel;
+import cn.boz.jb.plugin.idea.dialog.GotoScriptAction;
 import com.intellij.ide.actions.searcheverywhere.SearchEverywhereManager;
 import com.intellij.ide.actions.searcheverywhere.SearchEverywhereManagerImpl;
 import com.intellij.openapi.actionSystem.AnAction;
@@ -70,9 +71,7 @@ public class GotoServiceTaskAction extends AnAction {
                     }
 
                     private void doRun(String selectedValue) {
-                        SearchEverywhereManager instance = SearchEverywhereManager.getInstance(anActionEvent.getProject());
-                        String allContributorsGroupId = SearchEverywhereManagerImpl.ALL_CONTRIBUTORS_GROUP_ID;
-                        instance.show(allContributorsGroupId, selectedValue, anActionEvent);
+                        GotoScriptAction.gotoSelectedValue(selectedValue, anActionEvent);
                     }
                 });
         InputEvent inputEvent = anActionEvent.getInputEvent();

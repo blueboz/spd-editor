@@ -24,7 +24,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-public class SqlDiffAction extends AnAction {
+public class SpdSqlDiffAction extends AnAction {
     @Override
     public void actionPerformed(@NotNull AnActionEvent anActionEvent) {
         Component requiredData = anActionEvent.getRequiredData(PlatformDataKeys.CONTEXT_COMPONENT);
@@ -51,7 +51,7 @@ public class SqlDiffAction extends AnAction {
                     Map<String, String> dataTobeCompare = DBUtils.getInstance().fetchAndCompare(sqls, chartPanel.generateQueryEngineTaskSql(), chartPanel.generateQueryProcessTaskSql(), "Wrap".equals(selectedValue));
                     String old = dataTobeCompare.get("old");
                     String aNew = dataTobeCompare.get("new");
-                    CompareUtils.compare(old, "db version",aNew,  "current ver", PlainTextFileType.INSTANCE, anActionEvent.getProject());
+                    CompareUtils.compare(old, "db version",aNew,  "current ver", PlainTextFileType.INSTANCE, anActionEvent.getProject(),"Sql Into DbCompare");
                 }
             }
         };

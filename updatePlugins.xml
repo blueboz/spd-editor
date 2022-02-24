@@ -16,12 +16,13 @@
         <id>cn.boz.jb.plugin.spd-editor</id>
         <idea-version since-build="200.*"></idea-version>
         <description>
-            Release Date Time:$tfmt
             $desc
         </description>
 
         <change-notes>
             <![CDATA[
+            Release Time:$tfmt</br>
+
             $changeNotes
             ]]>
         </change-notes>

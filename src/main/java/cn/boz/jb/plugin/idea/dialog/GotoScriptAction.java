@@ -70,35 +70,41 @@ public class GotoScriptAction extends AnAction implements DumbAware {
                 //选择的值可以进行跳转
                 callback.run();
 
-                if (selectedValue.contains("processEngine.start")) {
-                    Pattern pattern = Pattern.compile("processEngine\\.start\\(\"(\\w+)\",CONTEXT\\)");
-                    Matcher matcher = pattern.matcher(selectedValue);
-                    if (matcher.find()) {
-                        String group = matcher.group(1);
-                        Project defaultProject = ProjectManager.getInstance().getDefaultProject();
-                        SearchEverywhereManager instance = SearchEverywhereManager.getInstance(defaultProject);
-                        String allContributorsGroupId = SearchEverywhereManagerImpl.ALL_CONTRIBUTORS_GROUP_ID;
-                        instance.show(allContributorsGroupId, group, anActionEvent);
-                    }
-                    //支持另外的一种形式
-                } else {
-                    if (selectedValue.contains("=")) {
-                        selectedValue = selectedValue.split("=")[1];
-                    }
-                    if (selectedValue.contains("(")) {
-                        selectedValue = selectedValue.split("\\(")[0];
-                    }
-                    Project defaultProject = ProjectManager.getInstance().getDefaultProject();
-
-                    SearchEverywhereManager instance = SearchEverywhereManager.getInstance(defaultProject);
-                    String allContributorsGroupId = SearchEverywhereManagerImpl.ALL_CONTRIBUTORS_GROUP_ID;
-                    instance.show(allContributorsGroupId, selectedValue, anActionEvent);
-
-                }
+                gotoSelectedValue(selectedValue, anActionEvent);
 
             }
+
+
         });
         search.showInCenterOf(centerOf);
+    }
+
+    public static  void gotoSelectedValue(String selectedValue, AnActionEvent anActionEvent) {
+        if (selectedValue.contains("processEngine.start")) {
+            Pattern pattern = Pattern.compile("processEngine\\.start\\(\"(\\w+)\",CONTEXT\\)");
+            Matcher matcher = pattern.matcher(selectedValue);
+            if (matcher.find()) {
+                String group = matcher.group(1);
+                Project defaultProject = ProjectManager.getInstance().getDefaultProject();
+                SearchEverywhereManager instance = SearchEverywhereManager.getInstance(defaultProject);
+                String allContributorsGroupId = SearchEverywhereManagerImpl.ALL_CONTRIBUTORS_GROUP_ID;
+                instance.show(allContributorsGroupId, group, anActionEvent);
+            }
+            //支持另外的一种形式
+        } else {
+            if (selectedValue.contains("=")) {
+                selectedValue = selectedValue.split("=")[1];
+            }
+            if (selectedValue.contains("(")) {
+                selectedValue = selectedValue.split("\\(")[0];
+            }
+            Project defaultProject = ProjectManager.getInstance().getDefaultProject();
+
+            SearchEverywhereManager instance = SearchEverywhereManager.getInstance(defaultProject);
+            String allContributorsGroupId = SearchEverywhereManagerImpl.ALL_CONTRIBUTORS_GROUP_ID;
+            instance.show(allContributorsGroupId, selectedValue, anActionEvent);
+
+        }
     }
 
 }
