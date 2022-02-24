@@ -16,7 +16,7 @@
         <id>cn.boz.jb.plugin.spd-editor</id>
         <idea-version since-build="200.*"></idea-version>
         <description>
-            插件发布时间:$tfmt
+            Release Date Time:$tfmt
             $desc
         </description>
 

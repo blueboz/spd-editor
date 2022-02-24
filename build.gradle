@@ -111,6 +111,8 @@ patchPluginXml {
         <li>support spd db diff</li>
         <li>support go to process</li>
         <li>compare spd file in convience way</li>
+        <li>support compare two version of spd file.</li>
+        <li>support dataprovider</li>
     </ul>
     
     <b>1.0.21</b><br>
