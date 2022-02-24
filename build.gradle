@@ -4,6 +4,7 @@ import groovy.text.GStringTemplateEngine
 
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
+import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 buildscript {
@@ -264,6 +265,7 @@ def pushFileToSSh(String updatePlugins) {
 
         var p = java.nio.file.Path.of("$projectDir\\updatePlugins.xml")
         var str = Files.readString(p, StandardCharsets.UTF_8)
+        def ld=LocalDate.now()
         def timefmt = ld.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
 
         def binding = [
