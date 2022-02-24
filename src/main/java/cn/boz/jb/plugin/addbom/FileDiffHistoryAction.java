@@ -17,11 +17,13 @@ import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vcs.AbstractVcs;
 import com.intellij.openapi.vcs.ProjectLevelVcsManager;
+import com.intellij.openapi.vcs.VcsDataKeys;
 import com.intellij.openapi.vcs.VcsException;
 import com.intellij.openapi.vcs.actions.CompareWithSelectedRevisionAction;
 import com.intellij.openapi.vcs.actions.VcsContextUtil;
 import com.intellij.openapi.vcs.history.VcsCachingHistory;
 import com.intellij.openapi.vcs.history.VcsFileRevision;
+import com.intellij.openapi.vcs.history.VcsRevisionNumber;
 import com.intellij.openapi.vcs.impl.VcsBackgroundableActions;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
@@ -38,7 +40,7 @@ import java.util.List;
 public class FileDiffHistoryAction extends AnAction {
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
-        final VirtualFile file =e.getData(CommonDataKeys.VIRTUAL_FILE);
+        final VirtualFile file = e.getData(CommonDataKeys.VIRTUAL_FILE);
         final Project project = (e.getProject());
         final AbstractVcs vcs = (ProjectLevelVcsManager.getInstance(project).getVcsFor(file));
 
@@ -50,11 +52,13 @@ public class FileDiffHistoryAction extends AnAction {
             final List<VcsFileRevision> revisions = session.getRevisionList();
             CompareWithSelectedRevisionAction.showListPopup(revisions, project,
                     selected -> {
-                        DiffContentFactory contentFactory = DiffContentFactory.getInstance();
                         try {
-                            String oldContent = new String(XmlUtils.readXmlAndSortAndFormat(file.contentsToByteArray(true)));
-                            String newContent = new String(XmlUtils.readXmlAndSortAndFormat(selected.loadContent()));
-                            CompareUtils.compare(oldContent,newContent, XmlFileType.INSTANCE,e.getProject());
+                            VcsRevisionNumber vcsRevisionNumber = selected.getRevisionNumber();
+                            String fileName = file.getName();
+                            String currentContent = XmlUtils.readXmlAndSortAndFormat(new String(file.contentsToByteArray(true)));
+                            String selectedContent =  XmlUtils.readXmlAndSortAndFormat(new String(selected.loadContent()));
+                            CompareUtils.compare(selectedContent,vcsRevisionNumber.asString(), currentContent,
+                                     "currentVersion:" + fileName, XmlFileType.INSTANCE, e.getProject());
                         } catch (IOException ex) {
                             ex.printStackTrace();
                         } catch (VcsException ex) {

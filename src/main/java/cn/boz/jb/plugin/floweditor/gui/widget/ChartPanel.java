@@ -35,13 +35,20 @@ import cn.boz.jb.plugin.floweditor.gui.utils.ShapeUtils;
 import cn.boz.jb.plugin.idea.configurable.SpdEditorDBState;
 import cn.boz.jb.plugin.idea.listener.ChartChangeListener;
 import cn.boz.jb.plugin.idea.listener.ProcessSaveListener;
+import cn.boz.jb.plugin.idea.widget.SpdEditor;
+import com.intellij.openapi.actionSystem.ActionGroup;
 import com.intellij.openapi.actionSystem.ActionManager;
+import com.intellij.openapi.actionSystem.ActionPlaces;
 import com.intellij.openapi.actionSystem.AnAction;
+import com.intellij.openapi.actionSystem.DataKey;
+import com.intellij.openapi.actionSystem.DataProvider;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.UserDataHolder;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.ui.PopupHandler;
+import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -93,7 +100,10 @@ import java.util.stream.Collectors;
 /**
  * 流程画板面板
  */
-public class ChartPanel extends JComponent implements MouseListener, MouseMotionListener, KeyListener, MouseWheelListener, PropertyObject, FocusListener, UserDataHolder {
+public class ChartPanel extends JComponent implements DataProvider, MouseListener, MouseMotionListener, KeyListener, MouseWheelListener, PropertyObject, FocusListener, UserDataHolder {
+
+    public static final DataKey<ChartPanel> CURRENT_CHART_PANEL = DataKey.create("CURRENT_CHART_PANEL");
+
 
     private List<ShapeSelectedListener> shapeSelectedListeners = new ArrayList<>();
     private List<ProcessSaveListener> processSaveListener = new ArrayList<>();
@@ -206,11 +216,13 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
     private Project project;
 
     private VirtualFile virtualFile;
+    private SpdEditor editor;
 
 
-    public ChartPanel(Project project, VirtualFile virtualFile) {
+    public ChartPanel(Project project, VirtualFile virtualFile, SpdEditor editor) {
         this.project = project;
         this.virtualFile = virtualFile;
+        this.editor = editor;
         setBackground(Color.gray);
         //初始化的图形仅仅供测试
         addMouseMotionListener(this);
@@ -222,6 +234,15 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
 
         addFocusListener(this);
         setInheritsPopupMenu(true);
+        ActionManager instance = ActionManager.getInstance();
+        ActionGroup ag = (ActionGroup) instance.getAction("SqlDiffAction");
+//        ActionPopupMenu sqlDiffAction = instance.createActionPopupMenu("diff", (ActionGroup) instance.getAction("SqlDiffAction"));
+        //这样
+//        sqlDiffAction.setTargetComponent(this.getSpdEditor().getChartPanel());
+//        chartPanel.setComponentPopupMenu(sqlDiffAction.getComponent());
+//        this.getSpdEditor().getChartPanel().setComponentPopupMenu(sqlDiffAction.getComponent());
+//        PopupHandler.installPopupMenu(myList, "VcsSelectionHistoryDialog.Popup", ActionPlaces.UPDATE_POPUP);
+        PopupHandler.installPopupHandler(this, ag, ActionPlaces.UPDATE_POPUP);
     }
 
     /**
@@ -547,7 +568,7 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
     public void drawRectInnerBorder(double x, double y, double w, double h) {
         HiPoint point = translatePoint(x, y);
         Size size = translateSize(w, h);
-        Graphics2D g2d =  currentGraphic;
+        Graphics2D g2d = currentGraphic;
         g2d.drawRect(doubleToInt(point.x), doubleToInt(point.y), doubleToInt(size.getW()) - 1, doubleToInt(size.getH()) - 1);
     }
 
@@ -558,7 +579,7 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
     public void fillOval(double x, double y, double w, double h) {
         HiPoint point = translatePoint(x, y);
         Size size = translateSize(w, h);
-        Graphics2D g2d =  currentGraphic;
+        Graphics2D g2d = currentGraphic;
         g2d.fillOval(doubleToInt(point.x), doubleToInt(point.y), doubleToInt(size.getW()), doubleToInt(size.getH()));
     }
 
@@ -568,7 +589,7 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
     public void drawOval(double x, double y, double w, double h) {
         HiPoint point = translatePoint(x, y);
         Size size = translateSize(w, h);
-        Graphics2D g2d =  currentGraphic;
+        Graphics2D g2d = currentGraphic;
         g2d.drawOval(doubleToInt(point.x), doubleToInt(point.y), doubleToInt(size.getW()), doubleToInt(size.getH()));
     }
 
@@ -584,7 +605,7 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
         for (int i = 0; i < yPoints.length; i++) {
             ypps[i] = (int) Math.round(translateY(yPoints[i]));
         }
-        Graphics2D g2d =  currentGraphic;
+        Graphics2D g2d = currentGraphic;
         g2d.drawPolyline(xpps, ypps, nPoints);
 
     }
@@ -1282,15 +1303,15 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
         }
 
         if (e.getClickCount() == 2) {
-            if(getSelectedObject() instanceof CallActivity){
+            if (getSelectedObject() instanceof CallActivity) {
                 ActionManager instance = ActionManager.getInstance();
                 AnAction goToProcessAction = instance.getAction("goToProcessAction");
                 instance.tryToExecute(goToProcessAction, e, this, "", true);
-            }else if(getSelectedObject() instanceof ServiceTask){
+            } else if (getSelectedObject() instanceof ServiceTask) {
                 ActionManager instance = ActionManager.getInstance();
                 AnAction gotoServiceTaskAction = instance.getAction("gotoServiceTaskAction");
                 instance.tryToExecute(gotoServiceTaskAction, e, this, "", true);
-            }else if(getSelectedObject() instanceof UserTask){
+            } else if (getSelectedObject() instanceof UserTask) {
                 ActionManager instance = ActionManager.getInstance();
                 AnAction gotoServiceTaskAction = instance.getAction("gotoRightAction");
                 instance.tryToExecute(gotoServiceTaskAction, e, this, "", true);
@@ -3334,16 +3355,16 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
 
     private Map userdata = new HashMap<>();
 
+    @SuppressWarnings("all")
     @Override
     public <T> @Nullable T getUserData(@NotNull Key<T> key) {
-        System.out.println("chart panel get user data:" + key);
         return (T) userdata.get(key);
     }
 
+    @SuppressWarnings("all")
     @Override
     public <T> void putUserData(@NotNull Key<T> key, @Nullable T t) {
         userdata.put(key, t);
-        System.out.println("chart panel put user data:" + key + " t:" + t);
     }
 
     public PropertyObject getSelectedObject() {
@@ -3352,5 +3373,14 @@ public class ChartPanel extends JComponent implements MouseListener, MouseMotion
 
     public void setSelectedObject(PropertyObject selectedObject) {
         this.selectedObject = selectedObject;
+    }
+
+    @Override
+    public @Nullable Object getData(@NotNull @NonNls String dataId) {
+
+        if (CURRENT_CHART_PANEL.is(dataId)) {
+            return this;
+        }
+        return null;
     }
 }

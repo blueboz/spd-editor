@@ -4,6 +4,7 @@ import groovy.text.GStringTemplateEngine
 
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
+import java.time.format.DateTimeFormatter
 
 buildscript {
     dependencies {
@@ -29,6 +30,9 @@ def ts = System.currentTimeMillis()
 ext['simplever'] = '1.0.35'
 group 'cn.boz'
 version ext['simplever'] + '.' + ts
+
+
+
 
 
 sourceCompatibility = 1.11
@@ -106,6 +110,7 @@ patchPluginXml {
         <li>support spd file diff</li>
         <li>support spd db diff</li>
         <li>support go to process</li>
+        <li>compare spd file in convience way</li>
     </ul>
     
     <b>1.0.21</b><br>
@@ -236,9 +241,9 @@ def pushFileToSSh(String updatePlugins) {
 
         def fpath = "$buildDir\\$distsDirName"
         def fts = fileTree(fpath)
-        if(fts.size()==0){
+        if (fts.size() == 0) {
             System.err.println "THERE IS NOTHING FILE TO BE PUBLISH"
-            return ;
+            return;
         }
         def distributionFilePath = fts.last()
 //        def distributionFilePath = "$buildDir\\$distsDirName\\${archivesBaseName}-${version}.zip"
@@ -257,12 +262,15 @@ def pushFileToSSh(String updatePlugins) {
 
         var p = java.nio.file.Path.of("$projectDir\\updatePlugins.xml")
         var str = Files.readString(p, StandardCharsets.UTF_8)
+        def timefmt = ld.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+
         def binding = [
                 version    : ext['simplever'] + '.' + "$dnamets",
                 changeNotes: "$cn",
                 desc       : "$patchPluginXml.description",
                 cts        : System.currentTimeMillis(),
-                flen       : "$flen"
+                flen       : "$flen",
+                tfmt       : "$timefmt"
         ]
 
         def engine = new GStringTemplateEngine()

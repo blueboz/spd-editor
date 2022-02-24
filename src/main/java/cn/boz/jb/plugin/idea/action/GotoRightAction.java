@@ -6,11 +6,14 @@ import cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel;
 import cn.boz.jb.plugin.idea.configurable.SpdEditorDBSettings;
 import cn.boz.jb.plugin.idea.dialog.EngineRightDialog;
 import cn.boz.jb.plugin.idea.utils.DBUtils;
+import cn.boz.jb.plugin.idea.widget.SpdEditor;
 import com.intellij.notification.NotificationGroupManager;
 import com.intellij.notification.NotificationType;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
+import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.options.ShowSettingsUtil;
 import com.intellij.openapi.progress.BackgroundTaskQueue;
 import com.intellij.openapi.progress.ProgressIndicator;
@@ -41,13 +44,13 @@ public class GotoRightAction extends AnAction {
 
     @Override
     public void update(@NotNull AnActionEvent anActionEvent) {
-        Component requiredData = anActionEvent.getRequiredData(PlatformDataKeys.CONTEXT_COMPONENT);
-        if (!(requiredData instanceof ChartPanel)) {
+        ChartPanel chartPanel = anActionEvent.getData(ChartPanel.CURRENT_CHART_PANEL);
+        if (chartPanel == null) {
             anActionEvent.getPresentation().setEnabledAndVisible(false);
+
             return;
         }
-        ChartPanel cp = (ChartPanel) requiredData;
-        if (cp.getSelectedObject() instanceof UserTask) {
+        if (chartPanel.getSelectedObject() instanceof UserTask) {
             anActionEvent.getPresentation().setEnabledAndVisible(true);
             return;
         }
@@ -56,12 +59,28 @@ public class GotoRightAction extends AnAction {
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent anActionEvent) {
-        Component requiredData = anActionEvent.getRequiredData(PlatformDataKeys.CONTEXT_COMPONENT);
-        if (!(requiredData instanceof ChartPanel)) {
+        /**
+         *
+         * 这个DataProvider会往上级的Component元素进行查找的。所以，只要上级元素有，就能够拿到
+         *  DataProvider dataProvider = getDataProviderEx(c);
+         *   if (dataProvider != null) {
+         *       Object data = this.getDataFromProvider(dataProvider, dataId, (Set)null, rule);
+         *       if (data != null) {
+         *           var8 = data;
+         *           break;
+         *       }
+         *   }
+         *
+         *   c = ((Component)c).getParent();
+         *         ChartPanel chartPanel = anActionEvent.getData(ChartPanel.CURRENT_CHART_PANEL);
+         *         SpdEditor spdEditor = anActionEvent.getData(SpdEditor.SPD_EDITOR);
+         */
+        ChartPanel chartPanel = anActionEvent.getData(ChartPanel.CURRENT_CHART_PANEL);
+
+        if (chartPanel == null) {
             return;
         }
-        ChartPanel cp = (ChartPanel) requiredData;
-        PropertyObject selectedObject = cp.getSelectedObject();
+        PropertyObject selectedObject = chartPanel.getSelectedObject();
         if (selectedObject instanceof UserTask) {
             UserTask userTask = (UserTask) selectedObject;
             String rights = userTask.getRights();

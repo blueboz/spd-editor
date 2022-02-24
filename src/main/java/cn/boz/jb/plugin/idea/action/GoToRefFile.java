@@ -72,25 +72,7 @@ public class GoToRefFile extends AnAction {
         FileType fileType = psiFile.getFileType();
         PsiElement element = psiFile.findElementAt(offset);
 
-        if (fileType instanceof JavaScriptFileType) {
-            PsiElement context = element.getContext();
-            if (context instanceof JSLiteralExpression) {
-                JSLiteralExpression jsLiteralExpression = (JSLiteralExpression) context;
-                String stringValue = jsLiteralExpression.getStringValue();
-                boolean tryToGotoFileRef = tryToGotoFileRef(psiFile, project, stringValue);
-                if (tryToGotoFileRef) {
-                    return;
-                }
-                boolean tryToGotoClassRef = tryToGotoClassRef(project, stringValue);
-                if (tryToGotoClassRef) {
-                    return;
-                }
-                boolean trytoGotoAction = tryToGotoAction(project, stringValue);
-                if (trytoGotoAction) {
-                    return;
-                }
-            }
-        } else if (fileType instanceof XmlFileType || fileType instanceof HtmlFileType) {
+        if (fileType instanceof XmlFileType || fileType instanceof HtmlFileType) {
             //xml 文件可能需要区分是不是mapper
             XmlTag rootTag = ((XmlFileImpl) element.getContainingFile()).getRootTag();
             if ("sqlMap".equals(rootTag.getName())) {
@@ -111,6 +93,32 @@ public class GoToRefFile extends AnAction {
             if (tryToGoToMapper(element)) {
                 return;
             }
+        } else {
+            try {
+                Class.forName("com.intellij.lang.javascript.JavaScriptFileType");
+
+                if (fileType instanceof JavaScriptFileType) {
+                    PsiElement context = element.getContext();
+                    if (context instanceof JSLiteralExpression) {
+                        JSLiteralExpression jsLiteralExpression = (JSLiteralExpression) context;
+                        String stringValue = jsLiteralExpression.getStringValue();
+                        boolean tryToGotoFileRef = tryToGotoFileRef(psiFile, project, stringValue);
+                        if (tryToGotoFileRef) {
+                            return;
+                        }
+                        boolean tryToGotoClassRef = tryToGotoClassRef(project, stringValue);
+                        if (tryToGotoClassRef) {
+                            return;
+                        }
+                        boolean trytoGotoAction = tryToGotoAction(project, stringValue);
+                        if (trytoGotoAction) {
+                            return;
+                        }
+                    }
+                }
+            } catch (ClassNotFoundException classNotFoundException) {
+            }
+
         }
         //try to use this function else do not use it.
         String text = element.getText();
@@ -412,19 +420,31 @@ public class GoToRefFile extends AnAction {
 
     @Override
     public void update(AnActionEvent e) {
+
         Editor editor = e.getData(CommonDataKeys.EDITOR);
         PsiFile psiFile = e.getData(CommonDataKeys.PSI_FILE);
         boolean b = editor != null && psiFile != null;
         if (b) {
             FileType fileType = psiFile.getFileType();
-            if (fileType instanceof HtmlFileType || fileType instanceof JavaScriptFileType || fileType instanceof XmlFile || fileType instanceof JavaFileType) {
+            if (fileType instanceof HtmlFileType || fileType instanceof XmlFile || fileType instanceof JavaFileType) {
                 e.getPresentation().setEnabled(true);
                 e.getPresentation().setVisible(true);
+                return;
             } else {
-                e.getPresentation().setEnabled(true);
-                e.getPresentation().setVisible(true);
+                try {
+                    Class.forName("com.intellij.lang.javascript.JavaScriptFileType");
+                    if (fileType instanceof JavaScriptFileType) {
+                        e.getPresentation().setEnabled(true);
+                        e.getPresentation().setVisible(true);
+                    }
+                    return;
+                } catch (ClassNotFoundException classNotFoundException) {
+                    e.getPresentation().setEnabled(true);
+                    e.getPresentation().setVisible(true);
+                }
             }
         }
+
     }
 
 

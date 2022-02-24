@@ -28,13 +28,13 @@ public class GotoServiceTaskAction extends AnAction {
 
     @Override
     public void update(@NotNull AnActionEvent anActionEvent) {
-        Component requiredData = anActionEvent.getRequiredData(PlatformDataKeys.CONTEXT_COMPONENT);
-        if (!(requiredData instanceof ChartPanel)) {
+        ChartPanel chartPanel = anActionEvent.getData(ChartPanel.CURRENT_CHART_PANEL);
+        if (chartPanel == null) {
             anActionEvent.getPresentation().setEnabledAndVisible(false);
+
             return;
         }
-        ChartPanel cp = (ChartPanel) requiredData;
-        if (cp.getSelectedObject() instanceof ServiceTask) {
+        if (chartPanel.getSelectedObject() instanceof ServiceTask) {
             anActionEvent.getPresentation().setEnabledAndVisible(true);
             return;
         }
@@ -43,14 +43,14 @@ public class GotoServiceTaskAction extends AnAction {
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent anActionEvent) {
-        Component requiredData = anActionEvent.getRequiredData(PlatformDataKeys.CONTEXT_COMPONENT);
-        if (!(requiredData instanceof ChartPanel)) {
+        ChartPanel chartPanel = anActionEvent.getData(ChartPanel.CURRENT_CHART_PANEL);
+
+        if (chartPanel == null) {
             return;
         }
-        ChartPanel cp = (ChartPanel) requiredData;
-        PropertyObject selectedObject = cp.getSelectedObject();
+        PropertyObject selectedObject = chartPanel.getSelectedObject();
         if (selectedObject instanceof ServiceTask) {
-            processServiceTask(anActionEvent, cp);
+            processServiceTask(anActionEvent, chartPanel);
         }
     }
 

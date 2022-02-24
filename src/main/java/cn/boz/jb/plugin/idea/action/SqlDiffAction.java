@@ -12,11 +12,14 @@ import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.openapi.ui.popup.ListPopup;
 import com.intellij.openapi.ui.popup.PopupStep;
 import com.intellij.openapi.ui.popup.util.BaseListPopupStep;
+import com.intellij.ui.awt.RelativePoint;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.SwingUtilities;
 import java.awt.Component;
+import java.awt.event.InputEvent;
+import java.awt.event.MouseEvent;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -45,16 +48,21 @@ public class SqlDiffAction extends AnAction {
                 if (spdEditor instanceof SpdEditor) {
                     ChartPanel chartPanel = spdEditor.getChartPanel();
                     List<String> sqls = chartPanel.generateSql();
-                    Map<String, String> dataTobeCompare = DBUtils.getInstance().fetchAndCompare(sqls, chartPanel.generateQueryEngineTaskSql(), chartPanel.generateQueryProcessTaskSql(),"Wrap".equals(selectedValue));
+                    Map<String, String> dataTobeCompare = DBUtils.getInstance().fetchAndCompare(sqls, chartPanel.generateQueryEngineTaskSql(), chartPanel.generateQueryProcessTaskSql(), "Wrap".equals(selectedValue));
                     String old = dataTobeCompare.get("old");
                     String aNew = dataTobeCompare.get("new");
-                    CompareUtils.compare(old, aNew, PlainTextFileType.INSTANCE, anActionEvent.getProject());
+                    CompareUtils.compare(old, "db version",aNew,  "current ver", PlainTextFileType.INSTANCE, anActionEvent.getProject());
                 }
             }
         };
         ListPopup listPopup = instance.createListPopup(baseListPopupStep);
-        listPopup.showInFocusCenter();
-
+        InputEvent inputEvent = anActionEvent.getInputEvent();
+        if (inputEvent instanceof MouseEvent) {
+            MouseEvent me = (MouseEvent) inputEvent;
+            listPopup.show(RelativePoint.fromScreen(me.getLocationOnScreen()));
+        } else {
+            listPopup.showInFocusCenter();
+        }
 
     }
 }

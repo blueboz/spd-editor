@@ -18,7 +18,7 @@
          on how to target different products -->
     <depends>com.intellij.modules.lang</depends>
     <depends>com.intellij.modules.platform</depends>
-    <depends>JavaScript</depends>
+    <depends optional="true" config-file="">JavaScript</depends>
     <!--    <depends>com.intellij.modules.java-capable</depends>-->
     <depends>com.intellij.java</depends>
     <depends>com.intellij.database</depends>
@@ -145,6 +145,7 @@
             <add-to-group group-id="VcsHistoryInternalGroup.Popup"></add-to-group>
             <add-to-group group-id="VcsSelectionHistoryDialog.Popup"></add-to-group>
             <add-to-group group-id="Vcs.RepositoryChangesBrowserMenu"></add-to-group>
+            <add-to-group group-id="Vcs.FileHistory.ContextMenu"></add-to-group>
         </action>
     </actions>
 

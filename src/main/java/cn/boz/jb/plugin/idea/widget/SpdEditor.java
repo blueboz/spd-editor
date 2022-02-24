@@ -22,6 +22,8 @@ import cn.boz.jb.plugin.idea.configurable.SpdEditorDBState;
 import cn.boz.jb.plugin.idea.utils.DBUtils;
 import com.intellij.notification.NotificationGroupManager;
 import com.intellij.notification.NotificationType;
+import com.intellij.openapi.actionSystem.DataKey;
+import com.intellij.openapi.actionSystem.DataProvider;
 import com.intellij.openapi.options.ShowSettingsUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
@@ -32,6 +34,9 @@ import com.intellij.ui.components.JBScrollBar;
 import com.intellij.ui.components.JBScrollPane;
 import com.intellij.util.ui.UIUtil;
 import icons.SpdEditorIcons;
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -58,7 +63,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-public class SpdEditor extends JComponent implements MouseListener, ClipboardOwner, FocusListener {
+public class SpdEditor extends JComponent implements DataProvider, MouseListener, ClipboardOwner, FocusListener {
 
     ChartPanel chartPanel;
     JBSplitter jbSplitter;
@@ -80,7 +85,7 @@ public class SpdEditor extends JComponent implements MouseListener, ClipboardOwn
 
         jbTable = new MyJBTable();
 
-        chartPanel = new ChartPanel(project,virtualFile);
+        chartPanel = new ChartPanel(project, virtualFile, this);
         chartPanel.registerShapeSelectedListener(jbTable);
         jbTable.bindChartPanel(chartPanel);
 
@@ -529,5 +534,15 @@ public class SpdEditor extends JComponent implements MouseListener, ClipboardOwn
             Messages.showErrorDialog("Something wrong happen", e.getMessage());
             e.printStackTrace();
         }
+    }
+
+    public static final DataKey<SpdEditor> SPD_EDITOR = DataKey.create("SPD_EDITOR");
+
+    @Override
+    public @Nullable Object getData(@NotNull @NonNls String dataId) {
+        if (SPD_EDITOR.is(dataId)) {
+            return this;
+        }
+        return null;
     }
 }
