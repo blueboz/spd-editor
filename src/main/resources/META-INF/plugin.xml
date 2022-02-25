@@ -143,15 +143,26 @@
                     icon="AllIcons.Actions.Play_forward"></action>
         </group>
         <action class="cn.boz.jb.plugin.idea.action.FileHistoryDiffAction" icon="SpdEditorIcons.FLOW_16_ICON"
-                text="Spd Compare With Before" id="SpdDiffActionExt" description="SpdDiff">
+                text="Spd Compare" id="FileHistoryDiff" description="SpdDiff">
             <add-to-group group-id="Vcs.FileHistory.ContextMenu"></add-to-group>
         </action>
+
         <action class="cn.boz.jb.plugin.idea.action.RepositoryChangeDiffAction" icon="SpdEditorIcons.FLOW_16_ICON"
-                text="Spd Compare" id="RepoChangeSpdCompare" description="SpdDiff">
+                text="RepositoryChangeDiff" id="RepoChangeSpdCompare" description="SpdDiff">
             <add-to-group group-id="VcsHistoryInternalGroup.Popup"></add-to-group>
+            <add-to-group group-id="ChangesViewPopupMenu"></add-to-group>
             <add-to-group group-id="VcsSelectionHistoryDialog.Popup"></add-to-group>
             <add-to-group group-id="Vcs.RepositoryChangesBrowserMenu"></add-to-group>
         </action>
+<!--        <action class="cn.boz.jb.plugin.idea.action.SpdCommitDiffAction" text="Spd Commit Diff" id="SpdCommitDiff" icon="SpdEditorIcons.FLOW_16_ICON">-->
+<!--            <add-to-group group-id="VcsGlobalGroup"></add-to-group>-->
+<!--            <add-to-group group-id="ChangesViewToolbar"></add-to-group>-->
+<!--            <add-to-group group-id="ChangesViewPopupMenu"></add-to-group>-->
+<!--            <add-to-group group-id="ChangesView.CommitToolbar"></add-to-group>-->
+<!--            <add-to-group group-id="ChangesViewPopupMenu"></add-to-group>-->
+<!--            <add-to-group group-id="VcsGeneral.KeymapGroup"></add-to-group>-->
+
+<!--        </action>-->
 
     </actions>
 
