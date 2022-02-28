@@ -136,6 +136,7 @@ public class ContentLoade {
 
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         XMLWriter xmlWriter = new XMLWriter(byteArrayOutputStream, xmlFormat);
+        xmlWriter.setEscapeText(false);
         xmlWriter.write(rootElement);
         xmlWriter.close();
         byte[] bytes = byteArrayOutputStream.toByteArray();

@@ -1,5 +1,6 @@
 package cn.boz.jb.plugin.floweditor.gui.file;
 
+import cn.boz.jb.plugin.addbom.utils.XmlUtils;
 import cn.boz.jb.plugin.floweditor.gui.process.bridge.CircleBridge;
 import cn.boz.jb.plugin.floweditor.gui.process.bridge.LineBridge;
 import cn.boz.jb.plugin.floweditor.gui.process.bridge.PrismaticBridge;
@@ -39,6 +40,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -336,20 +338,11 @@ public class TemplateLoaderImpl implements TemplateLoader {
             }
         }
 
-        OutputFormat format = OutputFormat.createPrettyPrint();
 
-        format.setIndent(true);
-        format.setIndent("\t");
-//        format.setIndentSize(4);  // 行缩进
-        format.setNewlines(true); // 一个结点为一行
-        format.setTrimText(true); // 去重空格
-        format.setPadText(true);
-        //转义
-//        format.setOmitEncoding(true);
-        format.setNewLineAfterDeclaration(false);
-        format.setEncoding("UTF-8");
-        XMLWriter xmlWriter = new XMLWriter(outputStream, format);
-        xmlWriter.write(doc);
+        String s = XmlUtils.formmaterOutput(doc);
+
+        outputStream.write(s.getBytes(StandardCharsets.UTF_8));
+        outputStream.flush();
     }
 
     /**

@@ -17,9 +17,6 @@ public class TranslateUtils {
             return "";
         }
         rawString = rawString.replace("\n", "#LEY#");
-        rawString = rawString.replace("\"", "&quot;");
-        rawString = rawString.replace(">", "&gt;");
-        rawString = rawString.replace("<", "&lt;");
         return rawString;
     }
 
@@ -30,10 +27,8 @@ public class TranslateUtils {
      * @return
      */
     public static String translateFromXmlString(String xmlString) {
+        //仅仅只需要处理
         xmlString = xmlString.replace("#LEY#", "\n");
-        xmlString = xmlString.replace("&quot;", "\"");
-        xmlString = xmlString.replace("&gt;", ">");
-        xmlString = xmlString.replace("&lt;", "<");
         return xmlString;
     }
 

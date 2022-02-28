@@ -21,7 +21,7 @@
 
         <change-notes>
             <![CDATA[
-            Release Time:$tfmt</br>
+            Release Time:$tfmt<br></br>
 
             $changeNotes
             ]]>

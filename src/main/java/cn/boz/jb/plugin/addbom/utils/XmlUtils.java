@@ -11,24 +11,16 @@ import org.dom4j.io.XMLWriter;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 public class XmlUtils {
-
-    public static String readXmlAndSortAndFormat(String str) throws DocumentException, IOException {
+    public static String readXmlAndSortAndFormat(String str) throws DocumentException {
         str = str.replaceAll("\n", "");
         str = str.replaceAll("\t", "");
-        try {
-            return new String(readXmlAndSortAndFormat(str.getBytes(StandardCharsets.UTF_8)));
-        } catch (Exception e) {
-            return str;
-        }
-    }
-
-    private static byte[] readXmlAndSortAndFormat(byte[] bs) throws DocumentException, IOException {
         SAXReader saxReader = new SAXReader();
-        Document read = saxReader.read(new ByteArrayInputStream(bs));
+        Document read = saxReader.read(new ByteArrayInputStream(str.getBytes(StandardCharsets.UTF_8)));
         Element rootElement = read.getRootElement();
         if (rootElement != null) {
             Element process = rootElement.element("process");
@@ -79,18 +71,28 @@ public class XmlUtils {
                 }
             }
         }
-        OutputFormat xmlFormat = new OutputFormat();
-        xmlFormat.setEncoding("UTF-8");
-        xmlFormat.setNewlines(true);
-        xmlFormat.setIndent(true);
-        xmlFormat.setIndent("\t");
 
-
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        XMLWriter xmlWriter = new XMLWriter(byteArrayOutputStream, xmlFormat);
-        xmlWriter.write(rootElement);
-        xmlWriter.close();
-        byte[] bytes = byteArrayOutputStream.toByteArray();
-        return bytes;
+        return formmaterOutput(read);
     }
+
+    public static final String formmaterOutput(Document document) {
+        try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()){
+            OutputFormat xmlFormat = new OutputFormat();
+            xmlFormat.setEncoding("UTF-8");
+            xmlFormat.setNewlines(true);
+            xmlFormat.setIndent(true);
+            xmlFormat.setIndent("\t");
+            XMLWriter xmlWriter = new XMLWriter(byteArrayOutputStream, xmlFormat);
+            xmlWriter.setEscapeText(false);
+            xmlWriter.write(document);
+            xmlWriter.close();
+            String s = new String(byteArrayOutputStream.toByteArray());
+//            s = s.replaceAll("&amp;", "&");
+            return s;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
 }
