@@ -365,6 +365,7 @@ public class GoToRefFile extends AnAction {
                     return PopupStep.FINAL_CHOICE;
                 }
 
+
                 private void doRun(String selectedValue) {
                     //选择的值可以进行跳转
                     tryToGotoAction(project, (String) selectedValue);

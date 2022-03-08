@@ -147,13 +147,17 @@
             <add-to-group group-id="Vcs.FileHistory.ContextMenu"></add-to-group>
         </action>
 
-        <action class="cn.boz.jb.plugin.idea.action.RepositoryChangeDiffAction" icon="SpdEditorIcons.FLOW_16_ICON"
-                text="RepositoryChangeDiff" id="RepoChangeSpdCompare" description="SpdDiff">
+        <group>
+
+            <action class="cn.boz.jb.plugin.idea.action.GitGetAction" text="GitGet" id="GitGet" icon="AllIcons.Vcs.ShelveSilent"></action>
+            <action class="cn.boz.jb.plugin.idea.action.RepositoryChangeDiffAction" icon="SpdEditorIcons.FLOW_16_ICON"
+                    text="RepositoryChangeDiff" id="RepoChangeSpdCompare" description="SpdDiff">
+            </action>
             <add-to-group group-id="VcsHistoryInternalGroup.Popup"></add-to-group>
             <add-to-group group-id="ChangesViewPopupMenu"></add-to-group>
             <add-to-group group-id="Vcs.RepositoryChangesBrowserMenu"></add-to-group>
             <add-to-group group-id="VcsSelectionHistoryDialog.Popup"></add-to-group>
-        </action>
+        </group>
 <!--        <action class="cn.boz.jb.plugin.idea.action.SpdCommitDiffAction" text="Spd Commit Diff" id="SpdCommitDiff" icon="SpdEditorIcons.FLOW_16_ICON">-->
 <!--            <add-to-group group-id="VcsGlobalGroup"></add-to-group>-->
 <!--            <add-to-group group-id="ChangesViewToolbar"></add-to-group>-->
@@ -163,10 +167,10 @@
 <!--            <add-to-group group-id="VcsGeneral.KeymapGroup"></add-to-group>-->
 
 <!--        </action>-->
-        <action class="cn.boz.jb.plugin.idea.action.SpdCommitDiffAction" text="SpdCommitDiffAction" id="SpdCommitDiff" icon="SpdEditorIcons.FLOW_16_ICON">
+        <group>
+            <action class="cn.boz.jb.plugin.idea.action.SpdCommitDiffAction" text="SpdCommitDiffAction" id="SpdCommitDiff" icon="SpdEditorIcons.FLOW_16_ICON"/>
             <add-to-group group-id="ChangesViewPopupMenu"></add-to-group>
-
-        </action>
+        </group>
 
     </actions>
 

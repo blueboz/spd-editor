@@ -3383,4 +3383,27 @@ public class ChartPanel extends JComponent implements DataProvider, MouseListene
         }
         return null;
     }
+
+    public List<Shape> getAllElements() {
+        return this.shapes;
+//        LinkedList<Shape> shapes = this.shapes;
+//        ret
+//        return shapes.stream().map(shape -> {
+//            Map<String, Object> result = new HashMap<String, Object>();
+//            StringBuilder searchString = new StringBuilder();
+//            searchString.append(shape.getName());
+//            searchString.append(" ");
+//            if (shape instanceof UserTask) {
+//                searchString.append(((UserTask) shape).getExpression());
+//            } else if (shape instanceof ServiceTask) {
+//                searchString.append(((ServiceTask) shape).getExpression());
+//            } else if (shape instanceof CallActivity) {
+//                searchString.append(((CallActivity) shape).getCalledElement());
+//            }
+//            result.put("obj", shape);
+//            result.put("text", searchString.toString());
+//            return result;
+//        }).collect(Collectors.toList());
+
+    }
 }

@@ -13,6 +13,7 @@ import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.openapi.ui.popup.ListPopup;
 import com.intellij.openapi.ui.popup.PopupStep;
 import com.intellij.openapi.ui.popup.util.BaseListPopupStep;
+import com.intellij.ui.ListSpeedSearch;
 import com.intellij.ui.awt.RelativePoint;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -72,6 +73,11 @@ public class GotoServiceTaskAction extends AnAction {
 
                     private void doRun(String selectedValue) {
                         GotoScriptAction.gotoSelectedValue(selectedValue, anActionEvent);
+                    }
+
+                    @Override
+                    public boolean isSpeedSearchEnabled() {
+                        return true;
                     }
                 });
         InputEvent inputEvent = anActionEvent.getInputEvent();
