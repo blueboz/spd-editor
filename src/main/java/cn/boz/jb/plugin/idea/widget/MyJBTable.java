@@ -39,6 +39,12 @@ public class MyJBTable extends JBTable implements ShapeSelectedListener, Propert
         this.getTableHeader().setPreferredSize(new Dimension(0, DEFAULT_ROW_HEIGHT));
 //        this.getColumnModel().getColumn(0).setMaxWidth(180);
 
+        TableColumn property = this.getColumn("Property");
+        property.setPreferredWidth(80);
+        property.setMaxWidth(120);
+
+
+
 
     }
 

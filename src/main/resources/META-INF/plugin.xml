@@ -107,6 +107,11 @@
                     description="Go To EngineRight"
                     text="Go To EngineRight"
                     icon="AllIcons.Nodes.SecurityRole"/>
+<!--            <action class="cn.boz.jb.plugin.idea.action.FindInSpdEditor" id="findInSpdEditorAction"-->
+<!--                    description="Find In Spd Editor"-->
+<!--                    text="Find In SpdEditor"-->
+<!--                    icon="AllIcons.Actions.Find"-->
+<!--            ></action>-->
         </group>
 
         <action class="cn.boz.jb.plugin.idea.action.NewSpdFileAction" id="NewSpdFile" text="Spd File"
@@ -149,7 +154,14 @@
 
         <group>
 
-            <action class="cn.boz.jb.plugin.idea.action.GitGetAction" text="GitGet" id="GitGet" icon="AllIcons.Vcs.ShelveSilent"></action>
+            <action class="cn.boz.jb.plugin.idea.action.GitGetAction" text="GitGet" id="GitGet"
+                    icon="AllIcons.Vcs.ShelveSilent"></action>
+            <add-to-group group-id="VcsHistoryInternalGroup.Popup"></add-to-group>
+            <add-to-group group-id="Vcs.RepositoryChangesBrowserMenu"></add-to-group>
+            <add-to-group group-id="VcsSelectionHistoryDialog.Popup"></add-to-group>
+        </group>
+        <group>
+
             <action class="cn.boz.jb.plugin.idea.action.RepositoryChangeDiffAction" icon="SpdEditorIcons.FLOW_16_ICON"
                     text="RepositoryChangeDiff" id="RepoChangeSpdCompare" description="SpdDiff">
             </action>
@@ -158,17 +170,18 @@
             <add-to-group group-id="Vcs.RepositoryChangesBrowserMenu"></add-to-group>
             <add-to-group group-id="VcsSelectionHistoryDialog.Popup"></add-to-group>
         </group>
-<!--        <action class="cn.boz.jb.plugin.idea.action.SpdCommitDiffAction" text="Spd Commit Diff" id="SpdCommitDiff" icon="SpdEditorIcons.FLOW_16_ICON">-->
-<!--            <add-to-group group-id="VcsGlobalGroup"></add-to-group>-->
-<!--            <add-to-group group-id="ChangesViewToolbar"></add-to-group>-->
-<!--            <add-to-group group-id="ChangesViewPopupMenu"></add-to-group>-->
-<!--            <add-to-group group-id="ChangesView.CommitToolbar"></add-to-group>-->
-<!--            <add-to-group group-id="ChangesViewPopupMenu"></add-to-group>-->
-<!--            <add-to-group group-id="VcsGeneral.KeymapGroup"></add-to-group>-->
+        <!--        <action class="cn.boz.jb.plugin.idea.action.SpdCommitDiffAction" text="Spd Commit Diff" id="SpdCommitDiff" icon="SpdEditorIcons.FLOW_16_ICON">-->
+        <!--            <add-to-group group-id="VcsGlobalGroup"></add-to-group>-->
+        <!--            <add-to-group group-id="ChangesViewToolbar"></add-to-group>-->
+        <!--            <add-to-group group-id="ChangesViewPopupMenu"></add-to-group>-->
+        <!--            <add-to-group group-id="ChangesView.CommitToolbar"></add-to-group>-->
+        <!--            <add-to-group group-id="ChangesViewPopupMenu"></add-to-group>-->
+        <!--            <add-to-group group-id="VcsGeneral.KeymapGroup"></add-to-group>-->
 
-<!--        </action>-->
+        <!--        </action>-->
         <group>
-            <action class="cn.boz.jb.plugin.idea.action.SpdCommitDiffAction" text="SpdCommitDiffAction" id="SpdCommitDiff" icon="SpdEditorIcons.FLOW_16_ICON"/>
+            <action class="cn.boz.jb.plugin.idea.action.SpdCommitDiffAction" text="SpdCommitDiffAction"
+                    id="SpdCommitDiff" icon="SpdEditorIcons.FLOW_16_ICON"/>
             <add-to-group group-id="ChangesViewPopupMenu"></add-to-group>
         </group>
 

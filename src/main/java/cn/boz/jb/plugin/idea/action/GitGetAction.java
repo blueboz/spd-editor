@@ -1,21 +1,11 @@
 package cn.boz.jb.plugin.idea.action;
 
-import com.intellij.configurationStore.StoreReloadManager;
-import com.intellij.database.run.ui.DataGridDocumentationProvider;
-import com.intellij.find.FindInProjectSettings;
-import com.intellij.find.FindModel;
-import com.intellij.find.findInProject.FindInProjectManager;
-import com.intellij.ide.actions.searcheverywhere.SearchEverywhereManager;
-import com.intellij.ide.actions.searcheverywhere.SearchEverywhereManagerImpl;
 import com.intellij.openapi.ListSelection;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.application.Application;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.fileEditor.impl.text.QuickDefinitionProvider;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.openapi.ui.popup.ListPopup;
 import com.intellij.openapi.ui.popup.PopupStep;
@@ -24,14 +14,10 @@ import com.intellij.openapi.vcs.FilePath;
 import com.intellij.openapi.vcs.FileStatus;
 import com.intellij.openapi.vcs.VcsDataKeys;
 import com.intellij.openapi.vcs.VcsException;
+import com.intellij.openapi.vcs.changes.ByteBackedContentRevision;
 import com.intellij.openapi.vcs.changes.Change;
 import com.intellij.openapi.vcs.changes.ContentRevision;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.vfs.VirtualFileManager;
-import com.intellij.psi.PsiDirectory;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiManager;
-import com.intellij.testFramework.propertyBased.PsiIndexConsistencyTester;
 import com.intellij.ui.awt.RelativePoint;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -41,12 +27,15 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 
 public class GitGetAction extends AnAction {
     @Override
     public void actionPerformed(@NotNull AnActionEvent anActionEvent) {
+        //s
         ListSelection<Change> changeListSelection = anActionEvent.getData(VcsDataKeys.CHANGES_SELECTION);
         if (changeListSelection == null) {
             return;
@@ -68,7 +57,12 @@ public class GitGetAction extends AnAction {
                     }
 
                     private void doRun(String selectedValue) {
-                        List<Change> changes = changeListSelection.getList();
+                        List<Change> changes = new ArrayList<>();
+                        if (changeListSelection.getSelectedIndex() != 0) {
+                            changes.add(changeListSelection.getList().get(changeListSelection.getSelectedIndex()));
+                        } else {
+                            changes.addAll(changeListSelection.getList());
+                        }
                         if ("Before Revision".equals(selectedValue)) {
                             for (Change change : changes) {
                                 ContentRevision beforeRevision = change.getBeforeRevision();
@@ -123,8 +117,6 @@ public class GitGetAction extends AnAction {
     public void reloadFromDisk(Project project) {
         VirtualFile baseDir = project.getBaseDir();
         baseDir.refresh(true, true);
-        DataGridDocumentationProvider dataGridDocumentationProvider;
-        QuickDefinitionProvider definitionProvider;
     }
 
     public void toRevision(ContentRevision toRevision, Project project) {
@@ -141,7 +133,12 @@ public class GitGetAction extends AnAction {
                 }
             }
             try (FileOutputStream fileOutputStream = new FileOutputStream(file);) {
-                fileOutputStream.write(toRevision.getContent().getBytes(StandardCharsets.ISO_8859_1));
+                if (toRevision instanceof ByteBackedContentRevision) {
+                    ByteBackedContentRevision bbcr = (ByteBackedContentRevision) toRevision;
+                    fileOutputStream.write(bbcr.getContentAsBytes());
+                } else {
+                    fileOutputStream.write(toRevision.getContent().getBytes(StandardCharsets.UTF_8));
+                }
                 fileOutputStream.flush();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -154,7 +151,14 @@ public class GitGetAction extends AnAction {
             //直接覆盖
             ApplicationManager.getApplication().runWriteAction(() -> {
                 try {
-                    virtualFile.setBinaryContent(toRevision.getContent().getBytes(StandardCharsets.ISO_8859_1));
+                    if (toRevision instanceof ByteBackedContentRevision) {
+                        ByteBackedContentRevision bbcr = (ByteBackedContentRevision) toRevision;
+                        virtualFile.setBinaryContent(bbcr.getContentAsBytes());
+                    } else {
+                        Charset charset = toRevision.getFile().getCharset();
+                        virtualFile.setBinaryContent(toRevision.getContent().getBytes(charset));
+                    }
+                    virtualFile.setBinaryContent(toRevision.getContent().getBytes(StandardCharsets.UTF_8));
                     reloadFromDisk(project);
                 } catch (IOException e) {
                     e.printStackTrace();

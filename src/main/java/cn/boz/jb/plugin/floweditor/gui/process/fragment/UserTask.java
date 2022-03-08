@@ -4,6 +4,7 @@ import cn.boz.jb.plugin.floweditor.gui.control.SqlAggregator;
 import cn.boz.jb.plugin.floweditor.gui.process.bridge.RectBridge;
 import cn.boz.jb.plugin.floweditor.gui.property.Property;
 import cn.boz.jb.plugin.floweditor.gui.property.PropertyEditorListener;
+import cn.boz.jb.plugin.floweditor.gui.property.impl.IntegerSpinnerProperty;
 import cn.boz.jb.plugin.floweditor.gui.property.impl.TextAreaProperty;
 import cn.boz.jb.plugin.floweditor.gui.property.impl.TextFieldProperty;
 import cn.boz.jb.plugin.floweditor.gui.shape.HiPoint;
@@ -145,7 +146,7 @@ public class UserTask extends RectBridge implements SqlAggregator {
         element.addAttribute("bussinesDescrition", TranslateUtils.translateToXmlString(this.getBussinesDescrition()));
         element.addAttribute("rights", TranslateUtils.translateToXmlString(this.getRights()));
         element.addAttribute("expression", TranslateUtils.translateToXmlString(this.getExpression()));
-        if(!StringUtils.isBlank(this.getEventListener())){
+        if (!StringUtils.isBlank(this.getEventListener())) {
             element.addAttribute("eventListener", TranslateUtils.translateToXmlString(this.getEventListener()));
         }
         element.addAttribute("validSecond", TranslateUtils.translateToXmlString(this.getValidSecond()));
@@ -186,9 +187,9 @@ public class UserTask extends RectBridge implements SqlAggregator {
                             new TextFieldProperty("bussinesDescrition", this, propertyEditor),
                             new TextFieldProperty("rights", this, propertyEditor),
                             new TextAreaProperty("expression", this, propertyEditor),
-                            new TextFieldProperty("validSecond", this, propertyEditor),
-                            new TextFieldProperty("openSecond", this, propertyEditor),
-                            new TextFieldProperty("eventListener", this, propertyEditor),
+                            new IntegerSpinnerProperty("validSecond", this, propertyEditor, -1, Integer.MAX_VALUE, 1),
+                            new IntegerSpinnerProperty("openSecond", this, propertyEditor, -1, Integer.MAX_VALUE, 1),
+                            new TextFieldProperty("eventListener", this, propertyEditor)
 
                     };
                 }

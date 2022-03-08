@@ -32,6 +32,7 @@ import cn.boz.jb.plugin.floweditor.gui.utils.LineUtils;
 import cn.boz.jb.plugin.floweditor.gui.utils.NumberUtils;
 import cn.boz.jb.plugin.floweditor.gui.utils.ShapePos;
 import cn.boz.jb.plugin.floweditor.gui.utils.ShapeUtils;
+import cn.boz.jb.plugin.idea.action.FindInSpdEditor;
 import cn.boz.jb.plugin.idea.configurable.SpdEditorDBState;
 import cn.boz.jb.plugin.idea.listener.ChartChangeListener;
 import cn.boz.jb.plugin.idea.listener.ProcessSaveListener;
@@ -243,6 +244,8 @@ public class ChartPanel extends JComponent implements DataProvider, MouseListene
 //        this.getSpdEditor().getChartPanel().setComponentPopupMenu(sqlDiffAction.getComponent());
 //        PopupHandler.installPopupMenu(myList, "VcsSelectionHistoryDialog.Popup", ActionPlaces.UPDATE_POPUP);
         PopupHandler.installPopupHandler(this, ag, ActionPlaces.UPDATE_POPUP);
+        //注册Ctrl+F给对应的Action
+        new FindInSpdEditor(this).registerCustomShortcutSet(this,null);
     }
 
     /**
@@ -3404,6 +3407,33 @@ public class ChartPanel extends JComponent implements DataProvider, MouseListene
 //            result.put("text", searchString.toString());
 //            return result;
 //        }).collect(Collectors.toList());
+
+    }
+
+    public void selectShape(Shape o) {
+        //1,将其他图形反选
+        for (Shape shape : this.shapes) {
+            if (shape != o) {
+                shape.blur(null);
+            }
+        }
+        o.focus(null);
+        double x = o.getX();
+        double y = o.getY();
+
+        //要求当前对象转义到(width/2,height/2)
+        /**
+         *
+         (x+originalPoint.x)*scale=width/2
+         (x+originalPoint.x)=width/(2*scale)
+         originalPoint.x=width/(2*scale)-x
+         */
+        originalPoint.x = this.getWidth() / (2 * scale) - x;
+        originalPoint.y = this.getHeight() / (2 * scale) - y;
+
+        this.fireShapeSelected(o);
+
+        //
 
     }
 }

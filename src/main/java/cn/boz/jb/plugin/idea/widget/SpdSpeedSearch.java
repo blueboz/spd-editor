@@ -93,12 +93,15 @@ public class SpdSpeedSearch extends SpeedSearchBase {
 
     @Override
     protected void selectElement(Object o, String s) {
-        System.out.println("select :" + s + " ->" + ((Shape) o).getName());
         if (o == null) {
             return;
         }
-        int i = chartPanel.getAllElements().indexOf(o);
-        cidx = i;
+        if("".equals(s)){
+            return;
+        }
+        chartPanel.selectShape((Shape)o);
+//        int i = chartPanel.getAllElements().indexOf(o);
+//        cidx = i;
         //获取焦点
 
     }
