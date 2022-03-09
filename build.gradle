@@ -33,9 +33,6 @@ group 'cn.boz'
 version ext['simplever'] + '.' + ts
 
 
-
-
-
 sourceCompatibility = 1.11
 
 dependencies {
@@ -74,7 +71,8 @@ intellij {
 //    localPath = '/Volumes/Mac/App/IntelliJ IDEA.app'
 //    localPath = 'F:\\App\\JetBrains\\IntelliJ IDEA 2021.2.1'
 //    localPath = 'D:\\App\\ideaIU-2020'
-    localPath = 'F:\\App\\JetBrains\\IntelliJ IDEA 2021.1.1'
+    localPath = 'F:\\App\\JetBrains\\ideaIU-2020'
+//    localPath = 'F:\\App\\JetBrains\\IntelliJ IDEA 2021.1.1'
     instrumentCode = false
 //    sandboxDir.set("${project.rootDir}/.sandbox")
     sandboxDir = "${project.rootDir}/.sandbox"
@@ -265,7 +263,7 @@ def pushFileToSSh(String updatePlugins) {
 
         var p = java.nio.file.Path.of("$projectDir\\updatePlugins.xml")
         var str = Files.readString(p, StandardCharsets.UTF_8)
-        def ld= LocalDateTime.now()
+        def ld = LocalDateTime.now()
         def timefmt = ld.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
 
         def binding = [

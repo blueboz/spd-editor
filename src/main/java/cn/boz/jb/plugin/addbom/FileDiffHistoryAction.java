@@ -1,26 +1,16 @@
 package cn.boz.jb.plugin.addbom;
 
 import cn.boz.jb.plugin.addbom.utils.XmlUtils;
-import cn.boz.jb.plugin.idea.filetype.SpdFileType;
 import cn.boz.jb.plugin.idea.utils.CompareUtils;
-import com.intellij.diff.DiffContentFactory;
-import com.intellij.diff.DiffDialogHints;
-import com.intellij.diff.DiffManager;
-import com.intellij.diff.actions.impl.MutableDiffRequestChain;
-import com.intellij.diff.contents.DocumentContent;
 import com.intellij.ide.highlighter.XmlFileType;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
-import com.intellij.openapi.fileTypes.FileType;
-import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vcs.AbstractVcs;
 import com.intellij.openapi.vcs.ProjectLevelVcsManager;
-import com.intellij.openapi.vcs.VcsDataKeys;
 import com.intellij.openapi.vcs.VcsException;
 import com.intellij.openapi.vcs.actions.CompareWithSelectedRevisionAction;
-import com.intellij.openapi.vcs.actions.VcsContextUtil;
 import com.intellij.openapi.vcs.history.VcsCachingHistory;
 import com.intellij.openapi.vcs.history.VcsFileRevision;
 import com.intellij.openapi.vcs.history.VcsRevisionNumber;

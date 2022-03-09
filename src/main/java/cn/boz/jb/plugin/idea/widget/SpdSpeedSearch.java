@@ -6,43 +6,10 @@ import cn.boz.jb.plugin.floweditor.gui.process.fragment.UserTask;
 import cn.boz.jb.plugin.floweditor.gui.shape.Shape;
 import cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel;
 import com.intellij.ui.SpeedSearchBase;
-import it.unimi.dsi.fastutil.ints.IntArrayList;
-import it.unimi.dsi.fastutil.ints.IntList;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.swing.JLabel;
-import java.awt.BorderLayout;
-import java.util.ListIterator;
-
 public class SpdSpeedSearch extends SpeedSearchBase {
-
-    @NotNull
-    @Override
-    protected SearchPopup createPopup(String s) {
-        SearchPopup popup = super.createPopup(s);
-        JLabel jLabel = new JLabel();
-        popup.add(jLabel, BorderLayout.SOUTH);
-        //参考其他组件的做法是对搜索算法进行抽取，然后自行进行元素过滤
-        //根据当前原始是否可见来控制筛选组件是否课件的操作方法
-        return popup;
-        ///每次键盘敲击都会触发一次selected
-
-    }
-
-    @NotNull
-    private IntList findAllFilteredElements(@NotNull String s) {
-        IntList indices = new IntArrayList();
-        String trimmed = s.trim();
-        ListIterator iterator = this.getElementIterator(0);
-        while (iterator.hasNext()) {
-            Object element = iterator.next();
-            if (this.isMatchingElement(element, trimmed)) {
-                indices.add(iterator.previousIndex());
-            }
-        }
-        return indices;
-    }
 
     private ChartPanel chartPanel;
 
@@ -81,9 +48,10 @@ public class SpdSpeedSearch extends SpeedSearchBase {
         return searchString.toString();
     }
 
+
     @Override
-    protected Object getElementAt(int viewIndex) {
-        return chartPanel.getAllElements().get(viewIndex);
+    protected Object @NotNull [] getAllElements() {
+        return chartPanel.getAllElements().toArray();
     }
 
     @Override
@@ -100,9 +68,6 @@ public class SpdSpeedSearch extends SpeedSearchBase {
             return;
         }
         chartPanel.selectShape((Shape)o);
-//        int i = chartPanel.getAllElements().indexOf(o);
-//        cidx = i;
-        //获取焦点
 
     }
 }

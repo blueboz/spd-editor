@@ -6,6 +6,8 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.application.Application;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.project.ProjectUtil;
+import com.intellij.openapi.roots.ProjectFileIndex;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.openapi.ui.popup.ListPopup;
 import com.intellij.openapi.ui.popup.PopupStep;
@@ -18,6 +20,7 @@ import com.intellij.openapi.vcs.changes.ByteBackedContentRevision;
 import com.intellij.openapi.vcs.changes.Change;
 import com.intellij.openapi.vcs.changes.ContentRevision;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.platform.ProjectBaseDirectory;
 import com.intellij.ui.awt.RelativePoint;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -115,8 +118,8 @@ public class GitGetAction extends AnAction {
     }
 
     public void reloadFromDisk(Project project) {
-        VirtualFile baseDir = project.getBaseDir();
-        baseDir.refresh(true, true);
+        VirtualFile virtualFile = ProjectUtil.guessProjectDir(project);
+        virtualFile.refresh(true, true);
     }
 
     public void toRevision(ContentRevision toRevision, Project project) {

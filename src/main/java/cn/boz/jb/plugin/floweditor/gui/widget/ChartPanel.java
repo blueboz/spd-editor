@@ -3356,7 +3356,7 @@ public class ChartPanel extends JComponent implements DataProvider, MouseListene
         chartChangeListenerList.add(changeListener);
     }
 
-    private Map userdata = new HashMap<>();
+    private Map<Key<? extends Object>,Object> userdata = new HashMap<>();
 
     @SuppressWarnings("all")
     @Override

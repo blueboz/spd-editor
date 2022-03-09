@@ -1,22 +1,9 @@
 package cn.boz.jb.plugin.idea.toolwindow;
 
-import com.intellij.database.access.DatabaseCredentials;
-import com.intellij.database.console.DatabaseServiceViewContributor;
-import com.intellij.database.console.session.DatabaseInEditorResults;
-import com.intellij.database.model.DasDataSource;
-import com.intellij.database.model.RawConnectionConfig;
-import com.intellij.database.psi.DataSourceManager;
-import com.intellij.database.view.ui.DataSourceManagerDialog;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.project.ProjectManager;
-import com.intellij.openapi.util.NlsActions;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.awt.Component;
-import java.awt.event.InputEvent;
-import java.util.List;
 
 public class PageRangeAction extends AnAction {
     @Override
@@ -38,7 +25,7 @@ public class PageRangeAction extends AnAction {
     }
 
     @Override
-    public @Nullable @NlsActions.ActionText String getTemplateText() {
+    public @Nullable String getTemplateText() {
         return "Template text";
     }
 

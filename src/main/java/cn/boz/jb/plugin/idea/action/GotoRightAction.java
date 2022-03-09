@@ -6,30 +6,19 @@ import cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel;
 import cn.boz.jb.plugin.idea.configurable.SpdEditorDBSettings;
 import cn.boz.jb.plugin.idea.dialog.EngineRightDialog;
 import cn.boz.jb.plugin.idea.utils.DBUtils;
-import cn.boz.jb.plugin.idea.widget.SpdEditor;
-import com.intellij.notification.NotificationGroupManager;
+import com.intellij.notification.NotificationGroup;
 import com.intellij.notification.NotificationType;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.CommonDataKeys;
-import com.intellij.openapi.actionSystem.PlatformDataKeys;
-import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.options.ShowSettingsUtil;
-import com.intellij.openapi.progress.BackgroundTaskQueue;
 import com.intellij.openapi.progress.ProgressIndicator;
-import com.intellij.openapi.progress.ProgressIndicatorProvider;
-import com.intellij.openapi.progress.ProgressManager;
-import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.progress.util.BackgroundTaskUtil;
 import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.ui.popup.BalloonBuilder;
 import com.intellij.openapi.ui.popup.JBPopup;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
-import com.intellij.util.Function;
 import icons.SpdEditorIcons;
 import org.jetbrains.annotations.NotNull;
 
-import java.awt.Component;
 import java.sql.Connection;
 import java.util.List;
 import java.util.Map;
@@ -93,8 +82,7 @@ public class GotoRightAction extends AnAction {
                     if (engineRights.size() < 1) {
 //                                SpdEditor editor = SwingUtilities.getAncestorOfClass(SpdEditor.class, this);
 //                                Spd Editor
-                        NotificationGroupManager.getInstance()
-                                .getNotificationGroup("Spd Editor")
+                        NotificationGroup.findRegisteredGroup("Spd Editor")
                                 .createNotification("disable auto save spd editor", NotificationType.INFORMATION).notify(null);
 
                     } else if (engineRights.size() == 1) {

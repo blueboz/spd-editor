@@ -2,7 +2,6 @@ package cn.boz.jb.plugin.idea.searcheverything;
 
 import com.intellij.ide.actions.searcheverywhere.SearchEverywhereContributor;
 import com.intellij.ide.actions.searcheverywhere.SearchEverywhereContributorFactory;
-import com.intellij.ide.actions.searcheverywhere.SearchEverywhereTabDescriptor;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.util.Processor;

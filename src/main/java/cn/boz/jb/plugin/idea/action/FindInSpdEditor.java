@@ -1,23 +1,12 @@
 package cn.boz.jb.plugin.idea.action;
 
 import cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel;
-import cn.boz.jb.plugin.floweditor.gui.widget.FlowEditorComponent;
-import cn.boz.jb.plugin.idea.widget.SpdEditor;
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.IdeActions;
 import com.intellij.openapi.project.DumbAwareAction;
-import com.intellij.ui.SearchTextField;
 import org.jetbrains.annotations.NotNull;
-
-import javax.swing.JLayeredPane;
-import javax.swing.JRootPane;
-import javax.swing.SwingUtilities;
-
-import java.awt.Container;
-
-import static javax.swing.JLayeredPane.POPUP_LAYER;
 
 public class FindInSpdEditor extends DumbAwareAction {
 
@@ -54,6 +43,18 @@ public class FindInSpdEditor extends DumbAwareAction {
 //                layeredPane.add(searchTextField,POPUP_LAYER);
 //            }
 //        }
+//        new SearchToolbar(chartPanel) {
+//            @Override
+//            public void selectElement(@Nullable Object o, @Nullable String s) {
+//
+//            }
+//
+//            @NotNull
+//            @Override
+//            public Object[] getAllElements() {
+//                return new Object[0];
+//            }
+//        };
 
 
 //        this.myPopupLayeredPane = rootPane == null ? null : rootPane.getLayeredPane();

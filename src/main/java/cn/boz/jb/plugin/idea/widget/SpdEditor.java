@@ -20,8 +20,7 @@ import cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel;
 import cn.boz.jb.plugin.idea.configurable.SpdEditorDBSettings;
 import cn.boz.jb.plugin.idea.configurable.SpdEditorDBState;
 import cn.boz.jb.plugin.idea.utils.DBUtils;
-import com.intellij.application.options.codeStyle.SpeedSearchHelper;
-import com.intellij.notification.NotificationGroupManager;
+import com.intellij.notification.NotificationGroup;
 import com.intellij.notification.NotificationType;
 import com.intellij.openapi.actionSystem.DataKey;
 import com.intellij.openapi.actionSystem.DataProvider;
@@ -31,11 +30,8 @@ import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.ui.JBSplitter;
-import com.intellij.ui.ListSpeedSearch;
 import com.intellij.ui.components.JBScrollBar;
 import com.intellij.ui.components.JBScrollPane;
-import com.intellij.ui.speedSearch.SpeedSearch;
-import com.intellij.ui.speedSearch.SpeedSearchUtil;
 import com.intellij.util.ui.UIUtil;
 import icons.SpdEditorIcons;
 import org.jetbrains.annotations.NonNls;
@@ -412,8 +408,7 @@ public class SpdEditor extends JComponent implements DataProvider, MouseListener
                     SpdEditorDBState.getInstance().autoSave = false;
                     myButton.setToolTipText("Enable AutoSave");
 
-                    NotificationGroupManager.getInstance()
-                            .getNotificationGroup("Spd Editor")
+                    NotificationGroup.findRegisteredGroup("Spd Editor")
                             .createNotification("disable auto save spd editor", NotificationType.INFORMATION).notify(null);
                     repaint();
                 } else if (automation.equals(IcoMoonUtils.getManual())) {
@@ -421,8 +416,7 @@ public class SpdEditor extends JComponent implements DataProvider, MouseListener
                     myButton.setTitle(IcoMoonUtils.getAutomation());
 
                     myButton.setToolTipText("Disable AutoSave");
-                    NotificationGroupManager.getInstance()
-                            .getNotificationGroup("Spd Editor")
+                    NotificationGroup.findRegisteredGroup("Spd Editor")
                             .createNotification("enable auto save spd editor", NotificationType.INFORMATION).notify(null);
                     repaint();
                 }
