@@ -44,6 +44,7 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.DataKey;
 import com.intellij.openapi.actionSystem.DataProvider;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.project.ProjectUtil;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.UserDataHolder;
@@ -3318,13 +3319,6 @@ public class ChartPanel extends JComponent implements DataProvider, MouseListene
         return sqls;
     }
 
-    public String generateQueryEngineTaskSql() {
-        return "select id_, type_, title_, expression_, returnvalue_, bussineskey_, bussinesdesc_, rights_, validsecond_, listener_, opensecond_, bussinesid_, tasklistener_ from ENGINE_TASK where id_ like '" + getId() + "/_%' escape '/' order by ID_";
-    }
-
-    public String generateQueryProcessTaskSql() {
-        return "select processid_, source_, target_, condition_, order_ from ENGINE_FLOW where PROCESSID_='" + this.getId() + "' order by SOURCE_,TARGET_";
-    }
 
     @Override
     public void focusGained(FocusEvent e) {

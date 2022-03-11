@@ -1,7 +1,10 @@
 package cn.boz.jb.plugin.idea.action;
 
+import cn.boz.jb.plugin.idea.bean.EngineAction;
+import cn.boz.jb.plugin.idea.bean.EngineTask;
 import cn.boz.jb.plugin.idea.configurable.SpdEditorDBState;
 import cn.boz.jb.plugin.idea.dialog.EngineActionDialog;
+import cn.boz.jb.plugin.idea.dialog.EngineTaskDialog;
 import cn.boz.jb.plugin.idea.utils.DBUtils;
 import com.intellij.codeInsight.navigation.NavigationUtil;
 import com.intellij.ide.actions.searcheverywhere.SearchEverywhereManager;
@@ -23,6 +26,7 @@ import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.ui.popup.JBPopup;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.openapi.ui.popup.ListPopup;
+import com.intellij.openapi.ui.popup.PopupChooserBuilder;
 import com.intellij.openapi.ui.popup.PopupStep;
 import com.intellij.openapi.ui.popup.SpeedSearchFilter;
 import com.intellij.openapi.ui.popup.util.BaseListPopupStep;
@@ -43,14 +47,27 @@ import com.intellij.psi.xml.XmlDocument;
 import com.intellij.psi.xml.XmlElement;
 import com.intellij.psi.xml.XmlFile;
 import com.intellij.psi.xml.XmlTag;
+import com.intellij.ui.awt.RelativePoint;
+import com.intellij.ui.components.JBLabel;
+import com.intellij.ui.components.JBList;
+import com.intellij.ui.components.JBScrollPane;
 import icons.SpdEditorIcons;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.Icon;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.ListCellRenderer;
+import java.awt.Component;
+import java.awt.event.InputEvent;
+import java.awt.event.MouseEvent;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -92,6 +109,10 @@ public class GoToRefFile extends AnAction {
             //判断是不是Dao接口，如果是Dao 接口，name
             if (tryToGoToMapper(element)) {
                 return;
+            } else {
+                if (tryToSearchUsageExt(element, anActionEvent)) {
+                    return;
+                }
             }
         } else {
             try {
@@ -127,6 +148,190 @@ public class GoToRefFile extends AnAction {
 //        SearchEverywhereManager searchEverywhereManager = SearchEverywhereManager.getInstance(project);
 //        HintManager.getInstance().showErrorHint(editor, "Cannot find declaration to go to");
 
+    }
+
+    EngineTaskDialog engineTaskDialog;
+    ListPopup listPopup;
+
+    /**
+     * 搜索在Engine_ACTION中的引用以及ENGINE_FLOW 中ENGINE_TASK 中的引用，并作列表快速搜索
+     *
+     * @param element
+     */
+    private boolean tryToSearchUsageExt(PsiElement element, AnActionEvent anActionEvent) {
+        PsiMethod containingMethod = PsiTreeUtil.getParentOfType(element, PsiMethod.class);
+        PsiClass containingClass;
+        if (containingMethod == null) {
+            containingClass = PsiTreeUtil.getParentOfType(element, PsiClass.class);
+            if (containingClass == null) {
+                return false;
+            }
+            //进入类
+        } else {
+            containingClass = containingMethod.getContainingClass();
+        }
+
+        String qualifiedName = containingClass.getQualifiedName();
+        String name = containingMethod.getName();
+        //
+        SpdEditorDBState instance = SpdEditorDBState.getInstance();
+
+        DBUtils dbUtils = DBUtils.getInstance();
+
+        Ref<List<EngineTask>> engineTaskRef = new Ref<>();
+        Ref<List<EngineAction>> engineActionRef = new Ref<>();
+        ProgressManager.getInstance().runProcessWithProgressSynchronously(() -> {
+            try (Connection connection = dbUtils.getConnection()) {
+                List<EngineTask> engineTasks = dbUtils.queryEngineTaskByExpression(connection, name);
+                List<EngineAction> engineActions = dbUtils.queryEngineActionByActionScript(connection, name);
+                engineTaskRef.set(engineTasks);
+                engineActionRef.set(engineActions);
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            } catch (NoSuchMethodException e) {
+                e.printStackTrace();
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }, "Loading...", true, anActionEvent.getProject());
+        if (engineTaskRef.isNull() && engineActionRef.isNull()) {
+            return false;
+        }
+        List<Object> objects = new ArrayList<>();
+        if (!engineTaskRef.isNull()) {
+            objects.addAll(engineTaskRef.get());
+        }
+        if (!engineActionRef.isNull()) {
+            objects.addAll(engineActionRef.get());
+        }
+
+        //弹出框应该包含提示语
+        BaseListPopupStep selPopup = new BaseListPopupStep<Object>("EngineAction/EngineTask", objects, SpdEditorIcons.ACTION_16_ICON) {
+            @Override
+            public @NotNull String getTextFor(Object o) {
+                if (o instanceof EngineTask) {
+                    EngineTask userTask = (EngineTask) o;
+                    return userTask.getId();
+                } else if (o instanceof EngineAction) {
+                    EngineAction serviceTask = (EngineAction) o;
+                    return serviceTask.getId();
+                }
+                return "";
+            }
+
+            @Override
+            public @Nullable PopupStep<?> onChosen(Object selectedValue, boolean finalChoice) {
+                if (finalChoice) {
+                    return doFinalStep(() -> doRun(selectedValue));
+                }
+                return PopupStep.FINAL_CHOICE;
+            }
+
+            @Override
+            public Icon getIconFor(Object o) {
+                if (o instanceof EngineTask) {
+                    return SpdEditorIcons.GEAR_16_ICON;
+                } else if (o instanceof EngineAction) {
+                    return SpdEditorIcons.ACTION_SCRIPT_16_ICON;
+                }
+                return SpdEditorIcons.ACTION_SCRIPT_16_ICON;
+            }
+
+            private void doRun(Object selectedValue) {
+                //选择的值可以进行跳转
+                if (selectedValue instanceof EngineAction) {
+                    EngineAction engineAction = (EngineAction) selectedValue;
+                    GoToRefFile.this.tryToGotoAction(anActionEvent.getProject(), engineAction.getId());
+                } else {
+                    engineTaskDialog = new EngineTaskDialog((EngineTask) selectedValue);
+                    JBScrollPane jbScrollPane = new JBScrollPane(engineTaskDialog);
+                    popup = JBPopupFactory.getInstance()
+                            .createComponentPopupBuilder(jbScrollPane, null)
+                            .setRequestFocus(true)
+                            .setFocusable(true)
+                            .setCancelOnOtherWindowOpen(true)
+                            .createPopup();
+
+                    popup.showInFocusCenter();
+                }
+            }
+
+            @Override
+            public SpeedSearchFilter<Object> getSpeedSearchFilter() {
+                return o -> {
+                    if (o instanceof EngineTask) {
+                        EngineTask userTask = (EngineTask) o;
+                        return userTask.getId();
+                    } else if (o instanceof EngineAction) {
+                        EngineAction serviceTask = (EngineAction) o;
+                        return serviceTask.getId();
+                    }
+                    return null;
+                };
+            }
+
+            public boolean isSpeedSearchEnabled() {
+                return true;
+            }
+        };
+
+        selPopup.isSelectable(true);
+        listPopup = JBPopupFactory.getInstance()
+                .createListPopup(selPopup);
+
+//        JBList<Object> jbList = new JBList<>(objects) {
+//            @Override
+//            public ListCellRenderer<? super Object> getCellRenderer() {
+//                return new DefaultListCellRenderer() {
+//                    private Object value;
+//                    @Override
+//                    public String getText() {
+//                        return super.getText();
+//                    }
+//
+//                    @Override
+//                    public Icon getIcon() {
+//                        return super.getIcon();
+//                    }
+//
+//                    @Override
+//                    public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+//                        this.value=value;
+//                        Component result = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+//                        return result;
+////                        if(value instanceof EngineTask){
+////                            EngineTask engineTask= (EngineTask) value;
+////                            return new JBLabel(engineTask.getId(),SpdEditorIcons.GEAR_16_ICON,JBLabel.HORIZONTAL);
+////                        }else{
+////                            EngineAction engineTask= (EngineAction) value;
+////                            return new JBLabel(engineTask.getId(),SpdEditorIcons.ACTION_SCRIPT_16_ICON,JBLabel.HORIZONTAL);
+////                        }
+//                    }
+//                };
+//            }
+//        };
+
+
+//        PopupChooserBuilder popupChooserBuilder = new PopupChooserBuilder(jbList);
+
+//        JBPopup popup = popupChooserBuilder.createPopup();
+
+        InputEvent inputEvent = anActionEvent.getInputEvent();
+        if (inputEvent instanceof MouseEvent) {
+            MouseEvent me = (MouseEvent) inputEvent;
+            listPopup.show(RelativePoint.fromScreen(me.getLocationOnScreen()));
+        } else {
+            listPopup.showInFocusCenter();
+        }
+        return true;
     }
 
     /**

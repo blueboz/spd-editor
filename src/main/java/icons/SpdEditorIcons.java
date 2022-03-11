@@ -1,7 +1,6 @@
 package icons;
 
 import com.intellij.openapi.util.IconLoader;
-import com.intellij.ui.IconManager;
 
 import javax.swing.Icon;
 
@@ -20,6 +19,8 @@ public class SpdEditorIcons {
 
     public static Icon COMPARE_16_ICON = icon("/icons/compare.svg");
     public static Icon PROCESS_16_ICON = icon("/icons/process.svg");
+    public static Icon ACTION_SCRIPT_16_ICON = icon("/icons/action.svg");
+    public static Icon GEAR_16_ICON = icon("/icons/gear.svg");
 
     static Icon icon(String path) {
         Icon icon = IconLoader.getIcon(path, SpdEditorIcons.class);

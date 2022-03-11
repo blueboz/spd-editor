@@ -1,7 +1,12 @@
 package cn.boz.jb.plugin.idea.utils;
 
+import cn.boz.jb.plugin.floweditor.gui.process.fragment.UserTask;
 import cn.boz.jb.plugin.floweditor.gui.utils.StringUtils;
+import cn.boz.jb.plugin.idea.bean.EngineAction;
+import cn.boz.jb.plugin.idea.bean.EngineFlow;
+import cn.boz.jb.plugin.idea.bean.EngineTask;
 import cn.boz.jb.plugin.idea.configurable.SpdEditorDBState;
+import com.intellij.openapi.actionSystem.DataContext;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
@@ -21,6 +26,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class DBUtils {
 
@@ -118,9 +125,10 @@ public class DBUtils {
 
     }
 
-    private String listMapToCsv(List<Map<String, Object>> listmap, boolean wrap) {
+    private String listMapToCsv(List<Map<String, Object>> listmap, boolean wrap, String type) {
         StringBuilder result = new StringBuilder();
         for (Map<String, Object> item : listmap) {
+            result.append(type + " ");
             for (Map.Entry<String, Object> entry : item.entrySet()) {
                 Object value = entry.getValue();
                 if (!wrap) {
@@ -138,16 +146,19 @@ public class DBUtils {
     }
 
 
-    public Map<String, String> fetchAndCompare(List<String> sqls, String generateQueryEngineTaskSql, String generateQueryProcessTaskSql, boolean wrap) {
+    public Map<String, String> fetchAndCompare(List<String> sqls, String processId, boolean wrap) {
         HashMap<String, String> result = new HashMap<>();
         try (Connection connection = getConnection(SpdEditorDBState.getInstance())) {
 
             try {
 
                 connection.setAutoCommit(false);
-                List<Map<String, Object>> engineTasksOld = queryForList(connection.prepareStatement(generateQueryEngineTaskSql));
-                List<Map<String, Object>> processOld = queryForList(connection.prepareStatement(generateQueryProcessTaskSql));
-                result.put("old", listMapToCsv(engineTasksOld, wrap) + listMapToCsv(processOld, wrap));
+                List<EngineTask> engineTasks = queryEngineTaskByIdLike(connection, processId);
+                List<EngineFlow> engineFlows = queryEngineFlowById(connection, processId);
+                String taskString = engineTasks.stream().map(enginetask -> enginetask.toCsv(wrap)).collect(Collectors.joining("\n"));
+                String flowString = engineFlows.stream().map(engineFlow -> engineFlow.toCsv(wrap)).collect(Collectors.joining("\n"));
+
+                result.put("old", taskString + "\n" + flowString);
                 Statement statement = connection.createStatement();
                 for (String s : sqls) {
                     //非空条件判断
@@ -156,9 +167,12 @@ public class DBUtils {
                     }
                 }
 
-                List<Map<String, Object>> engineTasksNew = queryForList(connection.prepareStatement(generateQueryEngineTaskSql));
-                List<Map<String, Object>> processOldNew = queryForList(connection.prepareStatement(generateQueryProcessTaskSql));
-                result.put("new", listMapToCsv(engineTasksNew, wrap) + listMapToCsv(processOldNew, wrap));
+                List<EngineTask> engineTasksNew = queryEngineTaskByIdLike(connection, processId);
+                List<EngineFlow> engineFlowsNew = queryEngineFlowById(connection, processId);
+                String taskStringNew = engineTasksNew.stream().map(enginetask -> enginetask.toCsv(wrap)).collect(Collectors.joining("\n"));
+                String flowStringNew = engineFlowsNew.stream().map(engineFlow -> engineFlow.toCsv(wrap)).collect(Collectors.joining("\n"));
+
+                result.put("new", taskStringNew + "\n" + flowStringNew);
             } finally {
                 connection.rollback();
             }
@@ -183,6 +197,7 @@ public class DBUtils {
         }
         return result;
     }
+
 
     public void executeSql(Connection connection, String sql) throws Exception {
         try (Statement statement = connection.createStatement();) {
@@ -251,6 +266,7 @@ public class DBUtils {
 
     /**
      * 查询权限
+     *
      * @param connection
      * @param right
      * @return
@@ -331,4 +347,74 @@ public class DBUtils {
         return datas;
     }
 
+    public static Function<Map<String, Object>, EngineTask> engineTaskMapper = new Function<Map<String, Object>, EngineTask>() {
+        @Override
+        public EngineTask apply(Map<String, Object> map) {
+            EngineTask engineTask = new EngineTask();
+            engineTask.setId((String) map.get("ID_"));
+            engineTask.setType((String) map.get("TYPE_"));
+            engineTask.setTitle((String) map.get("TITLE_"));
+            engineTask.setExpression((String) map.get("EXPRESSION_"));
+            engineTask.setReturnvalue((String) map.get("RETURNVALUE_"));
+            engineTask.setBussineskey((String) map.get("BUSSINESKEY_"));
+            engineTask.setRights((String) map.get("RIGHTS_"));
+            engineTask.setValidsecond(String.valueOf((BigDecimal) map.get("VALIDSECOND_")));
+            engineTask.setListener((String) map.get("LISTENER_"));
+            engineTask.setOpensecond(String.valueOf((BigDecimal) map.get("OPENSECOND_")));
+            engineTask.setBussinesdesc((String) map.get("BUSSINESID_"));
+            engineTask.setTasklistener((String) map.get("TASKLISTENER_"));
+            return engineTask;
+        }
+    };
+
+    public List<EngineTask> queryEngineTaskByIdLike(Connection connection, String id) throws SQLException {
+        ;
+        String sql = "select id_, type_, title_, expression_, returnvalue_, bussineskey_, bussinesdesc_, rights_, validsecond_, listener_, opensecond_, bussinesid_, tasklistener_ from ENGINE_TASK where id_ like '" + id + "/_%' escape '/' order by ID_";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql);) {
+            List<Map<String, Object>> maps = queryForList(preparedStatement);
+            return maps.stream().map(engineTaskMapper).collect(Collectors.toList());
+        }
+    }
+
+    public List<EngineFlow> queryEngineFlowById(Connection connection, String id) throws SQLException {
+        String sql = "select processid_, source_, target_, condition_, order_ from ENGINE_FLOW where PROCESSID_='" + id + "' order by SOURCE_,TARGET_";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql);) {
+            List<Map<String, Object>> maps = queryForList(preparedStatement);
+            return maps.stream().map(map -> {
+                EngineFlow engineFlow = new EngineFlow();
+                engineFlow.setProcessid((String) map.get("processid_"));
+                engineFlow.setSource((String) map.get("SOURCE_"));
+                engineFlow.setTarget((String) map.get("TARGET_"));
+                engineFlow.setCondition((String) map.get("CONDITION_"));
+                engineFlow.setOrder(String.valueOf(map.get("ORDER_")));
+                return engineFlow;
+            }).collect(Collectors.toList());
+        }
+    }
+
+    public List<EngineTask> queryEngineTaskByExpression(Connection connection, String name) throws SQLException {
+        try (PreparedStatement preparedStatement = connection.prepareStatement("select ID_, TYPE_, TITLE_, EXPRESSION_, RETURNVALUE_, BUSSINESKEY_, " +
+                "BUSSINESDESC_, RIGHTS_, VALIDSECOND_, LISTENER_, OPENSECOND_, BUSSINESID_, TASKLISTENER_ " +
+                " from ENGINE_TASK where EXPRESSION_ like '%" + name + "%'")) {
+            List<Map<String, Object>> maps = queryForList(preparedStatement);
+            return maps.stream().map(engineTaskMapper).collect(Collectors.toList());
+        }
+    }
+
+    public List<EngineAction> queryEngineActionByActionScript(Connection connection, String name) throws SQLException {
+        try (PreparedStatement preparedStatement = connection.prepareStatement("select ID_, NAMESPACE_, URL_, WINDOWPARAM_, ACTIONSCRIPT_, ACTIONINTERCEPT_  from ENGINE_ACTION where ACTIONSCRIPT_ like '%" + name + "%'")) {
+            List<Map<String, Object>> maps = queryForList(preparedStatement);
+            return maps.stream().map(it -> {
+                EngineAction engineAction = new EngineAction();
+                //ID_, NAMESPACE_, URL_, WINDOWPARAM_, ACTIONSCRIPT_, ACTIONINTERCEPT_
+                engineAction.setId((String) it.get("ID_"));
+                engineAction.setNamespace((String) it.get("NAMESPACE_"));
+                engineAction.setUrl((String) it.get("URL_"));
+                engineAction.setWindowparam((String) it.get("WINDOWPARAM_"));
+                engineAction.setActionscript((String) it.get("ACTIONINTERCEPT_"));
+
+                return engineAction;
+            }).collect(Collectors.toList());
+        }
+    }
 }

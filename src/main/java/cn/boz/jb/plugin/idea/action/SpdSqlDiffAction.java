@@ -48,7 +48,7 @@ public class SpdSqlDiffAction extends AnAction {
                 if (spdEditor instanceof SpdEditor) {
                     ChartPanel chartPanel = spdEditor.getChartPanel();
                     List<String> sqls = chartPanel.generateSql();
-                    Map<String, String> dataTobeCompare = DBUtils.getInstance().fetchAndCompare(sqls, chartPanel.generateQueryEngineTaskSql(), chartPanel.generateQueryProcessTaskSql(), "Wrap".equals(selectedValue));
+                    Map<String, String> dataTobeCompare = DBUtils.getInstance().fetchAndCompare(sqls, chartPanel.getId(), "Wrap".equals(selectedValue));
                     String old = dataTobeCompare.get("old");
                     String aNew = dataTobeCompare.get("new");
                     CompareUtils.compare(old, "db version",aNew,  "current ver", PlainTextFileType.INSTANCE, anActionEvent.getProject(),"Sql Into DbCompare");
