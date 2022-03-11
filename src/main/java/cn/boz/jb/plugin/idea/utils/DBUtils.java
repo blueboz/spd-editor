@@ -411,7 +411,7 @@ public class DBUtils {
                 engineAction.setNamespace((String) it.get("NAMESPACE_"));
                 engineAction.setUrl((String) it.get("URL_"));
                 engineAction.setWindowparam((String) it.get("WINDOWPARAM_"));
-                engineAction.setActionscript((String) it.get("ACTIONINTERCEPT_"));
+                engineAction.setActionscript((String) it.get("ACTIONSCRIPT_"));
 
                 return engineAction;
             }).collect(Collectors.toList());

@@ -3352,7 +3352,7 @@ public class ChartPanel extends JComponent implements DataProvider, MouseListene
 
     private Map<Key<? extends Object>,Object> userdata = new HashMap<>();
 
-    @SuppressWarnings("all")
+    @SuppressWarnings("unchecked")
     @Override
     public <T> @Nullable T getUserData(@NotNull Key<T> key) {
         return (T) userdata.get(key);

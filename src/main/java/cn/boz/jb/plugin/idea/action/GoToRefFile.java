@@ -1,11 +1,15 @@
 package cn.boz.jb.plugin.idea.action;
 
+import cn.boz.jb.plugin.floweditor.gui.process.fragment.UserTask;
 import cn.boz.jb.plugin.idea.bean.EngineAction;
+import cn.boz.jb.plugin.idea.bean.EngineFlow;
 import cn.boz.jb.plugin.idea.bean.EngineTask;
 import cn.boz.jb.plugin.idea.configurable.SpdEditorDBState;
 import cn.boz.jb.plugin.idea.dialog.EngineActionDialog;
 import cn.boz.jb.plugin.idea.dialog.EngineTaskDialog;
 import cn.boz.jb.plugin.idea.utils.DBUtils;
+import cn.boz.jb.plugin.idea.widget.SimpleIconControl;
+import com.google.common.cache.Weigher;
 import com.intellij.codeInsight.navigation.NavigationUtil;
 import com.intellij.ide.actions.searcheverywhere.SearchEverywhereManager;
 import com.intellij.ide.actions.searcheverywhere.SearchEverywhereManagerImpl;
@@ -31,6 +35,11 @@ import com.intellij.openapi.ui.popup.PopupStep;
 import com.intellij.openapi.ui.popup.SpeedSearchFilter;
 import com.intellij.openapi.ui.popup.util.BaseListPopupStep;
 import com.intellij.openapi.util.Ref;
+import com.intellij.openapi.util.registry.RegistryUi;
+import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.openapi.vcs.VcsBundle;
+import com.intellij.openapi.vcs.actions.CompareWithSelectedRevisionAction;
+import com.intellij.openapi.vcs.history.VcsFileRevision;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiClass;
@@ -47,10 +56,24 @@ import com.intellij.psi.xml.XmlDocument;
 import com.intellij.psi.xml.XmlElement;
 import com.intellij.psi.xml.XmlFile;
 import com.intellij.psi.xml.XmlTag;
+import com.intellij.ui.IdeBorderFactory;
+import com.intellij.ui.ScrollPaneFactory;
+import com.intellij.ui.SimpleColoredComponent;
+import com.intellij.ui.SpeedSearchBase;
+import com.intellij.ui.TableSpeedSearch;
+import com.intellij.ui.TableUtil;
 import com.intellij.ui.awt.RelativePoint;
 import com.intellij.ui.components.JBLabel;
 import com.intellij.ui.components.JBList;
 import com.intellij.ui.components.JBScrollPane;
+import com.intellij.ui.speedSearch.SpeedSearchUtil;
+import com.intellij.ui.table.JBTable;
+import com.intellij.ui.table.TableView;
+import com.intellij.util.Consumer;
+import com.intellij.util.ui.ColumnInfo;
+import com.intellij.util.ui.JBDimension;
+import com.intellij.util.ui.ListTableModel;
+import com.intellij.util.ui.UIUtil;
 import icons.SpdEditorIcons;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -59,7 +82,24 @@ import javax.swing.DefaultListCellRenderer;
 import javax.swing.Icon;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.ListCellRenderer;
+import javax.swing.RowFilter;
+import javax.swing.RowSorter;
+import javax.swing.border.Border;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
+import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
@@ -68,8 +108,10 @@ import java.net.MalformedURLException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 import java.util.stream.Collectors;
 
 /**
@@ -214,38 +256,95 @@ public class GoToRefFile extends AnAction {
         }
 
         //弹出框应该包含提示语
-        BaseListPopupStep selPopup = new BaseListPopupStep<Object>("EngineAction/EngineTask", objects, SpdEditorIcons.ACTION_16_ICON) {
+//        BaseListPopupStep selPopup = new BaseListPopupStep<Object>("EngineAction/EngineTask", objects, SpdEditorIcons.ACTION_16_ICON) {
+//            @Override
+//            public @NotNull String getTextFor(Object o) {
+//                if (o instanceof EngineTask) {
+//                    EngineTask userTask = (EngineTask) o;
+//                    return userTask.getId();
+//                } else if (o instanceof EngineAction) {
+//                    EngineAction serviceTask = (EngineAction) o;
+//                    return serviceTask.getId();
+//                }
+//                return "";
+//            }
+//
+//            @Override
+//            public @Nullable PopupStep<?> onChosen(Object selectedValue, boolean finalChoice) {
+//                if (finalChoice) {
+//                    return doFinalStep(() -> doRun(selectedValue));
+//                }
+//                return PopupStep.FINAL_CHOICE;
+//            }
+//
+//            @Override
+//            public Icon getIconFor(Object o) {
+//                if (o instanceof EngineTask) {
+//                    return SpdEditorIcons.GEAR_16_ICON;
+//                } else if (o instanceof EngineAction) {
+//                    return SpdEditorIcons.ACTION_SCRIPT_16_ICON;
+//                }
+//                return SpdEditorIcons.ACTION_SCRIPT_16_ICON;
+//            }
+//
+//            private void doRun(Object selectedValue) {
+//                //选择的值可以进行跳转
+//                if (selectedValue instanceof EngineAction) {
+//                    EngineAction engineAction = (EngineAction) selectedValue;
+//                    GoToRefFile.this.tryToGotoAction(anActionEvent.getProject(), engineAction.getId());
+//                } else {
+//                    engineTaskDialog = new EngineTaskDialog((EngineTask) selectedValue);
+//                    JBScrollPane jbScrollPane = new JBScrollPane(engineTaskDialog);
+//                    popup = JBPopupFactory.getInstance()
+//                            .createComponentPopupBuilder(jbScrollPane, null)
+//                            .setRequestFocus(true)
+//                            .setFocusable(true)
+//                            .setCancelOnOtherWindowOpen(true)
+//                            .createPopup();
+//
+//                    popup.showInFocusCenter();
+//                }
+//            }
+//
+//            @Override
+//            public SpeedSearchFilter<Object> getSpeedSearchFilter() {
+//                return o -> {
+//                    if (o instanceof EngineTask) {
+//                        EngineTask userTask = (EngineTask) o;
+//                        return userTask.getId();
+//                    } else if (o instanceof EngineAction) {
+//                        EngineAction serviceTask = (EngineAction) o;
+//                        return serviceTask.getId();
+//                    }
+//                    return null;
+//                };
+//            }
+//
+//            public boolean isSpeedSearchEnabled() {
+//                return true;
+//            }
+//        };
+//
+//        selPopup.isSelectable(true);
+//        listPopup = JBPopupFactory.getInstance()
+//                .createListPopup(selPopup);
+//
+//
+////        PopupChooserBuilder popupChooserBuilder = new PopupChooserBuilder(jbList);
+//
+////        JBPopup popup = popupChooserBuilder.createPopup();
+//
+//        InputEvent inputEvent = anActionEvent.getInputEvent();
+//        if (inputEvent instanceof MouseEvent) {
+//            MouseEvent me = (MouseEvent) inputEvent;
+//            listPopup.show(RelativePoint.fromScreen(me.getLocationOnScreen()));
+//        } else {
+//            listPopup.showInFocusCenter();
+//        }
+//        return true;
+        showListPopup(objects, anActionEvent.getProject(), new Consumer<Object>() {
             @Override
-            public @NotNull String getTextFor(Object o) {
-                if (o instanceof EngineTask) {
-                    EngineTask userTask = (EngineTask) o;
-                    return userTask.getId();
-                } else if (o instanceof EngineAction) {
-                    EngineAction serviceTask = (EngineAction) o;
-                    return serviceTask.getId();
-                }
-                return "";
-            }
-
-            @Override
-            public @Nullable PopupStep<?> onChosen(Object selectedValue, boolean finalChoice) {
-                if (finalChoice) {
-                    return doFinalStep(() -> doRun(selectedValue));
-                }
-                return PopupStep.FINAL_CHOICE;
-            }
-
-            @Override
-            public Icon getIconFor(Object o) {
-                if (o instanceof EngineTask) {
-                    return SpdEditorIcons.GEAR_16_ICON;
-                } else if (o instanceof EngineAction) {
-                    return SpdEditorIcons.ACTION_SCRIPT_16_ICON;
-                }
-                return SpdEditorIcons.ACTION_SCRIPT_16_ICON;
-            }
-
-            private void doRun(Object selectedValue) {
+            public void consume(Object selectedValue) {
                 //选择的值可以进行跳转
                 if (selectedValue instanceof EngineAction) {
                     EngineAction engineAction = (EngineAction) selectedValue;
@@ -263,75 +362,243 @@ public class GoToRefFile extends AnAction {
                     popup.showInFocusCenter();
                 }
             }
+        }, true);
+        return true;
+    }
+
+    private static JPanel createCommentsPanel(final JBTable table) {
+        final JTextArea textArea = new JTextArea("", 7, 30);
+        table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            public void valueChanged(@NotNull ListSelectionEvent e) {
+                ListTableModel model = (ListTableModel) table.getModel();
+                int selectedRow = table.getSelectedRow();
+                int i = table.convertRowIndexToModel(selectedRow);
+                Object item = model.getItem(i);
+                String hint = "";
+                if (item instanceof EngineTask) {
+                    hint = ((EngineTask) item).getExpression();
+                } else if (item instanceof EngineAction) {
+                    hint = ((EngineAction) item).getActionscript();
+                }
+                textArea.setText(hint);
+                textArea.select(0, 0);
+            }
+        });
+        JPanel jPanel = new JPanel(new BorderLayout());
+        JScrollPane textScrollPane = ScrollPaneFactory.createScrollPane(textArea);
+        JLabel commentLabel = new JLabel("script");
+        jPanel.add(commentLabel, "North");
+        commentLabel.setBorder(IdeBorderFactory.createBorder(11));
+        textScrollPane.setBorder((Border) null);
+        jPanel.add(textScrollPane, "Center");
+        jPanel.setPreferredSize(new JBDimension(800, 200));
+        return jPanel;
+    }
+
+
+    @SuppressWarnings("unchecked")
+    public static void showListPopup(final List<Object> objects, Project project, Consumer<? super Object> selectUserTaskConsumer, boolean showComments) {
+        MyRenderer myRenderer = new MyRenderer();
+        ColumnInfo[] columns = new ColumnInfo[]{new ColumnInfo<Object, String>("type") {
+
 
             @Override
-            public SpeedSearchFilter<Object> getSpeedSearchFilter() {
-                return o -> {
-                    if (o instanceof EngineTask) {
-                        EngineTask userTask = (EngineTask) o;
-                        return userTask.getId();
-                    } else if (o instanceof EngineAction) {
-                        EngineAction serviceTask = (EngineAction) o;
-                        return serviceTask.getId();
-                    }
-                    return null;
-                };
+            public @Nullable String valueOf(Object o) {
+                if (o instanceof EngineTask) {
+                    return "task";
+                } else if (o instanceof EngineAction) {
+                    return "action";
+                }
+                return "";
             }
 
-            public boolean isSpeedSearchEnabled() {
-                return true;
+        }, new ColumnInfo<Object, String>("id") {
+            @Nullable
+            @Override
+            public String valueOf(Object o) {
+                if (o instanceof EngineTask) {
+                    return ((EngineTask) o).getId();
+                } else if (o instanceof EngineAction) {
+                    return ((EngineAction) o).getId();
+                }
+                return "";
+            }
+
+            @Override
+            public @Nullable TableCellRenderer getRenderer(Object o) {
+                return myRenderer;
+            }
+
+
+        }, new ColumnInfo<Object, String>("name") {
+            @Nullable
+            @Override
+            public String valueOf(Object o) {
+                if (o instanceof EngineTask) {
+                    return ((EngineTask) o).getTitle();
+                } else if (o instanceof EngineAction) {
+                    return ((EngineAction) o).getNamespace();
+                }
+                return "";
+
+            }
+
+            @Override
+            public @Nullable TableCellRenderer getRenderer(Object o) {
+                return myRenderer;
+            }
+
+
+        }, new ColumnInfo<Object, String>("expressionOrScript") {
+            @Nullable
+            @Override
+            public String valueOf(Object o) {
+                if (o instanceof EngineTask) {
+                    return ((EngineTask) o).getExpression();
+                } else if (o instanceof EngineAction) {
+                    return ((EngineAction) o).getActionscript();
+                }
+                return "";
+            }
+
+            @Override
+            public @Nullable TableCellRenderer getRenderer(Object o) {
+                return myRenderer;
+            }
+        }};
+
+
+        JBTable jbTable = new JBTable(new ListTableModel(columns, objects, 0)) {
+            @Override
+            public TableCellRenderer getCellRenderer(int row, int column) {
+                return myRenderer;
+            }
+        };
+        final TableColumn c0 = jbTable.getColumnModel().getColumn(0);
+        c0.setMaxWidth(24);
+        c0.setWidth(24);
+        c0.setMinWidth(24);
+
+//        c0.setCellRenderer(myRenderer);
+        final TableColumn c1 = jbTable.getColumnModel().getColumn(1);
+        c1.setWidth(250);
+        c1.setMinWidth(250);
+//        c1.setCellRenderer(myRenderer);
+
+//        final TableView<Object> table = new TableView(new ListTableModel(columns, objects, 0));
+//        jbTable.setCellSelectionEnabled(true);
+        jbTable.setShowHorizontalLines(true);
+        jbTable.setTableHeader((JTableHeader) null);
+
+        jbTable.setRowSorter(new TableRowSorter<>(jbTable.getModel()));
+
+        Runnable runnable = () -> {
+            ListTableModel model = (ListTableModel) jbTable.getModel();
+            int selectedRow = jbTable.getSelectedRow();
+            int i = jbTable.convertRowIndexToModel(selectedRow);
+            Object item = model.getItem(i);
+            if (item != null) {
+                selectUserTaskConsumer.consume(item);
+            }
+
+        };
+        if (jbTable.getModel().getRowCount() == 0) {
+            jbTable.clearSelection();
+        }
+
+        TableSpeedSearch tableSpeedSearch = new TableSpeedSearch(jbTable) {
+            @Override
+            protected void onSearchFieldUpdated(String pattern) {
+                super.onSearchFieldUpdated(pattern);
+                RowSorter<? extends TableModel> sorter0 = myComponent.getRowSorter();
+                if (!(sorter0 instanceof TableRowSorter)) {
+                    return;
+                }
+                //noinspection unchecked
+                TableRowSorter<TableModel> sorter = (TableRowSorter<TableModel>) sorter0;
+                if (StringUtil.isNotEmpty(pattern)) {
+
+                    sorter.setRowFilter(new RowFilter<>() {
+                        @Override
+                        public boolean include(Entry<? extends TableModel, ? extends Integer> entry) {
+                            return isMatchingRow(entry.getIdentifier(), pattern);
+                        }
+                    });
+                } else {
+                    sorter.setRowFilter(null);
+                }
+            }
+
+            protected boolean isMatchingRow(int modelRow, String pattern) {
+                int columns = myComponent.getColumnCount();
+                for (int col = 0; col < columns; col++) {
+                    String str = (String) myComponent.getModel().getValueAt(modelRow, col);
+                    if (str != null && compare(str, pattern)) {
+                        return true;
+                    }
+                }
+                return false;
             }
         };
 
-        selPopup.isSelectable(true);
-        listPopup = JBPopupFactory.getInstance()
-                .createListPopup(selPopup);
+        jbTable.setMinimumSize(new JBDimension(800, 80));
 
-//        JBList<Object> jbList = new JBList<>(objects) {
-//            @Override
-//            public ListCellRenderer<? super Object> getCellRenderer() {
-//                return new DefaultListCellRenderer() {
-//                    private Object value;
-//                    @Override
-//                    public String getText() {
-//                        return super.getText();
-//                    }
-//
-//                    @Override
-//                    public Icon getIcon() {
-//                        return super.getIcon();
-//                    }
-//
-//                    @Override
-//                    public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-//                        this.value=value;
-//                        Component result = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-//                        return result;
-////                        if(value instanceof EngineTask){
-////                            EngineTask engineTask= (EngineTask) value;
-////                            return new JBLabel(engineTask.getId(),SpdEditorIcons.GEAR_16_ICON,JBLabel.HORIZONTAL);
-////                        }else{
-////                            EngineAction engineTask= (EngineAction) value;
-////                            return new JBLabel(engineTask.getId(),SpdEditorIcons.ACTION_SCRIPT_16_ICON,JBLabel.HORIZONTAL);
-////                        }
-//                    }
-//                };
-//            }
-//        };
-
-
-//        PopupChooserBuilder popupChooserBuilder = new PopupChooserBuilder(jbList);
-
-//        JBPopup popup = popupChooserBuilder.createPopup();
-
-        InputEvent inputEvent = anActionEvent.getInputEvent();
-        if (inputEvent instanceof MouseEvent) {
-            MouseEvent me = (MouseEvent) inputEvent;
-            listPopup.show(RelativePoint.fromScreen(me.getLocationOnScreen()));
-        } else {
-            listPopup.showInFocusCenter();
+        PopupChooserBuilder builder = new PopupChooserBuilder(jbTable);
+        if (showComments) {
+            //注释
+            builder.setSouthComponent(createCommentsPanel(jbTable));
         }
-        return true;
+
+        builder.setTitle("UserTaskSearcher").setItemChoosenCallback(runnable).setResizable(true)
+                .setDimensionServiceKey("UserTaskSearcher").setMinSize(new JBDimension(300, 300));
+        JBPopup popup = builder.createPopup();
+        popup.showCenteredInCurrentWindow(project);
+    }
+
+    private static class MyRenderer implements TableCellRenderer {
+        private final SimpleColoredComponent myComponent = new SimpleColoredComponent();
+
+        @NotNull
+        @Override
+        public Component getTableCellRendererComponent(@NotNull JTable table,
+                                                       Object value,
+                                                       boolean isSelected,
+                                                       boolean hasFocus,
+                                                       int row,
+                                                       int column) {
+
+            Color bg = isSelected ? table.getSelectionBackground() : table.getBackground();
+            Color fg = isSelected ? table.getSelectionForeground() : table.getForeground();
+            myComponent.clear();
+
+            if (column == 0) {
+                SimpleIconControl simpleIconControl = null;
+                if ("task".equals(value)) {
+                    simpleIconControl = new SimpleIconControl(SpdEditorIcons.GEAR_16_ICON);
+                } else if ("action".equals(value)) {
+                    simpleIconControl = new SimpleIconControl(SpdEditorIcons.ACTION_SCRIPT_16_ICON);
+
+                }
+                if (simpleIconControl == null) {
+                    return myComponent;
+                }
+                simpleIconControl.setBackground(bg);
+                simpleIconControl.setForeground(fg);
+                return simpleIconControl;
+            } else {
+                if (value != null) {
+                    myComponent.append((String) value);
+                } else {
+                    myComponent.append((String) "");
+                }
+            }
+            myComponent.setBackground(bg);
+            myComponent.setForeground(fg);
+
+            SpeedSearchUtil.applySpeedSearchHighlighting(table, myComponent, true, hasFocus);
+            return myComponent;
+
+        }
     }
 
     /**

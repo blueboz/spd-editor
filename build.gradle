@@ -204,7 +204,7 @@ tasks.withType(JavaCompile) {
 }
 
 runIde {
-    autoReloadPlugins = true
+    autoReloadPlugins = false
 }
 
 task "publishPluginLocal" {
@@ -222,6 +222,9 @@ tasks.whenTaskAdded { task ->
     if (task.name.equals("lint")) {
         task.enabled = false
     }
+//    if(task.name.contains("prepareSandbox")){
+//        task.enabled = false
+//    }
 
 //    :buildSearchableOptions
     if (task.name.contains("buildSearchableOptions")) {

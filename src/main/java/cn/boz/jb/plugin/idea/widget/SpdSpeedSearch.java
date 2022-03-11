@@ -9,6 +9,7 @@ import com.intellij.ui.SpeedSearchBase;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+@SuppressWarnings("unchecked")
 public class SpdSpeedSearch extends SpeedSearchBase {
 
     private ChartPanel chartPanel;
