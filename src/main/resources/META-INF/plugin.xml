@@ -72,31 +72,30 @@
                           relative-to-action="EditorPaste"/>
         </group>
 
-        <action class="cn.boz.jb.plugin.idea.action.GotoProcessAction" id="goToProcessAction"
-                description="Go To Process"
-                text="Go To Process"
-                icon="DvcsImplIcons.Outgoing">
-        </action>
-        <group id="SqlDiffAction">
+
+        <group id="spdEditorPopupGroup">
+            <action class="cn.boz.jb.plugin.idea.action.WhoCallMeAction" id="WhoCallMeAction" text="WhoCallMe" icon="AllIcons.General.User"></action>
 
             <action class="cn.boz.jb.plugin.idea.action.SpdSqlDiffAction" id="sqlDiffAction" description="SQLDiff"
                     text="Sql Diff"
                     icon="AllIcons.Diff.Compare4LeftRight">
             </action>
-            <group text="Go To Process" icon="DvcsImplIcons.Outgoing" id="goToProcessGroup" description="Go To Process"
+            <group text="Who I Call" icon="DvcsImplIcons.Outgoing" id="goToProcessGroup" description="Go To Process"
                    popup="true"
                    class="cn.boz.jb.plugin.idea.action.GotoProcessActionGroup">
                 <action class="cn.boz.jb.plugin.idea.action.GotoProcessSearchAction" id="goToProcessSearchAction"
                         description="Go To Process Search"
-                        text="Go To Process Search"
+                        text="Search"
                         icon="AllIcons.Actions.Search">
                 </action>
                 <action class="cn.boz.jb.plugin.idea.action.GotoProcessFindAction" id="goToProcessFindAction"
-                        description="Go To Process Search"
-                        text="Go To Process Search"
+                        description="Go To Process Find"
+                        text="Find"
                         icon="AllIcons.Actions.Search">
                 </action>
             </group>
+            <action class="cn.boz.jb.plugin.idea.action.FindInSpdEditor" icon="AllIcons.Actions.Find"
+                    id="FindInSpdEditor" text="FindInSpdEditor"></action>
 
             <action class="cn.boz.jb.plugin.idea.action.GotoServiceTaskAction" id="gotoServiceTaskAction"
                     description="Go To ServiceTask"
@@ -107,36 +106,34 @@
                     description="Go To EngineRight"
                     text="Go To EngineRight"
                     icon="AllIcons.Nodes.SecurityRole"/>
-<!--            <action class="cn.boz.jb.plugin.idea.action.FindInSpdEditor" id="findInSpdEditorAction"-->
-<!--                    description="Find In Spd Editor"-->
-<!--                    text="Find In SpdEditor"-->
-<!--                    icon="AllIcons.Actions.Find"-->
-<!--            ></action>-->
         </group>
 
         <action class="cn.boz.jb.plugin.idea.action.NewSpdFileAction" id="NewSpdFile" text="Spd File"
                 icon="SpdEditorIcons.FLOW_16_ICON" description="Spd File">
             <add-to-group group-id="NewGroup" anchor="last"/>
         </action>
-        <!--        <action id="EditorBasics.EditorIllustrationAction"-->
-        <!--                class="org.intellij.sdk.editor.EditorIllustrationAction"-->
-        <!--                text="Editor Replace Text"-->
-        <!--                description="Replaces selected text with 'Replacement'."-->
-        <!--                icon="SdkIcons.Sdk_default_icon">-->
-        <!--            <add-to-group group-id="EditorPopupMenu" anchor="first"/>-->
-        <!--        </action>-->
+
         <group>
             <action class="cn.boz.jb.plugin.idea.action.GoToRefFile" id="GoToRef" text="Go To Ref"
                     icon="SpdEditorIcons.REF_16_ICON">
             </action>
-            <action class="cn.boz.jb.plugin.idea.codedef.action.AddCodeDefAction" id="AddCodeDef" text="Add Code Def"
-                    icon="AllIcons.General.Add"></action>
+            <group text="GoToAction" id="GoToActionGroup" popup="true">
+                <action class="cn.boz.jb.plugin.idea.action.GoToAnyRefAction" icon="AllIcons.Actions.Search"
+                        id="GoToRefAction"
+                        text="GoToAnyRefAction"></action>
+                <action class="cn.boz.jb.plugin.idea.action.GoToAnyRefExtAction" icon="AllIcons.Actions.Search"
+                        text="GoToRefExt" id="GoToRefExt"></action>
+            </group>
+            <!--            <action class="cn.boz.jb.plugin.idea.codedef.action.AddCodeDefAction" id="AddCodeDef" text="Add Code Def"-->
+            <!--                    icon="AllIcons.General.Add"></action>-->
+
             <add-to-group group-id="EditorPopupMenu" anchor="first"></add-to-group>
         </group>
         <!--        GoToJsFile-->
 
         <group id="spd.gotorefaction.group">
-            <action class="cn.boz.jb.plugin.idea.action.GoToRefFile$SearchIdAction" icon="AllIcons.Actions.Find" id="GotoIdAction" text="SearchId"></action>
+            <action class="cn.boz.jb.plugin.idea.action.GoToRefFile$SearchIdAction" icon="AllIcons.Actions.Find"
+                    id="GotoIdAction" text="SearchId"></action>
         </group>
 
         <!--查看EngineAction 对话框中，功能菜单-->

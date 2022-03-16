@@ -4,9 +4,11 @@ import cn.boz.jb.plugin.floweditor.gui.process.fragment.ServiceTask;
 import cn.boz.jb.plugin.idea.bean.EngineAction;
 import cn.boz.jb.plugin.idea.bean.EngineTask;
 import cn.boz.jb.plugin.idea.configurable.SpdEditorDBState;
+import cn.boz.jb.plugin.idea.dialog.CallerSearcherCommentPanel;
 import cn.boz.jb.plugin.idea.dialog.EngineActionDialog;
 import cn.boz.jb.plugin.idea.dialog.EngineTaskDialog;
 import cn.boz.jb.plugin.idea.utils.DBUtils;
+import cn.boz.jb.plugin.idea.utils.MyHighlightUtils;
 import cn.boz.jb.plugin.idea.widget.SimpleIconControl;
 import com.intellij.codeInsight.navigation.NavigationUtil;
 import com.intellij.find.FindModel;
@@ -22,6 +24,7 @@ import com.intellij.lang.jvm.JvmMethod;
 import com.intellij.openapi.actionSystem.ActionGroup;
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.ActionPlaces;
+import com.intellij.openapi.actionSystem.ActionToolbar;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
@@ -44,6 +47,7 @@ import com.intellij.openapi.ui.popup.PopupStep;
 import com.intellij.openapi.ui.popup.SpeedSearchFilter;
 import com.intellij.openapi.ui.popup.util.BaseListPopupStep;
 import com.intellij.openapi.util.Ref;
+import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.JavaPsiFacade;
@@ -66,7 +70,9 @@ import com.intellij.ui.PopupHandler;
 import com.intellij.ui.ScrollPaneFactory;
 import com.intellij.ui.SimpleColoredComponent;
 import com.intellij.ui.TableSpeedSearch;
+import com.intellij.ui.awt.RelativePoint;
 import com.intellij.ui.components.JBScrollPane;
+import com.intellij.ui.speedSearch.SpeedSearchSupply;
 import com.intellij.ui.speedSearch.SpeedSearchUtil;
 import com.intellij.ui.table.JBTable;
 import com.intellij.util.Consumer;
@@ -78,6 +84,7 @@ import icons.SpdEditorIcons;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -93,9 +100,14 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultHighlighter;
+import javax.swing.text.Highlighter;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.event.InputEvent;
+import java.awt.event.MouseEvent;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.sql.Connection;
@@ -167,7 +179,7 @@ public class GoToRefFile extends AnAction {
                         if (tryToGotoClassRef) {
                             return;
                         }
-                        boolean trytoGotoAction = tryToGotoAction(project, stringValue);
+                        boolean trytoGotoAction = tryToGotoAction(stringValue, anActionEvent,true);
                         if (trytoGotoAction) {
                             return;
                         }
@@ -186,8 +198,6 @@ public class GoToRefFile extends AnAction {
 
     }
 
-    EngineTaskDialog engineTaskDialog;
-    ListPopup listPopup;
 
     /**
      * 搜索在Engine_ACTION中的引用以及ENGINE_FLOW 中ENGINE_TASK 中的引用，并作列表快速搜索
@@ -210,7 +220,6 @@ public class GoToRefFile extends AnAction {
         String qualifiedName = containingClass.getQualifiedName();
         String name = containingMethod.getName();
         //
-        SpdEditorDBState instance = SpdEditorDBState.getInstance();
 
         DBUtils dbUtils = DBUtils.getInstance();
 
@@ -249,6 +258,9 @@ public class GoToRefFile extends AnAction {
             objects.addAll(engineActionRef.get());
         }
 
+        if (objects.size() == 0) {
+            return false;
+        }
         //弹出框应该包含提示语
         showListPopup(objects, anActionEvent.getProject(), new Consumer<Object>() {
             @Override
@@ -256,14 +268,17 @@ public class GoToRefFile extends AnAction {
                 //选择的值可以进行跳转
                 if (selectedValue instanceof EngineAction) {
                     EngineAction engineAction = (EngineAction) selectedValue;
-                    GoToRefFile.this.tryToGotoAction(anActionEvent.getProject(), engineAction.getId());
+                    GoToRefFile.this.tryToGotoAction(engineAction.getId(), anActionEvent,true);
                 } else {
-                    engineTaskDialog = new EngineTaskDialog((EngineTask) selectedValue);
+                    EngineTaskDialog engineTaskDialog = new EngineTaskDialog((EngineTask) selectedValue);
                     JBScrollPane jbScrollPane = new JBScrollPane(engineTaskDialog);
+                    JBPopup popup;
                     popup = JBPopupFactory.getInstance()
                             .createComponentPopupBuilder(jbScrollPane, null)
                             .setRequestFocus(true)
                             .setFocusable(true)
+                            .setMovable(true)
+                            .setTitle("EngineTask")
                             .setCancelOnOtherWindowOpen(true)
                             .setProject(anActionEvent.getProject())
                             .createPopup();
@@ -275,35 +290,7 @@ public class GoToRefFile extends AnAction {
         return true;
     }
 
-    private static JPanel createCommentsPanel(final JBTable table) {
-        final JTextArea textArea = new JTextArea("", 7, 30);
-        table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-            public void valueChanged(@NotNull ListSelectionEvent e) {
-                ListTableModel model = (ListTableModel) table.getModel();
-                int selectedRow = table.getSelectedRow();
-                int i = table.convertRowIndexToModel(selectedRow);
-                Object item = model.getItem(i);
-                String hint = "";
-                if (item instanceof EngineTask) {
-                    hint = ((EngineTask) item).getExpression();
-                } else if (item instanceof EngineAction) {
-                    hint = ((EngineAction) item).getActionscript();
-                }
 
-                textArea.setText(hint);
-                textArea.select(0, 0);
-            }
-        });
-        JPanel jPanel = new JPanel(new BorderLayout());
-        JScrollPane textScrollPane = ScrollPaneFactory.createScrollPane(textArea);
-        JLabel commentLabel = new JLabel("script");
-        jPanel.add(commentLabel, "North");
-        commentLabel.setBorder(IdeBorderFactory.createBorder(11));
-        textScrollPane.setBorder((Border) null);
-        jPanel.add(textScrollPane, "Center");
-        jPanel.setPreferredSize(new JBDimension(800, 200));
-        return jPanel;
-    }
 
 
     @SuppressWarnings("unchecked")
@@ -391,14 +378,15 @@ public class GoToRefFile extends AnAction {
 
 //        c0.setCellRenderer(myRenderer);
         final TableColumn c1 = jbTable.getColumnModel().getColumn(1);
-        c1.setWidth(250);
+        //设置ID列宽度
+        c1.setWidth(210);
         c1.setMinWidth(250);
 //        c1.setCellRenderer(myRenderer);
 
 //        final TableView<Object> table = new TableView(new ListTableModel(columns, objects, 0));
 //        jbTable.setCellSelectionEnabled(true);
         jbTable.setShowHorizontalLines(true);
-        jbTable.setTableHeader((JTableHeader) null);
+//        jbTable.setTableHeader((JTableHeader) null);
 
         jbTable.setRowSorter(new TableRowSorter<>(jbTable.getModel()));
 
@@ -416,7 +404,7 @@ public class GoToRefFile extends AnAction {
             jbTable.clearSelection();
         }
 
-        TableSpeedSearch tableSpeedSearch = new TableSpeedSearch(jbTable) {
+        new TableSpeedSearch(jbTable) {
             @Override
             protected void onSearchFieldUpdated(String pattern) {
                 super.onSearchFieldUpdated(pattern);
@@ -451,16 +439,19 @@ public class GoToRefFile extends AnAction {
             }
         };
 
-        jbTable.setMinimumSize(new JBDimension(800, 400));
         PopupChooserBuilder builder = new PopupChooserBuilder(jbTable);
         if (showComments) {
             //注释
-            builder.setSouthComponent(createCommentsPanel(jbTable));
+            builder.setSouthComponent(new CallerSearcherCommentPanel(jbTable));
         }
 
 
-        builder.setTitle("UserTaskSearcher").setItemChoosenCallback(runnable).setResizable(true)
-                .setDimensionServiceKey("UserTaskSearcher").setMinSize(new JBDimension(300, 300));
+        builder.setTitle("caller Searcher")
+                .setItemChoosenCallback(runnable).setResizable(true)
+                .setMovable(true)
+                .setDimensionServiceKey("callerSearcher")
+                .setMinSize(new JBDimension(800, 400));
+
         JBPopup popup = builder.createPopup();
         popup.showCenteredInCurrentWindow(project);
 
@@ -546,7 +537,7 @@ public class GoToRefFile extends AnAction {
 
                 FindInProjectManager findInProjectManager = FindInProjectManager.getInstance(anActionEvent.getProject());
                 FindModel findModel = new FindModel();
-                findModel.setStringToFind(id.replaceFirst("/",""));
+                findModel.setStringToFind(id.replaceFirst("/", ""));
                 findInProjectManager.findInProject(anActionEvent.getDataContext(), findModel);
 
 
@@ -732,22 +723,21 @@ public class GoToRefFile extends AnAction {
 
     }
 
-    private JBPopup popup;
-    private EngineActionDialog temporyDialog;
+
 
     /**
      * 跳转到Engine Action
      *
-     * @param project
+     * @param
      * @param value
      * @return
      */
     @SuppressWarnings("unchecked")
-    private boolean tryToGotoAction(Project project, String value) {
+    public static boolean tryToGotoAction(String value, AnActionEvent anActionEvent,boolean strict) {
         if (value == null) {
             return false;
         }
-        if (!value.contains(".do")) {
+        if (!value.contains(".do")&&strict) {
             return false;
         }
         if (value.contains("?")) {
@@ -804,22 +794,27 @@ public class GoToRefFile extends AnAction {
 
 
         }, "Loading...", true, ProjectManager.getInstance().getDefaultProject());
-
+        JBPopup popup;
+        EngineActionDialog temporyDialog;
         if (!engineActionRef.isNull()) {
             EngineActionDataContainer container = engineActionRef.get();
+
 
             temporyDialog = new EngineActionDialog(container.getEngineAction(), container.getEngineActionInput(), container.getEngineActionOutput());
 
             popup = JBPopupFactory.getInstance()
                     .createComponentPopupBuilder(temporyDialog, null)
-//                    .setCancelOnClickOutside(true)
                     .setRequestFocus(true)
-                    .setProject(project)
+                    .setTitle("Action")
+                    .setMovable(true)
+                    .setProject(anActionEvent.getProject())
                     .setFocusable(true)
                     .setCancelOnOtherWindowOpen(true)
                     .createPopup();
 
-            popup.showCenteredInCurrentWindow(project);
+            //应该
+            popup.showCenteredInCurrentWindow(anActionEvent.getProject());
+
             return true;
         }
 
@@ -839,7 +834,7 @@ public class GoToRefFile extends AnAction {
 
                 private void doRun(String selectedValue) {
                     //选择的值可以进行跳转
-                    tryToGotoAction(project, (String) selectedValue);
+                    tryToGotoAction((String) selectedValue, anActionEvent,true);
                 }
 
                 @Override
@@ -856,7 +851,7 @@ public class GoToRefFile extends AnAction {
             selPopup.isSelectable(true);
             ListPopup listPopup = JBPopupFactory.getInstance()
                     .createListPopup(selPopup);
-            listPopup.showInFocusCenter();
+            listPopup.showCenteredInCurrentWindow(anActionEvent.getProject());
             return true;
         }
 

@@ -238,7 +238,7 @@ public class ChartPanel extends JComponent implements DataProvider, MouseListene
         addFocusListener(this);
         setInheritsPopupMenu(true);
         ActionManager instance = ActionManager.getInstance();
-        ActionGroup ag = (ActionGroup) instance.getAction("SqlDiffAction");
+        ActionGroup ag = (ActionGroup) instance.getAction("spdEditorPopupGroup");
 //        ActionPopupMenu sqlDiffAction = instance.createActionPopupMenu("diff", (ActionGroup) instance.getAction("SqlDiffAction"));
         //这样
 //        sqlDiffAction.setTargetComponent(this.getSpdEditor().getChartPanel());
@@ -247,6 +247,7 @@ public class ChartPanel extends JComponent implements DataProvider, MouseListene
 //        PopupHandler.installPopupMenu(myList, "VcsSelectionHistoryDialog.Popup", ActionPlaces.UPDATE_POPUP);
         PopupHandler.installPopupHandler(this, ag, ActionPlaces.UPDATE_POPUP);
         //注册Ctrl+F给对应的Action
+
         new FindInSpdEditor(this).registerCustomShortcutSet(this, null);
     }
 

@@ -79,7 +79,7 @@ public class GotoProcessAction extends AnAction {
         final String calledElement = callActivity.getCalledElement();
 
         ListPopup listPopup = JBPopupFactory.getInstance()
-                .createListPopup(new BaseListPopupStep<String>("Find in project or Search Everything",
+                .createListPopup(new BaseListPopupStep<String>("Find Who I Call",
                         "Search EveryThing", "Find In Project") {
 
                     @Override

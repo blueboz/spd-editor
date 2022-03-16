@@ -51,18 +51,14 @@ public class SpdSqlDiffAction extends AnAction {
                     Map<String, String> dataTobeCompare = DBUtils.getInstance().fetchAndCompare(sqls, chartPanel.getId(), "Wrap".equals(selectedValue));
                     String old = dataTobeCompare.get("old");
                     String aNew = dataTobeCompare.get("new");
-                    CompareUtils.compare(old, "db version",aNew,  "current ver", PlainTextFileType.INSTANCE, anActionEvent.getProject(),"Sql Into DbCompare");
+                    CompareUtils.compare(old, "db version", aNew, "current ver", PlainTextFileType.INSTANCE, anActionEvent.getProject(), "Sql Into DbCompare");
                 }
             }
         };
         ListPopup listPopup = instance.createListPopup(baseListPopupStep);
-        InputEvent inputEvent = anActionEvent.getInputEvent();
-        if (inputEvent instanceof MouseEvent) {
-            MouseEvent me = (MouseEvent) inputEvent;
-            listPopup.show(RelativePoint.fromScreen(me.getLocationOnScreen()));
-        } else {
-            listPopup.showInFocusCenter();
-        }
+        MouseEvent me = (MouseEvent) anActionEvent.getInputEvent();
+        listPopup.show(RelativePoint.fromScreen(me.getLocationOnScreen()));
+
 
     }
 }

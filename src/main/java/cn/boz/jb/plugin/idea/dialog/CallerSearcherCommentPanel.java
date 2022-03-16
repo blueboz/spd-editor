@@ -1,0 +1,74 @@
+package cn.boz.jb.plugin.idea.dialog;
+
+import cn.boz.jb.plugin.idea.bean.EngineAction;
+import cn.boz.jb.plugin.idea.bean.EngineTask;
+import cn.boz.jb.plugin.idea.utils.MyHighlightUtils;
+import com.intellij.openapi.actionSystem.ActionGroup;
+import com.intellij.openapi.actionSystem.ActionManager;
+import com.intellij.openapi.actionSystem.ActionToolbar;
+import com.intellij.ui.IdeBorderFactory;
+import com.intellij.ui.ScrollPaneFactory;
+import com.intellij.ui.components.JBPanel;
+import com.intellij.ui.table.JBTable;
+import com.intellij.util.ui.JBDimension;
+import com.intellij.util.ui.ListTableModel;
+import org.jetbrains.annotations.NotNull;
+
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.border.Border;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import java.awt.BorderLayout;
+
+public class CallerSearcherCommentPanel extends JBPanel {
+    private JBTable table;
+    JTextArea textArea;
+
+    public CallerSearcherCommentPanel(JBTable table){
+        this.table=table;
+        textArea = new JTextArea("", 7, 30);
+        table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            public void valueChanged(@NotNull ListSelectionEvent e) {
+                ListTableModel model = (ListTableModel) table.getModel();
+                int selectedRow = table.getSelectedRow();
+                int i = table.convertRowIndexToModel(selectedRow);
+                Object item = model.getItem(i);
+                String hint = "";
+                if (item instanceof EngineTask) {
+                    hint = ((EngineTask) item).getExpression();
+                } else if (item instanceof EngineAction) {
+                    hint = ((EngineAction) item).getActionscript();
+                }
+
+                textArea.setText(hint);
+                MyHighlightUtils.installHighlightForTextArea(table, textArea);
+
+
+            }
+        });
+        this.setLayout(new BorderLayout());;
+        JScrollPane textScrollPane = ScrollPaneFactory.createScrollPane(textArea);
+        JLabel commentLabel = new JLabel("script");
+        this.add(commentLabel, "North");
+        commentLabel.setBorder(IdeBorderFactory.createBorder(11));
+        textScrollPane.setBorder((Border) null);
+        this.add(textScrollPane, "Center");
+        this.setPreferredSize(new JBDimension(800, 200));
+
+        //增加应用
+        ActionManager instance = ActionManager.getInstance();
+        ActionGroup actionGroup = (ActionGroup) instance.getAction("spd.engineaction.dlg.group");
+        ActionToolbar spd_tb = instance.createActionToolbar("spd tb", actionGroup, true);
+        JComponent gotoactionScript = spd_tb.getComponent();
+        this.add(gotoactionScript,"South");
+
+    }
+
+    public String getScript(){
+        return textArea.getText();
+    }
+}

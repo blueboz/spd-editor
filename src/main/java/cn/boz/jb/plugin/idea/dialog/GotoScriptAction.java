@@ -41,16 +41,25 @@ public class GotoScriptAction extends AnAction implements DumbAware {
             String actionscript = (String) engineAction.get("ACTIONSCRIPT_");
             processScriptContent(actionscript, anActionEvent, engineActionDialog, () -> {
             });
-            return ;
+            return;
         }
         EngineTaskDialog engineTaskDialog = (EngineTaskDialog) SwingUtilities.getAncestorOfClass(EngineTaskDialog.class, anActionEvent.getInputEvent().getComponent());
-        if(engineTaskDialog instanceof EngineTaskDialog){
+        if (engineTaskDialog instanceof EngineTaskDialog) {
             EngineTask engineTask = engineTaskDialog.getEngineTask();
             String expression = engineTask.getExpression();
             processScriptContent(expression, anActionEvent, engineTaskDialog, () -> {
             });
             return;
         }
+        CallerSearcherCommentPanel caller = (cn.boz.jb.plugin.idea.dialog.CallerSearcherCommentPanel) SwingUtilities.getAncestorOfClass(CallerSearcherCommentPanel.class, anActionEvent.getInputEvent().getComponent());
+        if (caller instanceof CallerSearcherCommentPanel) {
+            String script = caller.getScript();
+            processScriptContent(script, anActionEvent, caller, () -> {
+
+            });
+            return;
+        }
+
         Component component = anActionEvent.getInputEvent().getComponent();
         InputLongTextDialog dialog = (InputLongTextDialog) InputLongTextDialog.findInstance(component);
         String inputText = dialog.getInputText();
@@ -87,7 +96,7 @@ public class GotoScriptAction extends AnAction implements DumbAware {
         search.showInCenterOf(centerOf);
     }
 
-    public static  void gotoSelectedValue(String selectedValue, AnActionEvent anActionEvent) {
+    public static void gotoSelectedValue(String selectedValue, AnActionEvent anActionEvent) {
         if (selectedValue.contains("processEngine.start")) {
             Pattern pattern = Pattern.compile("processEngine\\.start\\(\"(\\w+)\",CONTEXT\\)");
             Matcher matcher = pattern.matcher(selectedValue);
