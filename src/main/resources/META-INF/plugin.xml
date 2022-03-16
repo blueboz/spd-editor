@@ -135,7 +135,11 @@
         </group>
         <!--        GoToJsFile-->
 
+        <group id="spd.gotorefaction.group">
+            <action class="cn.boz.jb.plugin.idea.action.GoToRefFile$SearchIdAction" icon="AllIcons.Actions.Find" id="GotoIdAction" text="SearchId"></action>
+        </group>
 
+        <!--查看EngineAction 对话框中，功能菜单-->
         <group id="spd.engineaction.dlg.group">
             <action class="cn.boz.jb.plugin.idea.dialog.GotoScriptAction" id="gotoscriptaction" text="gotoscript"
                     icon="AllIcons.Actions.ShowCode">

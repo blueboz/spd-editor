@@ -46,6 +46,12 @@ public class EngineTask {
 
 
     public String getExpression() {
+        if (expression == null) {
+            return "";
+        }
+        if (!expression.contains("\n")) {
+            return expression.replaceAll(";", "\n");
+        }
         return expression;
     }
 

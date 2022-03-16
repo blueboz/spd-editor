@@ -95,9 +95,10 @@ public class GotoRightAction extends AnAction {
                                 .createComponentPopupBuilder(engineRightDialog, null)
                                 .setRequestFocus(true)
                                 .setFocusable(true)
+                                .setProject(anActionEvent.getProject())
                                 .setCancelOnOtherWindowOpen(true)
                                 .createPopup();
-                        popup.showInFocusCenter();
+                        popup.showCenteredInCurrentWindow(anActionEvent.getProject());
                     } else if (engineRights.size() > 1) {
                     }
                 } catch (Exception ee) {

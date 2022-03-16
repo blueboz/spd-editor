@@ -50,6 +50,7 @@ import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.UserDataHolder;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.ui.PopupHandler;
+import com.intellij.ui.TableUtil;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -246,7 +247,7 @@ public class ChartPanel extends JComponent implements DataProvider, MouseListene
 //        PopupHandler.installPopupMenu(myList, "VcsSelectionHistoryDialog.Popup", ActionPlaces.UPDATE_POPUP);
         PopupHandler.installPopupHandler(this, ag, ActionPlaces.UPDATE_POPUP);
         //注册Ctrl+F给对应的Action
-        new FindInSpdEditor(this).registerCustomShortcutSet(this,null);
+        new FindInSpdEditor(this).registerCustomShortcutSet(this, null);
     }
 
     /**
@@ -3350,7 +3351,7 @@ public class ChartPanel extends JComponent implements DataProvider, MouseListene
         chartChangeListenerList.add(changeListener);
     }
 
-    private Map<Key<? extends Object>,Object> userdata = new HashMap<>();
+    private Map<Key<? extends Object>, Object> userdata = new HashMap<>();
 
     @SuppressWarnings("unchecked")
     @Override
@@ -3381,6 +3382,15 @@ public class ChartPanel extends JComponent implements DataProvider, MouseListene
         return null;
     }
 
+    public List<PropertyObject> getAllPropertyObject() {
+        LinkedList<Shape> shapes = this.shapes;
+        LinkedList<Line> lines = this.lines;
+        LinkedList<PropertyObject> propertyObjects = new LinkedList<>();
+        propertyObjects.addAll(shapes);
+        propertyObjects.addAll(lines);
+        return propertyObjects;
+    }
+
     public List<Shape> getAllElements() {
         return this.shapes;
 //        LinkedList<Shape> shapes = this.shapes;
@@ -3403,6 +3413,82 @@ public class ChartPanel extends JComponent implements DataProvider, MouseListene
 //        }).collect(Collectors.toList());
 
     }
+
+    public void selectObject(Object o) {
+        for (Shape shape : this.shapes) {
+            if (shape != o) {
+                shape.blur(null);
+            }
+        }
+        for (Line line : this.lines) {
+            if (line != o) {
+                line.blur(null);
+            }
+        }
+        if(o instanceof Label){
+            Label lab=(Label) o;
+            Rect rect = lab.toRect();
+            double x = rect.getX();
+            double y = rect.getY();
+            lab.focus(null);
+            //要求当前对象转义到(width/2,height/2)
+            /**
+             *
+             (x+originalPoint.x)*scale=width/2
+             (x+originalPoint.x)=width/(2*scale)
+             originalPoint.x=width/(2*scale)-x
+             */
+            originalPoint.x = this.getWidth() / (2 * scale) - x;
+            originalPoint.y = this.getHeight() / (2 * scale) - y;
+
+            this.fireShapeSelected(lab);
+            o=lab.getBoundLine();
+
+        }
+        if (o instanceof Shape) {
+            Shape so = (Shape) o;
+            double x = so.getX();
+            double y = so.getY();
+            so.focus(null);
+
+            //要求当前对象转义到(width/2,height/2)
+            /**
+             *
+             (x+originalPoint.x)*scale=width/2
+             (x+originalPoint.x)=width/(2*scale)
+             originalPoint.x=width/(2*scale)-x
+             */
+            originalPoint.x = this.getWidth() / (2 * scale) - x;
+            originalPoint.y = this.getHeight() / (2 * scale) - y;
+
+            this.fireShapeSelected(so);
+        } else if (o instanceof Line) {
+            Line so = (Line) o;
+            so.focus(null);
+            double x1 = so.getStartShape().getX();
+            double y1 = so.getStartShape().getY();
+            double x2 = so.getEndShape().getX();
+            double y2 = so.getEndShape().getY();
+            double x = (x1 + x2) / 2;
+            double y = (y1 + y2) / 2;
+
+            //要求当前对象转义到(width/2,height/2)
+            /**
+             *
+             (x+originalPoint.x)*scale=width/2
+             (x+originalPoint.x)=width/(2*scale)
+             originalPoint.x=width/(2*scale)-x
+             */
+            originalPoint.x = this.getWidth() / (2 * scale) - x;
+            originalPoint.y = this.getHeight() / (2 * scale) - y;
+
+            this.fireShapeSelected(so);
+
+        }
+
+
+    }
+
 
     public void selectShape(Shape o) {
         //1,将其他图形反选

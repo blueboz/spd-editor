@@ -1,16 +1,16 @@
 package cn.boz.jb.plugin.idea.action;
 
-import cn.boz.jb.plugin.floweditor.gui.process.fragment.UserTask;
+import cn.boz.jb.plugin.floweditor.gui.process.fragment.ServiceTask;
 import cn.boz.jb.plugin.idea.bean.EngineAction;
-import cn.boz.jb.plugin.idea.bean.EngineFlow;
 import cn.boz.jb.plugin.idea.bean.EngineTask;
 import cn.boz.jb.plugin.idea.configurable.SpdEditorDBState;
 import cn.boz.jb.plugin.idea.dialog.EngineActionDialog;
 import cn.boz.jb.plugin.idea.dialog.EngineTaskDialog;
 import cn.boz.jb.plugin.idea.utils.DBUtils;
 import cn.boz.jb.plugin.idea.widget.SimpleIconControl;
-import com.google.common.cache.Weigher;
 import com.intellij.codeInsight.navigation.NavigationUtil;
+import com.intellij.find.FindModel;
+import com.intellij.find.findInProject.FindInProjectManager;
 import com.intellij.ide.actions.searcheverywhere.SearchEverywhereManager;
 import com.intellij.ide.actions.searcheverywhere.SearchEverywhereManagerImpl;
 import com.intellij.ide.highlighter.HtmlFileType;
@@ -19,12 +19,21 @@ import com.intellij.ide.highlighter.XmlFileType;
 import com.intellij.lang.javascript.JavaScriptFileType;
 import com.intellij.lang.javascript.psi.JSLiteralExpression;
 import com.intellij.lang.jvm.JvmMethod;
+import com.intellij.openapi.actionSystem.ActionGroup;
+import com.intellij.openapi.actionSystem.ActionManager;
+import com.intellij.openapi.actionSystem.ActionPlaces;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
+import com.intellij.openapi.actionSystem.DataKey;
+import com.intellij.openapi.actionSystem.DataProvider;
+import com.intellij.openapi.actionSystem.PlatformDataKeys;
+import com.intellij.openapi.application.WriteAction;
+import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.progress.ProgressManager;
+import com.intellij.openapi.project.DumbAwareAction;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.ui.popup.JBPopup;
@@ -35,11 +44,7 @@ import com.intellij.openapi.ui.popup.PopupStep;
 import com.intellij.openapi.ui.popup.SpeedSearchFilter;
 import com.intellij.openapi.ui.popup.util.BaseListPopupStep;
 import com.intellij.openapi.util.Ref;
-import com.intellij.openapi.util.registry.RegistryUi;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vcs.VcsBundle;
-import com.intellij.openapi.vcs.actions.CompareWithSelectedRevisionAction;
-import com.intellij.openapi.vcs.history.VcsFileRevision;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiClass;
@@ -57,42 +62,32 @@ import com.intellij.psi.xml.XmlElement;
 import com.intellij.psi.xml.XmlFile;
 import com.intellij.psi.xml.XmlTag;
 import com.intellij.ui.IdeBorderFactory;
+import com.intellij.ui.PopupHandler;
 import com.intellij.ui.ScrollPaneFactory;
 import com.intellij.ui.SimpleColoredComponent;
-import com.intellij.ui.SpeedSearchBase;
 import com.intellij.ui.TableSpeedSearch;
-import com.intellij.ui.TableUtil;
-import com.intellij.ui.awt.RelativePoint;
-import com.intellij.ui.components.JBLabel;
-import com.intellij.ui.components.JBList;
 import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.speedSearch.SpeedSearchUtil;
 import com.intellij.ui.table.JBTable;
-import com.intellij.ui.table.TableView;
 import com.intellij.util.Consumer;
+import com.intellij.util.ThrowableRunnable;
 import com.intellij.util.ui.ColumnInfo;
 import com.intellij.util.ui.JBDimension;
 import com.intellij.util.ui.ListTableModel;
-import com.intellij.util.ui.UIUtil;
 import icons.SpdEditorIcons;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.swing.DefaultListCellRenderer;
-import javax.swing.Icon;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
-import javax.swing.ListCellRenderer;
 import javax.swing.RowFilter;
 import javax.swing.RowSorter;
 import javax.swing.border.Border;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
@@ -101,23 +96,22 @@ import javax.swing.table.TableRowSorter;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.event.InputEvent;
-import java.awt.event.MouseEvent;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * 用于导航到指定文件
  */
 public class GoToRefFile extends AnAction {
+
+
     @Override
     public void actionPerformed(@NotNull AnActionEvent anActionEvent) {
         Editor editor = anActionEvent.getData(CommonDataKeys.EDITOR);
@@ -256,92 +250,6 @@ public class GoToRefFile extends AnAction {
         }
 
         //弹出框应该包含提示语
-//        BaseListPopupStep selPopup = new BaseListPopupStep<Object>("EngineAction/EngineTask", objects, SpdEditorIcons.ACTION_16_ICON) {
-//            @Override
-//            public @NotNull String getTextFor(Object o) {
-//                if (o instanceof EngineTask) {
-//                    EngineTask userTask = (EngineTask) o;
-//                    return userTask.getId();
-//                } else if (o instanceof EngineAction) {
-//                    EngineAction serviceTask = (EngineAction) o;
-//                    return serviceTask.getId();
-//                }
-//                return "";
-//            }
-//
-//            @Override
-//            public @Nullable PopupStep<?> onChosen(Object selectedValue, boolean finalChoice) {
-//                if (finalChoice) {
-//                    return doFinalStep(() -> doRun(selectedValue));
-//                }
-//                return PopupStep.FINAL_CHOICE;
-//            }
-//
-//            @Override
-//            public Icon getIconFor(Object o) {
-//                if (o instanceof EngineTask) {
-//                    return SpdEditorIcons.GEAR_16_ICON;
-//                } else if (o instanceof EngineAction) {
-//                    return SpdEditorIcons.ACTION_SCRIPT_16_ICON;
-//                }
-//                return SpdEditorIcons.ACTION_SCRIPT_16_ICON;
-//            }
-//
-//            private void doRun(Object selectedValue) {
-//                //选择的值可以进行跳转
-//                if (selectedValue instanceof EngineAction) {
-//                    EngineAction engineAction = (EngineAction) selectedValue;
-//                    GoToRefFile.this.tryToGotoAction(anActionEvent.getProject(), engineAction.getId());
-//                } else {
-//                    engineTaskDialog = new EngineTaskDialog((EngineTask) selectedValue);
-//                    JBScrollPane jbScrollPane = new JBScrollPane(engineTaskDialog);
-//                    popup = JBPopupFactory.getInstance()
-//                            .createComponentPopupBuilder(jbScrollPane, null)
-//                            .setRequestFocus(true)
-//                            .setFocusable(true)
-//                            .setCancelOnOtherWindowOpen(true)
-//                            .createPopup();
-//
-//                    popup.showInFocusCenter();
-//                }
-//            }
-//
-//            @Override
-//            public SpeedSearchFilter<Object> getSpeedSearchFilter() {
-//                return o -> {
-//                    if (o instanceof EngineTask) {
-//                        EngineTask userTask = (EngineTask) o;
-//                        return userTask.getId();
-//                    } else if (o instanceof EngineAction) {
-//                        EngineAction serviceTask = (EngineAction) o;
-//                        return serviceTask.getId();
-//                    }
-//                    return null;
-//                };
-//            }
-//
-//            public boolean isSpeedSearchEnabled() {
-//                return true;
-//            }
-//        };
-//
-//        selPopup.isSelectable(true);
-//        listPopup = JBPopupFactory.getInstance()
-//                .createListPopup(selPopup);
-//
-//
-////        PopupChooserBuilder popupChooserBuilder = new PopupChooserBuilder(jbList);
-//
-////        JBPopup popup = popupChooserBuilder.createPopup();
-//
-//        InputEvent inputEvent = anActionEvent.getInputEvent();
-//        if (inputEvent instanceof MouseEvent) {
-//            MouseEvent me = (MouseEvent) inputEvent;
-//            listPopup.show(RelativePoint.fromScreen(me.getLocationOnScreen()));
-//        } else {
-//            listPopup.showInFocusCenter();
-//        }
-//        return true;
         showListPopup(objects, anActionEvent.getProject(), new Consumer<Object>() {
             @Override
             public void consume(Object selectedValue) {
@@ -357,9 +265,10 @@ public class GoToRefFile extends AnAction {
                             .setRequestFocus(true)
                             .setFocusable(true)
                             .setCancelOnOtherWindowOpen(true)
+                            .setProject(anActionEvent.getProject())
                             .createPopup();
 
-                    popup.showInFocusCenter();
+                    popup.showCenteredInCurrentWindow(anActionEvent.getProject());
                 }
             }
         }, true);
@@ -380,6 +289,7 @@ public class GoToRefFile extends AnAction {
                 } else if (item instanceof EngineAction) {
                     hint = ((EngineAction) item).getActionscript();
                 }
+
                 textArea.setText(hint);
                 textArea.select(0, 0);
             }
@@ -467,7 +377,7 @@ public class GoToRefFile extends AnAction {
             }
         }};
 
-
+        //
         JBTable jbTable = new JBTable(new ListTableModel(columns, objects, 0)) {
             @Override
             public TableCellRenderer getCellRenderer(int row, int column) {
@@ -541,18 +451,107 @@ public class GoToRefFile extends AnAction {
             }
         };
 
-        jbTable.setMinimumSize(new JBDimension(800, 80));
-
+        jbTable.setMinimumSize(new JBDimension(800, 100));
         PopupChooserBuilder builder = new PopupChooserBuilder(jbTable);
         if (showComments) {
             //注释
             builder.setSouthComponent(createCommentsPanel(jbTable));
         }
 
+
         builder.setTitle("UserTaskSearcher").setItemChoosenCallback(runnable).setResizable(true)
                 .setDimensionServiceKey("UserTaskSearcher").setMinSize(new JBDimension(300, 300));
         JBPopup popup = builder.createPopup();
         popup.showCenteredInCurrentWindow(project);
+
+        ActionManager instance = ActionManager.getInstance();
+
+        ActionGroup ag = (ActionGroup) instance.getAction("spd.gotorefaction.group");
+
+        PopupHandler.installPopupHandler(jbTable, ag, ActionPlaces.UPDATE_POPUP);
+
+
+        //安装一个右键菜单供使用
+    }
+
+
+    @SuppressWarnings("unchecked")
+    public static class SearchIdAction extends DumbAwareAction {
+        @Override
+        public void actionPerformed(@NotNull AnActionEvent anActionEvent) {
+            JBTable jbTable = (JBTable) anActionEvent.getRequiredData(PlatformDataKeys.CONTEXT_COMPONENT);
+//            JBTable jbTablle = GoToRefFile.this.jbTable;
+            int selectedRow = jbTable.getSelectedRow();
+            int modelidx = jbTable.convertRowIndexToModel(selectedRow);
+            //如何拿到当前控件
+            ListTableModel model = (ListTableModel) jbTable.getModel();
+            Object item = model.getItem(modelidx);
+            if (item instanceof EngineTask) {
+                EngineTask engineTask = (EngineTask) item;
+                String id = engineTask.getId();
+                if (id.contains("_")) {
+                    String s = id.split("_")[0];
+                    List<String> collect = Stream.of(s, id).collect(Collectors.toList());
+
+                    BaseListPopupStep selPopup = new BaseListPopupStep<String>("id search", collect, SpdEditorIcons.ACTION_16_ICON) {
+                        @Override
+                        public @Nullable PopupStep<?> onChosen(String selectedValue, boolean finalChoice) {
+                            if (finalChoice) {
+                                return doFinalStep(() -> doRun(selectedValue));
+                            }
+                            return PopupStep.FINAL_CHOICE;
+                        }
+
+
+                        private void doRun(String selectedValue) {
+                            //选择的值可以进行跳转
+                            if (selectedValue.equals(s)) {
+                                String allContributorsGroupId = SearchEverywhereManagerImpl.ALL_CONTRIBUTORS_GROUP_ID;
+                                SearchEverywhereManager instance = SearchEverywhereManager.getInstance(anActionEvent.getProject());
+                                instance.show(allContributorsGroupId, s, anActionEvent);
+                            } else {
+                                FindInProjectManager findInProjectManager = FindInProjectManager.getInstance(anActionEvent.getProject());
+                                FindModel findModel = new FindModel();
+                                findModel.setStringToFind(id);
+                                findInProjectManager.findInProject(anActionEvent.getDataContext(), findModel);
+                            }
+                        }
+
+                        @Override
+                        public SpeedSearchFilter<String> getSpeedSearchFilter() {
+                            return super.getSpeedSearchFilter();
+                        }
+
+                        public boolean isSpeedSearchEnabled() {
+                            return true;
+                        }
+                    };
+
+                    //过滤框
+                    selPopup.isSelectable(true);
+                    ListPopup listPopup = JBPopupFactory.getInstance()
+                            .createListPopup(selPopup);
+                    listPopup.showInFocusCenter();
+
+
+                } else {
+                    FindInProjectManager findInProjectManager = FindInProjectManager.getInstance(anActionEvent.getProject());
+                    FindModel findModel = new FindModel();
+                    findModel.setStringToFind(id);
+                    findInProjectManager.findInProject(anActionEvent.getDataContext(), findModel);
+                }
+            } else if (item instanceof EngineAction) {
+                EngineAction engineAction = (EngineAction) item;
+                String id = engineAction.getId();
+
+                FindInProjectManager findInProjectManager = FindInProjectManager.getInstance(anActionEvent.getProject());
+                FindModel findModel = new FindModel();
+                findModel.setStringToFind(id.replaceFirst("/",""));
+                findInProjectManager.findInProject(anActionEvent.getDataContext(), findModel);
+
+
+            }
+        }
     }
 
     private static class MyRenderer implements TableCellRenderer {
@@ -579,12 +578,11 @@ public class GoToRefFile extends AnAction {
                     simpleIconControl = new SimpleIconControl(SpdEditorIcons.ACTION_SCRIPT_16_ICON);
 
                 }
-                if (simpleIconControl == null) {
-                    return myComponent;
+                if (simpleIconControl != null) {
+                    simpleIconControl.setBackground(bg);
+                    simpleIconControl.setForeground(fg);
+                    return simpleIconControl;
                 }
-                simpleIconControl.setBackground(bg);
-                simpleIconControl.setForeground(fg);
-                return simpleIconControl;
             } else {
                 if (value != null) {
                     myComponent.append((String) value);
@@ -816,11 +814,12 @@ public class GoToRefFile extends AnAction {
                     .createComponentPopupBuilder(temporyDialog, null)
 //                    .setCancelOnClickOutside(true)
                     .setRequestFocus(true)
+                    .setProject(project)
                     .setFocusable(true)
                     .setCancelOnOtherWindowOpen(true)
                     .createPopup();
 
-            popup.showInFocusCenter();
+            popup.showCenteredInCurrentWindow(project);
             return true;
         }
 

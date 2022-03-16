@@ -1,6 +1,9 @@
 package cn.boz.jb.plugin.idea.dialog;
 
 import cn.boz.jb.plugin.idea.bean.EngineTask;
+import com.intellij.openapi.actionSystem.ActionGroup;
+import com.intellij.openapi.actionSystem.ActionManager;
+import com.intellij.openapi.actionSystem.ActionToolbar;
 import com.intellij.ui.components.JBScrollPane;
 
 import javax.swing.JComponent;
@@ -9,9 +12,19 @@ import javax.swing.JTextArea;
 
 public class EngineTaskDialog extends JComponent {
     private MyLayoutManager myLayoutManager;
+    private EngineTask engineTask;
+
+    public EngineTask getEngineTask() {
+        return engineTask;
+    }
+
+    public void setEngineTask(EngineTask engineTask) {
+        this.engineTask = engineTask;
+    }
 
     public EngineTaskDialog(EngineTask engineTask) {
         myLayoutManager = new MyLayoutManager();
+        this.engineTask=engineTask;
 
         this.setLayout(myLayoutManager);
 
@@ -49,7 +62,19 @@ public class EngineTaskDialog extends JComponent {
 
         JLabel expressionLabel = new JLabel("expression");
         JTextArea expressionTA = new JTextArea("", 7, 30);
-        expressionTA.setText(expression);
+        if(!expression.contains("\n")){
+            if(expression==null){
+                expression="";
+            }
+            expressionTA.setText(expression.replaceAll(";",";\n"));
+        }else{
+            expressionTA.setText(expression);
+        }
+
+        ActionManager instance = ActionManager.getInstance();
+        ActionGroup actionGroup = (ActionGroup) instance.getAction("spd.engineaction.dlg.group");
+        ActionToolbar spd_tb = instance.createActionToolbar("spd tb", actionGroup, true);
+        JComponent gotoactionScript = spd_tb.getComponent();
 
 
         JLabel returnvalueLabel = new JLabel("returnvalue");
@@ -78,6 +103,7 @@ public class EngineTaskDialog extends JComponent {
         this.add(validsecondArea);
         this.add(expressionLabel);
         this.add(expressionTASc);
+        this.add(gotoactionScript);
         this.add(returnvalueLabel);
         this.add(returnvalueArea);
         this.add(tasklistenerLabel);
@@ -85,4 +111,5 @@ public class EngineTaskDialog extends JComponent {
 
         this.setFocusable(true);
     }
+
 }

@@ -24,6 +24,7 @@ public class JTableHoverDemo {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         Container contentPane = frame.getContentPane();
 
+        JLayeredPane layeredPane1 = frame.getLayeredPane();
 
 
 //        JLayeredPane layeredPane = new JLayeredPane();
@@ -43,6 +44,7 @@ public class JTableHoverDemo {
 
 
     }
+
 
     private static JComponent createComponent() throws Exception {
         JPanel jPanel = new JPanel();

@@ -1,6 +1,7 @@
 package cn.boz.jb.plugin.idea.dialog;
 
 import cn.boz.jb.plugin.floweditor.gui.property.InputLongTextDialog;
+import cn.boz.jb.plugin.idea.bean.EngineTask;
 import com.intellij.ide.actions.searcheverywhere.SearchEverywhereManager;
 import com.intellij.ide.actions.searcheverywhere.SearchEverywhereManagerImpl;
 import com.intellij.openapi.actionSystem.AnAction;
@@ -23,6 +24,7 @@ import javax.swing.JTextArea;
 import javax.swing.JViewport;
 import javax.swing.SwingUtilities;
 import java.awt.Component;
+import java.awt.Container;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -33,23 +35,29 @@ import java.util.stream.Collectors;
 public class GotoScriptAction extends AnAction implements DumbAware {
     @Override
     public void actionPerformed(@NotNull AnActionEvent anActionEvent) {
-        EngineActionDialog data = (EngineActionDialog) SwingUtilities.getAncestorOfClass(EngineActionDialog.class, anActionEvent.getInputEvent().getComponent());
-        if (data instanceof EngineActionDialog) {
-            EngineActionDialog engineActionDialog = data;
+        EngineActionDialog engineActionDialog = (EngineActionDialog) SwingUtilities.getAncestorOfClass(EngineActionDialog.class, anActionEvent.getInputEvent().getComponent());
+        if (engineActionDialog instanceof EngineActionDialog) {
             Map<String, Object> engineAction = engineActionDialog.getEngineAction();
             String actionscript = (String) engineAction.get("ACTIONSCRIPT_");
             processScriptContent(actionscript, anActionEvent, engineActionDialog, () -> {
             });
-        } else {
-            Component component = anActionEvent.getInputEvent().getComponent();
-            InputLongTextDialog dialog = (InputLongTextDialog) InputLongTextDialog.findInstance(component);
-            String inputText = dialog.getInputText();
-
-            processScriptContent(inputText, anActionEvent, dialog.getRootPane(), () -> {
-                dialog.close(0);
-            });
-
+            return ;
         }
+        EngineTaskDialog engineTaskDialog = (EngineTaskDialog) SwingUtilities.getAncestorOfClass(EngineTaskDialog.class, anActionEvent.getInputEvent().getComponent());
+        if(engineTaskDialog instanceof EngineTaskDialog){
+            EngineTask engineTask = engineTaskDialog.getEngineTask();
+            String expression = engineTask.getExpression();
+            processScriptContent(expression, anActionEvent, engineTaskDialog, () -> {
+            });
+            return;
+        }
+        Component component = anActionEvent.getInputEvent().getComponent();
+        InputLongTextDialog dialog = (InputLongTextDialog) InputLongTextDialog.findInstance(component);
+        String inputText = dialog.getInputText();
+
+        processScriptContent(inputText, anActionEvent, dialog.getRootPane(), () -> {
+            dialog.close(0);
+        });
     }
 
     public void processScriptContent(String actionscript, AnActionEvent anActionEvent, JComponent centerOf, Runnable callback) {
