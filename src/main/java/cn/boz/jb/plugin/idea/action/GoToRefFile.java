@@ -451,7 +451,7 @@ public class GoToRefFile extends AnAction {
             }
         };
 
-        jbTable.setMinimumSize(new JBDimension(800, 100));
+        jbTable.setMinimumSize(new JBDimension(800, 400));
         PopupChooserBuilder builder = new PopupChooserBuilder(jbTable);
         if (showComments) {
             //注释
