@@ -115,6 +115,7 @@ patchPluginXml {
         <li>support process search v1</li>
         <li>file history git get</li>
         <li>goto ref extend javacode to engineFlow query</li>
+        <li>Final version</li>
     </ul>
     
     <b>1.0.21</b><br>

@@ -72,14 +72,33 @@
                           relative-to-action="EditorPaste"/>
         </group>
 
+        <action class="cn.boz.jb.plugin.idea.action.GotoProcessAction" id="goToProcessAction"
+                description="Go To Process"
+                text="Go To Process"
+                icon="DvcsImplIcons.Outgoing">
+        </action>
 
         <group id="spdEditorPopupGroup">
-            <action class="cn.boz.jb.plugin.idea.action.WhoCallMeAction" id="WhoCallMeAction" text="WhoCallMe" icon="AllIcons.General.User"></action>
+            <group popup="true" text="WhoCallMe" icon="AllIcons.General.User">
+                <action class="cn.boz.jb.plugin.idea.action.WhoCallMeCodeActionGroup$WhoCallMeCodeAction"
+                        id="WhoCallMeCodeAction" text="Code" icon="SpdEditorIcons.CODE_16_ICON"></action>
+                <action class="cn.boz.jb.plugin.idea.action.WhoCallMeCodeActionGroup$WhoCallMeDBAction"
+                        id="WhoCallMeDbAction" text="DB" icon="SpdEditorIcons.DATABASE_16_ICON"></action>
 
-            <action class="cn.boz.jb.plugin.idea.action.SpdSqlDiffAction" id="sqlDiffAction" description="SQLDiff"
-                    text="Sql Diff"
-                    icon="AllIcons.Diff.Compare4LeftRight">
-            </action>
+            </group>
+            <group text="Db Diff" icon="AllIcons.Diff.Compare4LeftRight" popup="true">
+                <action class="cn.boz.jb.plugin.idea.action.SpdDbDiffGroup$SpdDbDiffKeepWrapAction"
+                        description="SQLDiff"
+                        text="Keep Wrap"
+                        icon="AllIcons.Actions.ToggleSoftWrap">
+                </action>
+                <action class="cn.boz.jb.plugin.idea.action.SpdDbDiffGroup$SpdDbDiffRemoveWrapAction"
+                        description="SQLDiff"
+                        text="Remove Wrap"
+                        icon="AllIcons.Actions.ListFiles">
+                </action>
+            </group>
+
             <group text="Who I Call" icon="DvcsImplIcons.Outgoing" id="goToProcessGroup" description="Go To Process"
                    popup="true"
                    class="cn.boz.jb.plugin.idea.action.GotoProcessActionGroup">
@@ -171,15 +190,7 @@
             <add-to-group group-id="Vcs.RepositoryChangesBrowserMenu"></add-to-group>
             <add-to-group group-id="VcsSelectionHistoryDialog.Popup"></add-to-group>
         </group>
-        <!--        <action class="cn.boz.jb.plugin.idea.action.SpdCommitDiffAction" text="Spd Commit Diff" id="SpdCommitDiff" icon="SpdEditorIcons.FLOW_16_ICON">-->
-        <!--            <add-to-group group-id="VcsGlobalGroup"></add-to-group>-->
-        <!--            <add-to-group group-id="ChangesViewToolbar"></add-to-group>-->
-        <!--            <add-to-group group-id="ChangesViewPopupMenu"></add-to-group>-->
-        <!--            <add-to-group group-id="ChangesView.CommitToolbar"></add-to-group>-->
-        <!--            <add-to-group group-id="ChangesViewPopupMenu"></add-to-group>-->
-        <!--            <add-to-group group-id="VcsGeneral.KeymapGroup"></add-to-group>-->
 
-        <!--        </action>-->
         <group>
             <action class="cn.boz.jb.plugin.idea.action.SpdCommitDiffAction" text="SpdCommitDiffAction"
                     id="SpdCommitDiff" icon="SpdEditorIcons.FLOW_16_ICON"/>

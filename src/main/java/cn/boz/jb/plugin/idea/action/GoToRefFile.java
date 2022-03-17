@@ -1,6 +1,5 @@
 package cn.boz.jb.plugin.idea.action;
 
-import cn.boz.jb.plugin.floweditor.gui.process.fragment.ServiceTask;
 import cn.boz.jb.plugin.idea.bean.EngineAction;
 import cn.boz.jb.plugin.idea.bean.EngineTask;
 import cn.boz.jb.plugin.idea.configurable.SpdEditorDBState;
@@ -8,7 +7,6 @@ import cn.boz.jb.plugin.idea.dialog.CallerSearcherCommentPanel;
 import cn.boz.jb.plugin.idea.dialog.EngineActionDialog;
 import cn.boz.jb.plugin.idea.dialog.EngineTaskDialog;
 import cn.boz.jb.plugin.idea.utils.DBUtils;
-import cn.boz.jb.plugin.idea.utils.MyHighlightUtils;
 import cn.boz.jb.plugin.idea.widget.SimpleIconControl;
 import com.intellij.codeInsight.navigation.NavigationUtil;
 import com.intellij.find.FindModel;
@@ -24,15 +22,10 @@ import com.intellij.lang.jvm.JvmMethod;
 import com.intellij.openapi.actionSystem.ActionGroup;
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.ActionPlaces;
-import com.intellij.openapi.actionSystem.ActionToolbar;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
-import com.intellij.openapi.actionSystem.DataKey;
-import com.intellij.openapi.actionSystem.DataProvider;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
-import com.intellij.openapi.application.WriteAction;
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.progress.ProgressManager;
@@ -47,7 +40,6 @@ import com.intellij.openapi.ui.popup.PopupStep;
 import com.intellij.openapi.ui.popup.SpeedSearchFilter;
 import com.intellij.openapi.ui.popup.util.BaseListPopupStep;
 import com.intellij.openapi.util.Ref;
-import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.JavaPsiFacade;
@@ -65,18 +57,13 @@ import com.intellij.psi.xml.XmlDocument;
 import com.intellij.psi.xml.XmlElement;
 import com.intellij.psi.xml.XmlFile;
 import com.intellij.psi.xml.XmlTag;
-import com.intellij.ui.IdeBorderFactory;
 import com.intellij.ui.PopupHandler;
-import com.intellij.ui.ScrollPaneFactory;
 import com.intellij.ui.SimpleColoredComponent;
 import com.intellij.ui.TableSpeedSearch;
-import com.intellij.ui.awt.RelativePoint;
 import com.intellij.ui.components.JBScrollPane;
-import com.intellij.ui.speedSearch.SpeedSearchSupply;
 import com.intellij.ui.speedSearch.SpeedSearchUtil;
 import com.intellij.ui.table.JBTable;
 import com.intellij.util.Consumer;
-import com.intellij.util.ThrowableRunnable;
 import com.intellij.util.ui.ColumnInfo;
 import com.intellij.util.ui.JBDimension;
 import com.intellij.util.ui.ListTableModel;
@@ -84,30 +71,15 @@ import icons.SpdEditorIcons;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextArea;
 import javax.swing.RowFilter;
 import javax.swing.RowSorter;
-import javax.swing.border.Border;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.DefaultHighlighter;
-import javax.swing.text.Highlighter;
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.event.InputEvent;
-import java.awt.event.MouseEvent;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.sql.Connection;
@@ -128,6 +100,7 @@ public class GoToRefFile extends AnAction {
     public void actionPerformed(@NotNull AnActionEvent anActionEvent) {
         Editor editor = anActionEvent.getData(CommonDataKeys.EDITOR);
         PsiFile psiFile = anActionEvent.getData(CommonDataKeys.PSI_FILE);
+        VirtualFile virtualFile = anActionEvent.getData(CommonDataKeys.VIRTUAL_FILE);
         if (editor == null || psiFile == null) {
             return;
         }
@@ -183,6 +156,14 @@ public class GoToRefFile extends AnAction {
                         if (trytoGotoAction) {
                             return;
                         }
+                        //尝试搜索文件名
+
+                        //看看有没有
+//                        FindInProjectManager instance = FindInProjectManager.getInstance(anActionEvent.getProject());
+//                        String fileName = virtualFile.getName();
+//                        FilenameIndex.getFilesByName(fileName.substring(0,fileName.lastIndexOf("."))):
+//                        new FindModel()
+//                        instance.findInProject();
                     }
                 }
             } catch (ClassNotFoundException classNotFoundException) {
@@ -217,10 +198,16 @@ public class GoToRefFile extends AnAction {
             containingClass = containingMethod.getContainingClass();
         }
 
-        String qualifiedName = containingClass.getQualifiedName();
         String name = containingMethod.getName();
         //
 
+        if (tryToSearchUsageByCodeFragment(anActionEvent, name)) {
+            return false;
+        }
+        return true;
+    }
+
+    public static boolean tryToSearchUsageByCodeFragment(AnActionEvent anActionEvent, String name) {
         DBUtils dbUtils = DBUtils.getInstance();
 
         Ref<List<EngineTask>> engineTaskRef = new Ref<>();
@@ -248,7 +235,7 @@ public class GoToRefFile extends AnAction {
             }
         }, "Loading...", true, anActionEvent.getProject());
         if (engineTaskRef.isNull() && engineActionRef.isNull()) {
-            return false;
+            return true;
         }
         List<Object> objects = new ArrayList<>();
         if (!engineTaskRef.isNull()) {
@@ -259,7 +246,7 @@ public class GoToRefFile extends AnAction {
         }
 
         if (objects.size() == 0) {
-            return false;
+            return true;
         }
         //弹出框应该包含提示语
         showListPopup(objects, anActionEvent.getProject(), new Consumer<Object>() {
@@ -268,7 +255,7 @@ public class GoToRefFile extends AnAction {
                 //选择的值可以进行跳转
                 if (selectedValue instanceof EngineAction) {
                     EngineAction engineAction = (EngineAction) selectedValue;
-                    GoToRefFile.this.tryToGotoAction(engineAction.getId(), anActionEvent,true);
+                    tryToGotoAction(engineAction.getId(), anActionEvent,true);
                 } else {
                     EngineTaskDialog engineTaskDialog = new EngineTaskDialog((EngineTask) selectedValue);
                     JBScrollPane jbScrollPane = new JBScrollPane(engineTaskDialog);
@@ -287,10 +274,8 @@ public class GoToRefFile extends AnAction {
                 }
             }
         }, true);
-        return true;
+        return false;
     }
-
-
 
 
     @SuppressWarnings("unchecked")

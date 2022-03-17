@@ -16,7 +16,6 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.swing.JComponent;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.border.Border;
@@ -62,6 +61,16 @@ public class CallerSearcherCommentPanel extends JBPanel {
         //增加应用
         ActionManager instance = ActionManager.getInstance();
         ActionGroup actionGroup = (ActionGroup) instance.getAction("spd.engineaction.dlg.group");
+        //建议将结果打开再ToolWindow中供方便搜索
+//        new ActionGroup(){
+//
+//            @Override
+//            public AnAction @NotNull [] getChildren(@Nullable AnActionEvent anActionEvent) {
+//                return new AnAction[0];
+//            }
+//        };
+
+
         ActionToolbar spd_tb = instance.createActionToolbar("spd tb", actionGroup, true);
         JComponent gotoactionScript = spd_tb.getComponent();
         this.add(gotoactionScript,"South");
