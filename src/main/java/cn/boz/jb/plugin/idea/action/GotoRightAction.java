@@ -6,6 +6,7 @@ import cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel;
 import cn.boz.jb.plugin.idea.configurable.SpdEditorDBSettings;
 import cn.boz.jb.plugin.idea.dialog.EngineRightDialog;
 import cn.boz.jb.plugin.idea.utils.DBUtils;
+import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationGroup;
 import com.intellij.notification.NotificationType;
 import com.intellij.openapi.actionSystem.AnAction;
@@ -80,11 +81,10 @@ public class GotoRightAction extends AnAction {
                     //RIGHTS_, CANDIDATE_, SQLCONDITION_, DOCONDITION_
                     List<Map<String, Object>> engineRights = instance.queryEngineRights(connection, rights);
                     if (engineRights.size() < 1) {
-//                                SpdEditor editor = SwingUtilities.getAncestorOfClass(SpdEditor.class, this);
-//                                Spd Editor
-                        NotificationGroup.findRegisteredGroup("Spd Editor")
-                                .createNotification("disable auto save spd editor", NotificationType.INFORMATION).notify(null);
-
+                        Notification spdEditorNotification = new Notification("Spd Editor", SpdEditorIcons.FLOW_16_ICON, NotificationType.INFORMATION);
+                        spdEditorNotification.setTitle("switcher");
+                        spdEditorNotification.setContent("disable auto save spd editor");
+                        spdEditorNotification.notify(anActionEvent.getProject());
                     } else if (engineRights.size() == 1) {
                         Map<String, Object> map = engineRights.get(0);
                         String candidate = (String) map.get("CANDIDATE_");

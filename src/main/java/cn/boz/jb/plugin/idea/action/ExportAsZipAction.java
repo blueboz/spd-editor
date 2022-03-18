@@ -1,8 +1,10 @@
 package cn.boz.jb.plugin.idea.action;
 
+import cn.boz.jb.plugin.idea.widget.SpdEditor;
 import com.intellij.dvcs.repo.Repository;
 import com.intellij.dvcs.repo.VcsRepositoryManager;
 import com.intellij.notification.EventLog;
+import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationGroup;
 import com.intellij.notification.NotificationType;
 import com.intellij.openapi.ListSelection;
@@ -11,6 +13,7 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.fileChooser.FileChooser;
 import com.intellij.openapi.fileChooser.FileChooserDescriptor;
+import com.intellij.openapi.ui.MessageType;
 import com.intellij.openapi.ui.popup.BalloonBuilder;
 import com.intellij.openapi.vcs.VcsDataKeys;
 import com.intellij.openapi.vcs.VcsException;
@@ -18,6 +21,7 @@ import com.intellij.openapi.vcs.changes.ByteBackedContentRevision;
 import com.intellij.openapi.vcs.changes.Change;
 import com.intellij.openapi.vcs.changes.ContentRevision;
 import com.intellij.openapi.vfs.VirtualFile;
+import icons.SpdEditorIcons;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.charset.Charset;
@@ -118,10 +122,12 @@ public class ExportAsZipAction extends AnAction {
                     zos.closeEntry();
                 }
                 zos.close();
-                NotificationGroup.findRegisteredGroup("Spd Editor")
-                        .createNotification("Export as zip in " + exportDest.getPath(), NotificationType.WARNING)
-                        .notify(anActionEvent.getProject());
-//            "D:\App\1647612107136.zip"
+
+                Notification spdEditorNotification = new Notification("Spd Editor", SpdEditorIcons.FLOW_16_ICON, NotificationType.INFORMATION);
+                spdEditorNotification.setTitle("exported");
+                spdEditorNotification.setContent("Export as zip in " + exportDest.getPath());
+                spdEditorNotification.notify(anActionEvent.getProject());
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -130,5 +136,9 @@ public class ExportAsZipAction extends AnAction {
 //        ZipUtils.zipFiles();
 
 
+
+
+
     }
+
 }

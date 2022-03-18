@@ -49,7 +49,6 @@
         <notificationGroup id="Spd Editor" displayType="BALLOON"/>
         <!--        <searchEverywhereContributor implementation="cn.boz.jb.plugin.idea.widget.SpdEditor" id="searchSpdFlow" order="last" os="freebsd"></searchEverywhereContributor>-->
 
-
     </extensions>
 
     <actions>
