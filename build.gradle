@@ -71,6 +71,8 @@ intellij {
 //    localPath = '/Volumes/Mac/App/IntelliJ IDEA.app'
 //    localPath = 'F:\\App\\JetBrains\\IntelliJ IDEA 2021.2.1'
 //    localPath = 'D:\\App\\ideaIU-2020'
+//    localPath='F:\\App\\JetBrains\\IntelliJ IDEA 2021.3.2'
+
     localPath = 'F:\\App\\JetBrains\\ideaIU-2020'
 //    localPath = 'F:\\App\\JetBrains\\IntelliJ IDEA 2021.1.1'
     instrumentCode = false
@@ -219,14 +221,14 @@ task "publishPluginLocal" {
 
 
 tasks.getByName("buildSearchableOptions").enabled(false)
-tasks.getByName("test").enabled(false)
+//tasks.getByName("test").enabled(false)
 tasks.whenTaskAdded { task ->
     if (task.name.contains("lint")) {
         task.enabled = false
     }
-    if (task.name.contains("test")) {
-        task.enabled = false
-    }
+//    if (task.name.contains("test")) {
+//        task.enabled = false
+//    }
 //    if(task.name.contains("prepareSandbox")){
 //        task.enabled = false
 //    }

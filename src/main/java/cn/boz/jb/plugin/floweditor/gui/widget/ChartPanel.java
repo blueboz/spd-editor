@@ -247,7 +247,6 @@ public class ChartPanel extends JComponent implements DataProvider, MouseListene
 //        PopupHandler.installPopupMenu(myList, "VcsSelectionHistoryDialog.Popup", ActionPlaces.UPDATE_POPUP);
         PopupHandler.installPopupHandler(this, ag, ActionPlaces.UPDATE_POPUP);
         //注册Ctrl+F给对应的Action
-
         new FindInSpdEditor(this).registerCustomShortcutSet(this, null);
     }
 

@@ -23,6 +23,7 @@ public class SpdEditorIcons {
     public static Icon GEAR_16_ICON = icon("/icons/gear.svg");
     public static Icon DATABASE_16_ICON = icon("/icons/database.svg");
     public static Icon CODE_16_ICON = icon("/icons/code.svg");
+    public static Icon ZIP_16_ICON = icon("/icons/zip.svg");
 
     static Icon icon(String path) {
         Icon icon = IconLoader.getIcon(path, SpdEditorIcons.class);

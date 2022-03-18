@@ -15,14 +15,12 @@ import cn.boz.jb.plugin.floweditor.gui.shape.Line;
 import cn.boz.jb.plugin.floweditor.gui.shape.Shape;
 import cn.boz.jb.plugin.floweditor.gui.utils.IcoMoonUtils;
 import cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel;
-import cn.boz.jb.plugin.idea.utils.MyHighlightUtils;
 import com.intellij.openapi.actionSystem.ActionGroup;
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.ActionPlaces;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.IdeActions;
-import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.project.DumbAwareAction;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.popup.JBPopup;
@@ -33,6 +31,7 @@ import com.intellij.ui.IdeBorderFactory;
 import com.intellij.ui.PopupHandler;
 import com.intellij.ui.ScrollPaneFactory;
 import com.intellij.ui.SimpleColoredComponent;
+import com.intellij.ui.SimpleTextAttributes;
 import com.intellij.ui.TableSpeedSearch;
 import com.intellij.ui.speedSearch.SpeedSearchSupply;
 import com.intellij.ui.speedSearch.SpeedSearchUtil;
@@ -49,6 +48,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.RowFilter;
 import javax.swing.RowSorter;
 import javax.swing.border.Border;
@@ -65,6 +65,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.List;
 
 public class FindInSpdEditor extends DumbAwareAction {
@@ -88,9 +90,6 @@ public class FindInSpdEditor extends DumbAwareAction {
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent anActionEvent) {
-        if (chartPanel == null) {
-            chartPanel = (ChartPanel) anActionEvent.getRequiredData(PlatformDataKeys.CONTEXT_COMPONENT);
-        }
         List<PropertyObject> propertyObjects = chartPanel.getAllPropertyObject();
         showListPopup(propertyObjects, anActionEvent.getProject(), o -> {
             chartPanel.selectObject(o);
@@ -260,6 +259,7 @@ public class FindInSpdEditor extends DumbAwareAction {
         };
 
 
+        jbTable.setMinimumSize(new JBDimension(800, 100));
         PopupChooserBuilder builder = new PopupChooserBuilder(jbTable);
         if (showComments) {
             //注释
@@ -267,12 +267,8 @@ public class FindInSpdEditor extends DumbAwareAction {
         }
 
 
-        builder.setTitle("UserTaskSearcher")
-                .setItemChoosenCallback(runnable)
-                .setResizable(true)
-                .setDimensionServiceKey("Spd Flow Search")
-                .setMovable(true)
-                .setMinSize(new JBDimension(800, 400));
+        builder.setTitle("UserTaskSearcher").setItemChoosenCallback(runnable).setResizable(true)
+                .setDimensionServiceKey("UserTaskSearcher").setMinSize(new JBDimension(300, 300));
         JBPopup popup = builder.createPopup();
         popup.showCenteredInCurrentWindow(project);
 
@@ -319,8 +315,31 @@ public class FindInSpdEditor extends DumbAwareAction {
                     hint = ((Label) item).getText();
                 }
 
+
                 textArea.setText(hint);
-                MyHighlightUtils.installHighlightForTextArea(table, textArea);
+                Highlighter highlighter = textArea.getHighlighter();
+                highlighter.removeAllHighlights();
+
+                SpeedSearchSupply speedSearch = SpeedSearchSupply.getSupply(table);
+                if (speedSearch == null) {
+                    return;
+                }
+                //底层匹配的时候，可能使用的是最大公共子串的算法
+                Iterable<TextRange> textRanges = speedSearch.matchingFragments(hint);
+                if (textRanges == null) {
+                    return;
+                }
+
+                DefaultHighlighter.DefaultHighlightPainter defaultHighlightPainter = new DefaultHighlighter.DefaultHighlightPainter(Color.ORANGE);
+
+                for (TextRange textRange : textRanges) {
+                    try {
+                        highlighter.addHighlight(textRange.getStartOffset(), textRange.getEndOffset(), defaultHighlightPainter);
+                    } catch (BadLocationException ex) {
+                        ex.printStackTrace();
+                    }
+                }
+
 
             }
         });
