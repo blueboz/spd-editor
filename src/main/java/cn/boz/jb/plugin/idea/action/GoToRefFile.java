@@ -201,7 +201,7 @@ public class GoToRefFile extends AnAction {
         }
         text = text.trim();
         if (text.startsWith("\"") && text.endsWith("\"")) {
-            text = text.substring(1, text.length() - 2);
+            text = text.substring(1, text.length() - 1);
         }
         String[] split = text.split("\\?");
         return split[0];

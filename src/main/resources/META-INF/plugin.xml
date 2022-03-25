@@ -135,9 +135,9 @@
 
         <group>
             <group class="cn.boz.jb.plugin.idea.action.JsUsageGroup" text="JavaScript Usage" icon="SpdEditorIcons.JAVASCRIPT_16_ICON" popup="true">
-                <action class="cn.boz.jb.plugin.idea.action.JsUsageGroup$JsUsageFindAction" id="Find"
+                <action class="cn.boz.jb.plugin.idea.action.JsUsageGroup$JsUsageFindAction" id="FindJsUsage"
                         text="JavaScript Usage" icon="SpdEditorIcons.SEARCH_ITEM_16_ICON"></action>
-                <action class="cn.boz.jb.plugin.idea.action.JsUsageGroup$JsUsageAction" id="Refer"
+                <action class="cn.boz.jb.plugin.idea.action.JsUsageGroup$JsUsageAction" id="ReferJsUsage"
                         text="JavaScript Usage" icon="SpdEditorIcons.REFER_16_ICON">
                 </action>
             </group>
