@@ -152,18 +152,12 @@ public class GoToRefFile extends AnAction {
                         if (tryToGotoClassRef) {
                             return;
                         }
-                        boolean trytoGotoAction = tryToGotoAction(stringValue, anActionEvent,true);
+                        boolean trytoGotoAction = tryToGotoAction(stringValue, anActionEvent, true);
                         if (trytoGotoAction) {
                             return;
                         }
                         //尝试搜索文件名
 
-                        //看看有没有
-//                        FindInProjectManager instance = FindInProjectManager.getInstance(anActionEvent.getProject());
-//                        String fileName = virtualFile.getName();
-//                        FilenameIndex.getFilesByName(fileName.substring(0,fileName.lastIndexOf("."))):
-//                        new FindModel()
-//                        instance.findInProject();
                     }
                 }
             } catch (ClassNotFoundException classNotFoundException) {
@@ -172,11 +166,73 @@ public class GoToRefFile extends AnAction {
         }
         //try to use this function else do not use it.
         String text = element.getText();
+        text = processStringForSearchable(text);
+        if (goToPathSearchRecusive(psiFile, project, text)) {
+            return;
+        }
+        text = removeStringContainsPath(text);
+
         String allContributorsGroupId = SearchEverywhereManagerImpl.ALL_CONTRIBUTORS_GROUP_ID;
         SearchEverywhereManager.getInstance(project).show(allContributorsGroupId, text, anActionEvent);
 //        SearchEverywhereManager searchEverywhereManager = SearchEverywhereManager.getInstance(project);
 //        HintManager.getInstance().showErrorHint(editor, "Cannot find declaration to go to");
 
+    }
+
+
+    private String removeStringContainsPath(String text) {
+        int i = text.lastIndexOf("/");
+        if (i == -1) {
+            return text;
+        }
+        return text.substring(i+1);
+    }
+
+
+    /**
+     * 处理字符串作为可以搜索的字符串
+     *
+     * @param text
+     * @return
+     */
+    private String processStringForSearchable(String text) {
+        if (text == null) {
+            return "";
+        }
+        text = text.trim();
+        if (text.startsWith("\"") && text.endsWith("\"")) {
+            text = text.substring(1, text.length() - 2);
+        }
+        String[] split = text.split("\\?");
+        return split[0];
+    }
+
+    /**
+     * 迭代递归的去往指定的路径
+     *
+     * @param psiFile 文件
+     * @param project 工程
+     * @param text    文本
+     * @return
+     */
+    public static  boolean goToPathSearchRecusive(PsiFile psiFile, Project project, String text) {
+        VirtualFile virtualFile = psiFile.getVirtualFile();
+        while (true) {
+            if (virtualFile == null) {
+                break;
+            }
+
+            VirtualFile selected = virtualFile.findFileByRelativePath(text);
+            if (selected != null) {
+                PsiFile targetJsFile = PsiManager.getInstance(project).findFile(selected);
+                NavigationUtil.activateFileWithPsiElement(targetJsFile);
+                return true;
+            } else {
+                virtualFile = virtualFile.getParent();
+            }
+
+        }
+        return false;
     }
 
 
@@ -255,7 +311,7 @@ public class GoToRefFile extends AnAction {
                 //选择的值可以进行跳转
                 if (selectedValue instanceof EngineAction) {
                     EngineAction engineAction = (EngineAction) selectedValue;
-                    tryToGotoAction(engineAction.getId(), anActionEvent,true);
+                    tryToGotoAction(engineAction.getId(), anActionEvent, true);
                 } else {
                     EngineTaskDialog engineTaskDialog = new EngineTaskDialog((EngineTask) selectedValue);
                     JBScrollPane jbScrollPane = new JBScrollPane(engineTaskDialog);
@@ -709,7 +765,6 @@ public class GoToRefFile extends AnAction {
     }
 
 
-
     /**
      * 跳转到Engine Action
      *
@@ -718,11 +773,11 @@ public class GoToRefFile extends AnAction {
      * @return
      */
     @SuppressWarnings("unchecked")
-    public static boolean tryToGotoAction(String value, AnActionEvent anActionEvent,boolean strict) {
+    public static boolean tryToGotoAction(String value, AnActionEvent anActionEvent, boolean strict) {
         if (value == null) {
             return false;
         }
-        if (!value.contains(".do")&&strict) {
+        if (!value.contains(".do") && strict) {
             return false;
         }
         if (value.contains("?")) {
@@ -819,7 +874,7 @@ public class GoToRefFile extends AnAction {
 
                 private void doRun(String selectedValue) {
                     //选择的值可以进行跳转
-                    tryToGotoAction((String) selectedValue, anActionEvent,true);
+                    tryToGotoAction((String) selectedValue, anActionEvent, true);
                 }
 
                 @Override

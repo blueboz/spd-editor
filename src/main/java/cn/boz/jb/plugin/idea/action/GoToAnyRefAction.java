@@ -6,6 +6,7 @@ import com.intellij.openapi.ui.popup.JBPopup;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.ui.awt.RelativePoint;
 import com.intellij.ui.components.JBPanel;
+import com.intellij.ui.components.JBScrollPane;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.JButton;
@@ -26,9 +27,11 @@ public class GoToAnyRefAction extends DumbAwareAction {
     public void actionPerformed(@NotNull AnActionEvent anActionEvent) {
         jbPanelJBPanel = new JBPanel<>();
         JTextArea jTextArea = new JTextArea(7,30);
+        jTextArea.setAutoscrolls(true);
+        JBScrollPane jbScrollPane = new JBScrollPane(jTextArea);
         JButton go = new JButton("Go");
         jbPanelJBPanel.setLayout(new BorderLayout());
-        jbPanelJBPanel.add(jTextArea, BorderLayout.CENTER);
+        jbPanelJBPanel.add(jbScrollPane, BorderLayout.CENTER);
         jbPanelJBPanel.add(go, BorderLayout.SOUTH);
 
 

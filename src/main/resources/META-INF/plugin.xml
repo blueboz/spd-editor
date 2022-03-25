@@ -134,6 +134,14 @@
         </action>
 
         <group>
+            <group class="cn.boz.jb.plugin.idea.action.JsUsageGroup" text="JavaScript Usage" icon="SpdEditorIcons.JAVASCRIPT_16_ICON" popup="true">
+                <action class="cn.boz.jb.plugin.idea.action.JsUsageGroup$JsUsageFindAction" id="Find"
+                        text="JavaScript Usage" icon="SpdEditorIcons.SEARCH_ITEM_16_ICON"></action>
+                <action class="cn.boz.jb.plugin.idea.action.JsUsageGroup$JsUsageAction" id="Refer"
+                        text="JavaScript Usage" icon="SpdEditorIcons.REFER_16_ICON">
+                </action>
+            </group>
+
             <action class="cn.boz.jb.plugin.idea.action.GoToRefFile" id="GoToRef" text="Go To Ref"
                     icon="SpdEditorIcons.REF_16_ICON">
             </action>
@@ -169,17 +177,17 @@
                     icon="AllIcons.Actions.Play_forward"></action>
         </group>
 
-<!--        <action class="cn.boz.jb.plugin.idea.action.ChangeViewAction" icon="SpdEditorIcons.FLOW_16_ICON" text="changeView" id="spdchangeview">-->
+        <!--        <action class="cn.boz.jb.plugin.idea.action.ChangeViewAction" icon="SpdEditorIcons.FLOW_16_ICON" text="changeView" id="spdchangeview">-->
 
-<!--            <add-to-group group-id="ChangesView.GroupBy"/>-->
+        <!--            <add-to-group group-id="ChangesView.GroupBy"/>-->
 
-<!--            <add-to-group group-id="ChangesBrowser"></add-to-group>-->
-<!--        </action>-->
+        <!--            <add-to-group group-id="ChangesBrowser"></add-to-group>-->
+        <!--        </action>-->
         <action class="cn.boz.jb.plugin.idea.action.FileHistoryDiffAction" icon="SpdEditorIcons.FLOW_16_ICON"
                 text="Spd Compare" id="FileHistoryDiff" description="SpdDiff">
             <add-to-group group-id="Vcs.FileHistory.ContextMenu"></add-to-group>
-<!--            <add-to-group group-id="ChangesBrowser"></add-to-group>-->
-<!--            <add-to-group group-id="ChangesView.GroupBy"/>-->
+            <!--            <add-to-group group-id="ChangesBrowser"></add-to-group>-->
+            <!--            <add-to-group group-id="ChangesView.GroupBy"/>-->
         </action>
 
         <group>
@@ -204,7 +212,8 @@
         <group>
             <action class="cn.boz.jb.plugin.idea.action.SpdCommitDiffAction" text="SpdCommitDiff"
                     id="SpdCommitDiff" icon="SpdEditorIcons.FLOW_16_ICON"/>
-            <action class="cn.boz.jb.plugin.idea.action.ExportAsZipAction" icon="SpdEditorIcons.ZIP_16_ICON" text="ExportAsZip"></action>
+            <action class="cn.boz.jb.plugin.idea.action.ExportAsZipAction" icon="SpdEditorIcons.ZIP_16_ICON"
+                    text="ExportAsZip"></action>
             <add-to-group group-id="ChangesViewPopupMenu"></add-to-group>
         </group>
 
