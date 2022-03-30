@@ -38,8 +38,8 @@
         <fileType name="Spd" extensions="spd"
                   implementationClass="cn.boz.jb.plugin.idea.filetype.SpdFileType" language="XML" fieldName="INSTANCE"/>
         <themeMetadataProvider path="/META-INF/SpdEditor.themeMetadata.json"/>
-        <applicationService serviceImplementation="cn.boz.jb.plugin.idea.configurable.SpdEditorDBState"/>
-        <applicationService serviceImplementation="cn.boz.jb.plugin.idea.configurable.SpdEditorNormState"/>
+        <projectService serviceImplementation="cn.boz.jb.plugin.idea.configurable.SpdEditorDBState"/>
+        <projectService serviceImplementation="cn.boz.jb.plugin.idea.configurable.SpdEditorNormState"/>
         <!--项目领域的数据库配置信息-->
         <applicationConfigurable parentId="tools" instance="cn.boz.jb.plugin.idea.configurable.SpdEditorDBSettings"
                                  id="spdEditorConfigurable" displayName="SpdEditor" nonDefaultProject="true"/>

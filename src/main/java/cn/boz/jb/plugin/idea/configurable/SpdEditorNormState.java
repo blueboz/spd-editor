@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * 这个Service是用于关于state的存取容器,其实际内容需要
  */
-@State(name = "cn.boz.jb.plugin.idea.configurable.SpdEditorNormState", storages = {@Storage("spdeditor.xml")})
+@State(name = "cn.boz.jb.plugin.idea.configurable.SpdEditorNormState", storages = {@Storage(StoragePathMacros.WORKSPACE_FILE)})
 public class SpdEditorNormState implements PersistentStateComponent<SpdEditorNormState> {
 
     public String webroot = "";
