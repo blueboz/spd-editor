@@ -44,4 +44,16 @@ public class TranslateUtils {
         rawSql = rawSql.replace("'", "''");
         return rawSql;
     }
+
+    /**
+     * 转化字符串中含有的&为 '||CHR(38)||'注意不能在translateToSql 之前用
+     * @param expression
+     * @return
+     */
+    public static String tranExpression(String expression){
+        if(expression==null){
+            return expression;
+        }
+        return expression.replaceAll("&","'||CHR(38)||'");
+    }
 }

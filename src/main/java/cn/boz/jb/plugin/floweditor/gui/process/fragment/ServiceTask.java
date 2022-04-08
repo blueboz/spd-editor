@@ -120,7 +120,7 @@ public class ServiceTask extends RectBridge implements SqlAggregator {
         String sql = String.format("INSERT INTO ENGINE_TASK (ID_, TYPE_, TITLE_, EXPRESSION_, RETURNVALUE_, BUSSINESKEY_, BUSSINESDESC_," +
                         "RIGHTS_, VALIDSECOND_, LISTENER_, OPENSECOND_, BUSSINESID_, TASKLISTENER_)" +
                         "VALUES ('%s', 'SERVICE', '%s', '%s', null, null, null, null, 10000, null, 60, null, %s)",
-                processId + "_" + getId(), getName(), TranslateUtils.translateToSql(getExpression()), getStringOrNull(getListener()));
+                processId + "_" + getId(), getName(), TranslateUtils.tranExpression(TranslateUtils.translateToSql(getExpression())), getStringOrNull(getListener()));
         return sql;
     }
 
