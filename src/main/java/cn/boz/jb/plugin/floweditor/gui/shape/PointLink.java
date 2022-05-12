@@ -1,7 +1,5 @@
 package cn.boz.jb.plugin.floweditor.gui.shape;
 
-import cn.boz.jb.plugin.floweditor.gui.shape.HiPoint;
-
 /**
  * 附带父子关系的节点链接
  */

@@ -2,11 +2,7 @@ package cn.boz.jb.plugin.idea.action;
 
 import cn.boz.jb.plugin.floweditor.gui.control.PropertyObject;
 import cn.boz.jb.plugin.floweditor.gui.process.fragment.CallActivity;
-import cn.boz.jb.plugin.floweditor.gui.process.fragment.ServiceTask;
-import cn.boz.jb.plugin.floweditor.gui.property.Property;
-import cn.boz.jb.plugin.floweditor.gui.property.impl.TextAreaProperty;
 import cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel;
-import cn.boz.jb.plugin.idea.widget.MyJBTable;
 import com.intellij.find.FindInProjectSettings;
 import com.intellij.find.FindModel;
 import com.intellij.find.findInProject.FindInProjectManager;
@@ -19,20 +15,13 @@ import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.openapi.ui.popup.ListPopup;
 import com.intellij.openapi.ui.popup.PopupStep;
 import com.intellij.openapi.ui.popup.util.BaseListPopupStep;
-import com.intellij.ui.JBSplitter;
 import com.intellij.ui.awt.RelativePoint;
-import com.intellij.ui.components.JBScrollPane;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.swing.JViewport;
-import javax.swing.SwingUtilities;
-import javax.swing.table.TableCellEditor;
 import java.awt.Component;
-import java.awt.Point;
 import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
-import java.util.List;
 
 /**
  * 转到流程的Action

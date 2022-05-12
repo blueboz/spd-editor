@@ -12,7 +12,7 @@ import java.util.List;
 
 public class SpdTable extends JTable {
 
-    public static int DEFAULT_ROW_HEIGHT=28;
+    public static int DEFAULT_ROW_HEIGHT = 28;
     private SpdTableCellEditor myTableCellEditor;
     private MyTableModel myTableModel;
     private SpdTableCellRender myTableCellRender;
@@ -27,14 +27,14 @@ public class SpdTable extends JTable {
         for (int i = 0; i < myProperties.size(); i++) {
             this.setRowHeight(i, myProperties.get(i).getRowHeight());
         }
-        this.getTableHeader().setPreferredSize(new Dimension(0,DEFAULT_ROW_HEIGHT));
+        this.getTableHeader().setPreferredSize(new Dimension(0, DEFAULT_ROW_HEIGHT));
         this.getColumnModel().getColumn(0).setPreferredWidth(30);
     }
 
 
     public void clearProperies() {
         //编辑器是否应该重新获取
-        if(this.isEditing()){
+        if (this.isEditing()) {
             this.getCellEditor().stopCellEditing();
         }
 

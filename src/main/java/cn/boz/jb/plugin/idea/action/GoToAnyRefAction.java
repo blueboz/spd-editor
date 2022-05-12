@@ -23,10 +23,11 @@ public class GoToAnyRefAction extends DumbAwareAction {
 
 
     JBPanel<JBPanel> jbPanelJBPanel;
+
     @Override
     public void actionPerformed(@NotNull AnActionEvent anActionEvent) {
         jbPanelJBPanel = new JBPanel<>();
-        JTextArea jTextArea = new JTextArea(7,30);
+        JTextArea jTextArea = new JTextArea(7, 30);
         jTextArea.setAutoscrolls(true);
         JBScrollPane jbScrollPane = new JBScrollPane(jTextArea);
         JButton go = new JButton("Go");
@@ -55,7 +56,7 @@ public class GoToAnyRefAction extends DumbAwareAction {
                 //搜索action或者流程?
                 popup.dispose();
                 String text = jTextArea.getText();
-                GoToRefFile.tryToGotoAction(text,anActionEvent,false);
+                GoToRefFile.tryToGotoAction(text, anActionEvent, false);
             }
         });
     }

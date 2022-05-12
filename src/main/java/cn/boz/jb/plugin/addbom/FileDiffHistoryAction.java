@@ -46,9 +46,9 @@ public class FileDiffHistoryAction extends AnAction {
                             VcsRevisionNumber vcsRevisionNumber = selected.getRevisionNumber();
                             String fileName = file.getName();
                             String currentContent = XmlUtils.readXmlAndSortAndFormat(new String(file.contentsToByteArray(true)));
-                            String selectedContent =  XmlUtils.readXmlAndSortAndFormat(new String(selected.loadContent()));
-                            CompareUtils.compare(selectedContent,vcsRevisionNumber.asString(), currentContent,
-                                     "currentVersion:" + fileName, XmlFileType.INSTANCE, e.getProject(),file.getName());
+                            String selectedContent = XmlUtils.readXmlAndSortAndFormat(new String(selected.loadContent()));
+                            CompareUtils.compare(selectedContent, vcsRevisionNumber.asString(), currentContent,
+                                    "currentVersion:" + fileName, XmlFileType.INSTANCE, e.getProject(), file.getName());
                         } catch (IOException ex) {
                             ex.printStackTrace();
                         } catch (VcsException ex) {

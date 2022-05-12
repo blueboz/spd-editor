@@ -13,7 +13,7 @@ public class TranslateUtils {
      * @return
      */
     public static String translateToXmlString(String rawString) {
-        if(rawString==null){
+        if (rawString == null) {
             return "";
         }
         rawString = rawString.replace("\n", "#LEY#");
@@ -34,11 +34,12 @@ public class TranslateUtils {
 
     /**
      * 转换成为sql语句
+     *
      * @param rawSql
      * @return
      */
-    public static String translateToSql(String rawSql){
-        if(rawSql==null){
+    public static String translateToSql(String rawSql) {
+        if (rawSql == null) {
             return "";
         }
         rawSql = rawSql.replace("'", "''");
@@ -47,13 +48,14 @@ public class TranslateUtils {
 
     /**
      * 转化字符串中含有的&为 '||CHR(38)||'注意不能在translateToSql 之前用
+     *
      * @param expression
      * @return
      */
-    public static String tranExpression(String expression){
-        if(expression==null){
+    public static String tranExpression(String expression) {
+        if (expression == null) {
             return expression;
         }
-        return expression.replaceAll("&","'||CHR(38)||'");
+        return expression.replaceAll("&", "'||CHR(38)||'");
     }
 }

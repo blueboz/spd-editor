@@ -13,7 +13,7 @@ import org.dom4j.Element;
 
 import java.awt.Cursor;
 
-public class ExclusiveGateway extends PrismaticBridge implements Gateway,SqlAggregator {
+public class ExclusiveGateway extends PrismaticBridge implements Gateway, SqlAggregator {
 
     public static Cursor CURSOR = IcoMoonUtils.initCursor(IcoMoonUtils.getExclusiveGateway());
 
@@ -72,6 +72,6 @@ public class ExclusiveGateway extends PrismaticBridge implements Gateway,SqlAggr
         return String.format("INSERT INTO ENGINE_TASK (ID_, TYPE_, TITLE_, EXPRESSION_, RETURNVALUE_, BUSSINESKEY_, BUSSINESDESC_," +
                 "RIGHTS_, VALIDSECOND_, LISTENER_, OPENSECOND_, BUSSINESID_, TASKLISTENER_)" +
                 "VALUES ('%s', 'CASE', '%s', null, null, null, null, null, 10000, null, 60, null," +
-                "null)", processId+"_"+id, name);
+                "null)", processId + "_" + id, name);
     }
 }

@@ -11,7 +11,6 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vcs.VcsDataKeys;
 import com.intellij.openapi.vcs.VcsException;
 import com.intellij.openapi.vcs.changes.Change;
-import com.intellij.openapi.vcs.changes.ContentRevision;
 import com.intellij.openapi.vcs.history.VcsFileRevision;
 import com.intellij.util.containers.ContainerUtil;
 import org.dom4j.DocumentException;
@@ -68,7 +67,7 @@ public class FileHistoryDiffAction extends AnAction {
                 String rev1num = rev1.getRevisionNumber().asString();
                 String rev2num = rev2.getRevisionNumber().asString();
                 CompareUtils.compare(XmlUtils.readXmlAndSortAndFormat(rev1s), rev1num, XmlUtils.readXmlAndSortAndFormat(rev2s), rev2num
-                        , XmlFileType.INSTANCE, e.getProject(),ChangeUtils.getChangeAvaiableFileName(change));
+                        , XmlFileType.INSTANCE, e.getProject(), ChangeUtils.getChangeAvaiableFileName(change));
             } catch (IOException ex) {
                 ex.printStackTrace();
             } catch (VcsException ex) {

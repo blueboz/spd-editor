@@ -15,9 +15,6 @@ import cn.boz.jb.plugin.floweditor.gui.utils.ShapeUtils;
 import cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel;
 
 import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +22,7 @@ import java.util.List;
 /**
  * 图形组件
  */
-public class Shape implements Restorable, Resizable, Alignable, Attachable,Cloneable, PropertyObject {
+public class Shape implements Restorable, Resizable, Alignable, Attachable, Cloneable, PropertyObject {
     protected String id;
     protected String name;
     //鼠标当前是否悬浮于图形上面
@@ -75,7 +72,6 @@ public class Shape implements Restorable, Resizable, Alignable, Attachable,Clone
     }
 
 
-
     public Shape(double x, double y) {
         this.x = x;
         this.y = y;
@@ -90,7 +86,6 @@ public class Shape implements Restorable, Resizable, Alignable, Attachable,Clone
         this.width = width;
         this.height = height;
     }
-
 
 
     /**
@@ -350,7 +345,7 @@ public class Shape implements Restorable, Resizable, Alignable, Attachable,Clone
     public void drawContent(ChartPanel chartPanel) {
         //根据不同的状态，修改背景透视的颜色
         Rect rect = this.toRect();
-        chartPanel.fillRoundRect(rect.getX(), rect.getY(), rect.getW(), rect.getH(),5,5);
+        chartPanel.fillRoundRect(rect.getX(), rect.getY(), rect.getW(), rect.getH(), 5, 5);
 
     }
 
@@ -369,7 +364,7 @@ public class Shape implements Restorable, Resizable, Alignable, Attachable,Clone
             chartPanel.markStroke();
             chartPanel.setColor(bColor);
             chartPanel.setStroke(ShapeUtils.getStoke(bw, bstyle));
-            chartPanel.drawRoundBorder(rect.getX(), rect.getY(), rect.getW(), rect.getH(),5,5);
+            chartPanel.drawRoundBorder(rect.getX(), rect.getY(), rect.getW(), rect.getH(), 5, 5);
             chartPanel.resetStroke();
             chartPanel.resetColor();
         }
@@ -451,11 +446,11 @@ public class Shape implements Restorable, Resizable, Alignable, Attachable,Clone
                 Rect br = Shape.getResizeRect(ShapePos.BOTTOM_RIGHT, shapeOfResizeing);
                 chartPanel.fillRect(br.getX(), br.getY(), br.getW(), br.getH());
                 chartPanel.resetColor();
-                if(!this.focusing) {
+                if (!this.focusing) {
                     drawBorder(chartPanel, shapeOfResizeing, resizingBorderWidth, resizingBorderStyle, ConstantUtils.getInstance().getShapeResizingBorderColor());
                 }
             } else {
-                if(!this.focusing){
+                if (!this.focusing) {
                     drawBorder(chartPanel, shapeOfResizeing, hoverBoarderWidth, hoverBorderStyle, ConstantUtils.getInstance().getChartPanelHoverBorderColor());
                 }
             }
@@ -1024,7 +1019,6 @@ public class Shape implements Restorable, Resizable, Alignable, Attachable,Clone
     }
 
 
-
     /**
      * 获取控件的填充颜色
      *
@@ -1111,7 +1105,7 @@ public class Shape implements Restorable, Resizable, Alignable, Attachable,Clone
 
     @Override
     public Object clone() throws CloneNotSupportedException {
-        Shape shape = new Shape(this.x,this.y,this.width,this.height);
+        Shape shape = new Shape(this.x, this.y, this.width, this.height);
 
         shape.setName(this.name);
         return shape;
@@ -1129,9 +1123,10 @@ public class Shape implements Restorable, Resizable, Alignable, Attachable,Clone
 
     /**
      * 提供图形的初始化操作
+     *
      * @param hiPoint
      */
-    public void init(HiPoint hiPoint){
+    public void init(HiPoint hiPoint) {
         this.setX(hiPoint.x);
         this.setY(hiPoint.y);
         this.setWidth(105);
@@ -1140,16 +1135,17 @@ public class Shape implements Restorable, Resizable, Alignable, Attachable,Clone
 
     /**
      * 提供图形初始化使用，一般在新建图形的时候会执行图形的初始化功能
+     *
      * @param rect
      */
-    public void init(Rect rect){
+    public void init(Rect rect) {
         this.setX(rect.getX());
         this.setY(rect.getY());
         this.setWidth(rect.getW());
         this.setHeight(rect.getW());
     }
 
-    public String getIdPrefix(){
+    public String getIdPrefix() {
         return "shape";
     }
 
@@ -1158,7 +1154,7 @@ public class Shape implements Restorable, Resizable, Alignable, Attachable,Clone
      *
      * @return
      */
-    public  boolean visiable() {
+    public boolean visiable() {
         if (this instanceof Label) {
             int labelShowMode = ConstantUtils.getInstance().getLabelShowMode();
             if (labelShowMode == ConstantUtils.LABEL_SHOW_FULL) {
@@ -1179,7 +1175,6 @@ public class Shape implements Restorable, Resizable, Alignable, Attachable,Clone
             return true;
         }
     }
-
 
 
 }

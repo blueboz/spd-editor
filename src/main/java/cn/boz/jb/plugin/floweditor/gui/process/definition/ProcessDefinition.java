@@ -9,8 +9,8 @@ import java.util.List;
 public class ProcessDefinition {
     private String id;
     private String name;
-    private List<Shape> shapes=new ArrayList<>();
-    private List<Line> lines=new ArrayList<>();
+    private List<Shape> shapes = new ArrayList<>();
+    private List<Line> lines = new ArrayList<>();
 
     public List<Shape> getShapes() {
         return shapes;

@@ -20,6 +20,7 @@ public class PropertyEditor extends JPanel implements ShapeSelectedListener, Pro
 
     /**
      * 更新指向对象的
+     *
      * @param operatedObject
      */
     public void setOperatedObject(PropertyObject operatedObject) {

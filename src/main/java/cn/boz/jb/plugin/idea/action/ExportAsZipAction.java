@@ -1,11 +1,8 @@
 package cn.boz.jb.plugin.idea.action;
 
-import cn.boz.jb.plugin.idea.widget.SpdEditor;
 import com.intellij.dvcs.repo.Repository;
 import com.intellij.dvcs.repo.VcsRepositoryManager;
-import com.intellij.notification.EventLog;
 import com.intellij.notification.Notification;
-import com.intellij.notification.NotificationGroup;
 import com.intellij.notification.NotificationType;
 import com.intellij.openapi.ListSelection;
 import com.intellij.openapi.actionSystem.AnAction;
@@ -13,8 +10,6 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.fileChooser.FileChooser;
 import com.intellij.openapi.fileChooser.FileChooserDescriptor;
-import com.intellij.openapi.ui.MessageType;
-import com.intellij.openapi.ui.popup.BalloonBuilder;
 import com.intellij.openapi.vcs.VcsDataKeys;
 import com.intellij.openapi.vcs.VcsException;
 import com.intellij.openapi.vcs.changes.ByteBackedContentRevision;
@@ -109,7 +104,7 @@ public class ExportAsZipAction extends AnAction {
             return;
         }
 
-        WriteCommandAction.runWriteCommandAction(anActionEvent.getProject(),() -> {
+        WriteCommandAction.runWriteCommandAction(anActionEvent.getProject(), () -> {
             try {
 
                 String filename = "GitExport_" + new Date().getTime() + ".zip";
@@ -134,9 +129,6 @@ public class ExportAsZipAction extends AnAction {
         });
 
 //        ZipUtils.zipFiles();
-
-
-
 
 
     }

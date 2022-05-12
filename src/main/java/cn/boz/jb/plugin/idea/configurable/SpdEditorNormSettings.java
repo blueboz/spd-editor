@@ -9,7 +9,7 @@ import javax.swing.JComponent;
 /**
  * 配置项编辑器
  */
-public class SpdEditorNormSettings implements Configurable  {
+public class SpdEditorNormSettings implements Configurable {
 
     private SpdEditorNormSettingsComp settings;
 

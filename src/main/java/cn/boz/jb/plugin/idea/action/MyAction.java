@@ -12,11 +12,11 @@ import org.jetbrains.annotations.NotNull;
 
 public class MyAction extends AnAction {
     @Override
-    public void actionPerformed(@NotNull AnActionEvent anActionEvent){
+    public void actionPerformed(@NotNull AnActionEvent anActionEvent) {
         Project project = anActionEvent.getProject();
         FileEditor selectedEditor = FileEditorManager.getInstance(project).getSelectedEditor();
-        if(selectedEditor instanceof SpdFileEditor){
-            SpdFileEditor mfe= (SpdFileEditor) selectedEditor;
+        if (selectedEditor instanceof SpdFileEditor) {
+            SpdFileEditor mfe = (SpdFileEditor) selectedEditor;
             SpdEditor spdEditor = mfe.getSpdEditor();
             ChartPanel chartPanel = spdEditor.getChartPanel();
             chartPanel.undo();

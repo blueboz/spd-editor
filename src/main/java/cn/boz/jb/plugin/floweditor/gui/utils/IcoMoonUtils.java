@@ -50,9 +50,11 @@ public class IcoMoonUtils {
     public static Font getFont48() {
         return FONT.deriveFont(Font.PLAIN, 48);
     }
+
     public static Font getFont72() {
         return FONT.deriveFont(Font.PLAIN, 72);
     }
+
     public static Font getFont(int size) {
         return FONT.deriveFont(Font.PLAIN, size);
 
@@ -75,9 +77,9 @@ public class IcoMoonUtils {
         double offsety = Math.round(size / 2.0 - fontMetrics.getDescent() + fontMetrics.getAscent() / 2.0);
         graphics.setFont(font16);
         boolean dark = RandomColorUtils.isDark(ThemeConstants.SHAPE_MODE_COLOR);
-        if(dark){
+        if (dark) {
             graphics.setColor(ThemeConstants.SHAPE_MODE_COLOR.brighter());
-        }else{
+        } else {
             graphics.setColor(ThemeConstants.SHAPE_MODE_COLOR.darker());
         }
 
@@ -214,6 +216,7 @@ public class IcoMoonUtils {
 
     /**
      * 自动化保存
+     *
      * @return
      */
     public static String getAutomation() {
@@ -226,6 +229,7 @@ public class IcoMoonUtils {
 
     /**
      * 从磁盘刷新
+     *
      * @return
      */
     public static String getReload() {

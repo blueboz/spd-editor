@@ -55,7 +55,7 @@ public class Rect {
                 '}';
     }
 
-    public HiPoint getCenterPoint(){
+    public HiPoint getCenterPoint() {
         return new HiPoint(this.x + this.w / 2, this.y + this.h / 2);
     }
 }

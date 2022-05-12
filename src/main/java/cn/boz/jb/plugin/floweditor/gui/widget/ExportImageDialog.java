@@ -8,19 +8,12 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.text.AbstractDocument;
-import javax.swing.text.AttributeSet;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Document;
-import javax.swing.text.DocumentFilter;
-import javax.swing.text.PlainDocument;
 import java.awt.Container;
 import java.awt.GraphicsEnvironment;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Rectangle;
-import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -39,11 +32,11 @@ public class ExportImageDialog extends JDialog {
     private JTextField widthText;
     private JTextField heightText;
 
-    public ExportImageDialog( double initScale,double width,double height) {
+    public ExportImageDialog(double initScale, double width, double height) {
         this.setTitle("设置分辨率");
-        this.initScale=initScale;
-        this.w=width;
-        this.h=height;
+        this.initScale = initScale;
+        this.w = width;
+        this.h = height;
         this.setModal(true);
         Container contentPane = this.getContentPane();
         GridBagLayout gridBagLayout = new GridBagLayout();
@@ -63,7 +56,7 @@ public class ExportImageDialog extends JDialog {
         gridBagLayout.setConstraints(scaleLabel, constraints);
         contentPane.add(scaleLabel);
 
-        scaleSpinner= new JSpinner();
+        scaleSpinner = new JSpinner();
         SpinnerNumberModel spinnerNumberModel = new SpinnerNumberModel(initScale, 0.1, 10, 0.01);
         scaleSpinner.setModel(spinnerNumberModel);
         constraints.gridx = 1;
@@ -72,16 +65,16 @@ public class ExportImageDialog extends JDialog {
         constraints.gridwidth = 2;
         gridBagLayout.setConstraints(scaleSpinner, constraints);
         contentPane.add(scaleSpinner);
-        ExportImageDialog dlg=this;
+        ExportImageDialog dlg = this;
         scaleSpinner.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
                 Object source = e.getSource();
-                if(source instanceof JSpinner){
-                    JSpinner spinner= (JSpinner) source;
+                if (source instanceof JSpinner) {
+                    JSpinner spinner = (JSpinner) source;
                     double value = (double) spinner.getValue();
-                    heightText.setText(String.format("%.2f",value*height));
-                    widthText.setText(String.format("%.2f",value*width));
+                    heightText.setText(String.format("%.2f", value * height));
+                    widthText.setText(String.format("%.2f", value * width));
                     dlg.setInitScale(value);
                 }
             }
@@ -98,7 +91,7 @@ public class ExportImageDialog extends JDialog {
 
 
         widthText = new JTextField();
-        widthText.setText(String.format("%.2f",width));
+        widthText.setText(String.format("%.2f", width));
         constraints.gridx = 1;
         constraints.gridy = 1;
         constraints.weightx = 1;
@@ -117,7 +110,7 @@ public class ExportImageDialog extends JDialog {
         contentPane.add(heightLabel);
 
         heightText = new JTextField();
-        heightText.setText(String.format("%.2f",height));
+        heightText.setText(String.format("%.2f", height));
         constraints.gridx = 1;
         constraints.gridy = 2;
         constraints.weightx = 1;
@@ -127,7 +120,7 @@ public class ExportImageDialog extends JDialog {
         heightText.setEnabled(false);
 
 
-        JButton btn= new JButton();
+        JButton btn = new JButton();
         btn.setText("确定");
         constraints.gridx = 0;
         constraints.gridy = 3;

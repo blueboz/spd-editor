@@ -1,9 +1,7 @@
 package cn.boz.jb.plugin.idea.action;
 
 import cn.boz.jb.plugin.idea.bean.EngineAction;
-import cn.boz.jb.plugin.idea.bean.EngineTask;
 import cn.boz.jb.plugin.idea.utils.DBUtils;
-import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.DumbAwareAction;
@@ -35,7 +33,7 @@ public class GoToAnyRefExtAction extends DumbAwareAction {
     @Override
     public void actionPerformed(@NotNull AnActionEvent anActionEvent) {
         jbPanelJBPanel = new JBPanel<>();
-        JTextArea jTextArea = new JTextArea(7,30);
+        JTextArea jTextArea = new JTextArea(7, 30);
         jTextArea.setAutoscrolls(true);
         JBScrollPane jbScrollPane = new JBScrollPane(jTextArea);
         JButton go = new JButton("Go");
@@ -62,13 +60,13 @@ public class GoToAnyRefExtAction extends DumbAwareAction {
                 //搜索action或者流程?
                 popup.dispose();
                 String text = jTextArea.getText();
-                queryEngineAction(anActionEvent,text);
+                queryEngineAction(anActionEvent, text);
 
             }
         });
     }
 
-    public void queryEngineAction(AnActionEvent anActionEvent,String name){
+    public void queryEngineAction(AnActionEvent anActionEvent, String name) {
         DBUtils dbUtils = DBUtils.getInstance();
 
         Ref<List<EngineAction>> engineActionRef = new Ref<>();
@@ -94,13 +92,13 @@ public class GoToAnyRefExtAction extends DumbAwareAction {
         }, "Loading Engine Action...", true, anActionEvent.getProject());
 
         if (engineActionRef.isNull()) {
-            return ;
+            return;
         }
         GoToRefFile.showListPopup(new ArrayList<>(engineActionRef.get()), anActionEvent.getProject(), new Consumer<Object>() {
             @Override
             public void consume(Object o) {
 
             }
-        },true);
+        }, true);
     }
 }

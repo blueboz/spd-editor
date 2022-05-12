@@ -80,11 +80,11 @@ public class Circle extends Shape {
 
     @Override
     public void drawNewShape(ChartPanel chartPanel, Rect rect) {
-        chartPanel.drawOval(rect.getX(),rect.getY(),rect.getW(),rect.getH());
+        chartPanel.drawOval(rect.getX(), rect.getY(), rect.getW(), rect.getH());
     }
 
     @Override
-    public void init(HiPoint hiPoint){
+    public void init(HiPoint hiPoint) {
         this.setX(hiPoint.x);
         this.setY(hiPoint.y);
         this.setWidth(35);

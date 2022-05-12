@@ -1,10 +1,6 @@
 package cn.boz.jb.plugin.floweditor.gui.utils;
 
-import cn.boz.jb.plugin.floweditor.gui.process.Gateway;
 import cn.boz.jb.plugin.floweditor.gui.shape.HiPoint;
-import cn.boz.jb.plugin.floweditor.gui.shape.Label;
-import cn.boz.jb.plugin.floweditor.gui.shape.Line;
-import cn.boz.jb.plugin.floweditor.gui.shape.Shape;
 
 public class LineUtils {
 

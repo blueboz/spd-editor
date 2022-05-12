@@ -7,19 +7,19 @@ import java.util.Map;
 public abstract class NodeData {
 
 
-    private Map<String,Object> nodeData;
+    private Map<String, Object> nodeData;
 
     private boolean subDataLoaded;
 
-    public NodeData( Map<String,Object> nodeData) {
+    public NodeData(Map<String, Object> nodeData) {
         this.nodeData = nodeData;
     }
 
-    public Map<String,Object> getNodeData() {
+    public Map<String, Object> getNodeData() {
         return nodeData;
     }
 
-    public void setNodeData(Map<String,Object> nodeData) {
+    public void setNodeData(Map<String, Object> nodeData) {
         this.nodeData = nodeData;
     }
 
@@ -35,6 +35,7 @@ public abstract class NodeData {
 
     /**
      * 加载子节点数据
+     *
      * @param connection 数据库连接对象
      * @return
      */

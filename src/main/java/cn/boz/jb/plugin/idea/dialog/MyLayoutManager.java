@@ -1,8 +1,5 @@
 package cn.boz.jb.plugin.idea.dialog;
 
-import javax.swing.JLabel;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;

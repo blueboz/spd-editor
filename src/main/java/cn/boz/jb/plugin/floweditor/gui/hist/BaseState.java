@@ -7,11 +7,11 @@ public class BaseState {
     //被操作的对象
     public Restorable operated;
 
-    public BaseState(){
+    public BaseState() {
 
     }
 
-    public BaseState(Restorable operated){
-        this.operated=operated;
+    public BaseState(Restorable operated) {
+        this.operated = operated;
     }
 }

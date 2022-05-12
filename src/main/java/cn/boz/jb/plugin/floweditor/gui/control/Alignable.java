@@ -16,6 +16,7 @@ public interface Alignable {
      * 垂直对齐
      */
     int REL_VERTICAL = 0x0200;
+
     /**
      * 参考
      * {@link #REL_HORIZONTAL}
@@ -37,12 +38,14 @@ public interface Alignable {
 
     /**
      * 是否可以作为对齐参考物?
+     *
      * @return
      */
     boolean alignRefAble();
 
     /**
      * 是否对齐自身
+     *
      * @return
      */
     boolean alignSelf();

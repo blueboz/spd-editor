@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 public class AddCodeDefAction extends AnAction {
     @Override
     public void actionPerformed(@NotNull AnActionEvent anActionEvent) {
-        AddCodeDefDialog addCodeDefDialog = new AddCodeDefDialog(anActionEvent.getProject(),true);
+        AddCodeDefDialog addCodeDefDialog = new AddCodeDefDialog(anActionEvent.getProject(), true);
         addCodeDefDialog.showAndGet();
 
     }

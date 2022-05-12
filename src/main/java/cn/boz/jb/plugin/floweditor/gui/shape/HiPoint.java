@@ -19,7 +19,7 @@ public class HiPoint implements Cloneable {
 
     @Override
     protected Object clone() throws CloneNotSupportedException {
-        HiPoint hiPoint = new HiPoint(x,y);
+        HiPoint hiPoint = new HiPoint(x, y);
         return hiPoint;
     }
 }

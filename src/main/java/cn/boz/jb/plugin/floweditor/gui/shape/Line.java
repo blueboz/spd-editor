@@ -20,7 +20,7 @@ import java.util.List;
 /**
  * 线段
  */
-public class Line implements Restorable, Comparable, PropertyObject,Cloneable {
+public class Line implements Restorable, Comparable, PropertyObject, Cloneable {
     protected String id;
     protected String name;
 
@@ -39,6 +39,7 @@ public class Line implements Restorable, Comparable, PropertyObject,Cloneable {
     public void setName(String name) {
         this.name = name;
     }
+
     private String sourceRef;
     private String targetRef;
     //鼠标当前是否悬浮于图形上面
@@ -338,11 +339,11 @@ public class Line implements Restorable, Comparable, PropertyObject,Cloneable {
             pointLink.setHead(startCenter);
             pointLink.setTail(endCenter);
             if (i == 0) {
-                pointLink.setPrev( pointLink.getHead());
-                pointLink.setPrevIsHead( true);
+                pointLink.setPrev(pointLink.getHead());
+                pointLink.setPrevIsHead(true);
             }
             if (i == allpoints.size() - 2) {
-                pointLink.setNext( pointLink.getTail());
+                pointLink.setNext(pointLink.getTail());
                 pointLink.setNextIsTail(true);
             }
             return pointLink;
@@ -473,7 +474,7 @@ public class Line implements Restorable, Comparable, PropertyObject,Cloneable {
         LineState lineTempory = new LineState();
         lineTempory.startShape = this.startShape;
         lineTempory.endShape = this.endShape;
-        lineTempory.label=this.label;
+        lineTempory.label = this.label;
         for (HiPoint point : points) {
             lineTempory.points.add(new HiPoint(point.x, point.y));
         }
@@ -492,7 +493,8 @@ public class Line implements Restorable, Comparable, PropertyObject,Cloneable {
         this.startShape = lineTempory.startShape;
         this.endShape = lineTempory.endShape;
         this.points = lineTempory.points;
-        this.label=lineTempory.label;;
+        this.label = lineTempory.label;
+        ;
     }
 
     @Override
@@ -596,7 +598,7 @@ public class Line implements Restorable, Comparable, PropertyObject,Cloneable {
      *
      * @return
      */
-    public HiPoint getCenterPointOfAllLine(){
+    public HiPoint getCenterPointOfAllLine() {
         List<HiPoint> allpoints = getAllPointWithStartEnd();
         double totaldistance = 0;
         List<Double> distances = new ArrayList<>();
@@ -627,10 +629,11 @@ public class Line implements Restorable, Comparable, PropertyObject,Cloneable {
 
     /**
      * 给所有的点一定偏移量
+     *
      * @param draggingOffsetX x偏移量
      * @param draggingOffsetY y轴偏移量
      */
-    public void moveAllPointsWithOffset(double draggingOffsetX,double draggingOffsetY){
+    public void moveAllPointsWithOffset(double draggingOffsetX, double draggingOffsetY) {
         for (HiPoint point : getPoints()) {
             point.x += draggingOffsetX;
             point.y += draggingOffsetY;
@@ -645,10 +648,11 @@ public class Line implements Restorable, Comparable, PropertyObject,Cloneable {
     /**
      * 绘制线段的核心
      * 绘制标签的代码请参考如下
-     * @see cn.boz.jb.plugin.floweditor.gui.shape.Label#drawContent(cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel)
+     *
      * @param chartPanel
+     * @see cn.boz.jb.plugin.floweditor.gui.shape.Label#drawContent(cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel)
      */
-    public void drawLine(ChartPanel chartPanel){
+    public void drawLine(ChartPanel chartPanel) {
         HiPoint endPoint = this.getEndPoint();
         chartPanel.setColor(ConstantUtils.getInstance().getChartPanelFlowLineFillColor());
         if (this.isHover()) {
@@ -707,15 +711,16 @@ public class Line implements Restorable, Comparable, PropertyObject,Cloneable {
 
     /**
      * 初始化的必要操作
+     *
      * @param startShape
      * @param endShape
      */
     public void init(Shape startShape, Shape endShape) {
         this.setStartShape(startShape);
         this.setEndShape(endShape);
-        String name="to " + endShape.getName();
+        String name = "to " + endShape.getName();
         this.setName(name);
-        Label label = new Label(0, 0, 0, 0,this.getName());
+        Label label = new Label(0, 0, 0, 0, this.getName());
         this.setLabel(label);
         label.setBoundLine(this);
     }
@@ -743,18 +748,18 @@ public class Line implements Restorable, Comparable, PropertyObject,Cloneable {
 
     public void addXWithOffset(double diffx) {
         for (HiPoint point : this.points) {
-            point.x+=diffx;
-            if(point.x<=0){
-                point.x=0;
+            point.x += diffx;
+            if (point.x <= 0) {
+                point.x = 0;
             }
         }
     }
 
     public void addYWithOffset(double diffy) {
         for (HiPoint point : this.points) {
-            point.y+=diffy;
-            if(point.y<=0){
-                point.y=0;
+            point.y += diffy;
+            if (point.y <= 0) {
+                point.y = 0;
             }
         }
     }

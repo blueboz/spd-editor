@@ -5,9 +5,9 @@ import java.util.Map;
 
 public class EngineActionDataContainer {
 
-    private Map<String,Object> engineAction;
-    private List<Map<String,Object>> engineActionInput;
-    private List<Map<String,Object>> engineActionOutput;
+    private Map<String, Object> engineAction;
+    private List<Map<String, Object>> engineActionInput;
+    private List<Map<String, Object>> engineActionOutput;
 
     public Map<String, Object> getEngineAction() {
         return engineAction;

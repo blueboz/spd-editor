@@ -96,7 +96,7 @@ public abstract class Property {
         this.propertyRender = new JLabel();
         valueRender.setAutoscrolls(false);
         propertyRender.setAutoscrolls(false);
-        this.propertyEditorListener=propertyEditorListener;
+        this.propertyEditorListener = propertyEditorListener;
 
     }
 
@@ -119,6 +119,7 @@ public abstract class Property {
         propertyRender.setAutoscrolls(false);
         valueRender.setAutoscrolls(false);
     }
+
     public Property(String propertyName, Object operatedObj, PropertyChangeListener listener, PropertyEditorListener propertyEditorListener) {
         this.propertyName = propertyName;
         this.operatedObj = operatedObj;
@@ -127,7 +128,7 @@ public abstract class Property {
         valueRender.setAutoscrolls(false);
         propertyRender.setAutoscrolls(false);
         this.propertyChangeListener = listener;
-        this.propertyEditorListener=propertyEditorListener;
+        this.propertyEditorListener = propertyEditorListener;
     }
 
 
@@ -191,8 +192,8 @@ public abstract class Property {
                     this.propertyChangeListener.propertyChange(propertyChangeEvent);
                     //可能每一个属性，有自己的属性监听器,
                 }
-                if(this.propertyEditorListener!=null){
-                    propertyEditorListener.propertyEdited(this,operatedObj,oldValue,newValue);
+                if (this.propertyEditorListener != null) {
+                    propertyEditorListener.propertyEdited(this, operatedObj, oldValue, newValue);
                 }
             }
         } catch (IllegalAccessException e) {

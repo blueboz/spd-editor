@@ -10,16 +10,16 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class AppNode extends NodeData {
-    public AppNode(Map<String,Object> nodeData) {
+    public AppNode(Map<String, Object> nodeData) {
         super(nodeData);
     }
 
-    public static List<NodeData> initLoad(Connection connection){
-        try{
+    public static List<NodeData> initLoad(Connection connection) {
+        try {
             DBUtils instance = DBUtils.getInstance();
             List<Map<String, Object>> apps = instance.queryEcasAppl(connection);
-            return apps.stream().map(app-> new AppNode(app)).collect(Collectors.toList());
-        }catch (Exception e){
+            return apps.stream().map(app -> new AppNode(app)).collect(Collectors.toList());
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return new ArrayList<>();
@@ -32,7 +32,7 @@ public class AppNode extends NodeData {
 
     @Override
     public List<NodeData> loadSubNodes(Connection connection) {
-        if(isSubDataLoaded()){
+        if (isSubDataLoaded()) {
             return new ArrayList<>();
         }
         this.setSubDataLoaded(true);

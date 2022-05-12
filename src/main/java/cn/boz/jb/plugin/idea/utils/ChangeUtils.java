@@ -33,7 +33,7 @@ public class ChangeUtils {
         if (afterRevision == null) {
             return "";
         }
-        return afterRevision.getRevisionNumber().asString()+" "+afterRevision.getFile().getName();
+        return afterRevision.getRevisionNumber().asString() + " " + afterRevision.getFile().getName();
     }
 
     public static String getChangeBeforeContent(Change change) {
@@ -57,9 +57,10 @@ public class ChangeUtils {
         return beforeRevision.getRevisionNumber().asString();
 
     }
-    public static String getChangeAvaiableFileName(Change change){
+
+    public static String getChangeAvaiableFileName(Change change) {
         FileStatus fileStatus = change.getFileStatus();
-        if(fileStatus==FileStatus.DELETED){
+        if (fileStatus == FileStatus.DELETED) {
             return change.getBeforeRevision().getFile().getName();
         }
         return change.getAfterRevision().getFile().getName();
@@ -70,7 +71,7 @@ public class ChangeUtils {
         if (beforeRevision == null) {
             return "";
         }
-        return beforeRevision.getRevisionNumber().asString()+" "+beforeRevision.getFile().getName();
+        return beforeRevision.getRevisionNumber().asString() + " " + beforeRevision.getFile().getName();
 
     }
 

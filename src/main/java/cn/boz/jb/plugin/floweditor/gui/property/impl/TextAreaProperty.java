@@ -3,7 +3,6 @@ package cn.boz.jb.plugin.floweditor.gui.property.impl;
 import cn.boz.jb.plugin.floweditor.gui.property.InputLongTextDialog;
 import cn.boz.jb.plugin.floweditor.gui.property.Property;
 import cn.boz.jb.plugin.floweditor.gui.property.PropertyEditorListener;
-import com.intellij.openapi.ui.DialogBuilder;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.ui.components.JBScrollPane;
 
@@ -36,7 +35,7 @@ public class TextAreaProperty extends Property {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() >= 2) {
-                    InputLongTextDialog inputLongTextDialog = new InputLongTextDialog(null, true,textArea.getText());
+                    InputLongTextDialog inputLongTextDialog = new InputLongTextDialog(null, true, textArea.getText());
                     //弹出一个大大的对话框
                     if (inputLongTextDialog.showAndGet()) {
                         String inputText = inputLongTextDialog.getInputText();

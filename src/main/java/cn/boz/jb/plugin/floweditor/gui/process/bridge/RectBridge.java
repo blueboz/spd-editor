@@ -8,8 +8,7 @@ import cn.boz.jb.plugin.floweditor.gui.utils.DiagramUtils;
 import cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel;
 import org.dom4j.Element;
 
-public class RectBridge extends Shape implements Diagram
-{
+public class RectBridge extends Shape implements Diagram {
     @Override
     public void drawContent(ChartPanel chartPanel) {
 
@@ -27,9 +26,9 @@ public class RectBridge extends Shape implements Diagram
     }
 
     @Override
-    public void init(HiPoint hiPoint){
-        this.setX(hiPoint.x-52);
-        this.setY(hiPoint.y-27);
+    public void init(HiPoint hiPoint) {
+        this.setX(hiPoint.x - 52);
+        this.setY(hiPoint.y - 27);
         this.setWidth(105);
         this.setHeight(55);
     }

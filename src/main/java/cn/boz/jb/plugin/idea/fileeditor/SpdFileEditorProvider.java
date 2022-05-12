@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SpdFileEditorProvider implements FileEditorProvider, DumbAware {
-    private Map<VirtualFile,FileEditor> fileFileEditorMap=new HashMap<>();
+    private Map<VirtualFile, FileEditor> fileFileEditorMap = new HashMap<>();
 
     @Override
     public boolean accept(@NotNull Project project, @NotNull VirtualFile virtualFile) {
@@ -26,10 +26,10 @@ public class SpdFileEditorProvider implements FileEditorProvider, DumbAware {
 
     @Override
     public @NotNull FileEditor createEditor(@NotNull Project project, @NotNull VirtualFile virtualFile) {
-        if(!fileFileEditorMap.containsKey(virtualFile)){
-            synchronized (SpdFileEditorProvider.class){
-                if(!fileFileEditorMap.containsKey(virtualFile)){
-                    fileFileEditorMap.put(virtualFile,new SpdFileEditor(project, virtualFile));
+        if (!fileFileEditorMap.containsKey(virtualFile)) {
+            synchronized (SpdFileEditorProvider.class) {
+                if (!fileFileEditorMap.containsKey(virtualFile)) {
+                    fileFileEditorMap.put(virtualFile, new SpdFileEditor(project, virtualFile));
                 }
             }
         }

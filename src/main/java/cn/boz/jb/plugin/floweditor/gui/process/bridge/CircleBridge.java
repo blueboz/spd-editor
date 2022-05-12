@@ -21,9 +21,9 @@ public class CircleBridge extends Circle implements Diagram {
     }
 
     @Override
-    public void init(HiPoint hiPoint){
-        this.setX(hiPoint.x-17);
-        this.setY(hiPoint.y-17);
+    public void init(HiPoint hiPoint) {
+        this.setX(hiPoint.x - 17);
+        this.setY(hiPoint.y - 17);
         this.setWidth(35);
         this.setHeight(35);
     }
@@ -39,13 +39,13 @@ public class CircleBridge extends Circle implements Diagram {
     @Override
     public void drawContent(ChartPanel chartPanel) {
         double diameter;
-        if(this.width>this.height){
-            diameter=this.height;
-        }else{
-            diameter=this.width;
+        if (this.width > this.height) {
+            diameter = this.height;
+        } else {
+            diameter = this.width;
         }
-        double newx=this.x+this.width/2-diameter/2;
-        double newy=this.y+this.height/2-diameter/2;
+        double newx = this.x + this.width / 2 - diameter / 2;
+        double newy = this.y + this.height / 2 - diameter / 2;
         chartPanel.fillOval(newx, newy, diameter, diameter);
         super.drawInnerBorder(chartPanel, this, borderWidth, borderStyle, borderColor);
     }

@@ -24,7 +24,6 @@ public class AddCodeDefDialog extends DialogWrapper {
     private MyLayoutManager myLayoutManager;
 
 
-
     public AddCodeDefDialog(@Nullable Project project, boolean canBeParent) {
         super(project, canBeParent);
         init();

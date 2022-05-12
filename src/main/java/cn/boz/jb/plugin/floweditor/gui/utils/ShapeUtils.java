@@ -6,15 +6,25 @@ import cn.boz.jb.plugin.floweditor.gui.shape.Shape;
 
 import java.awt.BasicStroke;
 
-import static cn.boz.jb.plugin.floweditor.gui.utils.ShapePos.*;
+import static cn.boz.jb.plugin.floweditor.gui.utils.ShapePos.BOTTOM_CENTER;
+import static cn.boz.jb.plugin.floweditor.gui.utils.ShapePos.BOTTOM_LEFT;
+import static cn.boz.jb.plugin.floweditor.gui.utils.ShapePos.BOTTOM_RIGHT;
+import static cn.boz.jb.plugin.floweditor.gui.utils.ShapePos.MIDDLE_CENTER;
+import static cn.boz.jb.plugin.floweditor.gui.utils.ShapePos.MIDDLE_LEFT;
+import static cn.boz.jb.plugin.floweditor.gui.utils.ShapePos.MIDDLE_RIGHT;
+import static cn.boz.jb.plugin.floweditor.gui.utils.ShapePos.NOT_INSIDE;
+import static cn.boz.jb.plugin.floweditor.gui.utils.ShapePos.TOP_CENTER;
+import static cn.boz.jb.plugin.floweditor.gui.utils.ShapePos.TOP_LEFT;
+import static cn.boz.jb.plugin.floweditor.gui.utils.ShapePos.TOP_RIGHT;
 
 public class ShapeUtils {
 
     /**
      * 给定线段，计算与给定图形的相交点坐标
-     * @param rect 给定矩形
+     *
+     * @param rect           给定矩形
      * @param lineStartPoint 线段起始点坐标
-     * @param lineEndPoint 线段终止点坐标
+     * @param lineEndPoint   线段终止点坐标
      * @return
      */
     public static HiPoint calculateCrossPointWithRect(Rect rect, HiPoint lineStartPoint, HiPoint lineEndPoint) {
@@ -25,10 +35,10 @@ public class ShapeUtils {
         double a = lineStartPoint.y - lineEndPoint.y;
         double b = lineEndPoint.x - lineStartPoint.x;
         double c = -(a * lineStartPoint.x + b * lineStartPoint.y);
-        double x=rect.getX();
-        double y=rect.getY();
-        double width=rect.getW();
-        double height=rect.getH();
+        double x = rect.getX();
+        double y = rect.getY();
+        double width = rect.getW();
+        double height = rect.getH();
         //区域范围
         //target center
         if (b != 0.0f) {
@@ -69,8 +79,9 @@ public class ShapeUtils {
             }
         }
         //下边线
-        return  new HiPoint(x, y + height);
+        return new HiPoint(x, y + height);
     }
+
     /**
      * 判断是否在小点区域范围内
      *
@@ -123,7 +134,7 @@ public class ShapeUtils {
 
     public static BasicStroke getStoke(int strokeWidth, String type) {
         if ("solid".equals(type)) {
-            return new BasicStroke(strokeWidth, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 1.0f, new float[]{1f,0f}, 0f);
+            return new BasicStroke(strokeWidth, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 1.0f, new float[]{1f, 0f}, 0f);
         } else if ("dashed".equals(type)) {
             return new BasicStroke(strokeWidth, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND, 1.0f, new float[]{2f, 0f, 2f}, 0f);
         } else if ("dotted".equals(type)) {

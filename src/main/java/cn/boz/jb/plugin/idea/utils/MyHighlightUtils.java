@@ -12,7 +12,7 @@ import java.awt.Color;
 
 public class MyHighlightUtils {
 
-    public static void installHighlightForTextArea(JComponent component,JTextArea textArea){
+    public static void installHighlightForTextArea(JComponent component, JTextArea textArea) {
         String text = textArea.getText();
         Highlighter highlighter = textArea.getHighlighter();
         highlighter.removeAllHighlights();

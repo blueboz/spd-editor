@@ -3,8 +3,6 @@ package cn.boz.jb.plugin.floweditor.gui.shape;
 import cn.boz.jb.plugin.floweditor.gui.utils.LineUtils;
 import cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel;
 
-import java.awt.Color;
-
 /**
  * 棱形
  */
@@ -14,7 +12,7 @@ public class Prismatic extends Shape {
     public static int POINT_NORTH = 2;
     public static int POINT_SOUTH = 3;
 
-    public Prismatic(){
+    public Prismatic() {
 
     }
 
@@ -47,22 +45,22 @@ public class Prismatic extends Shape {
             //第一象限SE    东南
             HiPoint sP = getPointOfPos(POINT_EAST);
             HiPoint eP = getPointOfPos(POINT_SOUTH);
-            return LineUtils.calcCrossPointOfTwoLine(sP,eP,lineStartPoint,lineEndPoint);
+            return LineUtils.calcCrossPointOfTwoLine(sP, eP, lineStartPoint, lineEndPoint);
         } else if (dx < 0 && dy > 0) {
             //第二象限SW    西南
             HiPoint sP = getPointOfPos(POINT_WEST);
             HiPoint eP = getPointOfPos(POINT_SOUTH);
-            return LineUtils.calcCrossPointOfTwoLine(sP,eP,lineStartPoint,lineEndPoint);
+            return LineUtils.calcCrossPointOfTwoLine(sP, eP, lineStartPoint, lineEndPoint);
         } else if (dx < 0 && dy < 0) {
             //第三象限NW    西北
             HiPoint sP = getPointOfPos(POINT_WEST);
             HiPoint eP = getPointOfPos(POINT_NORTH);
-            return LineUtils.calcCrossPointOfTwoLine(sP,eP,lineStartPoint,lineEndPoint);
+            return LineUtils.calcCrossPointOfTwoLine(sP, eP, lineStartPoint, lineEndPoint);
         } else if (dx > 0 && dy < 0) {
             //第四象限NE    东北
             HiPoint sP = getPointOfPos(POINT_EAST);
             HiPoint eP = getPointOfPos(POINT_NORTH);
-            return LineUtils.calcCrossPointOfTwoLine(sP,eP,lineStartPoint,lineEndPoint);
+            return LineUtils.calcCrossPointOfTwoLine(sP, eP, lineStartPoint, lineEndPoint);
         }
 //        LineUtils.calcCrossAngleOfTwoLine()
         return super.calculateCrossPoint(lineStartPoint, lineEndPoint);

@@ -44,8 +44,6 @@ public class MyJBTable extends JBTable implements ShapeSelectedListener, Propert
         property.setMaxWidth(120);
 
 
-
-
     }
 
 
@@ -106,12 +104,13 @@ public class MyJBTable extends JBTable implements ShapeSelectedListener, Propert
 
     /**
      * 设置被操作的对象
+     *
      * @param selectedObject
      */
     private void setOperatedObject(PropertyObject selectedObject) {
-        if(selectedObject==null){
+        if (selectedObject == null) {
             this.repaint();
-            return ;
+            return;
         }
         //修改操作的对象的时候，是需要重新进行维护的
         if (this.operatedObject == selectedObject) {
@@ -129,16 +128,16 @@ public class MyJBTable extends JBTable implements ShapeSelectedListener, Propert
 
     @Override
     public void propertyEdited(Property property, Object operatedObj, Object oldValue, Object newValue) {
-        if(oldValue!=newValue){
+        if (oldValue != newValue) {
             //触发函数回调
-            if(SpdEditorDBState.getInstance().autoSave){
+            if (SpdEditorDBState.getInstance().autoSave) {
                 chartPanel.fireSavedListener();
             }
         }
     }
 
     public void bindChartPanel(ChartPanel chartPanel) {
-        this.chartPanel=chartPanel;
+        this.chartPanel = chartPanel;
     }
 
     public class MyTableModel extends AbstractTableModel {
@@ -157,7 +156,6 @@ public class MyJBTable extends JBTable implements ShapeSelectedListener, Propert
         public int getColumnCount() {
             return 2;
         }
-
 
 
         @Override

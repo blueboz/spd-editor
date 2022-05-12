@@ -44,13 +44,11 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.DataKey;
 import com.intellij.openapi.actionSystem.DataProvider;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.project.ProjectUtil;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.UserDataHolder;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.ui.PopupHandler;
-import com.intellij.ui.TableUtil;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -3425,8 +3423,8 @@ public class ChartPanel extends JComponent implements DataProvider, MouseListene
                 line.blur(null);
             }
         }
-        if(o instanceof Label){
-            Label lab=(Label) o;
+        if (o instanceof Label) {
+            Label lab = (Label) o;
             Rect rect = lab.toRect();
             double x = rect.getX();
             double y = rect.getY();
@@ -3442,7 +3440,7 @@ public class ChartPanel extends JComponent implements DataProvider, MouseListene
             originalPoint.y = this.getHeight() / (2 * scale) - y;
 
             this.fireShapeSelected(lab);
-            o=lab.getBoundLine();
+            o = lab.getBoundLine();
 
         }
         if (o instanceof Shape) {

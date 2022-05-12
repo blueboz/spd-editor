@@ -14,7 +14,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 
-public class FlowEditorGui extends JFrame implements MouseListener  {
+public class FlowEditorGui extends JFrame implements MouseListener {
 
     private FlowEditorComponent flowEditorComponent;
 
@@ -78,7 +78,6 @@ public class FlowEditorGui extends JFrame implements MouseListener  {
     public void mouseExited(MouseEvent e) {
 
     }
-
 
 
 }

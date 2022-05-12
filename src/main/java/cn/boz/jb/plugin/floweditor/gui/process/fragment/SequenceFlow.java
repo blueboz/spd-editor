@@ -42,7 +42,7 @@ public class SequenceFlow extends LineBridge implements FlowSqlAggregator {
     }
 
     public String getConditionExpression() {
-        if(conditionExpression==null){
+        if (conditionExpression == null) {
             return "";
         }
         return conditionExpression;
@@ -58,7 +58,7 @@ public class SequenceFlow extends LineBridge implements FlowSqlAggregator {
         element.addAttribute("name", this.getName());
         element.addAttribute("sourceRef", this.getSourceRef());
         element.addAttribute("targetRef", this.getTargetRef());
-        if(!StringUtils.isBlank(this.getConditionExpression())){
+        if (!StringUtils.isBlank(this.getConditionExpression())) {
             element.addAttribute("conditionExpression", TranslateUtils.translateToXmlString(this.getConditionExpression()));
         }
         return element;

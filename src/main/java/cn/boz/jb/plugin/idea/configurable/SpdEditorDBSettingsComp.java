@@ -110,7 +110,6 @@ public class SpdEditorDBSettingsComp {
     }
 
 
-
     public JComponent getPreferredFocusedComponent() {
         return jdbcUrlText;
     }

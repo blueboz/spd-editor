@@ -6,6 +6,7 @@ public class Size {
     private double w;
     //高度
     private double h;
+
     public Size(double w, double h) {
         this.w = w;
         this.h = h;

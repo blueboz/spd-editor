@@ -27,7 +27,7 @@ public class CompareUtils {
 
     }
 
-    public static void compare(String oldver, String oldTitle, String newVer, String newTitle, FileType fileType, Project project,String windowTitle) {
+    public static void compare(String oldver, String oldTitle, String newVer, String newTitle, FileType fileType, Project project, String windowTitle) {
         DiffContentFactory contentFactory = DiffContentFactory.getInstance();
         DocumentContent left = contentFactory.create(oldver, fileType);
         DocumentContent right = contentFactory.create(newVer, fileType);

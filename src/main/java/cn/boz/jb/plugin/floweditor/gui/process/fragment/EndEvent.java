@@ -20,7 +20,7 @@ public class EndEvent extends CircleBridge {
         chartPanel.markFont();
         chartPanel.setColor(getForegroundColor());
         chartPanel.setFontExt(IcoMoonUtils.getFont16());
-        chartPanel.drawString(this.getX(), this.getY() , this.getWidth(), this.getHeight(), IcoMoonUtils.getStop());
+        chartPanel.drawString(this.getX(), this.getY(), this.getWidth(), this.getHeight(), IcoMoonUtils.getStop());
         chartPanel.resetFont();
     }
 

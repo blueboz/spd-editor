@@ -10,8 +10,6 @@ import org.dom4j.io.XMLWriter;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
@@ -76,7 +74,7 @@ public class XmlUtils {
     }
 
     public static final String formmaterOutput(Document document) {
-        try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()){
+        try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
             OutputFormat xmlFormat = new OutputFormat();
             xmlFormat.setEncoding("UTF-8");
             xmlFormat.setNewlines(true);

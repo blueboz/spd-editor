@@ -73,7 +73,7 @@ public class ServiceTask extends RectBridge implements SqlAggregator {
         element.addAttribute("name", TranslateUtils.translateToXmlString(this.getName()));
         element.addAttribute("expression", TranslateUtils.translateToXmlString(this.getExpression()));
         //如果是空的那么就先不写入
-        if(!StringUtils.isBlank(this.getListener())){
+        if (!StringUtils.isBlank(this.getListener())) {
             element.addAttribute("listener", TranslateUtils.translateToXmlString(this.getListener()));
         }
         return element;

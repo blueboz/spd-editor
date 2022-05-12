@@ -1,8 +1,5 @@
 package cn.boz.jb.plugin.floweditor.gui.utils;
 
-import com.intellij.openapi.graph.option.TableEditorFactory;
-import com.intellij.ui.JBColor;
-
 import java.awt.Color;
 
 public class ConstantUtils {

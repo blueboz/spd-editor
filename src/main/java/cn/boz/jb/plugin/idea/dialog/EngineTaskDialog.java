@@ -24,7 +24,7 @@ public class EngineTaskDialog extends JComponent {
 
     public EngineTaskDialog(EngineTask engineTask) {
         myLayoutManager = new MyLayoutManager();
-        this.engineTask=engineTask;
+        this.engineTask = engineTask;
 
         this.setLayout(myLayoutManager);
 
@@ -62,12 +62,12 @@ public class EngineTaskDialog extends JComponent {
 
         JLabel expressionLabel = new JLabel("expression");
         JTextArea expressionTA = new JTextArea("", 7, 30);
-        if(!expression.contains("\n")){
-            if(expression==null){
-                expression="";
+        if (!expression.contains("\n")) {
+            if (expression == null) {
+                expression = "";
             }
-            expressionTA.setText(expression.replaceAll(";",";\n"));
-        }else{
+            expressionTA.setText(expression.replaceAll(";", ";\n"));
+        } else {
             expressionTA.setText(expression);
         }
 

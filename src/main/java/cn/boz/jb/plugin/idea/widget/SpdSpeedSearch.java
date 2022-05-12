@@ -65,10 +65,10 @@ public class SpdSpeedSearch extends SpeedSearchBase {
         if (o == null) {
             return;
         }
-        if("".equals(s)){
+        if ("".equals(s)) {
             return;
         }
-        chartPanel.selectShape((Shape)o);
+        chartPanel.selectShape((Shape) o);
 
     }
 }

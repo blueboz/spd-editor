@@ -185,7 +185,7 @@ public class GoToRefFile extends AnAction {
         if (i == -1) {
             return text;
         }
-        return text.substring(i+1);
+        return text.substring(i + 1);
     }
 
 
@@ -215,7 +215,7 @@ public class GoToRefFile extends AnAction {
      * @param text    文本
      * @return
      */
-    public static  boolean goToPathSearchRecusive(PsiFile psiFile, Project project, String text) {
+    public static boolean goToPathSearchRecusive(PsiFile psiFile, Project project, String text) {
         VirtualFile virtualFile = psiFile.getVirtualFile();
         while (true) {
             if (virtualFile == null) {

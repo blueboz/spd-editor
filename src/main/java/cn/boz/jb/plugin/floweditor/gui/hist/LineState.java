@@ -13,6 +13,7 @@ public class LineState extends BaseState {
     //图形的引用指针，方便后面进行
 
     public Label label;
+
     @Override
     public String toString() {
         return "LineState{" +

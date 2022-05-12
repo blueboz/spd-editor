@@ -91,8 +91,8 @@ public class CallActivity extends RectBridge implements SqlAggregator {
             synchronized (CallActivity.class) {
                 if (ps == null) {
                     ps = new Property[]{
-                            new TextFieldProperty("name", this,propertyEditor),
-                            new TextFieldProperty("calledElement", this,propertyEditor),
+                            new TextFieldProperty("name", this, propertyEditor),
+                            new TextFieldProperty("calledElement", this, propertyEditor),
                     };
                 }
             }
@@ -100,7 +100,6 @@ public class CallActivity extends RectBridge implements SqlAggregator {
 
         return ps;
     }
-
 
 
     @Override

@@ -100,7 +100,6 @@ public class Button extends JComponent implements MouseListener, MouseMotionList
     }
 
 
-
     private Color getForegroundColor() {
         if (hover || (toggle && toggleAble)) {
             if ((toggle && toggleAble) || press) {
@@ -135,11 +134,11 @@ public class Button extends JComponent implements MouseListener, MouseMotionList
                 RenderingHints.VALUE_RENDER_QUALITY);
 
         Color bgc = getBackgroundColor();
-        if(bgc!=null){
+        if (bgc != null) {
             Color color = g2d.getColor();
             g2d.setColor(bgc);
 //            g2d.fillRect(2, 2, this.getWidth() - 4, this.getHeight() - 4);
-            g2d.fillRoundRect(4,4,this.getWidth()-8,this.getHeight()-8,5,5);
+            g2d.fillRoundRect(4, 4, this.getWidth() - 8, this.getHeight() - 8, 5, 5);
             g2d.setColor(color);
         }
         int fontsize = this.getWidth();
@@ -192,7 +191,7 @@ public class Button extends JComponent implements MouseListener, MouseMotionList
         if (toggleAble) {
             this.fireToggleListener(toggle, !toggle);
             toggle = !toggle;
-            if(toggle){
+            if (toggle) {
                 //并且给同组的设置toggle
                 Container parent = this.getParent();
                 Component[] components = parent.getComponents();
@@ -207,11 +206,11 @@ public class Button extends JComponent implements MouseListener, MouseMotionList
                         }
                     }
                 }
-            }else{
+            } else {
                 Container parent = this.getParent();
                 Component[] components = parent.getComponents();
-                if(components.length>1){
-                    toggle=true;
+                if (components.length > 1) {
+                    toggle = true;
                 }
             }
         }

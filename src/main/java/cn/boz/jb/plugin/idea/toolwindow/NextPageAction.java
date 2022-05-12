@@ -15,8 +15,8 @@ public class NextPageAction extends AnAction {
         InputEvent inputEvent = anActionEvent.getInputEvent();
         Component component = inputEvent.getComponent();
         Container ancestorOfClass = SwingUtilities.getAncestorOfClass(MenuIdDialog.class, component);
-        if(ancestorOfClass instanceof MenuIdDialog){
-            MenuIdDialog dlg= (MenuIdDialog) ancestorOfClass;
+        if (ancestorOfClass instanceof MenuIdDialog) {
+            MenuIdDialog dlg = (MenuIdDialog) ancestorOfClass;
             dlg.loadNextPage();
         }
     }

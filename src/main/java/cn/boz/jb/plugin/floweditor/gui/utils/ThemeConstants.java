@@ -5,14 +5,15 @@ import com.intellij.ui.JBColor;
 import java.awt.Color;
 
 public class ThemeConstants {
-    public static final Color CHARTPANEL_BOARDBACKGROUND = JBColor.namedColor("ChartPanel.boardBackground", new JBColor(new Color(212, 212, 212, 255),new Color(110, 110, 110, 185)));
+    public static final Color CHARTPANEL_BOARDBACKGROUND = JBColor.namedColor("ChartPanel.boardBackground", new JBColor(new Color(212, 212, 212, 255), new Color(110, 110, 110, 185)));
 
     public static final Color SHAPE_ACTIVE_BACKGROUND = JBColor.namedColor("ChartPanel.shapeActiveBackground", new JBColor(new Color(73, 211, 242, 181), new Color(78, 226, 255, 239)));
     public static final Color SHAPE_ACTIVE_FOREGROUND = JBColor.namedColor("ChartPanel.shapeActiveForeground", new JBColor(new Color(255, 255, 255), new Color(255, 255, 255)));
 
     public static final Color SHAPE_BACKGROUND = JBColor.namedColor("ChartPanel.shapeBackground", new JBColor(new Color(255, 255, 255, 228), new Color(255, 255, 255, 65)));
     public static final Color SHAPE_FOREGROUND = JBColor.namedColor("ChartPanel.shapeForegroundColor", new JBColor(new Color(0, 0, 0), new Color(234, 234, 234)));
-    public static final Color SHAPE_MODE_COLOR=JBColor.namedColor("ChartPanel.shapeForegroundColor", new JBColor(new Color(11, 11, 11, 221),new Color(255,255,255, 230)));;
+    public static final Color SHAPE_MODE_COLOR = JBColor.namedColor("ChartPanel.shapeForegroundColor", new JBColor(new Color(11, 11, 11, 221), new Color(255, 255, 255, 230)));
+    ;
 
 
     public static final Color CHARTPANEL_HOVERBORDER = JBColor.namedColor("ChartPanel.chartPanelHoverBorder", new JBColor(new Color(0, 0, 0, 255), new Color(255, 255, 255, 255)));

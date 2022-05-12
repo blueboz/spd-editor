@@ -5,5 +5,6 @@ package cn.boz.jb.plugin.floweditor.gui.hist;
  */
 public interface Restorable {
     BaseState serialize();
+
     void restore(BaseState state);
 }

@@ -6,25 +6,12 @@ import cn.boz.jb.plugin.idea.utils.CompareUtils;
 import com.intellij.ide.highlighter.XmlFileType;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.CommonDataKeys;
-import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vcs.FileStatus;
 import com.intellij.openapi.vcs.VcsDataKeys;
-import com.intellij.openapi.vcs.VcsException;
 import com.intellij.openapi.vcs.changes.Change;
-import com.intellij.openapi.vcs.changes.ContentRevision;
-import com.intellij.openapi.vcs.history.VcsFileRevision;
-import com.intellij.psi.PsiFile;
-import com.intellij.util.containers.ContainerUtil;
-import org.dom4j.DocumentException;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
-import java.util.List;
-
 public class RepositoryChangeDiffAction extends AnAction {
-
-
 
 
     /**
@@ -52,8 +39,8 @@ public class RepositoryChangeDiffAction extends AnAction {
                     String changeBeforeContent = ChangeUtils.getChangeBeforeContent(change);
                     String changeBeforeTitle = ChangeUtils.getChangeBeforeTitle(change);
 
-                    CompareUtils.compare( XmlUtils.readXmlAndSortAndFormat(changeBeforeContent)
-                            , changeBeforeTitle,XmlUtils.readXmlAndSortAndFormat(changeAfterContent), changeAfterTitle, XmlFileType.INSTANCE, e.getProject(),ChangeUtils.getChangeAvaiableFileName(change));
+                    CompareUtils.compare(XmlUtils.readXmlAndSortAndFormat(changeBeforeContent)
+                            , changeBeforeTitle, XmlUtils.readXmlAndSortAndFormat(changeAfterContent), changeAfterTitle, XmlFileType.INSTANCE, e.getProject(), ChangeUtils.getChangeAvaiableFileName(change));
 
                 } else if (selectChange.length == 2) {
 
@@ -65,7 +52,7 @@ public class RepositoryChangeDiffAction extends AnAction {
                     String change2AfterTitle = ChangeUtils.getChangeAfterTitleWithName(change2);
 
                     CompareUtils.compare(XmlUtils.readXmlAndSortAndFormat(change1AfterContent), change1AfterTitle, XmlUtils.readXmlAndSortAndFormat(change2AfterContent)
-                            , change2AfterTitle, XmlFileType.INSTANCE, e.getProject(),"diff");
+                            , change2AfterTitle, XmlFileType.INSTANCE, e.getProject(), "diff");
                 }
             } catch (Exception eee) {
                 eee.printStackTrace();

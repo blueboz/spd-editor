@@ -73,6 +73,6 @@ public class ParallelGateway extends PrismaticBridge implements Gateway, SqlAggr
         return String.format("INSERT INTO ENGINE_TASK (ID_, TYPE_, TITLE_, EXPRESSION_, RETURNVALUE_, BUSSINESKEY_, " +
                 "BUSSINESDESC_, RIGHTS_, VALIDSECOND_, LISTENER_, OPENSECOND_, BUSSINESID_, TASKLISTENER_) " +
                 "VALUES ('%s', 'PARALLEL', '%s', null, null, null, null, null," +
-                " 10000, null, 60, null, null)", processId+"_"+this.id, this.name);
+                " 10000, null, 60, null, null)", processId + "_" + this.id, this.name);
     }
 }

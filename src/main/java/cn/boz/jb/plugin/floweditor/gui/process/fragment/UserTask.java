@@ -15,7 +15,6 @@ import cn.boz.jb.plugin.floweditor.gui.utils.TranslateUtils;
 import cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
-import org.jsoup.internal.StringUtil;
 
 import java.awt.Cursor;
 

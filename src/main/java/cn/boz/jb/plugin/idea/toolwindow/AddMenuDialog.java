@@ -270,7 +270,7 @@ public class AddMenuDialog extends DialogWrapper {
                         if (StringUtils.isBlank(instance.webroot)) {
                             urlt.setText(String.valueOf(selectedValue.getPath()));
                         } else {
-                            urlt.setText(String.valueOf(selectedValue.getPath()).replace(instance.webroot.replace("\\","/"), ""));
+                            urlt.setText(String.valueOf(selectedValue.getPath()).replace(instance.webroot.replace("\\", "/"), ""));
                         }
                         urlt.setBackground(null);
                         PsiFile psiFile = PsiManager.getInstance(ProjectManager.getInstance().getDefaultProject()).findFile(selectedValue);

@@ -20,7 +20,7 @@ public class StartEvent extends CircleBridge {
         chartPanel.markFont();
         chartPanel.setColor(getForegroundColor());
         chartPanel.setFontExt(IcoMoonUtils.getFont16());
-        chartPanel.drawString(this.getX(), this.getY() , this.getWidth(), this.getHeight(), IcoMoonUtils.getPlay());
+        chartPanel.drawString(this.getX(), this.getY(), this.getWidth(), this.getHeight(), IcoMoonUtils.getPlay());
         chartPanel.resetFont();
     }
 
@@ -45,7 +45,7 @@ public class StartEvent extends CircleBridge {
     }
 
     @Override
-    public void init(HiPoint hiPoint){
+    public void init(HiPoint hiPoint) {
         super.init(hiPoint);
         this.setName("Start");
     }

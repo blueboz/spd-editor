@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class MenuNode extends NodeData {
-    public MenuNode(Map<String,Object> nodeData) {
+    public MenuNode(Map<String, Object> nodeData) {
         super(nodeData);
     }
 
@@ -33,7 +33,7 @@ public class MenuNode extends NodeData {
 
     @Override
     public List<NodeData> loadSubNodes(Connection connection) {
-        if(isSubDataLoaded()){
+        if (isSubDataLoaded()) {
             return new ArrayList<>();
         }
         this.setSubDataLoaded(true);
@@ -49,31 +49,31 @@ public class MenuNode extends NodeData {
     }
 
 
-    public static MenuNode buildEmptyNode(){
+    public static MenuNode buildEmptyNode() {
         /**
          [
-             {
-                 "APPLID": 999,
-                 "MENUID": 661,
-                 "NAME": "统一额度使用情况",
-                 "LVL": 1,
-                 "URL": "riskctl/MarginUsagesStatus.html",
-                 "PARENT": 5,
-                 "IMG": "../ui/eraui/images/title_icon.gif",
-                 "ISCHILD": 1,
-                 "GROUPID": 0
-             }
+         {
+         "APPLID": 999,
+         "MENUID": 661,
+         "NAME": "统一额度使用情况",
+         "LVL": 1,
+         "URL": "riskctl/MarginUsagesStatus.html",
+         "PARENT": 5,
+         "IMG": "../ui/eraui/images/title_icon.gif",
+         "ISCHILD": 1,
+         "GROUPID": 0
+         }
          ]
          */
         Map<String, Object> emptyNode = new HashMap<>();
-        emptyNode.put("APPLID",9999);
-        emptyNode.put("MENUID",661);
-        emptyNode.put("NAME","统一额度使用情况");
-        emptyNode.put("LVL",1);
-        emptyNode.put("URL","riskctl/MarginUsagesStatus.html");
-        emptyNode.put("IMG","../ui/eraui/images/title_icon.gif");
-        emptyNode.put("ISCHILD",1);
-        emptyNode.put("GROUPID",0);
+        emptyNode.put("APPLID", 9999);
+        emptyNode.put("MENUID", 661);
+        emptyNode.put("NAME", "统一额度使用情况");
+        emptyNode.put("LVL", 1);
+        emptyNode.put("URL", "riskctl/MarginUsagesStatus.html");
+        emptyNode.put("IMG", "../ui/eraui/images/title_icon.gif");
+        emptyNode.put("ISCHILD", 1);
+        emptyNode.put("GROUPID", 0);
         return new MenuNode(emptyNode);
     }
 }

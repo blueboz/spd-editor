@@ -27,8 +27,8 @@ public class CallerSearcherCommentPanel extends JBPanel {
     private JBTable table;
     JTextArea textArea;
 
-    public CallerSearcherCommentPanel(JBTable table){
-        this.table=table;
+    public CallerSearcherCommentPanel(JBTable table) {
+        this.table = table;
         textArea = new JTextArea("", 7, 30);
         table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             public void valueChanged(@NotNull ListSelectionEvent e) {
@@ -49,7 +49,8 @@ public class CallerSearcherCommentPanel extends JBPanel {
 
             }
         });
-        this.setLayout(new BorderLayout());;
+        this.setLayout(new BorderLayout());
+        ;
         JScrollPane textScrollPane = ScrollPaneFactory.createScrollPane(textArea);
         JLabel commentLabel = new JLabel("script");
         this.add(commentLabel, "North");
@@ -73,11 +74,11 @@ public class CallerSearcherCommentPanel extends JBPanel {
 
         ActionToolbar spd_tb = instance.createActionToolbar("spd tb", actionGroup, true);
         JComponent gotoactionScript = spd_tb.getComponent();
-        this.add(gotoactionScript,"South");
+        this.add(gotoactionScript, "South");
 
     }
 
-    public String getScript(){
+    public String getScript() {
         return textArea.getText();
     }
 }

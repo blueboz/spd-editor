@@ -1,11 +1,9 @@
 package cn.boz.jb.plugin.floweditor.gui.shape;
 
-import java.awt.Color;
-
 /**
  * 矩形
  */
-public class Rectangle extends Shape{
+public class Rectangle extends Shape {
 
     public Rectangle(double x, double y, int status) {
         super(x, y);
