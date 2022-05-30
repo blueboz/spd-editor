@@ -1,6 +1,7 @@
 package cn.boz.jb.plugin.idea.utils;
 
 import cn.boz.jb.plugin.floweditor.gui.utils.StringUtils;
+import cn.boz.jb.plugin.idea.bean.EcasMenu;
 import cn.boz.jb.plugin.idea.bean.EngineAction;
 import cn.boz.jb.plugin.idea.bean.EngineFlow;
 import cn.boz.jb.plugin.idea.bean.EngineTask;
@@ -412,6 +413,26 @@ public class DBUtils {
                 engineAction.setActionscript((String) it.get("ACTIONSCRIPT_"));
 
                 return engineAction;
+            }).collect(Collectors.toList());
+        }
+    }
+
+    public List<EcasMenu> queryHtmlRefMenu(Connection connection, String fileName) throws SQLException {
+        try (PreparedStatement preparedStatement = connection.prepareStatement("select * from ecas_menu start with menuid=( select menuid from ECAS_MENU where url like '%" + fileName + "%' ) connect by prior parent=menuid ")) {
+            List<Map<String, Object>> maps = queryForList(preparedStatement);
+            //APPLID, MENUID, NAME, LVL, URL, PARENT, IMG, ISCHILD, GROUPID
+            return maps.stream().map(it -> {
+                EcasMenu ecasMenu = new EcasMenu();
+                ecasMenu.setApplid(String.valueOf( it.get("APPLID")));
+                ecasMenu.setMenuid(String.valueOf( it.get("MENUID")));
+                ecasMenu.setName(String.valueOf(it.get("NAME")));
+                ecasMenu.setLvl(String.valueOf(it.get("LVL")));
+                ecasMenu.setUrl(String.valueOf(it.get("URL")));
+                ecasMenu.setParent(String.valueOf(it.get("PARENT")));
+                ecasMenu.setImg(String.valueOf(it.get("IMG")));
+                ecasMenu.setIschild(String.valueOf(it.get("ISCHILD")));
+                ecasMenu.setGroupid(String.valueOf(it.get("GROUPID")));
+                return ecasMenu;
             }).collect(Collectors.toList());
         }
     }

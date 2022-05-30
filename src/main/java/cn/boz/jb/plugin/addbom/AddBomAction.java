@@ -28,6 +28,10 @@ public class AddBomAction extends AnAction {
             return;
         }
         VirtualFile virtualFile = e.getData(CommonDataKeys.VIRTUAL_FILE);
+        if(virtualFile==null){
+            e.getPresentation().setEnabledAndVisible(false);
+            return;
+        }
         byte[] bom = virtualFile.getBOM();
         if (bom != null && bom.length == 3) {
             e.getPresentation().setEnabledAndVisible(false);

@@ -62,6 +62,9 @@
                     text="AddBom"
                     icon="SpdEditorIcons.BOM_16_ICON">
             </action>
+            <action class="cn.boz.jb.plugin.idea.action.HtmlRefAction" id="htmlRefAction" description="check who refer me in ecas menu"
+                    text="HtmlRef">
+            </action>
             <action class="cn.boz.jb.plugin.addbom.FileDiffHistoryAction" id="myfileDiffAction"
                     description="FileDiffHistory"
                     text="Spd File Diff"
