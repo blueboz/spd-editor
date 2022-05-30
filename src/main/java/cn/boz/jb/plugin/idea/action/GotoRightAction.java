@@ -19,6 +19,12 @@ import com.intellij.openapi.ui.popup.JBPopupFactory;
 import icons.SpdEditorIcons;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.nio.Buffer;
+import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.util.List;
 import java.util.Map;
@@ -74,7 +80,6 @@ public class GotoRightAction extends AnAction {
             UserTask userTask = (UserTask) selectedObject;
             String rights = userTask.getRights();
             ProgressIndicator pg = BackgroundTaskUtil.executeAndTryWait(progressIndicator -> () -> {
-
                 DBUtils instance = DBUtils.getInstance();
                 try (Connection connection = instance.getConnection()) {
                     //RIGHTS_, CANDIDATE_, SQLCONDITION_, DOCONDITION_
@@ -101,11 +106,7 @@ public class GotoRightAction extends AnAction {
                     } else if (engineRights.size() > 1) {
                     }
                 } catch (Exception ee) {
-                    ee.printStackTrace();
-                    int idx = Messages.showDialog(ee.getMessage(), "Oops!", new String[]{"Check Db Config", "Never Mind"}, 0, SpdEditorIcons.FLOW_16_ICON);
-                    if (idx == 0) {
-                        ShowSettingsUtil.getInstance().showSettingsDialog(null, SpdEditorDBSettings.class);
-                    }
+                   DBUtils.dbExceptionProcessor(ee,anActionEvent.getProject());
                     //数据库
                 }
             }, null);

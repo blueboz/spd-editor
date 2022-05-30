@@ -7,6 +7,7 @@ import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.Ref;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.ui.ToolbarDecorator;
 import com.intellij.ui.components.JBLabel;
 import com.intellij.ui.components.JBList;
@@ -51,12 +52,19 @@ public class SpdEditorDBSettingsComp {
 
         //包装器
         jdbcDriverListModel = new DefaultListModel();
+        jdbcDriverListModel.clear();
         jdbcDriverList = new JBList<>(jdbcDriverListModel);
         ToolbarDecorator decorator = ToolbarDecorator.createDecorator(jdbcDriverList).disableUpDownActions();
-        decorator.setAddAction(anActionButton -> FileChooser.chooseFile(JAR_DESCRIPTOR, null, null, file -> {
-            String path = file.getPath();
-            jdbcDriverListModel.addElement(path);
-        }));
+        decorator.setAddAction(anActionButton -> {
+
+            FileChooser.chooseFiles(JAR_DESCRIPTOR, null, null, files -> {
+                for (VirtualFile file : files) {
+                    String path = file.getPath();
+                    jdbcDriverListModel.addElement(path);
+                }
+            });
+
+        });
         decorator.setRemoveAction(anActionButton -> {
             int selectedRow = jdbcDriverList.getSelectedIndex();
             jdbcDriverListModel.remove(selectedRow);

@@ -47,15 +47,7 @@ public class HtmlRefAction extends AnAction {
             showTablePopup(result, e.getProject());
 
         } catch (Exception ex) {
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            PrintWriter printWriter = new PrintWriter(byteArrayOutputStream);
-            ex.printStackTrace(printWriter);
-            byte[] bytes = byteArrayOutputStream.toByteArray();
-            try {
-                Messages.showErrorDialog("Error while Getting Connection\n" + new String(bytes, "UTF-8"), "Error");
-            } catch (UnsupportedEncodingException exc) {
-                exc.printStackTrace();
-            }
+            DBUtils.dbExceptionProcessor(ex,e.getProject());
         }
 
     }

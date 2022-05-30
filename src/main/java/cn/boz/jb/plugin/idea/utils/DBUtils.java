@@ -5,14 +5,23 @@ import cn.boz.jb.plugin.idea.bean.EcasMenu;
 import cn.boz.jb.plugin.idea.bean.EngineAction;
 import cn.boz.jb.plugin.idea.bean.EngineFlow;
 import cn.boz.jb.plugin.idea.bean.EngineTask;
+import cn.boz.jb.plugin.idea.configurable.SpdEditorDBSettings;
 import cn.boz.jb.plugin.idea.configurable.SpdEditorDBState;
+import com.intellij.openapi.options.ShowSettingsUtil;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.Messages;
+import icons.SpdEditorIcons;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.PreparedStatement;
@@ -40,6 +49,15 @@ public class DBUtils {
         return INST;
     }
 
+    public static void dbExceptionProcessor(Exception ee, Project project){
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        PrintWriter printWriter = new PrintWriter(new OutputStreamWriter(baos));
+        ee.printStackTrace(printWriter);
+        int idx = Messages.showDialog(new String(baos.toByteArray()), "Oops!", new String[]{"Check Db Config", "Never Mind"}, 0, SpdEditorIcons.FLOW_16_ICON);
+        if (idx == 0) {
+            ShowSettingsUtil.getInstance().showSettingsDialog(project, SpdEditorDBSettings.class);
+        }
+    }
     /**
      * 测试连接
      *

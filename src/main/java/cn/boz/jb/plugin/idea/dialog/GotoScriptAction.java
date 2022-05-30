@@ -109,9 +109,8 @@ public class GotoScriptAction extends AnAction implements DumbAware {
             if (selectedValue.contains("(")) {
                 selectedValue = selectedValue.split("\\(")[0];
             }
-            Project defaultProject = ProjectManager.getInstance().getDefaultProject();
 
-            SearchEverywhereManager instance = SearchEverywhereManager.getInstance(defaultProject);
+            SearchEverywhereManager instance = SearchEverywhereManager.getInstance(anActionEvent.getProject());
             String allContributorsGroupId = SearchEverywhereManagerImpl.ALL_CONTRIBUTORS_GROUP_ID;
             instance.show(allContributorsGroupId, selectedValue, anActionEvent);
 

@@ -274,20 +274,8 @@ public class GoToRefFile extends AnAction {
                 List<EngineAction> engineActions = dbUtils.queryEngineActionByActionScript(connection, name);
                 engineTaskRef.set(engineTasks);
                 engineActionRef.set(engineActions);
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            } catch (InvocationTargetException e) {
-                e.printStackTrace();
-            } catch (NoSuchMethodException e) {
-                e.printStackTrace();
-            } catch (InstantiationException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
+            } catch (Exception e) {
+                DBUtils.dbExceptionProcessor(e,anActionEvent.getProject());
             }
         }, "Loading...", true, anActionEvent.getProject());
         if (engineTaskRef.isNull() && engineActionRef.isNull()) {

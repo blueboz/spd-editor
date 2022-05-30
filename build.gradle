@@ -73,7 +73,8 @@ intellij {
 //    localPath = 'D:\\App\\ideaIU-2020'
 //    localPath='F:\\App\\JetBrains\\IntelliJ IDEA 2021.3.2'
 
-    localPath = 'F:\\App\\JetBrains\\ideaIU-2020'
+    localPath='F:\\App\\JetBrains\\idea2022'
+//    localPath = 'F:\\App\\JetBrains\\ideaIU-2020'
 //    localPath = 'F:\\App\\JetBrains\\IntelliJ IDEA 2021.1.1'
     instrumentCode = false
 //    sandboxDir.set("${project.rootDir}/.sandbox")
@@ -118,6 +119,8 @@ patchPluginXml {
         <li>file history git get</li>
         <li>goto ref extend javacode to engineFlow query</li>
         <li>Final version</li>
+        <li>Support idea2022 ver</li>
+        <li>fixed some uncomfortable feeling</li>
     </ul>
     
     <b>1.0.21</b><br>
