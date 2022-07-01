@@ -86,7 +86,9 @@ public class EcasMenuDialog extends DialogWrapper {
         }
         };
 
-        JBTable jbTable = new JBTable(new ListTableModel(columns, ecasMenuList, 0)){
+
+
+        JBTable jbTable = new JBTable(new ListTableModel<EcasMenu>(columns, ecasMenuList, 0)){
             @Override
             public boolean isCellEditable(int row, int column) {
                 return true;

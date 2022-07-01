@@ -10,11 +10,12 @@ import cn.boz.jb.plugin.floweditor.gui.hist.ShapeState;
 import cn.boz.jb.plugin.floweditor.gui.listener.ClickListener;
 import cn.boz.jb.plugin.floweditor.gui.process.Gateway;
 import cn.boz.jb.plugin.floweditor.gui.utils.ConstantUtils;
+import cn.boz.jb.plugin.floweditor.gui.utils.IcoMoonUtils;
 import cn.boz.jb.plugin.floweditor.gui.utils.ShapePos;
 import cn.boz.jb.plugin.floweditor.gui.utils.ShapeUtils;
 import cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel;
 
-import java.awt.Color;
+import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
@@ -1120,6 +1121,24 @@ public class Shape implements Restorable, Resizable, Alignable, Attachable, Clon
     public void drawNewShape(ChartPanel chartPanel, Rect rect) {
         chartPanel.drawRect(rect.getX(), rect.getY(), rect.getW(), rect.getH());
     }
+
+    public String indicatorFont(){
+        return  IcoMoonUtils.getCircle();
+    }
+
+    /**
+     * 只是绘制指示器有用，有需要请自己重写
+     * @param chartPanel
+     */
+    public void drawIndicator(ChartPanel chartPanel, Point point){
+        chartPanel.markFont();
+        chartPanel.setColor(new Color(255,255,255,100));
+        Shape.this.drawContent(chartPanel);
+
+        chartPanel.resetFont();
+    }
+
+
 
     /**
      * 提供图形的初始化操作

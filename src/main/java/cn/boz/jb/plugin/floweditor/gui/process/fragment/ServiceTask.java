@@ -20,7 +20,11 @@ import java.awt.Cursor;
 public class ServiceTask extends RectBridge implements SqlAggregator {
 
     public static Cursor CURSOR = IcoMoonUtils.initCursor(IcoMoonUtils.getServiceTask());
+    @Override
+    public String indicatorFont() {
+        return  IcoMoonUtils.getGear();
 
+    }
     private String expression;
     private String listener;
 
@@ -38,7 +42,7 @@ public class ServiceTask extends RectBridge implements SqlAggregator {
         chartPanel.markFont();
         chartPanel.setColor(getForegroundColor());
         chartPanel.setFontExt(IcoMoonUtils.getFont16());
-        chartPanel.drawString(this.getX() + 1, this.getY() + 1, IcoMoonUtils.getGear());
+        chartPanel.drawString(this.getX() + 1, this.getY() + 1, indicatorFont());
         chartPanel.resetFont();
         chartPanel.drawString(this.getX(), this.getY(), this.getWidth(), this.getHeight(), this.getName());
 

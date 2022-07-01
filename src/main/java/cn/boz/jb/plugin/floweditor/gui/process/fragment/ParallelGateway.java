@@ -17,6 +17,11 @@ public class ParallelGateway extends PrismaticBridge implements Gateway, SqlAggr
 
     public static Cursor CURSOR = IcoMoonUtils.initCursor(IcoMoonUtils.getParallelGateway());
 
+    @Override
+    public String indicatorFont() {
+        return  IcoMoonUtils.getPlus();
+
+    }
 
     @Override
     public void drawContent(ChartPanel chartPanel) {

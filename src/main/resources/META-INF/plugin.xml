@@ -26,6 +26,7 @@
     <!--    <depends>JavaScriptLanguage</depends>-->
 
 
+
     <extensions defaultExtensionNs="com.intellij">
         <internalFileTemplate name="Spd Process"/>
         <!-- Add your extensions here -->
@@ -41,6 +42,7 @@
         <projectService serviceImplementation="cn.boz.jb.plugin.idea.configurable.SpdEditorDBState"/>
         <projectService serviceImplementation="cn.boz.jb.plugin.idea.configurable.SpdEditorNormState"/>
         <!--项目领域的数据库配置信息-->
+
         <applicationConfigurable parentId="tools" instance="cn.boz.jb.plugin.idea.configurable.SpdEditorDBSettings"
                                  id="spdEditorConfigurable" displayName="SpdEditor" nonDefaultProject="true"/>
         <applicationConfigurable parentId="spdEditorConfigurable"
@@ -48,7 +50,6 @@
                                  id="spdEditorConfigurableConfig" displayName="BasicConfig" nonDefaultProject="true"/>
         <notificationGroup id="Spd Editor" displayType="BALLOON"/>
         <!--        <searchEverywhereContributor implementation="cn.boz.jb.plugin.idea.widget.SpdEditor" id="searchSpdFlow" order="last" os="freebsd"></searchEverywhereContributor>-->
-
     </extensions>
 
     <actions>

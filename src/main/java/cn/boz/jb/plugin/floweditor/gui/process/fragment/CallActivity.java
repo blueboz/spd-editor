@@ -29,7 +29,11 @@ public class CallActivity extends RectBridge implements SqlAggregator {
         this.calledElement = calledElement;
     }
 
+    @Override
+    public String indicatorFont() {
+        return  IcoMoonUtils.getPlus();
 
+    }
     @Override
     public void drawContent(ChartPanel chartPanel) {
         super.drawContent(chartPanel);
@@ -37,7 +41,7 @@ public class CallActivity extends RectBridge implements SqlAggregator {
         chartPanel.markFont();
         chartPanel.setColor(getForegroundColor());
         chartPanel.setFontExt(IcoMoonUtils.getFont16());
-        chartPanel.drawString(this.getX() + 1, this.getY() + 1, IcoMoonUtils.getPlus());
+        chartPanel.drawString(this.getX() + 1, this.getY() + 1, indicatorFont());
         chartPanel.resetFont();
         chartPanel.drawString(this.getX(), this.getY(), this.getWidth(), this.getHeight(), this.getName());
     }

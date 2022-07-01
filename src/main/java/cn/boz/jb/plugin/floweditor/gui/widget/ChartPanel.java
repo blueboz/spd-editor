@@ -12,9 +12,16 @@ import cn.boz.jb.plugin.floweditor.gui.hist.LineState;
 import cn.boz.jb.plugin.floweditor.gui.hist.ShapeState;
 import cn.boz.jb.plugin.floweditor.gui.hist.StateChange;
 import cn.boz.jb.plugin.floweditor.gui.listener.ShapeSelectedListener;
+import cn.boz.jb.plugin.floweditor.gui.process.bridge.RectBridge;
 import cn.boz.jb.plugin.floweditor.gui.process.definition.ProcessDefinition;
 import cn.boz.jb.plugin.floweditor.gui.process.fragment.CallActivity;
+import cn.boz.jb.plugin.floweditor.gui.process.fragment.EndEvent;
+import cn.boz.jb.plugin.floweditor.gui.process.fragment.ExclusiveGateway;
+import cn.boz.jb.plugin.floweditor.gui.process.fragment.ForeachGateway;
+import cn.boz.jb.plugin.floweditor.gui.process.fragment.ParallelGateway;
+import cn.boz.jb.plugin.floweditor.gui.process.fragment.SequenceFlow;
 import cn.boz.jb.plugin.floweditor.gui.process.fragment.ServiceTask;
+import cn.boz.jb.plugin.floweditor.gui.process.fragment.StartEvent;
 import cn.boz.jb.plugin.floweditor.gui.process.fragment.UserTask;
 import cn.boz.jb.plugin.floweditor.gui.property.Property;
 import cn.boz.jb.plugin.floweditor.gui.property.PropertyEditorListener;
@@ -85,6 +92,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -104,6 +112,24 @@ import java.util.stream.Collectors;
 public class ChartPanel extends JComponent implements DataProvider, MouseListener, MouseMotionListener, KeyListener, MouseWheelListener, PropertyObject, FocusListener, UserDataHolder {
 
     public static final DataKey<ChartPanel> CURRENT_CHART_PANEL = DataKey.create("CURRENT_CHART_PANEL");
+
+    public static final Map<Class<? extends Shape>, Shape> shapeMapper = new HashMap<>();
+
+    static {
+        shapeMapper.put(UserTask.class, new UserTask());
+        shapeMapper.put(ServiceTask.class, new ServiceTask());
+        shapeMapper.put(StartEvent.class, new StartEvent());
+        shapeMapper.put(ParallelGateway.class, new ParallelGateway());
+        shapeMapper.put(ForeachGateway.class, new ForeachGateway());
+        shapeMapper.put(ExclusiveGateway.class, new ExclusiveGateway());
+        shapeMapper.put(EndEvent.class, new EndEvent());
+        shapeMapper.put(CallActivity.class, new CallActivity());
+        shapeMapper.put(RectBridge.class, new RectBridge());
+        shapeMapper.put(Shape.class, new Shape());
+        for (Shape shape : shapeMapper.values()) {
+            shape.init(new HiPoint(0,0));
+        }
+    }
 
 
     private List<ShapeSelectedListener> shapeSelectedListeners = new ArrayList<>();
@@ -301,6 +327,7 @@ public class ChartPanel extends JComponent implements DataProvider, MouseListene
 
     public void setMode(int mode) {
         this.mode = mode;
+        this.mouseCurrentPoint=new Point(-100,100);
         //重置状态
         this.dragPressObj = null;
         this.resizePressObj = null;
@@ -751,7 +778,23 @@ public class ChartPanel extends JComponent implements DataProvider, MouseListene
         //绘制耗损性能情况
 //        drawOccupation();
 
+        //当前模式显示器
+        drawIndicator();
         g.dispose();
+    }
+
+
+    private void drawIndicator() {
+        if (mode == MODE_NEW_SHAPE && mouseCurrentPoint != null) {
+
+            HiPoint point = retranslatePoint(mouseCurrentPoint);
+
+            Shape shape = shapeMapper.get(newShapeClass);
+            shape.init(point);
+            shape.drawIndicator(this ,mouseCurrentPoint);
+//            shape.drawContent(this);
+
+        }
     }
 
 
@@ -807,9 +850,10 @@ public class ChartPanel extends JComponent implements DataProvider, MouseListene
 
             if (newShapeClass != null && MODE_NEW_SHAPE == mode) {
                 try {
-                    Shape shape = newShapeClass.getDeclaredConstructor().newInstance();
+                    //产生过多的无用对象
+                    Shape shape = shapeMapper.get(newShapeClass);
                     shape.drawNewShape(this, rect);
-                } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -993,7 +1037,7 @@ public class ChartPanel extends JComponent implements DataProvider, MouseListene
         int x = initx;
         int y = inity;
         g.setColor(new Color(86, 86, 86, 217));
-        g.fillRect(initx, inity, offsetright, lineheight * (shapes.size() * 3 + 1));
+        g.fillRect(initx, inity, offsetright, lineheight * (shapes.size() * 3 + 4));
 
 
         for (int i = 0; i < shapes.size(); i++) {
@@ -1023,6 +1067,14 @@ public class ChartPanel extends JComponent implements DataProvider, MouseListene
         }
         g.setColor(new Color(241, 168, 89));
         g.drawString(String.format("ctl:%s ws:%s sc:%.2f org:(%.2f,%.2f)", ctrlPressing ? 1 : 0, whitespacePressing ? 1 : 0, scale, originalPoint.x, originalPoint.y), x, y + 12);
+        y += lineheight;
+        g.drawString(String.format("mode:%d cpint:x:%d,y:%d", mode,
+                mouseCurrentPoint == null ? -1 : mouseCurrentPoint.x,
+                mouseCurrentPoint == null ? -1 : mouseCurrentPoint.y), x, y + 12);
+        y += lineheight;
+        g.drawString(String.format("lc:%s", newLineClass), x, y + 12);
+        y += lineheight;
+        g.drawString(String.format("sc:%s", newShapeClass), x, y + 12);
         y += lineheight;
         g.setColor(color);
 
@@ -1342,7 +1394,8 @@ public class ChartPanel extends JComponent implements DataProvider, MouseListene
                     fireSavedListener();
                 }
 
-            } catch (InstantiationException | NoSuchMethodException | InvocationTargetException | IllegalAccessException instantiationException) {
+            } catch (InstantiationException | NoSuchMethodException | InvocationTargetException |
+                     IllegalAccessException instantiationException) {
                 instantiationException.printStackTrace();
             }
 
@@ -1719,7 +1772,8 @@ public class ChartPanel extends JComponent implements DataProvider, MouseListene
                 if (SpdEditorDBState.getInstance().autoSave) {
                     fireSavedListener();
                 }
-            } catch (InstantiationException | NoSuchMethodException | InvocationTargetException | IllegalAccessException instantiationException) {
+            } catch (InstantiationException | NoSuchMethodException | InvocationTargetException |
+                     IllegalAccessException instantiationException) {
 
                 instantiationException.printStackTrace();
             }
@@ -2491,7 +2545,13 @@ public class ChartPanel extends JComponent implements DataProvider, MouseListene
             mouseMovedModeDefault(e);
         } else if (MODE_LINE == mode) {
             mouseMovedModeLine(e);
+        } else if (MODE_NEW_SHAPE == mode) {
+            mouseMovedModeShape(e);
         }
+    }
+
+    private void mouseMovedModeShape(MouseEvent e) {
+        repaint();
     }
 
     /**
@@ -2687,7 +2747,7 @@ public class ChartPanel extends JComponent implements DataProvider, MouseListene
                 lineCursorTracker = null;
                 repaint();
             } else if (mode == MODE_NEW_SHAPE) {
-
+                setMode(MODE_DEFAULT);
             } else if (mode == MODE_DEFAULT) {
                 for (Line line : lines) {
                     if (line.isSelected()) {

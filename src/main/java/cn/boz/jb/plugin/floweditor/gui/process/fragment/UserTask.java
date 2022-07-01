@@ -30,6 +30,11 @@ public class UserTask extends RectBridge implements SqlAggregator {
     protected String openSecond;
 
     public static Cursor CURSOR = IcoMoonUtils.initCursor(IcoMoonUtils.getUserTask());
+    @Override
+    public String indicatorFont() {
+        return  IcoMoonUtils.getUser();
+
+    }
 
     public String getBussinesId() {
         return bussinesId;
@@ -115,7 +120,7 @@ public class UserTask extends RectBridge implements SqlAggregator {
         chartPanel.markFont();
         chartPanel.setColor(getForegroundColor());
         chartPanel.setFontExt(IcoMoonUtils.getFont16());
-        chartPanel.drawString(this.getX() + 1, this.getY() + 1, IcoMoonUtils.getUser());
+        chartPanel.drawString(this.getX() + 1, this.getY() + 1, indicatorFont());
 
         chartPanel.resetFont();
         chartPanel.drawString(this.getX(), this.getY(), this.getWidth(), this.getHeight(), this.getName());

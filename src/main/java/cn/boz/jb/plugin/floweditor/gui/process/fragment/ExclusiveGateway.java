@@ -17,6 +17,9 @@ public class ExclusiveGateway extends PrismaticBridge implements Gateway, SqlAgg
 
     public static Cursor CURSOR = IcoMoonUtils.initCursor(IcoMoonUtils.getExclusiveGateway());
 
+    public String indicatorFont(){
+        return  IcoMoonUtils.getClose();
+    }
     @Override
     public void drawContent(ChartPanel chartPanel) {
         super.drawContent(chartPanel);
@@ -24,7 +27,7 @@ public class ExclusiveGateway extends PrismaticBridge implements Gateway, SqlAgg
         chartPanel.markFont();
         chartPanel.setColor(getForegroundColor());
         chartPanel.setFontExt(IcoMoonUtils.getFont20());
-        chartPanel.drawString(this.getX(), this.getY() + 1, this.getWidth(), this.getHeight(), IcoMoonUtils.getClose());
+        chartPanel.drawString(this.getX(), this.getY() + 1, this.getWidth(), this.getHeight(), indicatorFont());
         chartPanel.resetFont();
 
     }

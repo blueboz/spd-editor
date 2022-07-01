@@ -13,14 +13,18 @@ import java.awt.Cursor;
 public class StartEvent extends CircleBridge {
 
     public static Cursor CURSOR = IcoMoonUtils.initCursor(IcoMoonUtils.getStartEvent());
+    @Override
+    public String indicatorFont() {
+        return  IcoMoonUtils.getPlay();
 
+    }
     @Override
     public void drawContent(ChartPanel chartPanel) {
         super.drawContent(chartPanel);
         chartPanel.markFont();
         chartPanel.setColor(getForegroundColor());
         chartPanel.setFontExt(IcoMoonUtils.getFont16());
-        chartPanel.drawString(this.getX(), this.getY(), this.getWidth(), this.getHeight(), IcoMoonUtils.getPlay());
+        chartPanel.drawString(this.getX(), this.getY(), this.getWidth(), this.getHeight(), indicatorFont());
         chartPanel.resetFont();
     }
 

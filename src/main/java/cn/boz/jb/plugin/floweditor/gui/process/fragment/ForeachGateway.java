@@ -24,13 +24,19 @@ public class ForeachGateway extends PrismaticBridge implements Gateway, SqlAggre
     public static Cursor CURSOR = IcoMoonUtils.initCursor(IcoMoonUtils.getForeachGateway());
 
     @Override
+    public String indicatorFont() {
+        return  IcoMoonUtils.getCircle();
+
+    }
+
+    @Override
     public void drawContent(ChartPanel chartPanel) {
         super.drawContent(chartPanel);
 
         chartPanel.markFont();
         chartPanel.setColor(getForegroundColor());
         chartPanel.setFontExt(IcoMoonUtils.getFont20());
-        chartPanel.drawString(this.getX(), this.getY() + 2, this.getWidth(), this.getHeight(), IcoMoonUtils.getCircle());
+        chartPanel.drawString(this.getX(), this.getY() + 2, this.getWidth(), this.getHeight(), indicatorFont());
         chartPanel.resetFont();
     }
 
