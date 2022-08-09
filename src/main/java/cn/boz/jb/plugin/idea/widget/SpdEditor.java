@@ -24,11 +24,16 @@ import com.intellij.notification.NotificationGroup;
 import com.intellij.notification.NotificationType;
 import com.intellij.openapi.actionSystem.DataKey;
 import com.intellij.openapi.actionSystem.DataProvider;
+import com.intellij.openapi.command.WriteCommandAction;
+import com.intellij.openapi.fileChooser.FileChooser;
+import com.intellij.openapi.fileChooser.FileChooserDescriptor;
 import com.intellij.openapi.options.ShowSettingsUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.ui.Messages;
+import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.ui.JBSplitter;
 import com.intellij.ui.components.JBScrollBar;
 import com.intellij.ui.components.JBScrollPane;
@@ -58,6 +63,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -445,7 +451,7 @@ public class SpdEditor extends JComponent implements DataProvider, MouseListener
                 }
 
                 String joiningSql = sqls.stream().map(sql -> sql.replace("\n", "")).collect(Collectors.joining(";\n")) + ";";
-                int idx = Messages.showDialog(joiningSql, "SQL", new String[]{"复制Sql", "更新至DB", "打开配置项", "确定"}, 3, SpdEditorIcons.FLOW_16_ICON);
+                int idx = Messages.showDialog(joiningSql, "SQL", new String[]{"复制Sql", "更新至DB", "打开配置项","导出到目录", "确定"}, 3, SpdEditorIcons.FLOW_16_ICON);
                 if (idx == 0) {
                     Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
                     StringSelection selection = new StringSelection(joiningSql);
@@ -469,6 +475,28 @@ public class SpdEditor extends JComponent implements DataProvider, MouseListener
                     }
                 } else if (idx == 2) {
                     ShowSettingsUtil.getInstance().showSettingsDialog(ProjectManager.getInstance().getDefaultProject(), SpdEditorDBSettings.class);
+                } else if (idx == 3) {
+                    FileChooserDescriptor fileChooserDescriptor = new FileChooserDescriptor(false, true, false, false, false, false);
+                    VirtualFile selectPath = FileChooser.chooseFile(fileChooserDescriptor, null, null);
+                    //当前文件名称
+                    String name = virtualFile.getName();
+                    String nameSub = name.substring(0, name.lastIndexOf(".spd"));
+//                    String path = selectPath.getPath();
+                    //写入到文件
+//                    selectPath.create
+                    WriteCommandAction.runWriteCommandAction(ProjectManager.getInstance().getDefaultProject(), () -> {
+
+                        try{
+                            byte[] bytes = joiningSql.getBytes(StandardCharsets.UTF_8);
+                            VirtualFile vfile = selectPath.createChildData(null, nameSub + ".sql");
+                            vfile.setCharset(StandardCharsets.UTF_8);
+                            vfile.setBOM(new byte[]{(byte) 0xef, (byte) 0xbb, (byte) 0xbf});
+                            vfile.setBinaryContent(bytes);
+                        }catch (Exception ee){
+                        }
+                    });
+
+
                 }
                 break;
             default:

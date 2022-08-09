@@ -39,7 +39,6 @@ public class HtmlRefAction extends AnAction {
     public void actionPerformed(@NotNull AnActionEvent e) {
         VirtualFile virtualFile = e.getData(CommonDataKeys.VIRTUAL_FILE);
         String fileName = virtualFile.getName();
-        System.out.println(fileName);
         DBUtils instance = DBUtils.getInstance();
         try {
             Connection connection = DBUtils.getConnection();
