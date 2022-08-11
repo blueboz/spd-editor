@@ -2,6 +2,7 @@ package cn.boz.jb.plugin.idea.configurable;
 
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.ConfigurationException;
+import com.intellij.openapi.options.ex.Settings;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.JComponent;
@@ -32,6 +33,7 @@ public class SpdEditorDBSettings implements Configurable {
 
     @Override
     public void apply() throws ConfigurationException {
+        //保存方式
         settings.apply();
     }
 

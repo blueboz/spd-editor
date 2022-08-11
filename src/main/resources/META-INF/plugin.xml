@@ -48,8 +48,10 @@
         <applicationConfigurable parentId="spdEditorConfigurable"
                                  instance="cn.boz.jb.plugin.idea.configurable.SpdEditorNormSettings"
                                  id="spdEditorConfigurableConfig" displayName="BasicConfig" nonDefaultProject="true"/>
-        <notificationGroup id="Spd Editor" displayType="BALLOON"/>
+        <notificationGroup id="Spd Editor" displayType="BALLOON" />
+        <notification.group shortTitle="SpdNotify" groupId="SpdNotify" id="SpdNotify" ></notification.group>
         <!--        <searchEverywhereContributor implementation="cn.boz.jb.plugin.idea.widget.SpdEditor" id="searchSpdFlow" order="last" os="freebsd"></searchEverywhereContributor>-->
+        <projectService serviceImplementation="cn.boz.jb.plugin.idea.notification.SpdEditorNotification" />
     </extensions>
 
     <actions>
@@ -221,7 +223,17 @@
             <add-to-group group-id="ChangesViewPopupMenu"></add-to-group>
         </group>
 
+        <group>
+            <group popup="true" text="FmsTools">
+                <action class="cn.boz.jb.plugin.idea.action.fmss.GoToClientSyncBase"
+                        id="ClientSyncBase" text="ClientSyncBase"></action>
+            </group>
+            <add-to-group group-id="MainMenu"></add-to-group>
+            <add-to-group group-id="HelpMenu"></add-to-group>
+        </group>
+
     </actions>
+
 
 
 </idea-plugin>

@@ -11,11 +11,13 @@ import com.intellij.openapi.options.ShowSettingsUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
 import icons.SpdEditorIcons;
+import org.apache.commons.collections.CollectionUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.net.MalformedURLException;
@@ -50,13 +52,37 @@ public class DBUtils {
     }
 
     public static void dbExceptionProcessor(Exception ee, Project project){
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        PrintWriter printWriter = new PrintWriter(new OutputStreamWriter(baos));
-        ee.printStackTrace(printWriter);
-        int idx = Messages.showDialog(new String(baos.toByteArray()), "Oops!", new String[]{"Check Db Config", "Never Mind"}, 0, SpdEditorIcons.FLOW_16_ICON);
+
+        String errMsg = generateRecrusiveException(ee);
+        int idx = Messages.showDialog(errMsg, "Oops!Something wrong happen!", new String[]{"Check Db Config", "Never Mind"}, 0, SpdEditorIcons.FLOW_16_ICON);
         if (idx == 0) {
+
             ShowSettingsUtil.getInstance().showSettingsDialog(project, SpdEditorDBSettings.class);
         }
+    }
+
+    public static String generateRecrusiveException(Throwable e) {
+        if (e == null) {
+            return "";
+        }
+        StringBuilder sb = new StringBuilder();
+        StringWriter stringWriter = new StringWriter();
+        PrintWriter printWriter = new PrintWriter(stringWriter);
+        e.printStackTrace(printWriter);
+        String msg = stringWriter.toString();
+        String[] split = msg.split("\n");
+        for (String s : split) {
+            if(s.contains("at")){
+
+                if (s.contains("cn.boz")) {
+                    sb.append(s);
+                }
+            }else{
+                sb.append(s);
+            }
+
+        }
+        return sb.toString();
     }
     /**
      * 测试连接
@@ -416,6 +442,23 @@ public class DBUtils {
             List<Map<String, Object>> maps = queryForList(preparedStatement);
             return maps.stream().map(engineTaskMapper).collect(Collectors.toList());
         }
+    }
+
+    /**
+     * 查询系统日期
+     * @param connection
+     * @return
+     * @throws SQLException
+     */
+    public String querySysDay(Connection connection) throws  SQLException{
+        try (PreparedStatement preparedStatement = connection.prepareStatement("select PGET_SYSDATE() sd from dual")) {
+            List<Map<String, Object>> maps = queryForList(preparedStatement);
+            if(CollectionUtils.isEmpty(maps)){
+                return null;
+            }
+            return (String) maps.get(0).get("SD");
+        }
+
     }
 
     public List<EngineAction> queryEngineActionByActionScript(Connection connection, String name) throws SQLException {

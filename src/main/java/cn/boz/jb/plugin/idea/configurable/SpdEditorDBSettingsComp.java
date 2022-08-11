@@ -31,7 +31,6 @@ public class SpdEditorDBSettingsComp {
 
     private JBPasswordField jdbcPassword;
 
-
     private JButton testConnection;
 
     private JPanel mainComponent;

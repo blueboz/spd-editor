@@ -30,6 +30,7 @@ import com.intellij.openapi.fileChooser.FileChooserDescriptor;
 import com.intellij.openapi.options.ShowSettingsUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
+import com.intellij.openapi.project.ProjectUtil;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -476,8 +477,10 @@ public class SpdEditor extends JComponent implements DataProvider, MouseListener
                 } else if (idx == 2) {
                     ShowSettingsUtil.getInstance().showSettingsDialog(ProjectManager.getInstance().getDefaultProject(), SpdEditorDBSettings.class);
                 } else if (idx == 3) {
+                    Project project = ProjectUtil.guessProjectForFile(virtualFile);
                     FileChooserDescriptor fileChooserDescriptor = new FileChooserDescriptor(false, true, false, false, false, false);
-                    VirtualFile selectPath = FileChooser.chooseFile(fileChooserDescriptor, null, null);
+
+                    VirtualFile selectPath = FileChooser.chooseFile(fileChooserDescriptor, project, null);
                     //当前文件名称
                     String name = virtualFile.getName();
                     String nameSub = name.substring(0, name.lastIndexOf(".spd"));
