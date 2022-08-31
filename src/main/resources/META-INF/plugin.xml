@@ -220,6 +220,8 @@
                     id="SpdCommitDiff" icon="SpdEditorIcons.FLOW_16_ICON"/>
             <action class="cn.boz.jb.plugin.idea.action.ExportAsZipAction" icon="SpdEditorIcons.ZIP_16_ICON"
                     text="ExportAsZip"></action>
+            <action class="cn.boz.jb.plugin.idea.action.ExportAllSpdSql"
+                    text="ExportAsSQL"></action>
             <add-to-group group-id="ChangesViewPopupMenu"></add-to-group>
         </group>
 

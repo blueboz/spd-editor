@@ -2,8 +2,7 @@ package cn.boz.jb.plugin.floweditor.gui.property;
 
 import cn.boz.jb.plugin.floweditor.gui.widget.SpdTable;
 
-import javax.swing.JComponent;
-import javax.swing.JLabel;
+import javax.swing.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.lang.reflect.Field;

@@ -2,12 +2,12 @@ package cn.boz.jb.plugin.idea.widget;
 
 import cn.boz.jb.plugin.floweditor.gui.property.Property;
 
-import javax.swing.JTable;
+import javax.swing.*;
 import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.EventListenerList;
 import javax.swing.table.TableCellEditor;
-import java.awt.Component;
+import java.awt.*;
 import java.util.EventObject;
 
 public class MyJBTableCellEditor implements TableCellEditor {

@@ -1,6 +1,6 @@
 package cn.boz.jb.plugin.floweditor.gui.utils;
 
-import java.awt.Color;
+import java.awt.*;
 
 public class ConstantUtils {
 

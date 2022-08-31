@@ -10,7 +10,7 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import org.jetbrains.annotations.NotNull;
 
-import java.awt.Component;
+import java.awt.*;
 
 /**
  * 转到流程的Action

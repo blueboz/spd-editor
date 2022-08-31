@@ -14,14 +14,11 @@ import com.intellij.util.ui.JBDimension;
 import com.intellij.util.ui.ListTableModel;
 import org.jetbrains.annotations.NotNull;
 
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
+import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import java.awt.BorderLayout;
+import java.awt.*;
 
 public class CallerSearcherCommentPanel extends JBPanel {
     private JBTable table;

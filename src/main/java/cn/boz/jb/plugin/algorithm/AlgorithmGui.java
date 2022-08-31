@@ -3,16 +3,8 @@ package cn.boz.jb.plugin.algorithm;
 import cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel;
 
 import javax.imageio.ImageIO;
-import javax.swing.JComponent;
-import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
-import javax.swing.Timer;
-import java.awt.BorderLayout;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.GraphicsEnvironment;
-import java.awt.HeadlessException;
-import java.awt.Rectangle;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.AffineTransform;

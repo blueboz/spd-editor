@@ -4,7 +4,7 @@ import cn.boz.jb.plugin.floweditor.gui.utils.LineUtils;
 import cn.boz.jb.plugin.floweditor.gui.utils.ShapeUtils;
 import cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel;
 
-import java.awt.Color;
+import java.awt.*;
 
 /**
  * 圆形

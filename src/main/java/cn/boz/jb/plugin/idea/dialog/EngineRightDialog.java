@@ -2,9 +2,7 @@ package cn.boz.jb.plugin.idea.dialog;
 
 import com.intellij.ui.components.JBScrollPane;
 
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JTextArea;
+import javax.swing.*;
 
 public class EngineRightDialog extends JComponent {
 

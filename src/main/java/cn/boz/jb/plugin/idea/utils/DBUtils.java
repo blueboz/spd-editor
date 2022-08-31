@@ -13,9 +13,7 @@ import com.intellij.openapi.ui.Messages;
 import icons.SpdEditorIcons;
 import org.apache.commons.collections.CollectionUtils;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
@@ -23,7 +21,6 @@ import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.PreparedStatement;

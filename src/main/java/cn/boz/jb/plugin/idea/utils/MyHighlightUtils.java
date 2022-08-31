@@ -3,12 +3,11 @@ package cn.boz.jb.plugin.idea.utils;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.ui.speedSearch.SpeedSearchSupply;
 
-import javax.swing.JComponent;
-import javax.swing.JTextArea;
+import javax.swing.*;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Highlighter;
-import java.awt.Color;
+import java.awt.*;
 
 public class MyHighlightUtils {
 

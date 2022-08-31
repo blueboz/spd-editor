@@ -6,9 +6,8 @@ import cn.boz.jb.plugin.floweditor.gui.listener.ShapeSelectedListener;
 import cn.boz.jb.plugin.floweditor.gui.property.Property;
 import cn.boz.jb.plugin.floweditor.gui.property.PropertyEditorListener;
 
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import java.awt.BorderLayout;
+import javax.swing.*;
+import java.awt.*;
 
 public class PropertyEditor extends JPanel implements ShapeSelectedListener, PropertyEditorListener {
     private PropertyObject operatedObject;

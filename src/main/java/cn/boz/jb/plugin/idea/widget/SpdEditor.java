@@ -32,9 +32,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.project.ProjectUtil;
 import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.ui.JBSplitter;
 import com.intellij.ui.components.JBScrollBar;
 import com.intellij.ui.components.JBScrollPane;
@@ -44,15 +42,8 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollBar;
-import javax.swing.JSeparator;
-import javax.swing.Timer;
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-import java.awt.Toolkit;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.ClipboardOwner;
 import java.awt.datatransfer.StringSelection;
@@ -451,6 +442,7 @@ public class SpdEditor extends JComponent implements DataProvider, MouseListener
                     return;
                 }
 
+                //FIXME 建议SQL优化抽离为好用的方法
                 String joiningSql = sqls.stream().map(sql -> sql.replace("\n", "")).collect(Collectors.joining(";\n")) + ";";
                 int idx = Messages.showDialog(joiningSql, "SQL", new String[]{"复制Sql", "更新至DB", "打开配置项","导出到目录", "确定"}, 3, SpdEditorIcons.FLOW_16_ICON);
                 if (idx == 0) {

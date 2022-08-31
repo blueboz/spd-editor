@@ -3,9 +3,7 @@ package cn.boz.jb.plugin.floweditor.gui.property.impl;
 import cn.boz.jb.plugin.floweditor.gui.property.Property;
 import cn.boz.jb.plugin.floweditor.gui.property.PropertyEditorListener;
 
-import javax.swing.JComponent;
-import javax.swing.JSpinner;
-import javax.swing.SpinnerNumberModel;
+import javax.swing.*;
 import java.beans.PropertyChangeListener;
 
 //通过

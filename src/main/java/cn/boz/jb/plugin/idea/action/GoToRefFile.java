@@ -71,15 +71,12 @@ import icons.SpdEditorIcons;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.swing.JTable;
-import javax.swing.RowFilter;
-import javax.swing.RowSorter;
+import javax.swing.*;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
-import java.awt.Color;
-import java.awt.Component;
+import java.awt.*;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.sql.Connection;

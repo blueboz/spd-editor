@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.swing.JComponent;
+import javax.swing.*;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.util.HashMap;

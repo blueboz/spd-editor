@@ -2,10 +2,9 @@ package cn.boz.jb.plugin.floweditor.gui.widget;
 
 import cn.boz.jb.plugin.floweditor.gui.property.Property;
 
-import javax.swing.JComponent;
-import javax.swing.JTable;
+import javax.swing.*;
 import javax.swing.table.TableCellRenderer;
-import java.awt.Component;
+import java.awt.*;
 
 public class SpdTableCellRender implements TableCellRenderer {
     @Override

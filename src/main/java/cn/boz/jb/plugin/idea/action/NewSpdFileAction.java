@@ -9,7 +9,7 @@ import icons.SpdEditorIcons;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
-import javax.swing.Icon;
+import javax.swing.*;
 
 public class NewSpdFileAction extends CreateFileFromTemplateAction implements DumbAware {
 

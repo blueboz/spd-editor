@@ -6,9 +6,7 @@ import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.ActionToolbar;
 import com.intellij.ui.components.JBScrollPane;
 
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JTextArea;
+import javax.swing.*;
 
 public class EngineTaskDialog extends JComponent {
     private MyLayoutManager myLayoutManager;

@@ -2,11 +2,11 @@ package cn.boz.jb.plugin.floweditor.gui.widget;
 
 import cn.boz.jb.plugin.floweditor.gui.property.Property;
 
-import javax.swing.JTable;
+import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
-import java.awt.Dimension;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 

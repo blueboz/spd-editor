@@ -11,7 +11,7 @@ import cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 
-import java.awt.Cursor;
+import java.awt.*;
 
 public class ParallelGateway extends PrismaticBridge implements Gateway, SqlAggregator {
 

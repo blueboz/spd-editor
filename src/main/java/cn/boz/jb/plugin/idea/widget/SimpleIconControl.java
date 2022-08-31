@@ -2,11 +2,8 @@ package cn.boz.jb.plugin.idea.widget;
 
 import com.intellij.util.IconUtil;
 
-import javax.swing.Icon;
-import javax.swing.JComponent;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
+import javax.swing.*;
+import java.awt.*;
 
 public class SimpleIconControl extends JComponent {
 

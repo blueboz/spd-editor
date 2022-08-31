@@ -6,8 +6,7 @@ import com.intellij.openapi.ui.TextFieldWithBrowseButton;
 import com.intellij.ui.components.JBLabel;
 import com.intellij.util.ui.FormBuilder;
 
-import javax.swing.JComponent;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 public class SpdEditorNormSettingsComp {
 

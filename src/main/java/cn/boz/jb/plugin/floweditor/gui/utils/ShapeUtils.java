@@ -4,18 +4,9 @@ import cn.boz.jb.plugin.floweditor.gui.shape.HiPoint;
 import cn.boz.jb.plugin.floweditor.gui.shape.Rect;
 import cn.boz.jb.plugin.floweditor.gui.shape.Shape;
 
-import java.awt.BasicStroke;
+import java.awt.*;
 
-import static cn.boz.jb.plugin.floweditor.gui.utils.ShapePos.BOTTOM_CENTER;
-import static cn.boz.jb.plugin.floweditor.gui.utils.ShapePos.BOTTOM_LEFT;
-import static cn.boz.jb.plugin.floweditor.gui.utils.ShapePos.BOTTOM_RIGHT;
-import static cn.boz.jb.plugin.floweditor.gui.utils.ShapePos.MIDDLE_CENTER;
-import static cn.boz.jb.plugin.floweditor.gui.utils.ShapePos.MIDDLE_LEFT;
-import static cn.boz.jb.plugin.floweditor.gui.utils.ShapePos.MIDDLE_RIGHT;
-import static cn.boz.jb.plugin.floweditor.gui.utils.ShapePos.NOT_INSIDE;
-import static cn.boz.jb.plugin.floweditor.gui.utils.ShapePos.TOP_CENTER;
-import static cn.boz.jb.plugin.floweditor.gui.utils.ShapePos.TOP_LEFT;
-import static cn.boz.jb.plugin.floweditor.gui.utils.ShapePos.TOP_RIGHT;
+import static cn.boz.jb.plugin.floweditor.gui.utils.ShapePos.*;
 
 public class ShapeUtils {
 

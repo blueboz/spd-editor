@@ -16,10 +16,8 @@ import cn.boz.jb.plugin.floweditor.gui.shape.Shape;
 import cn.boz.jb.plugin.floweditor.gui.utils.ConstantUtils;
 import cn.boz.jb.plugin.floweditor.gui.utils.IcoMoonUtils;
 
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 

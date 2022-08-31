@@ -16,9 +16,8 @@ import com.intellij.openapi.ui.popup.util.BaseListPopupStep;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.swing.JComponent;
-import javax.swing.SwingUtilities;
-import java.awt.Component;
+import javax.swing.*;
+import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;

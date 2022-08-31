@@ -19,7 +19,6 @@ import cn.boz.jb.plugin.floweditor.gui.process.fragment.EndEvent;
 import cn.boz.jb.plugin.floweditor.gui.process.fragment.ExclusiveGateway;
 import cn.boz.jb.plugin.floweditor.gui.process.fragment.ForeachGateway;
 import cn.boz.jb.plugin.floweditor.gui.process.fragment.ParallelGateway;
-import cn.boz.jb.plugin.floweditor.gui.process.fragment.SequenceFlow;
 import cn.boz.jb.plugin.floweditor.gui.process.fragment.ServiceTask;
 import cn.boz.jb.plugin.floweditor.gui.process.fragment.StartEvent;
 import cn.boz.jb.plugin.floweditor.gui.process.fragment.UserTask;
@@ -61,22 +60,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.imageio.ImageIO;
-import javax.swing.JComponent;
-import javax.swing.JFileChooser;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.Timer;
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.MouseInfo;
-import java.awt.Point;
-import java.awt.RenderingHints;
-import java.awt.Stroke;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
@@ -92,7 +77,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -245,6 +229,10 @@ public class ChartPanel extends JComponent implements DataProvider, MouseListene
     private VirtualFile virtualFile;
     private SpdEditor editor;
 
+    public ChartPanel(){
+
+        //forexportonly
+    }
 
     public ChartPanel(Project project, VirtualFile virtualFile, SpdEditor editor) {
         this.project = project;

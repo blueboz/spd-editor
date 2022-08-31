@@ -10,8 +10,7 @@ import cn.boz.jb.plugin.floweditor.gui.utils.ConstantUtils;
 import cn.boz.jb.plugin.floweditor.gui.utils.LineUtils;
 import cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel;
 
-import java.awt.BasicStroke;
-import java.awt.Point;
+import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.LinkedList;

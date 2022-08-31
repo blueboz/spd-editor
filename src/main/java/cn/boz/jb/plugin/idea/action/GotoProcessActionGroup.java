@@ -7,7 +7,7 @@ import com.intellij.openapi.actionSystem.DefaultActionGroup;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import org.jetbrains.annotations.NotNull;
 
-import java.awt.Component;
+import java.awt.*;
 
 public class GotoProcessActionGroup extends DefaultActionGroup {
 

@@ -3,8 +3,7 @@ package cn.boz.jb.plugin.floweditor.gui.property.impl;
 import cn.boz.jb.plugin.floweditor.gui.property.Property;
 import cn.boz.jb.plugin.floweditor.gui.property.PropertyEditorListener;
 
-import javax.swing.JComponent;
-import javax.swing.JTextField;
+import javax.swing.*;
 import java.beans.PropertyChangeListener;
 
 //通过

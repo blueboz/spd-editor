@@ -10,8 +10,8 @@ import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.fileTypes.PlainTextFileType;
 import org.jetbrains.annotations.NotNull;
 
-import javax.swing.SwingUtilities;
-import java.awt.Component;
+import javax.swing.*;
+import java.awt.*;
 import java.util.List;
 import java.util.Map;
 

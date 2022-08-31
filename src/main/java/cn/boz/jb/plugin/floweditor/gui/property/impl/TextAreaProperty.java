@@ -6,9 +6,7 @@ import cn.boz.jb.plugin.floweditor.gui.property.PropertyEditorListener;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.ui.components.JBScrollPane;
 
-import javax.swing.JComponent;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
+import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 

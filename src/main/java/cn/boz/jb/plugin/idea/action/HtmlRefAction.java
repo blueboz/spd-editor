@@ -1,36 +1,18 @@
 package cn.boz.jb.plugin.idea.action;
 
 import cn.boz.jb.plugin.idea.bean.EcasMenu;
-import cn.boz.jb.plugin.idea.bean.EngineAction;
-import cn.boz.jb.plugin.idea.bean.EngineTask;
-import cn.boz.jb.plugin.idea.dialog.CallerSearcherCommentPanel;
 import cn.boz.jb.plugin.idea.dialog.EcasMenuDialog;
 import cn.boz.jb.plugin.idea.utils.DBUtils;
 import com.intellij.ide.highlighter.HtmlFileType;
-import com.intellij.openapi.actionSystem.ActionGroup;
-import com.intellij.openapi.actionSystem.ActionManager;
-import com.intellij.openapi.actionSystem.ActionPlaces;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.ui.popup.JBPopup;
-import com.intellij.openapi.ui.popup.PopupChooserBuilder;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
-import com.intellij.ui.PopupHandler;
-import com.intellij.ui.table.JBTable;
-import com.intellij.util.ui.ColumnInfo;
-import com.intellij.util.ui.ListTableModel;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import javax.swing.table.TableCellRenderer;
-import java.io.ByteArrayOutputStream;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
 import java.sql.Connection;
 import java.util.List;
 

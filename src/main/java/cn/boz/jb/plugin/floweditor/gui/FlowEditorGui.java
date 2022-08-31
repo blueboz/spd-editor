@@ -3,11 +3,8 @@ package cn.boz.jb.plugin.floweditor.gui;
 import cn.boz.jb.plugin.floweditor.gui.widget.FlowEditorComponent;
 
 import javax.imageio.ImageIO;
-import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
-import java.awt.BorderLayout;
-import java.awt.GraphicsEnvironment;
-import java.awt.Rectangle;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;

@@ -9,9 +9,8 @@ import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.swing.JList;
-import javax.swing.ListCellRenderer;
-import java.awt.Component;
+import javax.swing.*;
+import java.awt.*;
 
 /**
  * 检索器

@@ -2,7 +2,7 @@ package cn.boz.jb.plugin.floweditor.gui.utils;
 
 import com.intellij.ui.JBColor;
 
-import java.awt.Color;
+import java.awt.*;
 
 public class ThemeConstants {
     public static final Color CHARTPANEL_BOARDBACKGROUND = JBColor.namedColor("ChartPanel.boardBackground", new JBColor(new Color(212, 212, 212, 255), new Color(110, 110, 110, 185)));
