@@ -13,6 +13,15 @@ public class CallerSearcherTable extends JBTable {
         this(model,null);
 
     }
+    private String queryName;
+
+    public String getQueryName() {
+        return queryName;
+    }
+
+    public void setQueryName(String queryName) {
+        this.queryName = queryName;
+    }
 
     public CallerSearcherTable(TableModel model, TableColumnModel columnModel) {
         super(model, columnModel);

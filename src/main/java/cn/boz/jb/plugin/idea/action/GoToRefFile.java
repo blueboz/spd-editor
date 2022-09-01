@@ -306,7 +306,7 @@ public class GoToRefFile extends AnAction {
                     popup.showCenteredInCurrentWindow(anActionEvent.getProject());
                 }
             }
-        }, true);
+        }, true,name);
         return false;
     }
     public static CallerSearcherTableCellRender CALL_SEARCHER_TABLE_RENDERER =new CallerSearcherTableCellRender() ;
@@ -381,10 +381,11 @@ public class GoToRefFile extends AnAction {
 
 
     @SuppressWarnings("unchecked")
-    public static void showListPopup(final List<Object> objects, Project project, Consumer<? super Object> selectUserTaskConsumer, boolean showComments) {
+    public static void showListPopup(final List<Object> objects, Project project, Consumer<? super Object> selectUserTaskConsumer, boolean showComments,String queryName) {
         //
         CallerSearcherTable jbTable = new CallerSearcherTable(new ListTableModel<>(CALL_SEARCHER_TABLE_COLUMN_INFO,objects,0));
 
+        jbTable.setQueryName(queryName);
         Runnable runnable = () -> {
             ListTableModel model = (ListTableModel) jbTable.getModel();
             int selectedRow = jbTable.getSelectedRow();
@@ -406,7 +407,7 @@ public class GoToRefFile extends AnAction {
             builder.setSouthComponent(new CallerSearcherCommentPanel(jbTable));
         }
 
-        builder.setTitle("caller Searcher")
+        builder.setTitle("caller Searcher:"+queryName)
                 .setItemChoosenCallback(runnable).setResizable(true)
                 .setMovable(true)
                 .setDimensionServiceKey("callerSearcher")
@@ -761,6 +762,7 @@ public class GoToRefFile extends AnAction {
                     return super.getSpeedSearchFilter();
                 }
 
+                @Override
                 public boolean isSpeedSearchEnabled() {
                     return true;
                 }

@@ -30,7 +30,7 @@ public class OpenInSearchToolWindow extends AnAction implements DumbAware {
     @Override
     public void actionPerformed(@NotNull AnActionEvent anActionEvent) {
         //拿到要检索的内容，如代码片段，搜索db
-        JBTable outside = (JBTable) anActionEvent.getRequiredData(PlatformDataKeys.CONTEXT_COMPONENT);
+        CallerSearcherTable outside = (CallerSearcherTable) anActionEvent.getRequiredData(PlatformDataKeys.CONTEXT_COMPONENT);
         if(outside!=null){
             ListTableModel model = (ListTableModel) outside.getModel();
             List items = model.getItems();
@@ -56,7 +56,7 @@ public class OpenInSearchToolWindow extends AnAction implements DumbAware {
             ToolWindow callSearch = ToolWindowManager.getInstance(anActionEvent.getProject()).getToolWindow("CallSearch");
 
             ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
-            Content title = contentFactory.createContent(jbSplitter, "CallerSearcher", true);
+            Content title = contentFactory.createContent(jbSplitter, "call:"+outside.getQueryName(), true);
             title.setCloseable(true);
             callSearch.getContentManager().addContent(title);;
             callSearch.getContentManager().requestFocus(title,true);
