@@ -133,7 +133,7 @@ public class SequenceFlow extends LineBridge implements FlowSqlAggregator {
                         "VALUES ('%s', '%s', '%s', '%s', 0)", processId,
                 this.getStartShape() instanceof StartEvent ? "START" : processId + "_" + this.getSourceRef(),
                 this.getEndShape() instanceof EndEvent ? "END" : processId + "_" + this.getTargetRef(),
-                TranslateUtils.translateToSql(this.getConditionExpression()));
+                TranslateUtils.tranExpression(TranslateUtils.translateToSql(this.getConditionExpression())));
 
     }
 

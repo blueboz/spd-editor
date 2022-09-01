@@ -71,6 +71,7 @@ public class MyLayoutManager implements LayoutManager {
         }
 //        System.out.println(accy + "-->" + height);
         parent.setSize(width, accy);
+        parent.setPreferredSize(new Dimension(width,accy));
 
     }
 

@@ -33,6 +33,11 @@
         <fileEditorProvider implementation="cn.boz.jb.plugin.idea.fileeditor.SpdFileEditorProvider"
                             id="myFileEditorProvider" order="last">
         </fileEditorProvider>
+
+        <toolWindow factoryClass="cn.boz.jb.plugin.idea.toolwindow.CallerSearchCommentPanelWindow" id="CallSearch"
+                    anchor="bottom"
+                    order="last" icon="SpdEditorIcons.REFER_16_ICON" canCloseContents="true"/>
+
         <toolWindow factoryClass="cn.boz.jb.plugin.idea.toolwindow.EcasMenuToolWindowFactory" id="EcasMenu"
                     anchor="right"
                     order="last" icon="SpdEditorIcons.MENU_16_ICON"/>
@@ -168,6 +173,15 @@
         <group id="spd.gotorefaction.group">
             <action class="cn.boz.jb.plugin.idea.action.GoToRefFile$SearchIdAction" icon="AllIcons.Actions.Find"
                     id="GotoIdAction" text="SearchId"></action>
+
+            <action class="cn.boz.jb.plugin.idea.dialog.OpenInSearchToolWindow" icon="AllIcons.Actions.Forward"
+                    id="OpenInSearchToolWindow" text="OpenInSearchToolWindow"></action>
+        </group>
+
+        <group id="spd.gotorefaction.callersearcher.group">
+            <action class="cn.boz.jb.plugin.idea.action.GoToRefFile$SearchIdAction" icon="AllIcons.Actions.Find"
+                    id="GotoIdAction" text="SearchId"></action>
+
         </group>
 
         <!--查看EngineAction 对话框中，功能菜单-->

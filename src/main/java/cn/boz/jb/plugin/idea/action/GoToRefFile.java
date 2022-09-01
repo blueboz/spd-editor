@@ -2,12 +2,13 @@ package cn.boz.jb.plugin.idea.action;
 
 import cn.boz.jb.plugin.idea.bean.EngineAction;
 import cn.boz.jb.plugin.idea.bean.EngineTask;
+import cn.boz.jb.plugin.idea.callsearch.CallerSearcherTable;
+import cn.boz.jb.plugin.idea.callsearch.CallerSearcherTableCellRender;
 import cn.boz.jb.plugin.idea.configurable.SpdEditorDBState;
 import cn.boz.jb.plugin.idea.dialog.CallerSearcherCommentPanel;
 import cn.boz.jb.plugin.idea.dialog.EngineActionDialog;
 import cn.boz.jb.plugin.idea.dialog.EngineTaskDialog;
 import cn.boz.jb.plugin.idea.utils.DBUtils;
-import cn.boz.jb.plugin.idea.widget.SimpleIconControl;
 import com.intellij.codeInsight.navigation.NavigationUtil;
 import com.intellij.find.FindModel;
 import com.intellij.find.findInProject.FindInProjectManager;
@@ -40,7 +41,6 @@ import com.intellij.openapi.ui.popup.PopupStep;
 import com.intellij.openapi.ui.popup.SpeedSearchFilter;
 import com.intellij.openapi.ui.popup.util.BaseListPopupStep;
 import com.intellij.openapi.util.Ref;
-import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiClass;
@@ -58,10 +58,7 @@ import com.intellij.psi.xml.XmlElement;
 import com.intellij.psi.xml.XmlFile;
 import com.intellij.psi.xml.XmlTag;
 import com.intellij.ui.PopupHandler;
-import com.intellij.ui.SimpleColoredComponent;
-import com.intellij.ui.TableSpeedSearch;
 import com.intellij.ui.components.JBScrollPane;
-import com.intellij.ui.speedSearch.SpeedSearchUtil;
 import com.intellij.ui.table.JBTable;
 import com.intellij.util.Consumer;
 import com.intellij.util.ui.ColumnInfo;
@@ -71,12 +68,7 @@ import icons.SpdEditorIcons;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.swing.*;
 import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableColumn;
-import javax.swing.table.TableModel;
-import javax.swing.table.TableRowSorter;
-import java.awt.*;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.sql.Connection;
@@ -266,7 +258,7 @@ public class GoToRefFile extends AnAction {
         Ref<List<EngineTask>> engineTaskRef = new Ref<>();
         Ref<List<EngineAction>> engineActionRef = new Ref<>();
         ProgressManager.getInstance().runProcessWithProgressSynchronously(() -> {
-            try (Connection connection = dbUtils.getConnection()) {
+            try (Connection connection = DBUtils.getConnection()) {
                 List<EngineTask> engineTasks = dbUtils.queryEngineTaskByExpression(connection, name);
                 List<EngineAction> engineActions = dbUtils.queryEngineActionByActionScript(connection, name);
                 engineTaskRef.set(engineTasks);
@@ -317,104 +309,81 @@ public class GoToRefFile extends AnAction {
         }, true);
         return false;
     }
+    public static CallerSearcherTableCellRender CALL_SEARCHER_TABLE_RENDERER =new CallerSearcherTableCellRender() ;
+
+
+    public static ColumnInfo[] CALL_SEARCHER_TABLE_COLUMN_INFO = new ColumnInfo[]{new ColumnInfo<Object, String>("type") {
+
+        @Override
+        public @Nullable String valueOf(Object o) {
+            if (o instanceof EngineTask) {
+                return "task";
+            } else if (o instanceof EngineAction) {
+                return "action";
+            }
+            return "";
+        }
+
+    }, new ColumnInfo<Object, String>("id") {
+        @Nullable
+        @Override
+        public String valueOf(Object o) {
+            if (o instanceof EngineTask) {
+                return ((EngineTask) o).getId();
+            } else if (o instanceof EngineAction) {
+                return ((EngineAction) o).getId();
+            }
+            return "";
+        }
+
+        @Override
+        public @Nullable TableCellRenderer getRenderer(Object o) {
+            return CALL_SEARCHER_TABLE_RENDERER;
+        }
+
+
+    }, new ColumnInfo<Object, String>("name") {
+        @Nullable
+        @Override
+        public String valueOf(Object o) {
+            if (o instanceof EngineTask) {
+                return ((EngineTask) o).getTitle();
+            } else if (o instanceof EngineAction) {
+                return ((EngineAction) o).getNamespace();
+            }
+            return "";
+
+        }
+
+        @Override
+        public @Nullable TableCellRenderer getRenderer(Object o) {
+            return CALL_SEARCHER_TABLE_RENDERER;
+        }
+
+
+    }, new ColumnInfo<Object, String>("expressionOrScript") {
+        @Nullable
+        @Override
+        public String valueOf(Object o) {
+            if (o instanceof EngineTask) {
+                return ((EngineTask) o).getExpression();
+            } else if (o instanceof EngineAction) {
+                return ((EngineAction) o).getActionscript();
+            }
+            return "";
+        }
+
+        @Override
+        public @Nullable TableCellRenderer getRenderer(Object o) {
+            return CALL_SEARCHER_TABLE_RENDERER;
+        }
+    }};
 
 
     @SuppressWarnings("unchecked")
     public static void showListPopup(final List<Object> objects, Project project, Consumer<? super Object> selectUserTaskConsumer, boolean showComments) {
-        MyRenderer myRenderer = new MyRenderer();
-        ColumnInfo[] columns = new ColumnInfo[]{new ColumnInfo<Object, String>("type") {
-
-
-            @Override
-            public @Nullable String valueOf(Object o) {
-                if (o instanceof EngineTask) {
-                    return "task";
-                } else if (o instanceof EngineAction) {
-                    return "action";
-                }
-                return "";
-            }
-
-        }, new ColumnInfo<Object, String>("id") {
-            @Nullable
-            @Override
-            public String valueOf(Object o) {
-                if (o instanceof EngineTask) {
-                    return ((EngineTask) o).getId();
-                } else if (o instanceof EngineAction) {
-                    return ((EngineAction) o).getId();
-                }
-                return "";
-            }
-
-            @Override
-            public @Nullable TableCellRenderer getRenderer(Object o) {
-                return myRenderer;
-            }
-
-
-        }, new ColumnInfo<Object, String>("name") {
-            @Nullable
-            @Override
-            public String valueOf(Object o) {
-                if (o instanceof EngineTask) {
-                    return ((EngineTask) o).getTitle();
-                } else if (o instanceof EngineAction) {
-                    return ((EngineAction) o).getNamespace();
-                }
-                return "";
-
-            }
-
-            @Override
-            public @Nullable TableCellRenderer getRenderer(Object o) {
-                return myRenderer;
-            }
-
-
-        }, new ColumnInfo<Object, String>("expressionOrScript") {
-            @Nullable
-            @Override
-            public String valueOf(Object o) {
-                if (o instanceof EngineTask) {
-                    return ((EngineTask) o).getExpression();
-                } else if (o instanceof EngineAction) {
-                    return ((EngineAction) o).getActionscript();
-                }
-                return "";
-            }
-
-            @Override
-            public @Nullable TableCellRenderer getRenderer(Object o) {
-                return myRenderer;
-            }
-        }};
-
         //
-        JBTable jbTable = new JBTable(new ListTableModel(columns, objects, 0)) {
-            @Override
-            public TableCellRenderer getCellRenderer(int row, int column) {
-                return myRenderer;
-            }
-        };
-        final TableColumn c0 = jbTable.getColumnModel().getColumn(0);
-        c0.setMaxWidth(24);
-        c0.setWidth(24);
-        c0.setMinWidth(24);
-
-//        c0.setCellRenderer(myRenderer);
-        final TableColumn c1 = jbTable.getColumnModel().getColumn(1);
-        //设置ID列宽度
-        c1.setWidth(210);
-        c1.setMinWidth(250);
-//        c1.setCellRenderer(myRenderer);
-
-//        final TableView<Object> table = new TableView(new ListTableModel(columns, objects, 0));
-//        jbTable.setCellSelectionEnabled(true);
-        jbTable.setShowHorizontalLines(true);
-//        jbTable.setTableHeader((JTableHeader) null);
-
-        jbTable.setRowSorter(new TableRowSorter<>(jbTable.getModel()));
+        CallerSearcherTable jbTable = new CallerSearcherTable(new ListTableModel<>(CALL_SEARCHER_TABLE_COLUMN_INFO,objects,0));
 
         Runnable runnable = () -> {
             ListTableModel model = (ListTableModel) jbTable.getModel();
@@ -430,40 +399,6 @@ public class GoToRefFile extends AnAction {
             jbTable.clearSelection();
         }
 
-        new TableSpeedSearch(jbTable) {
-            @Override
-            protected void onSearchFieldUpdated(String pattern) {
-                super.onSearchFieldUpdated(pattern);
-                RowSorter<? extends TableModel> sorter0 = myComponent.getRowSorter();
-                if (!(sorter0 instanceof TableRowSorter)) {
-                    return;
-                }
-                //noinspection unchecked
-                TableRowSorter<TableModel> sorter = (TableRowSorter<TableModel>) sorter0;
-                if (StringUtil.isNotEmpty(pattern)) {
-
-                    sorter.setRowFilter(new RowFilter<>() {
-                        @Override
-                        public boolean include(Entry<? extends TableModel, ? extends Integer> entry) {
-                            return isMatchingRow(entry.getIdentifier(), pattern);
-                        }
-                    });
-                } else {
-                    sorter.setRowFilter(null);
-                }
-            }
-
-            protected boolean isMatchingRow(int modelRow, String pattern) {
-                int columns = myComponent.getColumnCount();
-                for (int col = 0; col < columns; col++) {
-                    String str = (String) myComponent.getModel().getValueAt(modelRow, col);
-                    if (str != null && compare(str, pattern)) {
-                        return true;
-                    }
-                }
-                return false;
-            }
-        };
 
         PopupChooserBuilder builder = new PopupChooserBuilder(jbTable);
         if (showComments) {
@@ -471,15 +406,16 @@ public class GoToRefFile extends AnAction {
             builder.setSouthComponent(new CallerSearcherCommentPanel(jbTable));
         }
 
-
         builder.setTitle("caller Searcher")
                 .setItemChoosenCallback(runnable).setResizable(true)
                 .setMovable(true)
                 .setDimensionServiceKey("callerSearcher")
                 .setMinSize(new JBDimension(800, 400));
 
+
         JBPopup popup = builder.createPopup();
         popup.showCenteredInCurrentWindow(project);
+
 
         ActionManager instance = ActionManager.getInstance();
 
@@ -539,6 +475,7 @@ public class GoToRefFile extends AnAction {
                             return super.getSpeedSearchFilter();
                         }
 
+                        @Override
                         public boolean isSpeedSearchEnabled() {
                             return true;
                         }
@@ -571,50 +508,7 @@ public class GoToRefFile extends AnAction {
         }
     }
 
-    private static class MyRenderer implements TableCellRenderer {
-        private final SimpleColoredComponent myComponent = new SimpleColoredComponent();
 
-        @NotNull
-        @Override
-        public Component getTableCellRendererComponent(@NotNull JTable table,
-                                                       Object value,
-                                                       boolean isSelected,
-                                                       boolean hasFocus,
-                                                       int row,
-                                                       int column) {
-
-            Color bg = isSelected ? table.getSelectionBackground() : table.getBackground();
-            Color fg = isSelected ? table.getSelectionForeground() : table.getForeground();
-            myComponent.clear();
-
-            if (column == 0) {
-                SimpleIconControl simpleIconControl = null;
-                if ("task".equals(value)) {
-                    simpleIconControl = new SimpleIconControl(SpdEditorIcons.GEAR_16_ICON);
-                } else if ("action".equals(value)) {
-                    simpleIconControl = new SimpleIconControl(SpdEditorIcons.ACTION_SCRIPT_16_ICON);
-
-                }
-                if (simpleIconControl != null) {
-                    simpleIconControl.setBackground(bg);
-                    simpleIconControl.setForeground(fg);
-                    return simpleIconControl;
-                }
-            } else {
-                if (value != null) {
-                    myComponent.append((String) value);
-                } else {
-                    myComponent.append((String) "");
-                }
-            }
-            myComponent.setBackground(bg);
-            myComponent.setForeground(fg);
-
-            SpeedSearchUtil.applySpeedSearchHighlighting(table, myComponent, true, hasFocus);
-            return myComponent;
-
-        }
-    }
 
     /**
      * 从java接口跳转到mapper文件里面

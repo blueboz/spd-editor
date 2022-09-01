@@ -213,7 +213,7 @@ tasks.withType(JavaCompile) {
 }
 
 runIde {
-    autoReloadPlugins = false
+    autoReloadPlugins = true
 }
 
 task "publishPluginLocal" {
