@@ -83,6 +83,6 @@ public class GoToAnyRefExtAction extends DumbAwareAction {
             public void consume(Object o) {
 
             }
-        }, true,name);
+        }, true,name,"");
     }
 }

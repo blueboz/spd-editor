@@ -48,7 +48,7 @@ public class OpenInSearchToolWindow extends AnAction implements DumbAware {
             JBScrollPane tabSp = new JBScrollPane(tabTable);
             JBSplitter jbSplitter = new JBSplitter();
             jbSplitter.setFirstComponent(tabSp);
-            CallerSearcherDetailComment callerSearcherCommentPanel = new CallerSearcherDetailComment(tabTable);
+            CallerSearcherDetailComment callerSearcherCommentPanel = new CallerSearcherDetailComment(tabTable,outside.getQueryName());
             JBScrollPane detailSp = new JBScrollPane(callerSearcherCommentPanel);
             jbSplitter.setSecondComponent(detailSp);
 
@@ -56,7 +56,9 @@ public class OpenInSearchToolWindow extends AnAction implements DumbAware {
             ToolWindow callSearch = ToolWindowManager.getInstance(anActionEvent.getProject()).getToolWindow("CallSearch");
 
             ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
-            Content title = contentFactory.createContent(jbSplitter, "call:"+outside.getQueryName(), true);
+            String queryName = outside.getQueryName();
+            String qualifierName = outside.getQualifierName();
+            Content title = contentFactory.createContent(jbSplitter, String.format("%s.%s",qualifierName,queryName), true);
             title.setCloseable(true);
             callSearch.getContentManager().addContent(title);;
             callSearch.getContentManager().requestFocus(title,true);

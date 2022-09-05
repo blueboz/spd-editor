@@ -1,21 +1,13 @@
 package cn.boz.jb.plugin.idea.callsearch;
 
+import cn.boz.jb.plugin.floweditor.gui.utils.StringUtils;
 import cn.boz.jb.plugin.idea.bean.EngineAction;
 import cn.boz.jb.plugin.idea.bean.EngineTask;
 import cn.boz.jb.plugin.idea.dialog.MyLayoutManager;
 import cn.boz.jb.plugin.idea.utils.MyHighlightUtils;
-import com.intellij.ide.actions.searcheverywhere.SearchEverywhereManager;
-import com.intellij.ide.actions.searcheverywhere.SearchEverywhereManagerImpl;
 import com.intellij.openapi.actionSystem.ActionGroup;
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.ActionToolbar;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.project.ProjectManager;
-import com.intellij.openapi.project.ProjectUtil;
-import com.intellij.openapi.ui.TextBrowseFolderListener;
-import com.intellij.openapi.ui.TextFieldWithBrowseButton;
-import com.intellij.ui.AnActionButton;
 import com.intellij.ui.IdeBorderFactory;
 import com.intellij.ui.ScrollPaneFactory;
 import com.intellij.ui.components.JBPanel;
@@ -28,10 +20,10 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultHighlighter;
+import javax.swing.text.Highlighter;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.InputEvent;
 
 public class CallerSearcherDetailComment extends JBPanel {
     private JBTable table;
@@ -39,7 +31,10 @@ public class CallerSearcherDetailComment extends JBPanel {
     JTextField jpidf;
     JTextField taskidf;
 
-    public CallerSearcherDetailComment(JBTable table) {
+    public void query() {
+    }
+
+    public CallerSearcherDetailComment(JBTable table, String queryName) {
         this.table = table;
         this.setLayout(new MyLayoutManager());
         JLabel jpidl = new JLabel("processId");
@@ -55,31 +50,33 @@ public class CallerSearcherDetailComment extends JBPanel {
         this.add(taskidf);
 
 
-        textArea = new JTextArea("", 7, 30);
+        textArea = new JTextArea("", 12, 35);
+
 
         table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
             public void valueChanged(@NotNull ListSelectionEvent e) {
                 ListTableModel model = (ListTableModel) table.getModel();
                 int selectedRow = table.getSelectedRow();
                 int i = table.convertRowIndexToModel(selectedRow);
 
-                if(i==-1){
-                    return ;
+                if (i == -1) {
+                    return;
                 }
                 Object item = model.getItem(i);
                 String hint = "";
                 if (item instanceof EngineTask) {
                     hint = ((EngineTask) item).getExpression();
                     String id = ((EngineTask) item).getId();
-                    if(id.contains("_")){
+                    if (id.contains("_")) {
                         String[] s = id.split("_");
                         jpidf.setText(s[0]);
                         taskidf.setText(s[1]);
                     }
                 } else if (item instanceof EngineAction) {
                     hint = ((EngineAction) item).getActionscript();
-                    String id = ((EngineTask) item).getId();
-                    if(id.contains("_")){
+                    String id = ((EngineAction) item).getId();
+                    if (id.contains("_")) {
                         String[] s = id.split("_");
                         jpidf.setText(s[0]);
                         taskidf.setText(s[1]);
@@ -87,7 +84,21 @@ public class CallerSearcherDetailComment extends JBPanel {
                 }
 
                 textArea.setText(hint);
-                MyHighlightUtils.installHighlightForTextArea(table, textArea);
+                DefaultHighlighter.DefaultHighlightPainter defaultHighlightPainter = new DefaultHighlighter.DefaultHighlightPainter(Color.ORANGE);
+                Highlighter highlighter = textArea.getHighlighter();
+                if (!StringUtils.isBlank(queryName)) {
+                    int queryNameidx = hint.indexOf(queryName);
+                    if (queryNameidx != -1) {
+                        highlighter.removeAllHighlights();
+                        try {
+                            highlighter.addHighlight(queryNameidx, queryNameidx + queryName.length(), defaultHighlightPainter);
+                        } catch (BadLocationException badLocationException) {
+                            badLocationException.printStackTrace();
+                        }
+                    }
+                }
+
+//                MyHighlightUtils.installHighlightForTextArea(table, textArea);
 
 
             }
@@ -97,7 +108,7 @@ public class CallerSearcherDetailComment extends JBPanel {
         this.add(commentLabel);
         commentLabel.setBorder(IdeBorderFactory.createBorder(11));
         textScrollPane.setBorder((Border) null);
-        this.add(textScrollPane );
+        this.add(textScrollPane);
         this.setPreferredSize(new JBDimension(800, 200));
 
         //增加应用

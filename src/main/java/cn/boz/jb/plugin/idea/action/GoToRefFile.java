@@ -244,15 +244,16 @@ public class GoToRefFile extends AnAction {
         }
 
         String name = containingMethod.getName();
+        String qualifiedName = containingMethod.getContainingClass().getQualifiedName();
         //
 
-        if (tryToSearchUsageByCodeFragment(anActionEvent, name)) {
+        if (tryToSearchUsageByCodeFragment(anActionEvent, name,qualifiedName)) {
             return false;
         }
         return true;
     }
 
-    public static boolean tryToSearchUsageByCodeFragment(AnActionEvent anActionEvent, String name) {
+    public static boolean tryToSearchUsageByCodeFragment(AnActionEvent anActionEvent, String name,String qualifieredName) {
         DBUtils dbUtils = DBUtils.getInstance();
 
         Ref<List<EngineTask>> engineTaskRef = new Ref<>();
@@ -306,7 +307,7 @@ public class GoToRefFile extends AnAction {
                     popup.showCenteredInCurrentWindow(anActionEvent.getProject());
                 }
             }
-        }, true,name);
+        }, true,name,qualifieredName);
         return false;
     }
     public static CallerSearcherTableCellRender CALL_SEARCHER_TABLE_RENDERER =new CallerSearcherTableCellRender() ;
@@ -381,11 +382,13 @@ public class GoToRefFile extends AnAction {
 
 
     @SuppressWarnings("unchecked")
-    public static void showListPopup(final List<Object> objects, Project project, Consumer<? super Object> selectUserTaskConsumer, boolean showComments,String queryName) {
+    public static void showListPopup(final List<Object> objects, Project project, Consumer<? super Object> selectUserTaskConsumer, boolean showComments,String queryName,String qualifierName) {
         //
         CallerSearcherTable jbTable = new CallerSearcherTable(new ListTableModel<>(CALL_SEARCHER_TABLE_COLUMN_INFO,objects,0));
 
         jbTable.setQueryName(queryName);
+        jbTable.setQualifierName(qualifierName);
+
         Runnable runnable = () -> {
             ListTableModel model = (ListTableModel) jbTable.getModel();
             int selectedRow = jbTable.getSelectedRow();

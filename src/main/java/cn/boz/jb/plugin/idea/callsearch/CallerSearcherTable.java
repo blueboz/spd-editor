@@ -13,7 +13,16 @@ public class CallerSearcherTable extends JBTable {
         this(model,null);
 
     }
+    private String qualifierName;
     private String queryName;
+
+    public String getQualifierName() {
+        return qualifierName;
+    }
+
+    public void setQualifierName(String qualifierName) {
+        this.qualifierName = qualifierName;
+    }
 
     public String getQueryName() {
         return queryName;
