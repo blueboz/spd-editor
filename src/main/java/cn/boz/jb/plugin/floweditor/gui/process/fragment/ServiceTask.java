@@ -4,6 +4,7 @@ import cn.boz.jb.plugin.floweditor.gui.control.SqlAggregator;
 import cn.boz.jb.plugin.floweditor.gui.process.bridge.RectBridge;
 import cn.boz.jb.plugin.floweditor.gui.property.Property;
 import cn.boz.jb.plugin.floweditor.gui.property.PropertyEditorListener;
+import cn.boz.jb.plugin.floweditor.gui.property.impl.LabelProperty;
 import cn.boz.jb.plugin.floweditor.gui.property.impl.TextAreaProperty;
 import cn.boz.jb.plugin.floweditor.gui.property.impl.TextFieldProperty;
 import cn.boz.jb.plugin.floweditor.gui.shape.HiPoint;
@@ -109,6 +110,7 @@ public class ServiceTask extends RectBridge implements SqlAggregator {
             synchronized (ServiceTask.class) {
                 if (ps == null) {
                     ps = new Property[]{
+                            new LabelProperty("id", this, propertyEditor),
                             new TextFieldProperty("name", this, propertyEditor),
                             new TextAreaProperty("expression", this, propertyEditor),
                             new TextFieldProperty("listener", this, propertyEditor),

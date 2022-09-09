@@ -4,6 +4,7 @@ import cn.boz.jb.plugin.floweditor.gui.control.FlowSqlAggregator;
 import cn.boz.jb.plugin.floweditor.gui.process.bridge.LineBridge;
 import cn.boz.jb.plugin.floweditor.gui.property.Property;
 import cn.boz.jb.plugin.floweditor.gui.property.PropertyEditorListener;
+import cn.boz.jb.plugin.floweditor.gui.property.impl.LabelProperty;
 import cn.boz.jb.plugin.floweditor.gui.property.impl.TextFieldProperty;
 import cn.boz.jb.plugin.floweditor.gui.shape.HiPoint;
 import cn.boz.jb.plugin.floweditor.gui.shape.Label;
@@ -115,6 +116,7 @@ public class SequenceFlow extends LineBridge implements FlowSqlAggregator {
             synchronized (SequenceFlow.class) {
                 if (ps == null) {
                     ps = new Property[]{
+                            new LabelProperty("id", this, propertyEditor),
                             new TextFieldProperty("name", this, (ctx) -> {
                                 Label label = this.getLabel();
                                 label.setText((String) ctx.getNewValue());

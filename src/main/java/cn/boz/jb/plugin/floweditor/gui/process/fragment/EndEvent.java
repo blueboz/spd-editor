@@ -1,6 +1,9 @@
 package cn.boz.jb.plugin.floweditor.gui.process.fragment;
 
 import cn.boz.jb.plugin.floweditor.gui.process.bridge.CircleBridge;
+import cn.boz.jb.plugin.floweditor.gui.property.Property;
+import cn.boz.jb.plugin.floweditor.gui.property.PropertyEditorListener;
+import cn.boz.jb.plugin.floweditor.gui.property.impl.LabelProperty;
 import cn.boz.jb.plugin.floweditor.gui.shape.HiPoint;
 import cn.boz.jb.plugin.floweditor.gui.shape.Rect;
 import cn.boz.jb.plugin.floweditor.gui.utils.IcoMoonUtils;
@@ -62,5 +65,21 @@ public class EndEvent extends CircleBridge {
     public void init(Rect rect) {
         super.init(rect);
         this.setName("End");
+    }
+
+    private Property[] ps;
+
+    @Override
+    public Property[] getPropertyEditors(PropertyEditorListener propertyEditor) {
+        if (ps == null) {
+            synchronized (ServiceTask.class) {
+                if (ps == null) {
+                    ps = new Property[]{
+                            new LabelProperty("id", this, propertyEditor),
+                    };
+                }
+            }
+        }
+        return ps;
     }
 }

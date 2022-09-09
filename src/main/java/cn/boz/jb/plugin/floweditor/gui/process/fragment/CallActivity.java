@@ -4,6 +4,7 @@ import cn.boz.jb.plugin.floweditor.gui.control.SqlAggregator;
 import cn.boz.jb.plugin.floweditor.gui.process.bridge.RectBridge;
 import cn.boz.jb.plugin.floweditor.gui.property.Property;
 import cn.boz.jb.plugin.floweditor.gui.property.PropertyEditorListener;
+import cn.boz.jb.plugin.floweditor.gui.property.impl.LabelProperty;
 import cn.boz.jb.plugin.floweditor.gui.property.impl.TextFieldProperty;
 import cn.boz.jb.plugin.floweditor.gui.shape.HiPoint;
 import cn.boz.jb.plugin.floweditor.gui.shape.Rect;
@@ -95,6 +96,7 @@ public class CallActivity extends RectBridge implements SqlAggregator {
             synchronized (CallActivity.class) {
                 if (ps == null) {
                     ps = new Property[]{
+                            new LabelProperty("id", this, propertyEditor),
                             new TextFieldProperty("name", this, propertyEditor),
                             new TextFieldProperty("calledElement", this, propertyEditor),
                     };
@@ -113,4 +115,6 @@ public class CallActivity extends RectBridge implements SqlAggregator {
                         "VALUES ('%s', 'CALL', '%s', '%s', null, null, null, null, 10000, null, 60, null, null)", processId + "_" + this.getId()
                 , this.getName(), this.getCalledElement());
     }
+
+
 }

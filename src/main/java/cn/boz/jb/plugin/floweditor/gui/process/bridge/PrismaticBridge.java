@@ -4,6 +4,7 @@ import cn.boz.jb.plugin.floweditor.gui.process.control.Diagram;
 import cn.boz.jb.plugin.floweditor.gui.process.fragment.ParallelGateway;
 import cn.boz.jb.plugin.floweditor.gui.property.Property;
 import cn.boz.jb.plugin.floweditor.gui.property.PropertyEditorListener;
+import cn.boz.jb.plugin.floweditor.gui.property.impl.LabelProperty;
 import cn.boz.jb.plugin.floweditor.gui.property.impl.TextFieldProperty;
 import cn.boz.jb.plugin.floweditor.gui.shape.HiPoint;
 import cn.boz.jb.plugin.floweditor.gui.shape.Prismatic;
@@ -54,6 +55,7 @@ public class PrismaticBridge extends Prismatic implements Diagram {
                 if (ps == null) {
 
                     ps = new Property[]{
+                            new LabelProperty("id", this, propertyEditor),
                             new TextFieldProperty("name", this),
                     };
                 }

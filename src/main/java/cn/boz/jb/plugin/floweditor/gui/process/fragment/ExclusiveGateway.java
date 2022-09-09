@@ -17,6 +17,7 @@ public class ExclusiveGateway extends PrismaticBridge implements Gateway, SqlAgg
 
     public static Cursor CURSOR = IcoMoonUtils.initCursor(IcoMoonUtils.getExclusiveGateway());
 
+    @Override
     public String indicatorFont(){
         return  IcoMoonUtils.getClose();
     }

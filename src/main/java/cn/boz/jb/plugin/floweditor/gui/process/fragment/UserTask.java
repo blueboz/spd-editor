@@ -5,6 +5,7 @@ import cn.boz.jb.plugin.floweditor.gui.process.bridge.RectBridge;
 import cn.boz.jb.plugin.floweditor.gui.property.Property;
 import cn.boz.jb.plugin.floweditor.gui.property.PropertyEditorListener;
 import cn.boz.jb.plugin.floweditor.gui.property.impl.IntegerSpinnerProperty;
+import cn.boz.jb.plugin.floweditor.gui.property.impl.LabelProperty;
 import cn.boz.jb.plugin.floweditor.gui.property.impl.TextAreaProperty;
 import cn.boz.jb.plugin.floweditor.gui.property.impl.TextFieldProperty;
 import cn.boz.jb.plugin.floweditor.gui.shape.HiPoint;
@@ -185,6 +186,7 @@ public class UserTask extends RectBridge implements SqlAggregator {
                 if (ps == null) {
                     ps = new Property[]{
 
+                            new LabelProperty("id", this, propertyEditor),
                             new TextFieldProperty("name", this, propertyEditor),
                             new TextFieldProperty("bussinesKey", this, propertyEditor),
                             new TextFieldProperty("bussinesId", this, propertyEditor),
