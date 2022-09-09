@@ -24,6 +24,7 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Highlighter;
 import java.awt.*;
+import java.util.concurrent.TimeUnit;
 
 public class CallerSearcherDetailComment extends JBPanel {
     private JBTable table;
@@ -50,7 +51,7 @@ public class CallerSearcherDetailComment extends JBPanel {
         this.add(taskidf);
 
 
-        textArea = new JTextArea("", 12, 35);
+        textArea = new JTextArea("", 12, 28);
 
 
         table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
@@ -82,6 +83,10 @@ public class CallerSearcherDetailComment extends JBPanel {
                         taskidf.setText(s[1]);
                     }
                 }
+                if(hint.contains(";")){
+                    hint = hint.replaceAll(";", "\r\n");
+                    hint = hint.replaceAll("\r\n\r\n", "\r\n");
+                }
 
                 textArea.setText(hint);
                 DefaultHighlighter.DefaultHighlightPainter defaultHighlightPainter = new DefaultHighlighter.DefaultHighlightPainter(Color.ORANGE);
@@ -109,7 +114,7 @@ public class CallerSearcherDetailComment extends JBPanel {
         commentLabel.setBorder(IdeBorderFactory.createBorder(11));
         textScrollPane.setBorder((Border) null);
         this.add(textScrollPane);
-        this.setPreferredSize(new JBDimension(800, 200));
+//        this.setPreferredSize(new JBDimension(800, 200));
 
         //增加应用
         ActionManager instance = ActionManager.getInstance();
@@ -122,7 +127,6 @@ public class CallerSearcherDetailComment extends JBPanel {
 //                return new AnAction[0];
 //            }
 //        };
-
 
         ActionToolbar spd_tb = instance.createActionToolbar("spd tb", actionGroup, true);
         JComponent gotoactionScript = spd_tb.getComponent();

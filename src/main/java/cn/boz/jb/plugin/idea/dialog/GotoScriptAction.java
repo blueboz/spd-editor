@@ -2,6 +2,7 @@ package cn.boz.jb.plugin.idea.dialog;
 
 import cn.boz.jb.plugin.floweditor.gui.property.InputLongTextDialog;
 import cn.boz.jb.plugin.idea.bean.EngineTask;
+import cn.boz.jb.plugin.idea.callsearch.CallerSearcherDetailComment;
 import com.intellij.ide.actions.searcheverywhere.SearchEverywhereManager;
 import com.intellij.ide.actions.searcheverywhere.SearchEverywhereManagerImpl;
 import com.intellij.openapi.actionSystem.AnAction;
@@ -52,6 +53,15 @@ public class GotoScriptAction extends AnAction implements DumbAware {
             });
             return;
         }
+        CallerSearcherDetailComment detailComment = (CallerSearcherDetailComment) SwingUtilities.getAncestorOfClass(CallerSearcherDetailComment.class, anActionEvent.getInputEvent().getComponent());
+        if (detailComment instanceof CallerSearcherDetailComment) {
+            String script = detailComment.getScript();
+            processScriptContent(script, anActionEvent, caller, () -> {
+
+            });
+            return;
+        }
+
 
         Component component = anActionEvent.getInputEvent().getComponent();
         InputLongTextDialog dialog = (InputLongTextDialog) InputLongTextDialog.findInstance(component);

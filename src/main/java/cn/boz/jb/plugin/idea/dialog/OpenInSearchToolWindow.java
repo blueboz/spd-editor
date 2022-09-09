@@ -57,7 +57,11 @@ public class OpenInSearchToolWindow extends AnAction implements DumbAware {
 
             ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
             String queryName = outside.getQueryName();
+
             String qualifierName = outside.getQualifierName();
+            if(qualifierName.lastIndexOf(".")!=-1){
+                qualifierName = qualifierName.substring(qualifierName.lastIndexOf(".") + 1);
+            }
             Content title = contentFactory.createContent(jbSplitter, String.format("%s.%s",qualifierName,queryName), true);
             title.setCloseable(true);
             callSearch.getContentManager().addContent(title);;

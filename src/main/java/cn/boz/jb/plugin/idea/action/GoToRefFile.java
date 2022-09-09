@@ -59,6 +59,7 @@ import com.intellij.psi.xml.XmlFile;
 import com.intellij.psi.xml.XmlTag;
 import com.intellij.ui.PopupHandler;
 import com.intellij.ui.components.JBScrollPane;
+import com.intellij.ui.content.Content;
 import com.intellij.ui.table.JBTable;
 import com.intellij.util.Consumer;
 import com.intellij.util.ui.ColumnInfo;
@@ -409,8 +410,10 @@ public class GoToRefFile extends AnAction {
             //注释
             builder.setSouthComponent(new CallerSearcherCommentPanel(jbTable));
         }
+        String format = String.format("%s.%s", qualifierName, queryName);
 
-        builder.setTitle("caller Searcher:"+queryName)
+
+        builder.setTitle("caller Searcher:"+format)
                 .setItemChoosenCallback(runnable).setResizable(true)
                 .setMovable(true)
                 .setDimensionServiceKey("callerSearcher")
