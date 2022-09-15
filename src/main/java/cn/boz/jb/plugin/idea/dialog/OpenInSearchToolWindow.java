@@ -39,7 +39,20 @@ public class OpenInSearchToolWindow extends AnAction implements DumbAware {
             doForCallerSearcherTable((CallerSearcherTable) component, anActionEvent);
         } else if (component instanceof EngineRightDialog) {
             doForEngineRights(anActionEvent, component);
-
+        } else if (component instanceof EngineActionDialog) {
+            EngineActionDialog engineActionDialog= (EngineActionDialog) component;
+            engineActionDialog.setWithOpenInToolWindow(false);
+            ToolWindow callSearch = ToolWindowManager.getInstance(anActionEvent.getProject()).getToolWindow(Constants.TOOL_WINDOW_CALLSEARCH);
+            ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
+            JBScrollPane jbScrollPane = new JBScrollPane(engineActionDialog);
+            Content title = contentFactory.createContent(jbScrollPane, engineActionDialog.getId(), true);
+            title.setCloseable(true);
+            callSearch.getContentManager().addContent(title);
+            callSearch.getContentManager().requestFocus(title, true);
+            if (!callSearch.isActive()) {
+                callSearch.show();
+            }
+            PopupUtil.getPopupContainerFor(component).dispose();
         }
 
     }
@@ -115,6 +128,11 @@ public class OpenInSearchToolWindow extends AnAction implements DumbAware {
             e.getPresentation().setVisible(true);
         } else if(component instanceof EngineRightDialog) {
             e.getPresentation().setVisible(true);
+        } else if(component instanceof EngineActionDialog) {
+            EngineActionDialog dd= (EngineActionDialog) component;
+            if(dd.isWithOpenInToolWindow()){
+                e.getPresentation().setVisible(true);
+            }
         }else{
             e.getPresentation().setVisible(false);
         }

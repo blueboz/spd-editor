@@ -60,13 +60,17 @@ public class EngineActionDialog extends JComponent {
     private JScrollPane actionOutputPanel;
     private JTable actionOutputTable;
     private JLabel actionOutputLabel;
+    private boolean withOpenInToolWindow;
     private DefaultTableModel outputModel;
+    private String id;
 
-    public EngineActionDialog(Map<String, Object> engineAction, List<Map<String, Object>> engineActionInput, List<Map<String, Object>> engineActionOutput) {
+    public EngineActionDialog(Map<String, Object> engineAction, List<Map<String, Object>> engineActionInput, List<Map<String, Object>> engineActionOutput,boolean withOpenInToolWindow) {
         this.engineAction = engineAction;
+        this.withOpenInToolWindow=withOpenInToolWindow;
         this.engineActionInput = engineActionInput;
         this.engineActionOutput = engineActionOutput;
         String id = (String) engineAction.get("ID_");
+        this.id=id;
         String namespace = (String) engineAction.get("NAMESPACE_");
         String actionscript = (String) engineAction.get("ACTIONSCRIPT_");
 
@@ -118,6 +122,7 @@ public class EngineActionDialog extends JComponent {
         };
         actionOutputPanel = new JBScrollPane(actionOutputTable);
         actionOutputPanel.setPreferredSize(new Dimension(0, 200));
+
         ActionManager instance = ActionManager.getInstance();
         ActionGroup actionGroup = (ActionGroup) instance.getAction(Constants.ACTION_GROUP_REF_ENGINE_ACTION);
         ActionToolbar spd_tb = instance.createActionToolbar("spd tb", actionGroup, true);
@@ -141,5 +146,15 @@ public class EngineActionDialog extends JComponent {
         this.setFocusable(true);
     }
 
+    public boolean isWithOpenInToolWindow() {
+        return withOpenInToolWindow;
+    }
 
+    public void setWithOpenInToolWindow(boolean withOpenInToolWindow) {
+        this.withOpenInToolWindow = withOpenInToolWindow;
+    }
+
+    public String getId() {
+        return id;
+    }
 }

@@ -726,7 +726,7 @@ public class GoToRefFile extends AnAction {
             EngineActionDataContainer container = engineActionRef.get();
 
 
-            temporyDialog = new EngineActionDialog(container.getEngineAction(), container.getEngineActionInput(), container.getEngineActionOutput());
+            temporyDialog = new EngineActionDialog(container.getEngineAction(), container.getEngineActionInput(), container.getEngineActionOutput(),true);
 
             popup = JBPopupFactory.getInstance()
                     .createComponentPopupBuilder(temporyDialog, null)
@@ -869,3 +869,4 @@ public class GoToRefFile extends AnAction {
         return false;
     }
 }
+
