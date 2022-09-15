@@ -82,6 +82,10 @@ public class CallerSearcherDetailComment extends JBPanel {
                         String[] s = id.split("_");
                         jpidf.setText(s[0]);
                         taskidf.setText(s[1]);
+                    }else{
+                        jpidf.setText("");
+                        taskidf.setText("");
+
                     }
                 }
                 if(hint.contains(";")){

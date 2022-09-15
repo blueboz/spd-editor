@@ -4,6 +4,7 @@ import cn.boz.jb.plugin.floweditor.gui.process.fragment.UserTask;
 import com.intellij.openapi.actionSystem.ActionGroup;
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.ActionToolbar;
+import com.intellij.ui.IdeBorderFactory;
 import com.intellij.ui.components.JBLabel;
 import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.components.JBTextField;
@@ -98,14 +99,23 @@ public class EngineRightDialog extends JComponent {
 
         JBTextField doConditionTextArea = new JBTextField();
         doConditionTextArea.setText(this.doCondition);
-        return FormBuilder.createFormBuilder()
-                .addLabeledComponent(new JBLabel("candidate:"), candidateTextArea, 1, false)
-                .addLabeledComponent(new JBLabel("sqlCondition:"), sqlConditionTextArea, 1, false)
-                .addLabeledComponent(new JBLabel("doCondition:"), doConditionTextArea, 1, false)
+                UserTask userTask = this.getUserTask();
+        String rights = userTask.getRights();
+        String id = userTask.getId();
+        String name = userTask.getName();
+
+        String titleStr =String.format("%s-%s(%s)-%s",this.getProcessId(),id,name,rights);
+        JPanel panel = FormBuilder.createFormBuilder()
+                .addLabeledComponent(new JBLabel("route:"), new JBTextField(titleStr), 1, true)
+                .addLabeledComponent(new JBLabel("candidate:"), candidateTextArea, 1, true)
+                .addLabeledComponent(new JBLabel("sqlCondition:"), sqlConditionTextArea, 1, true)
+                .addLabeledComponent(new JBLabel("doCondition:"), doConditionTextArea, 1, true)
                 .setHorizontalGap(4)
                 .setVerticalGap(4)
-                .addComponentFillVertically(new JPanel(), 0)
+                .addComponentFillVertically(new JPanel(), 5)
                 .getPanel();
+        panel.setBorder(IdeBorderFactory.createBorder(10));
+        return panel;
     }
 
     public UserTask getUserTask() {

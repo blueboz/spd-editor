@@ -49,13 +49,8 @@ public class OpenInSearchToolWindow extends AnAction implements DumbAware {
         JComponent derive = engineRightDialog.derive();
         ToolWindow callSearch = ToolWindowManager.getInstance(anActionEvent.getProject()).getToolWindow(Constants.TOOL_WINDOW_CALLSEARCH);
         ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
-        UserTask userTask = engineRightDialog.getUserTask();
-        String rights = userTask.getRights();
-        String id = userTask.getId();
-        String name = userTask.getName();
-
-        String titleStr =String.format("%s-%s(%s)-%s",engineRightDialog.getProcessId(),id,name,rights);
-        Content title = contentFactory.createContent(derive,titleStr, true);
+;
+        Content title = contentFactory.createContent(derive,engineRightDialog.getUserTask().getRights(), true);
         title.setCloseable(true);
         callSearch.getContentManager().addContent(title);
         callSearch.getContentManager().requestFocus(title, true);
