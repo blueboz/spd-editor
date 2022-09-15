@@ -8,7 +8,7 @@ public class MyLayoutManager implements LayoutManager {
     @Override
     public void addLayoutComponent(String name, Component comp) {
 //        System.out.println("setting bound");
-        comp.setBounds(0, 0, 40, 40);
+//        comp.setBounds(0, 0, 40, 40);
     }
 
 
@@ -34,7 +34,7 @@ public class MyLayoutManager implements LayoutManager {
 
     @Override
     public Dimension minimumLayoutSize(Container parent) {
-        return new Dimension(715, 200);
+        return new Dimension(715, 10);
     }
 
     private int initialOffsetY = 0;
@@ -44,7 +44,6 @@ public class MyLayoutManager implements LayoutManager {
     public void layoutContainer(Container parent) {
 //        System.out.println("layout" + initialOffsetY);
         int width = parent.getWidth();
-        int height = parent.getHeight();
         Component[] components = parent.getComponents();
         int padding = 10;
         int accy = 0;
@@ -52,22 +51,23 @@ public class MyLayoutManager implements LayoutManager {
         for (int i = 0; i < components.length; i++) {
             Component component = components[i];
             Dimension preferredSize = component.getPreferredSize();
-            Dimension minimumSize = component.getSize();
             accy += thick / 2;
             if (i == components.length - 1) {
                 //最后一个元素
-                int heightremain = height - accy;
                 if (preferredSize.height == -1) {
-                    component.setBounds(padding / 2, accy, width - padding, heightremain - thick / 2);
+                    component.setBounds(padding / 2, accy, width - padding, 40);
+                    accy+=40;
                 } else {
-                    component.setBounds(padding / 2, accy, width - padding, preferredSize.height > 200 ? 200 : preferredSize.height);
+                    component.setBounds(padding / 2, accy, width - padding, preferredSize.height);
+                    accy += preferredSize.height;
+                    accy += thick / 2;
                 }
             } else {
-                component.setBounds(padding / 2, accy, width - padding, preferredSize.height > 200 ? 200 : preferredSize.height);
+                component.setBounds(padding / 2, accy, width - padding, preferredSize.height );
+                accy += preferredSize.height;
+                accy += thick / 2;
             }
 
-            accy += preferredSize.height;
-            accy += thick / 2;
         }
 //        System.out.println(accy + "-->" + height);
         parent.setSize(width, accy);

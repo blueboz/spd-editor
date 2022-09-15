@@ -4,6 +4,7 @@ import cn.boz.jb.plugin.floweditor.gui.utils.StringUtils;
 import cn.boz.jb.plugin.idea.bean.EngineAction;
 import cn.boz.jb.plugin.idea.bean.EngineTask;
 import cn.boz.jb.plugin.idea.dialog.MyLayoutManager;
+import cn.boz.jb.plugin.idea.utils.Constants;
 import cn.boz.jb.plugin.idea.utils.MyHighlightUtils;
 import com.intellij.openapi.actionSystem.ActionGroup;
 import com.intellij.openapi.actionSystem.ActionManager;
@@ -118,7 +119,7 @@ public class CallerSearcherDetailComment extends JBPanel {
 
         //增加应用
         ActionManager instance = ActionManager.getInstance();
-        ActionGroup actionGroup = (ActionGroup) instance.getAction("spd.engineaction.dlg.group");
+        ActionGroup actionGroup = (ActionGroup) instance.getAction(Constants.ACTION_GROUP_REF_ENGINE_ACTION);
         //建议将结果打开再ToolWindow中供方便搜索
 //        new ActionGroup(){
 //

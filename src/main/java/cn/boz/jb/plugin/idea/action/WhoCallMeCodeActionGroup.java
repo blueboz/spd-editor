@@ -1,6 +1,7 @@
 package cn.boz.jb.plugin.idea.action;
 
 import cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel;
+import cn.boz.jb.plugin.idea.utils.Constants;
 import com.intellij.find.FindModel;
 import com.intellij.find.findInProject.FindInProjectManager;
 import com.intellij.notification.Notification;
@@ -21,10 +22,7 @@ public class WhoCallMeCodeActionGroup {
             if (chartPanel instanceof ChartPanel) {
                 String id = chartPanel.getId();
                 if (id == null || "".equals(id.trim())) {
-                    NotificationGroup.findRegisteredGroup("Spd Editor")
-                            .createNotification("", NotificationType.WARNING)
-                            .notify(anActionEvent.getProject());
-                    Notification spdEditorNotification = new Notification("Spd Editor", SpdEditorIcons.FLOW_16_ICON, NotificationType.WARNING);
+                    Notification spdEditorNotification = new Notification(Constants.NOTIFY_GROUP_GLOBAL, SpdEditorIcons.FLOW_16_ICON, NotificationType.WARNING);
                     spdEditorNotification.setTitle("warn");
                     spdEditorNotification.setContent("Flow id is null");
                     spdEditorNotification.notify(anActionEvent.getProject());
@@ -42,7 +40,7 @@ public class WhoCallMeCodeActionGroup {
             if (chartPanel instanceof ChartPanel) {
                 String id = chartPanel.getId();
                 if (id == null || "".equals(id.trim())) {
-                    NotificationGroup.findRegisteredGroup("Spd Editor")
+                    NotificationGroup.findRegisteredGroup("SpdEditorNotifyGroup")
                             .createNotification("Flow id is null", NotificationType.WARNING)
                             .notify(anActionEvent.getProject());
                 } else {

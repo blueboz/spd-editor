@@ -1,5 +1,6 @@
 package cn.boz.jb.plugin.idea.dialog;
 
+import cn.boz.jb.plugin.idea.utils.Constants;
 import com.intellij.openapi.actionSystem.ActionGroup;
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.ActionToolbar;
@@ -87,7 +88,7 @@ public class EngineActionDialog extends JComponent {
         actionScriptTextArea.setLineWrap(true);
 
 
-        actionScriptScrollPane = new JScrollPane(actionScriptTextArea);
+        actionScriptScrollPane = new JBScrollPane(actionScriptTextArea);
 
         actionInputLabel = new JLabel("actionInput:");
         DefaultTableModel tableModel = new DefaultTableModel();
@@ -103,7 +104,7 @@ public class EngineActionDialog extends JComponent {
 //        Project defaultProject = projectManager.getDefaultProject();
 
 
-        actionInputPanel = new JScrollPane(actionInputTable);
+        actionInputPanel = new JBScrollPane(actionInputTable);
         actionInputPanel.setPreferredSize(new Dimension(0, 200));
 
         actionOutputLabel = new JLabel("actionOutput:");
@@ -118,7 +119,7 @@ public class EngineActionDialog extends JComponent {
         actionOutputPanel = new JBScrollPane(actionOutputTable);
         actionOutputPanel.setPreferredSize(new Dimension(0, 200));
         ActionManager instance = ActionManager.getInstance();
-        ActionGroup actionGroup = (ActionGroup) instance.getAction("spd.engineaction.dlg.group");
+        ActionGroup actionGroup = (ActionGroup) instance.getAction(Constants.ACTION_GROUP_REF_ENGINE_ACTION);
         ActionToolbar spd_tb = instance.createActionToolbar("spd tb", actionGroup, true);
 
         JComponent gotoactionScript = spd_tb.getComponent();

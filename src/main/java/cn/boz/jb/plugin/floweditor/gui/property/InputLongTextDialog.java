@@ -1,5 +1,6 @@
 package cn.boz.jb.plugin.floweditor.gui.property;
 
+import cn.boz.jb.plugin.idea.utils.Constants;
 import com.intellij.openapi.actionSystem.ActionGroup;
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.ActionToolbar;
@@ -7,6 +8,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.ui.components.JBPanel;
 import com.intellij.ui.components.JBScrollPane;
+import io.netty.util.Constant;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
@@ -37,7 +39,7 @@ public class InputLongTextDialog extends DialogWrapper {
         jScrollPane.setPreferredSize(new Dimension((int) (maxRect.getWidth() * .96), (int) (maxRect.getHeight() * .8)));
         init();
         ActionManager instance = ActionManager.getInstance();
-        ActionGroup actionGroup = (ActionGroup) instance.getAction("spd.engineaction.dlg.group");
+        ActionGroup actionGroup = (ActionGroup) instance.getAction(Constants.ACTION_GROUP_REF_ENGINE_ACTION);
         ActionToolbar spd_tb = instance.createActionToolbar("spd tb", actionGroup, true);
         JComponent gotoactionScript = spd_tb.getComponent();
         jbPanelJBPanel.add(jScrollPane, BorderLayout.CENTER);

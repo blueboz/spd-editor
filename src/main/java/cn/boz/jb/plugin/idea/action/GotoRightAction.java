@@ -4,6 +4,7 @@ import cn.boz.jb.plugin.floweditor.gui.control.PropertyObject;
 import cn.boz.jb.plugin.floweditor.gui.process.fragment.UserTask;
 import cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel;
 import cn.boz.jb.plugin.idea.dialog.EngineRightDialog;
+import cn.boz.jb.plugin.idea.utils.Constants;
 import cn.boz.jb.plugin.idea.utils.DBUtils;
 import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationType;
@@ -76,7 +77,7 @@ public class GotoRightAction extends AnAction {
                     //RIGHTS_, CANDIDATE_, SQLCONDITION_, DOCONDITION_
                     List<Map<String, Object>> engineRights = instance.queryEngineRights(connection, rights);
                     if (engineRights.size() < 1) {
-                        Notification spdEditorNotification = new Notification("Spd Editor", SpdEditorIcons.FLOW_16_ICON, NotificationType.INFORMATION);
+                        Notification spdEditorNotification = new Notification(Constants.NOTIFY_GROUP_GLOBAL, SpdEditorIcons.FLOW_16_ICON, NotificationType.INFORMATION);
                         spdEditorNotification.setTitle("switcher");
                         spdEditorNotification.setContent("disable auto save spd editor");
                         spdEditorNotification.notify(anActionEvent.getProject());
@@ -85,11 +86,16 @@ public class GotoRightAction extends AnAction {
                         String candidate = (String) map.get("CANDIDATE_");
                         String sqlcondition = (String) map.get("SQLCONDITION_");
                         String docondition = (String) map.get("DOCONDITION_");
-                        engineRightDialog = new EngineRightDialog(candidate, sqlcondition, docondition);
+
+                        engineRightDialog = new EngineRightDialog(candidate, sqlcondition, docondition,chartPanel.getId(),userTask,true);
+
+
                         popup = JBPopupFactory.getInstance()
                                 .createComponentPopupBuilder(engineRightDialog, null)
                                 .setRequestFocus(true)
                                 .setFocusable(true)
+                                .setTitle("rights:"+rights)
+                                .setMovable(true)
                                 .setProject(anActionEvent.getProject())
                                 .setCancelOnOtherWindowOpen(true)
                                 .createPopup();

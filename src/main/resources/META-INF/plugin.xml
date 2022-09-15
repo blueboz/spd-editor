@@ -53,11 +53,13 @@
         <applicationConfigurable parentId="spdEditorConfigurable"
                                  instance="cn.boz.jb.plugin.idea.configurable.SpdEditorNormSettings"
                                  id="spdEditorConfigurableConfig" displayName="BasicConfig" nonDefaultProject="true"/>
-        <notificationGroup id="Spd Editor" displayType="BALLOON" />
-        <notification.group shortTitle="SpdNotify" groupId="SpdNotify" id="SpdNotify" ></notification.group>
+        <notificationGroup id="SpdEditorNotifyGroup" displayType="BALLOON" />
         <!--        <searchEverywhereContributor implementation="cn.boz.jb.plugin.idea.widget.SpdEditor" id="searchSpdFlow" order="last" os="freebsd"></searchEverywhereContributor>-->
         <projectService serviceImplementation="cn.boz.jb.plugin.idea.notification.SpdEditorNotification" />
     </extensions>
+    <applicationListeners>
+        <listener class="cn.boz.jb.plugin.idea.listener.SpdEditorLifeCycleListener" topic="com.intellij.ide.AppLifecycleListener"></listener>
+    </applicationListeners>
 
     <actions>
         <!-- Add your actions here -->
@@ -174,8 +176,7 @@
             <action class="cn.boz.jb.plugin.idea.action.GoToRefFile$SearchIdAction" icon="AllIcons.Actions.Find"
                     id="GotoIdAction" text="SearchId"></action>
 
-            <action class="cn.boz.jb.plugin.idea.dialog.OpenInSearchToolWindow" icon="AllIcons.Actions.Forward"
-                    id="OpenInSearchToolWindow" text="OpenInSearchToolWindow"></action>
+
         </group>
 
         <group id="spd.gotorefaction.callersearcher.group">
@@ -189,6 +190,12 @@
             <action class="cn.boz.jb.plugin.idea.dialog.GotoScriptAction" id="gotoscriptaction" text="gotoscript"
                     icon="AllIcons.Actions.ShowCode">
             </action>
+            <action class="cn.boz.jb.plugin.idea.dialog.OpenInSearchToolWindow" icon="AllIcons.Actions.MoveToBottomLeft"
+                    id="OpenInSearchToolWindow" text="OpenInSearchToolWindow"></action>
+        </group>
+        <group id="spd.engineright.dlg.group">
+            <action class="cn.boz.jb.plugin.idea.dialog.OpenInSearchToolWindow" icon="AllIcons.Actions.MoveToBottomLeft"
+                    id="OpenInSearchToolWindow" text="OpenInSearchToolWindow"></action>
         </group>
         <group id="spd.menuid.spanel.group">
             <action class="cn.boz.jb.plugin.idea.toolwindow.PrevPageAction" icon="AllIcons.Actions.Play_back"></action>

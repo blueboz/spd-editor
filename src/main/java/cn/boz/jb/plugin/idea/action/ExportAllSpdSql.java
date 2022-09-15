@@ -1,6 +1,7 @@
 package cn.boz.jb.plugin.idea.action;
 
 import cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel;
+import cn.boz.jb.plugin.idea.utils.Constants;
 import com.intellij.dvcs.repo.Repository;
 import com.intellij.dvcs.repo.VcsRepositoryManager;
 import com.intellij.notification.Notification;
@@ -134,7 +135,7 @@ public class ExportAllSpdSql extends AnAction {
                 }
                 zos.close();
 
-                Notification spdEditorNotification = new Notification("Spd Editor", SpdEditorIcons.FLOW_16_ICON, NotificationType.INFORMATION);
+                Notification spdEditorNotification = new Notification(Constants.NOTIFY_GROUP_GLOBAL, SpdEditorIcons.FLOW_16_ICON, NotificationType.INFORMATION);
                 spdEditorNotification.setTitle("exported");
                 spdEditorNotification.setContent("Export as zip in " + exportDest.getPath());
                 spdEditorNotification.notify(anActionEvent.getProject());
