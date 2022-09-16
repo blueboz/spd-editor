@@ -4,6 +4,7 @@ import cn.boz.jb.plugin.idea.utils.Constants;
 import com.intellij.openapi.actionSystem.ActionGroup;
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.ActionToolbar;
+import com.intellij.ui.components.JBPanel;
 import com.intellij.ui.components.JBScrollPane;
 
 import javax.swing.*;
@@ -73,12 +74,17 @@ public class EngineActionDialog extends JComponent {
         this.id=id;
         String namespace = (String) engineAction.get("NAMESPACE_");
         String actionscript = (String) engineAction.get("ACTIONSCRIPT_");
+        if(!actionscript.contains("\n")){
+            if(actionscript.contains(";")){
+                actionscript=actionscript.replaceAll(";","\n");
+            }
+        }
+
 
 
         myLayoutManager = new MyLayoutManager();
 
         this.setLayout(myLayoutManager);
-
         actionIdLabel = new JLabel("actionId:");
         actionIdTextField = new JTextField();
         actionIdTextField.setText(id);
@@ -124,7 +130,7 @@ public class EngineActionDialog extends JComponent {
         actionOutputPanel.setPreferredSize(new Dimension(0, 200));
 
         ActionManager instance = ActionManager.getInstance();
-        ActionGroup actionGroup = (ActionGroup) instance.getAction(Constants.ACTION_GROUP_REF_ENGINE_ACTION);
+        ActionGroup actionGroup = (ActionGroup) instance.getAction(Constants.ACTION_GROUP_REF_ENGINE_ACTION_MIN);
         ActionToolbar spd_tb = instance.createActionToolbar("spd tb", actionGroup, true);
 
         JComponent gotoactionScript = spd_tb.getComponent();
@@ -145,6 +151,11 @@ public class EngineActionDialog extends JComponent {
 
         this.setFocusable(true);
     }
+
+    public EngineActionDerivePanel derive(){
+        return new EngineActionDerivePanel(engineAction,engineActionInput,engineActionOutput);
+    }
+
 
     public boolean isWithOpenInToolWindow() {
         return withOpenInToolWindow;

@@ -3,10 +3,12 @@ package cn.boz.jb.plugin.idea.dialog;
 import cn.boz.jb.plugin.floweditor.gui.property.InputLongTextDialog;
 import cn.boz.jb.plugin.idea.bean.EngineTask;
 import cn.boz.jb.plugin.idea.callsearch.CallerSearcherDetailComment;
+import cn.boz.jb.plugin.idea.callsearch.CallerSearcherTable;
 import com.intellij.ide.actions.searcheverywhere.SearchEverywhereManager;
 import com.intellij.ide.actions.searcheverywhere.SearchEverywhereManagerImpl;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
@@ -56,7 +58,7 @@ public class GotoScriptAction extends AnAction implements DumbAware {
         CallerSearcherDetailComment detailComment = (CallerSearcherDetailComment) SwingUtilities.getAncestorOfClass(CallerSearcherDetailComment.class, anActionEvent.getInputEvent().getComponent());
         if (detailComment instanceof CallerSearcherDetailComment) {
             String script = detailComment.getScript();
-            processScriptContent(script, anActionEvent, caller, () -> {
+            processScriptContent(script, anActionEvent, detailComment, () -> {
 
             });
             return;
@@ -65,11 +67,21 @@ public class GotoScriptAction extends AnAction implements DumbAware {
 
         Component component = anActionEvent.getInputEvent().getComponent();
         InputLongTextDialog dialog = (InputLongTextDialog) InputLongTextDialog.findInstance(component);
-        String inputText = dialog.getInputText();
+        if(dialog!=null){
+            String inputText = dialog.getInputText();
 
-        processScriptContent(inputText, anActionEvent, dialog.getRootPane(), () -> {
-            dialog.close(0);
-        });
+            processScriptContent(inputText, anActionEvent, dialog.getRootPane(), () -> {
+                dialog.close(0);
+            });
+        }
+
+        Component contextComponent = anActionEvent.getRequiredData(PlatformDataKeys.CONTEXT_COMPONENT);
+        if(contextComponent instanceof CallerSearcherCommentPanel){
+            CallerSearcherCommentPanel cscp= (CallerSearcherCommentPanel) contextComponent;
+            String script = cscp.getScript();
+            processScriptContent(script, anActionEvent, cscp.getRootPane(), () -> {
+            });
+        }
     }
 
     public void processScriptContent(String actionscript, AnActionEvent anActionEvent, JComponent centerOf, Runnable callback) {

@@ -174,7 +174,7 @@
 
         <group id="spd.gotorefaction.group">
             <action class="cn.boz.jb.plugin.idea.action.GoToRefFile$SearchIdAction" icon="AllIcons.Actions.Find"
-                    id="GotoIdAction" text="SearchId"></action>
+                    id="SpdEditorGotoIdAction" text="SearchId"></action>
 
 
         </group>
@@ -185,13 +185,20 @@
 
         </group>
 
-        <!--查看EngineAction 对话框中，功能菜单-->
-        <group id="spd.engineaction.dlg.group">
+        <!--查看EngineAction 对话框中，功能菜单包含最小化-->
+        <group id="spd.engineaction.min.dlg.group">
             <action class="cn.boz.jb.plugin.idea.dialog.GotoScriptAction" id="gotoscriptaction" text="gotoscript"
                     icon="AllIcons.Actions.ShowCode">
             </action>
             <action class="cn.boz.jb.plugin.idea.dialog.OpenInSearchToolWindow" icon="AllIcons.Actions.MoveToBottomLeft"
                     id="OpenInSearchToolWindow" text="OpenInSearchToolWindow"></action>
+        </group>
+
+        <group id="spd.engineaction.dlg.group">
+            <action class="cn.boz.jb.plugin.idea.dialog.GotoScriptAction" id="gotoscriptaction" text="gotoscript"
+                    icon="AllIcons.Actions.ShowCode">
+            </action>
+        >
         </group>
         <group id="spd.engineright.dlg.group">
             <action class="cn.boz.jb.plugin.idea.dialog.OpenInSearchToolWindow" icon="AllIcons.Actions.MoveToBottomLeft"

@@ -11,7 +11,9 @@ import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.ActionPlaces;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
+import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.ui.popup.util.PopupUtil;
 import com.intellij.openapi.wm.ToolWindow;
@@ -32,44 +34,79 @@ import java.util.List;
 public class OpenInSearchToolWindow extends AnAction implements DumbAware {
 
     @Override
-    public void actionPerformed(@NotNull AnActionEvent anActionEvent) {
+    public void actionPerformed(@NotNull AnActionEvent e) {
         //拿到要检索的内容，如代码片段，搜索db
-        Component component = anActionEvent.getRequiredData(PlatformDataKeys.CONTEXT_COMPONENT);
-        if (component instanceof CallerSearcherTable) {
-            doForCallerSearcherTable((CallerSearcherTable) component, anActionEvent);
-        } else if (component instanceof EngineRightDialog) {
-            doForEngineRights(anActionEvent, component);
-        } else if (component instanceof EngineActionDialog) {
-            EngineActionDialog engineActionDialog= (EngineActionDialog) component;
-            engineActionDialog.setWithOpenInToolWindow(false);
-            ToolWindow callSearch = ToolWindowManager.getInstance(anActionEvent.getProject()).getToolWindow(Constants.TOOL_WINDOW_CALLSEARCH);
-            ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
-            JBScrollPane jbScrollPane = new JBScrollPane(engineActionDialog);
-            Content title = contentFactory.createContent(jbScrollPane, engineActionDialog.getId(), true);
-            title.setCloseable(true);
-            callSearch.getContentManager().addContent(title);
-            callSearch.getContentManager().requestFocus(title, true);
-            if (!callSearch.isActive()) {
-                callSearch.show();
-            }
-            PopupUtil.getPopupContainerFor(component).dispose();
+
+        Component component = e.getRequiredData(PlatformDataKeys.CONTEXT_COMPONENT);
+        if(component instanceof CallerSearcherTable){
+            doForCallerSearcherTable((CallerSearcherTable) component,e);
+            return ;
+
         }
 
+        if (component instanceof CallerSearcherTable) {
+            doForCallerSearcherTable((CallerSearcherTable) component, e);
+            return;
+        }
+        if (component instanceof EngineRightDialog) {
+            doForEngineRights(e,component);
+            return;
+        }
+        if (component instanceof EngineActionDialog) {
+            doForEngineAction(e, component);
+
+        }
+        CallerSearcherTable callerSearcherTable = (CallerSearcherTable) SwingUtilities.getAncestorOfClass(CallerSearcherTable.class, component);
+
+        EngineRightDialog engineRightDialog = (EngineRightDialog) SwingUtilities.getAncestorOfClass(EngineRightDialog.class, component);
+        EngineActionDialog engineActionDialog = (EngineActionDialog) SwingUtilities.getAncestorOfClass(EngineRightDialog.class, component);
+
+        if (callerSearcherTable instanceof CallerSearcherTable) {
+            doForCallerSearcherTable( callerSearcherTable, e);
+            return;
+        }
+        if (engineRightDialog instanceof EngineRightDialog) {
+            doForEngineRights(e,engineRightDialog);
+            return;
+        }
+        if (engineActionDialog instanceof EngineActionDialog) {
+            doForEngineAction(e,engineActionDialog);
+        }
+    }
+
+    private void doForEngineAction(AnActionEvent anActionEvent, Component component) {
+        EngineActionDialog engineActionDialog = (EngineActionDialog) component;
+        JPanel derive = engineActionDialog.derive();
+
+        ToolWindow callSearch = ToolWindowManager.getInstance(anActionEvent.getProject()).getToolWindow(Constants.TOOL_WINDOW_CALLSEARCH);
+        ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
+        JBScrollPane jbScrollPane = new JBScrollPane(derive);
+        Content engineActionContent = contentFactory.createContent(jbScrollPane, engineActionDialog.getId(), true);
+        engineActionContent.setCloseable(true);
+        callSearch.getContentManager().addContent(engineActionContent);
+        callSearch.getContentManager().requestFocus(engineActionContent, true);
+        if (!callSearch.isActive()) {
+            callSearch.show();
+        }
+        callSearch.getContentManager().setSelectedContent(engineActionContent);
+        PopupUtil.getPopupContainerFor(component).dispose();
     }
 
     private void doForEngineRights(@NotNull AnActionEvent anActionEvent, Component component) {
-        EngineRightDialog engineRightDialog= (EngineRightDialog) component;
+        EngineRightDialog engineRightDialog = (EngineRightDialog) component;
         JComponent derive = engineRightDialog.derive();
         ToolWindow callSearch = ToolWindowManager.getInstance(anActionEvent.getProject()).getToolWindow(Constants.TOOL_WINDOW_CALLSEARCH);
         ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
-;
-        Content title = contentFactory.createContent(derive,engineRightDialog.getUserTask().getRights(), true);
+        ;
+        Content title = contentFactory.createContent(derive, engineRightDialog.getUserTask().getRights(), true);
         title.setCloseable(true);
         callSearch.getContentManager().addContent(title);
         callSearch.getContentManager().requestFocus(title, true);
         if (!callSearch.isActive()) {
             callSearch.show();
         }
+        callSearch.getContentManager().setSelectedContent(title);
+
         PopupUtil.getPopupContainerFor(component).dispose();
     }
 
@@ -123,20 +160,6 @@ public class OpenInSearchToolWindow extends AnAction implements DumbAware {
 
     @Override
     public void update(@NotNull AnActionEvent e) {
-        Component component = e.getRequiredData(PlatformDataKeys.CONTEXT_COMPONENT);
-        if (component instanceof CallerSearcherTable) {
-            e.getPresentation().setVisible(true);
-        } else if(component instanceof EngineRightDialog) {
-            e.getPresentation().setVisible(true);
-        } else if(component instanceof EngineActionDialog) {
-            EngineActionDialog dd= (EngineActionDialog) component;
-            if(dd.isWithOpenInToolWindow()){
-                e.getPresentation().setVisible(true);
-            }
-        }else{
-            e.getPresentation().setVisible(false);
-        }
 
-        super.update(e);
     }
 }
