@@ -2,6 +2,7 @@ package cn.boz.jb.plugin.idea.dialog;
 
 import cn.boz.jb.plugin.floweditor.gui.process.fragment.UserTask;
 import cn.boz.jb.plugin.idea.action.GoToRefFile;
+import cn.boz.jb.plugin.idea.bean.EngineTask;
 import cn.boz.jb.plugin.idea.callsearch.CallerSearcherDetailComment;
 import cn.boz.jb.plugin.idea.callsearch.CallerSearcherTable;
 import cn.boz.jb.plugin.idea.utils.Constants;
@@ -54,12 +55,23 @@ public class OpenInSearchToolWindow extends AnAction implements DumbAware {
         }
         if (component instanceof EngineActionDialog) {
             doForEngineAction(e, component);
+            return ;
 
+        }
+        if(component instanceof JBScrollPane){
+            JBScrollPane jbScrollPane= (JBScrollPane) component;
+            JViewport viewport = jbScrollPane.getViewport();
+            Component view = viewport.getView();
+            if(view instanceof  EngineTaskDialog){
+                doForEngineTask(e, (EngineTaskDialog) view);
+                return ;
+            }
         }
         CallerSearcherTable callerSearcherTable = (CallerSearcherTable) SwingUtilities.getAncestorOfClass(CallerSearcherTable.class, component);
 
         EngineRightDialog engineRightDialog = (EngineRightDialog) SwingUtilities.getAncestorOfClass(EngineRightDialog.class, component);
-        EngineActionDialog engineActionDialog = (EngineActionDialog) SwingUtilities.getAncestorOfClass(EngineRightDialog.class, component);
+        EngineActionDialog engineActionDialog = (EngineActionDialog) SwingUtilities.getAncestorOfClass(EngineActionDialog.class, component);
+        EngineTaskDialog engineTaskDialog = (EngineTaskDialog) SwingUtilities.getAncestorOfClass(EngineTaskDialog.class, component);
 
         if (callerSearcherTable instanceof CallerSearcherTable) {
             doForCallerSearcherTable( callerSearcherTable, e);
@@ -72,11 +84,31 @@ public class OpenInSearchToolWindow extends AnAction implements DumbAware {
         if (engineActionDialog instanceof EngineActionDialog) {
             doForEngineAction(e,engineActionDialog);
         }
+        if(engineTaskDialog instanceof  EngineTaskDialog){
+            doForEngineTask(e,engineTaskDialog);
+        }
+    }
+
+    private void doForEngineTask(AnActionEvent anActionEvent, EngineTaskDialog engineTaskDialog) {
+        JComponent derive = engineTaskDialog.derive();
+
+        ToolWindow callSearch = ToolWindowManager.getInstance(anActionEvent.getProject()).getToolWindow(Constants.TOOL_WINDOW_CALLSEARCH);
+        ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
+        JBScrollPane jbScrollPane = new JBScrollPane(derive);
+        Content engineActionContent = contentFactory.createContent(jbScrollPane, engineTaskDialog.getEngineTask().getId(), true);
+        engineActionContent.setCloseable(true);
+        callSearch.getContentManager().addContent(engineActionContent);
+        callSearch.getContentManager().requestFocus(engineActionContent, true);
+        if (!callSearch.isActive()) {
+            callSearch.show();
+        }
+        callSearch.getContentManager().setSelectedContent(engineActionContent);
+        PopupUtil.getPopupContainerFor(engineTaskDialog).dispose();
     }
 
     private void doForEngineAction(AnActionEvent anActionEvent, Component component) {
         EngineActionDialog engineActionDialog = (EngineActionDialog) component;
-        JPanel derive = engineActionDialog.derive();
+        JComponent derive = engineActionDialog.derive();
 
         ToolWindow callSearch = ToolWindowManager.getInstance(anActionEvent.getProject()).getToolWindow(Constants.TOOL_WINDOW_CALLSEARCH);
         ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
@@ -149,6 +181,7 @@ public class OpenInSearchToolWindow extends AnAction implements DumbAware {
             if (!callSearch.isActive()) {
                 callSearch.show();
             }
+            callSearch.getContentManager().setSelectedContent(title);
 
             ActionManager instance = ActionManager.getInstance();
             ActionGroup ag = (ActionGroup) instance.getAction("spd.gotorefaction.callersearcher.group");

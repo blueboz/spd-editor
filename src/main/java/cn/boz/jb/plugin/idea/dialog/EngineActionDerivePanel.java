@@ -12,22 +12,22 @@ import java.awt.*;
 import java.util.List;
 import java.util.Map;
 
-public class EngineActionDerivePanel extends JPanel {
+public class EngineActionDerivePanel extends JComponent {
     MyLayoutManager myLayoutManager;
+
+    private String actionScript;
 
     public EngineActionDerivePanel( Map<String, Object> engineAction,
                                    List<Map<String, Object>> engineActionInput, List<Map<String, Object>> engineActionOutput) {
-        JPanel panel = new JPanel();
         String id = (String) engineAction.get("ID_");
         String namespace = (String) engineAction.get("NAMESPACE_");
         String actionscript = (String) engineAction.get("ACTIONSCRIPT_");
 
-        ;
 
 
         myLayoutManager = new MyLayoutManager();
 
-        panel.setLayout(myLayoutManager);
+        this.setLayout(myLayoutManager);
 
         JLabel actionIdLabel = new JLabel("actionId:");
         JTextField actionIdTextField = new JTextField();
@@ -40,6 +40,7 @@ public class EngineActionDerivePanel extends JPanel {
         JTextArea actionScriptTextArea = new JTextArea("", 7, 30);
         actionScriptTextArea.setText(actionscript);
         actionScriptTextArea.setLineWrap(true);
+        this.actionScript=actionscript;
 
 
         JBScrollPane actionScriptScrollPane = new JBScrollPane(actionScriptTextArea);
@@ -77,18 +78,26 @@ public class EngineActionDerivePanel extends JPanel {
         JComponent gotoactionScript = spd_tb.getComponent();
 
 
-        panel.add(actionIdLabel);
-        panel.add(actionIdTextField);
-        panel.add(namespaceLabel);
-        panel.add(namespaceTextField);
-        panel.add(actionscriptLabel);
-        panel.add(actionScriptScrollPane);
-        panel.add(gotoactionScript);
-        panel.add(actionInputLabel);
-        panel.add(actionInputPanel);
-        panel.add(actionOutputLabel);
-        panel.add(actionOutputPanel);
+        this.add(actionIdLabel);
+        this.add(actionIdTextField);
+        this.add(namespaceLabel);
+        this.add(namespaceTextField);
+        this.add(actionscriptLabel);
+        this.add(actionScriptScrollPane);
+        this.add(gotoactionScript);
+        this.add(actionInputLabel);
+        this.add(actionInputPanel);
+        this.add(actionOutputLabel);
+        this.add(actionOutputPanel);
 
 
+    }
+
+    public String getActionScript() {
+        return actionScript;
+    }
+
+    public void setActionScript(String actionScript) {
+        this.actionScript = actionScript;
     }
 }

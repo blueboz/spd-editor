@@ -64,6 +64,25 @@ public class GotoScriptAction extends AnAction implements DumbAware {
             return;
         }
 
+        EngineTaskDerivePanel engineTaskDerivePanel = (EngineTaskDerivePanel) SwingUtilities.getAncestorOfClass(EngineTaskDerivePanel.class, anActionEvent.getInputEvent().getComponent());
+        if (engineTaskDerivePanel instanceof EngineTaskDerivePanel) {
+            String script = engineTaskDerivePanel.getEngineTask().getExpression();
+            processScriptContent(script, anActionEvent, engineTaskDerivePanel, () -> {
+
+            });
+            return;
+        }
+
+        EngineActionDerivePanel engineActionDerivePanel = (EngineActionDerivePanel) SwingUtilities.getAncestorOfClass(EngineActionDerivePanel.class, anActionEvent.getInputEvent().getComponent());
+        if (engineActionDerivePanel instanceof EngineActionDerivePanel) {
+            String script = engineActionDerivePanel.getActionScript();
+            processScriptContent(script, anActionEvent, engineActionDerivePanel, () -> {
+
+            });
+            return;
+        }
+
+
 
         Component component = anActionEvent.getInputEvent().getComponent();
         InputLongTextDialog dialog = (InputLongTextDialog) InputLongTextDialog.findInstance(component);

@@ -9,7 +9,7 @@ import com.intellij.ui.components.JBScrollPane;
 
 import javax.swing.*;
 
-public class EngineTaskDialog extends JComponent {
+public class EngineTaskDerivePanel extends JComponent {
     private MyLayoutManager myLayoutManager;
     private EngineTask engineTask;
 
@@ -21,7 +21,7 @@ public class EngineTaskDialog extends JComponent {
         this.engineTask = engineTask;
     }
 
-    public EngineTaskDialog(EngineTask engineTask) {
+    public EngineTaskDerivePanel(EngineTask engineTask) {
         myLayoutManager = new MyLayoutManager();
         this.engineTask = engineTask;
 
@@ -71,7 +71,7 @@ public class EngineTaskDialog extends JComponent {
         }
 
         ActionManager instance = ActionManager.getInstance();
-        ActionGroup actionGroup = (ActionGroup) instance.getAction(Constants.ACTION_GROUP_REF_ENGINE_ACTION_MIN);
+        ActionGroup actionGroup = (ActionGroup) instance.getAction(Constants.ACTION_GROUP_REF_ENGINE_ACTION);
         ActionToolbar spd_tb = instance.createActionToolbar("spd tb", actionGroup, true);
         JComponent gotoactionScript = spd_tb.getComponent();
 
@@ -109,10 +109,6 @@ public class EngineTaskDialog extends JComponent {
         this.add(tasklistenerArea);
 
         this.setFocusable(true);
-    }
-
-    public JComponent derive(){
-        return new EngineTaskDerivePanel(engineTask);
     }
 
 }
