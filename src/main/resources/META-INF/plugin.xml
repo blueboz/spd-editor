@@ -26,7 +26,6 @@
     <!--    <depends>JavaScriptLanguage</depends>-->
 
 
-
     <extensions defaultExtensionNs="com.intellij">
         <internalFileTemplate name="Spd Process"/>
         <!-- Add your extensions here -->
@@ -53,12 +52,13 @@
         <applicationConfigurable parentId="spdEditorConfigurable"
                                  instance="cn.boz.jb.plugin.idea.configurable.SpdEditorNormSettings"
                                  id="spdEditorConfigurableConfig" displayName="BasicConfig" nonDefaultProject="true"/>
-        <notificationGroup id="SpdEditorNotifyGroup" displayType="BALLOON" />
+        <notificationGroup id="SpdEditorNotifyGroup" displayType="BALLOON"/>
         <!--        <searchEverywhereContributor implementation="cn.boz.jb.plugin.idea.widget.SpdEditor" id="searchSpdFlow" order="last" os="freebsd"></searchEverywhereContributor>-->
-        <projectService serviceImplementation="cn.boz.jb.plugin.idea.notification.SpdEditorNotification" />
+        <projectService serviceImplementation="cn.boz.jb.plugin.idea.notification.SpdEditorNotification"/>
     </extensions>
     <applicationListeners>
-        <listener class="cn.boz.jb.plugin.idea.listener.SpdEditorLifeCycleListener" topic="com.intellij.ide.AppLifecycleListener"></listener>
+        <listener class="cn.boz.jb.plugin.idea.listener.SpdEditorLifeCycleListener"
+                  topic="com.intellij.ide.AppLifecycleListener"></listener>
     </applicationListeners>
 
     <actions>
@@ -72,7 +72,8 @@
                     text="AddBom"
                     icon="SpdEditorIcons.BOM_16_ICON">
             </action>
-            <action class="cn.boz.jb.plugin.idea.action.HtmlRefAction" id="htmlRefAction" description="check who refer me in ecas menu"
+            <action class="cn.boz.jb.plugin.idea.action.HtmlRefAction" id="htmlRefAction"
+                    description="check who refer me in ecas menu"
                     text="HtmlRef">
             </action>
             <action class="cn.boz.jb.plugin.addbom.FileDiffHistoryAction" id="myfileDiffAction"
@@ -147,7 +148,8 @@
         </action>
 
         <group>
-            <group class="cn.boz.jb.plugin.idea.action.JsUsageGroup" text="JavaScript Usage" icon="SpdEditorIcons.JAVASCRIPT_16_ICON" popup="true">
+            <group class="cn.boz.jb.plugin.idea.action.JsUsageGroup" text="JavaScript Usage"
+                   icon="SpdEditorIcons.JAVASCRIPT_16_ICON" popup="true">
                 <action class="cn.boz.jb.plugin.idea.action.JsUsageGroup$JsUsageFindAction" id="FindJsUsage"
                         text="JavaScript Usage" icon="SpdEditorIcons.SEARCH_ITEM_16_ICON"></action>
                 <action class="cn.boz.jb.plugin.idea.action.JsUsageGroup$JsUsageAction" id="ReferJsUsage"
@@ -175,30 +177,46 @@
         <group id="spd.gotorefaction.group">
             <action class="cn.boz.jb.plugin.idea.action.GotoRefFileAction$SearchIdAction" icon="AllIcons.Actions.Find"
                     id="SpdEditorGotoIdAction" text="SearchId"></action>
-            <action class="cn.boz.jb.plugin.idea.action.GotoRefFileAction$ActionOrTaskDetailAction" icon="SpdEditorIcons.ACTION_16_ICON"
+            <action class="cn.boz.jb.plugin.idea.action.GotoRefFileAction$ActionOrTaskDetailAction"
+                    icon="SpdEditorIcons.ACTION_16_ICON"
                     id="SpdEditorActionOrTaskAction" text="GoDetail"
-
             ></action>
+        </group>
+        <group id="spd.copy.taskaction.group">
+            <action class="cn.boz.jb.plugin.idea.action.engineaction.CopyEngineActionScriptAction"
+                    icon="AllIcons.Actions.Copy" id="SpdEditorCopyEngineAction" text="CopyQuerySql"></action>
+            <add-to-group group-id="spd.gotorefaction.group"></add-to-group>
         </group>
 
 
         <!--查看EngineAction 对话框中，功能菜单包含最小化-->
-        <group id="spd.engineaction.min.dlg.group">
-            <action class="cn.boz.jb.plugin.idea.action.GotoScriptAction" id="gotoscriptaction" text="gotoscript"
-                    icon="AllIcons.Actions.ShowCode">
-            </action>
-            <action class="cn.boz.jb.plugin.idea.action.OpenInSearchToolWindowAction" icon="AllIcons.Actions.MoveToBottomLeft"
-                    id="OpenInSearchToolWindow" text="OpenInSearchToolWindow"></action>
+        <group id="spd.actiontask.min.dlg.group">
+            <action class="cn.boz.jb.plugin.idea.action.engineaction.CopyEngineActionScriptAction"
+                    icon="AllIcons.Actions.Copy" id="SpdEditorCopyEngineAction" text="CopyQuerySql"></action>
         </group>
 
-        <group id="spd.engineaction.dlg.group">
+        <group id="spd.actionscript.gotoaction.group">
             <action class="cn.boz.jb.plugin.idea.action.GotoScriptAction" id="gotoscriptaction" text="gotoscript"
                     icon="AllIcons.Actions.ShowCode">
             </action>
-        >
+            <add-to-group group-id="spd.actiontask.dlg.group"></add-to-group>
+            <add-to-group group-id="spd.actiontask.min.dlg.group"></add-to-group>
+        </group>
+
+        <group id="spd.actiontask.dlg.group">
+            <action class="cn.boz.jb.plugin.idea.action.engineaction.CopyEngineActionScriptAction"
+                    icon="AllIcons.Actions.Copy" id="SpdEditorCopyEngineAction" text="CopyQuerySql"></action>
+        </group>
+        <group id="spd.toolwindow.open.group">
+            <action class="cn.boz.jb.plugin.idea.action.OpenInSearchToolWindowAction"
+                    icon="AllIcons.Actions.MoveToBottomLeft"
+                    id="OpenInSearchToolWindow" text="OpenInSearchToolWindow"></action>
+            <add-to-group group-id="spd.engineright.dlg.group"></add-to-group>
+            <add-to-group group-id="spd.actiontask.min.dlg.group"></add-to-group>
         </group>
         <group id="spd.engineright.dlg.group">
-            <action class="cn.boz.jb.plugin.idea.action.OpenInSearchToolWindowAction" icon="AllIcons.Actions.MoveToBottomLeft"
+            <action class="cn.boz.jb.plugin.idea.action.OpenInSearchToolWindowAction"
+                    icon="AllIcons.Actions.MoveToBottomLeft"
                     id="OpenInSearchToolWindow" text="OpenInSearchToolWindow"></action>
         </group>
         <group id="spd.menuid.spanel.group">
@@ -260,7 +278,6 @@
         </group>
 
     </actions>
-
 
 
 </idea-plugin>

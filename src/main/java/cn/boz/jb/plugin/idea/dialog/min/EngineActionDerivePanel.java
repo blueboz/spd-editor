@@ -18,11 +18,14 @@ public class EngineActionDerivePanel extends JComponent {
 
     private String actionScript;
 
+    private String id;
+
     public EngineActionDerivePanel( Map<String, Object> engineAction,
                                    List<Map<String, Object>> engineActionInput, List<Map<String, Object>> engineActionOutput) {
         String id = (String) engineAction.get("ID_");
         String namespace = (String) engineAction.get("NAMESPACE_");
         String actionscript = (String) engineAction.get("ACTIONSCRIPT_");
+        this.id=id;
 
         myLayoutManager = new MyLayoutManager();
 
@@ -98,5 +101,13 @@ public class EngineActionDerivePanel extends JComponent {
 
     public void setActionScript(String actionScript) {
         this.actionScript = actionScript;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

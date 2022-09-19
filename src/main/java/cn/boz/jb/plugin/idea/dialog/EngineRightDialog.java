@@ -85,7 +85,6 @@ public class EngineRightDialog extends JComponent {
         ActionGroup actionGroup = (ActionGroup) instance.getAction(Constants.ACTION_GROUP_FLOW_ENGINE_RIGHTS);
         ActionToolbar spd_tb = instance.createActionToolbar("spdtb", actionGroup, true);
         JComponent gotoactionScript = spd_tb.getComponent();
-
         this.add(gotoactionScript) ;
     }
 
