@@ -1,6 +1,6 @@
 package cn.boz.jb.plugin.idea.codedef.dialog;
 
-import cn.boz.jb.plugin.idea.dialog.MyLayoutManager;
+import cn.boz.jb.plugin.idea.layoutmanager.MyLayoutManager;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;

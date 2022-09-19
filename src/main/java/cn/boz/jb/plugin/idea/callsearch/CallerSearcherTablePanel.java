@@ -8,8 +8,8 @@ import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
-public class CallerSearcherTable extends JBTable {
-    public CallerSearcherTable(TableModel model) {
+public class CallerSearcherTablePanel extends JBTable {
+    public CallerSearcherTablePanel(TableModel model) {
         this(model,null);
 
     }
@@ -32,7 +32,7 @@ public class CallerSearcherTable extends JBTable {
         this.queryName = queryName;
     }
 
-    public CallerSearcherTable(TableModel model, TableColumnModel columnModel) {
+    public CallerSearcherTablePanel(TableModel model, TableColumnModel columnModel) {
         super(model, columnModel);
         new CallerSearcherSpeedSearch(this);
         final TableColumn c0 = getColumnModel().getColumn(0);

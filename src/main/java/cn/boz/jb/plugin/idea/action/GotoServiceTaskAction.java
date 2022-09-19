@@ -3,7 +3,6 @@ package cn.boz.jb.plugin.idea.action;
 import cn.boz.jb.plugin.floweditor.gui.control.PropertyObject;
 import cn.boz.jb.plugin.floweditor.gui.process.fragment.ServiceTask;
 import cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel;
-import cn.boz.jb.plugin.idea.dialog.GotoScriptAction;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.ui.popup.JBPopupFactory;

@@ -2,12 +2,13 @@ package cn.boz.jb.plugin.idea.action;
 
 import cn.boz.jb.plugin.idea.bean.EngineAction;
 import cn.boz.jb.plugin.idea.bean.EngineTask;
-import cn.boz.jb.plugin.idea.callsearch.CallerSearcherTable;
+import cn.boz.jb.plugin.idea.callsearch.CallerSearcherTablePanel;
 import cn.boz.jb.plugin.idea.callsearch.CallerSearcherTableCellRender;
 import cn.boz.jb.plugin.idea.configurable.SpdEditorDBState;
-import cn.boz.jb.plugin.idea.dialog.CallerSearcherCommentPanel;
+import cn.boz.jb.plugin.idea.callsearch.CallerSearcherCommentPanel;
 import cn.boz.jb.plugin.idea.dialog.EngineActionDialog;
 import cn.boz.jb.plugin.idea.dialog.EngineTaskDialog;
+import cn.boz.jb.plugin.idea.utils.Constants;
 import cn.boz.jb.plugin.idea.utils.DBUtils;
 import com.intellij.codeInsight.navigation.NavigationUtil;
 import com.intellij.find.FindModel;
@@ -59,7 +60,6 @@ import com.intellij.psi.xml.XmlFile;
 import com.intellij.psi.xml.XmlTag;
 import com.intellij.ui.PopupHandler;
 import com.intellij.ui.components.JBScrollPane;
-import com.intellij.ui.content.Content;
 import com.intellij.ui.table.JBTable;
 import com.intellij.util.Consumer;
 import com.intellij.util.ui.ColumnInfo;
@@ -70,6 +70,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.table.TableCellRenderer;
+import java.awt.*;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.sql.Connection;
@@ -83,7 +84,7 @@ import java.util.stream.Stream;
 /**
  * 用于导航到指定文件
  */
-public class GoToRefFile extends AnAction {
+public class GotoRefFileAction extends AnAction {
 
 
     @Override
@@ -385,7 +386,7 @@ public class GoToRefFile extends AnAction {
     @SuppressWarnings("unchecked")
     public static void showListPopup(final List<Object> objects, Project project, Consumer<? super Object> selectUserTaskConsumer, boolean showComments,String queryName,String qualifierName) {
         //
-        CallerSearcherTable jbTable = new CallerSearcherTable(new ListTableModel<>(CALL_SEARCHER_TABLE_COLUMN_INFO,objects,0));
+        CallerSearcherTablePanel jbTable = new CallerSearcherTablePanel(new ListTableModel<>(CALL_SEARCHER_TABLE_COLUMN_INFO,objects,0));
 
         jbTable.setQueryName(queryName);
         jbTable.setQualifierName(qualifierName);
@@ -426,7 +427,7 @@ public class GoToRefFile extends AnAction {
 
         ActionManager instance = ActionManager.getInstance();
 
-        ActionGroup ag = (ActionGroup) instance.getAction("spd.gotorefaction.group");
+        ActionGroup ag = (ActionGroup) instance.getAction(Constants.ACTION_GROUP_REF_TABLE_SEARCH_ID);
 
         PopupHandler.installPopupHandler(jbTable, ag, ActionPlaces.UPDATE_POPUP);
 
@@ -434,6 +435,52 @@ public class GoToRefFile extends AnAction {
         //安装一个右键菜单供使用
     }
 
+
+    /**
+     * this is beging use by
+     * @see GotoRefFileAction#showListPopup(List, Project, Consumer, boolean, String, String)
+     */
+    public static class ActionOrTaskDetailAction extends DumbAwareAction {
+
+        /**
+         *
+         * @see  GotoRefFileAction#showListPopup(List, Project, Consumer, boolean, String, String)
+         * @param anActionEvent
+         */
+        @Override
+        public void actionPerformed(@NotNull AnActionEvent anActionEvent) {
+            Component com = anActionEvent.getRequiredData(PlatformDataKeys.CONTEXT_COMPONENT);
+            if(com instanceof JBTable){
+                JBTable jbTable= (JBTable) com;
+                ListTableModel model = (ListTableModel) jbTable.getModel();
+                int selectedRow = jbTable.getSelectedRow();
+                int i = jbTable.convertRowIndexToModel(selectedRow);
+                Object item = model.getItem(i);
+                if (item != null) {
+                    if (item instanceof EngineAction) {
+                        EngineAction engineAction = (EngineAction) item;
+                        tryToGotoAction(engineAction.getId(), anActionEvent, true);
+                    } else {
+                        EngineTaskDialog engineTaskDialog = new EngineTaskDialog((EngineTask) item);
+                        JBScrollPane jbScrollPane = new JBScrollPane(engineTaskDialog);
+                        JBPopup popup;
+                        popup = JBPopupFactory.getInstance()
+                                .createComponentPopupBuilder(jbScrollPane, null)
+                                .setRequestFocus(true)
+                                .setFocusable(true)
+                                .setMovable(true)
+                                .setTitle("EngineTask")
+                                .setCancelOnOtherWindowOpen(true)
+                                .setProject(anActionEvent.getProject())
+                                .createPopup();
+
+                        popup.showCenteredInCurrentWindow(anActionEvent.getProject());
+                    }
+                }
+            }
+
+        }
+    }
 
     @SuppressWarnings("unchecked")
     public static class SearchIdAction extends DumbAwareAction {

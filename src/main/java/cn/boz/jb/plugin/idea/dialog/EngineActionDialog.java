@@ -1,10 +1,11 @@
 package cn.boz.jb.plugin.idea.dialog;
 
+import cn.boz.jb.plugin.idea.dialog.min.EngineActionDerivePanel;
+import cn.boz.jb.plugin.idea.layoutmanager.MyLayoutManager;
 import cn.boz.jb.plugin.idea.utils.Constants;
 import com.intellij.openapi.actionSystem.ActionGroup;
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.ActionToolbar;
-import com.intellij.ui.components.JBPanel;
 import com.intellij.ui.components.JBScrollPane;
 
 import javax.swing.*;
@@ -61,13 +62,11 @@ public class EngineActionDialog extends JComponent {
     private JScrollPane actionOutputPanel;
     private JTable actionOutputTable;
     private JLabel actionOutputLabel;
-    private boolean withOpenInToolWindow;
     private DefaultTableModel outputModel;
     private String id;
 
     public EngineActionDialog(Map<String, Object> engineAction, List<Map<String, Object>> engineActionInput, List<Map<String, Object>> engineActionOutput,boolean withOpenInToolWindow) {
         this.engineAction = engineAction;
-        this.withOpenInToolWindow=withOpenInToolWindow;
         this.engineActionInput = engineActionInput;
         this.engineActionOutput = engineActionOutput;
         String id = (String) engineAction.get("ID_");
@@ -156,14 +155,6 @@ public class EngineActionDialog extends JComponent {
         return new EngineActionDerivePanel(engineAction,engineActionInput,engineActionOutput);
     }
 
-
-    public boolean isWithOpenInToolWindow() {
-        return withOpenInToolWindow;
-    }
-
-    public void setWithOpenInToolWindow(boolean withOpenInToolWindow) {
-        this.withOpenInToolWindow = withOpenInToolWindow;
-    }
 
     public String getId() {
         return id;

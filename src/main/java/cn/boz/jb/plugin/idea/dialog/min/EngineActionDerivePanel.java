@@ -1,5 +1,6 @@
-package cn.boz.jb.plugin.idea.dialog;
+package cn.boz.jb.plugin.idea.dialog.min;
 
+import cn.boz.jb.plugin.idea.layoutmanager.MyLayoutManager;
 import cn.boz.jb.plugin.idea.utils.Constants;
 import com.intellij.openapi.actionSystem.ActionGroup;
 import com.intellij.openapi.actionSystem.ActionManager;
@@ -22,8 +23,6 @@ public class EngineActionDerivePanel extends JComponent {
         String id = (String) engineAction.get("ID_");
         String namespace = (String) engineAction.get("NAMESPACE_");
         String actionscript = (String) engineAction.get("ACTIONSCRIPT_");
-
-
 
         myLayoutManager = new MyLayoutManager();
 

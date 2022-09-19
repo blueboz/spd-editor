@@ -73,7 +73,7 @@ public class JsUsageGroup extends DefaultActionGroup {
                 String destpath = cpath.replace(ppath, "");
                 destpath = destpath.substring(1);
                 String replace = destpath.replace(".js", ".html");
-                GoToRefFile.goToPathSearchRecusive(psiFile, anActionEvent.getProject(), replace);
+                GotoRefFileAction.goToPathSearchRecusive(psiFile, anActionEvent.getProject(), replace);
 
             }
         }

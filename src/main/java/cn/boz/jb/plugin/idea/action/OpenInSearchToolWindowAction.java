@@ -1,20 +1,17 @@
-package cn.boz.jb.plugin.idea.dialog;
+package cn.boz.jb.plugin.idea.action;
 
-import cn.boz.jb.plugin.floweditor.gui.process.fragment.UserTask;
-import cn.boz.jb.plugin.idea.action.GoToRefFile;
-import cn.boz.jb.plugin.idea.bean.EngineTask;
 import cn.boz.jb.plugin.idea.callsearch.CallerSearcherDetailComment;
-import cn.boz.jb.plugin.idea.callsearch.CallerSearcherTable;
+import cn.boz.jb.plugin.idea.callsearch.CallerSearcherTablePanel;
+import cn.boz.jb.plugin.idea.dialog.EngineActionDialog;
+import cn.boz.jb.plugin.idea.dialog.EngineRightDialog;
+import cn.boz.jb.plugin.idea.dialog.EngineTaskDialog;
 import cn.boz.jb.plugin.idea.utils.Constants;
-import com.intellij.jam.model.util.JamCommonUtil;
 import com.intellij.openapi.actionSystem.ActionGroup;
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.ActionPlaces;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
-import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.ui.popup.util.PopupUtil;
 import com.intellij.openapi.wm.ToolWindow;
@@ -32,22 +29,17 @@ import java.awt.*;
 import java.util.List;
 
 
-public class OpenInSearchToolWindow extends AnAction implements DumbAware {
+public class OpenInSearchToolWindowAction extends AnAction implements DumbAware {
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
         //拿到要检索的内容，如代码片段，搜索db
 
         Component component = e.getRequiredData(PlatformDataKeys.CONTEXT_COMPONENT);
-        if(component instanceof CallerSearcherTable){
-            doForCallerSearcherTable((CallerSearcherTable) component,e);
+        if(component instanceof CallerSearcherTablePanel){
+            doForCallerSearcherTable((CallerSearcherTablePanel) component,e);
             return ;
 
-        }
-
-        if (component instanceof CallerSearcherTable) {
-            doForCallerSearcherTable((CallerSearcherTable) component, e);
-            return;
         }
         if (component instanceof EngineRightDialog) {
             doForEngineRights(e,component);
@@ -62,19 +54,19 @@ public class OpenInSearchToolWindow extends AnAction implements DumbAware {
             JBScrollPane jbScrollPane= (JBScrollPane) component;
             JViewport viewport = jbScrollPane.getViewport();
             Component view = viewport.getView();
-            if(view instanceof  EngineTaskDialog){
+            if(view instanceof EngineTaskDialog){
                 doForEngineTask(e, (EngineTaskDialog) view);
                 return ;
             }
         }
-        CallerSearcherTable callerSearcherTable = (CallerSearcherTable) SwingUtilities.getAncestorOfClass(CallerSearcherTable.class, component);
+        CallerSearcherTablePanel callerSearcherTablePanel = (CallerSearcherTablePanel) SwingUtilities.getAncestorOfClass(CallerSearcherTablePanel.class, component);
 
         EngineRightDialog engineRightDialog = (EngineRightDialog) SwingUtilities.getAncestorOfClass(EngineRightDialog.class, component);
         EngineActionDialog engineActionDialog = (EngineActionDialog) SwingUtilities.getAncestorOfClass(EngineActionDialog.class, component);
         EngineTaskDialog engineTaskDialog = (EngineTaskDialog) SwingUtilities.getAncestorOfClass(EngineTaskDialog.class, component);
 
-        if (callerSearcherTable instanceof CallerSearcherTable) {
-            doForCallerSearcherTable( callerSearcherTable, e);
+        if (callerSearcherTablePanel instanceof CallerSearcherTablePanel) {
+            doForCallerSearcherTable(callerSearcherTablePanel, e);
             return;
         }
         if (engineRightDialog instanceof EngineRightDialog) {
@@ -142,18 +134,17 @@ public class OpenInSearchToolWindow extends AnAction implements DumbAware {
         PopupUtil.getPopupContainerFor(component).dispose();
     }
 
-    private void doForCallerSearcherTable(CallerSearcherTable outside, AnActionEvent anActionEvent) {
+    private void doForCallerSearcherTable(CallerSearcherTablePanel outside, AnActionEvent anActionEvent) {
         if (outside != null) {
             ListTableModel model = (ListTableModel) outside.getModel();
             List items = model.getItems();
-            CallerSearcherTable tabTable = new CallerSearcherTable(new ListTableModel<>(GoToRefFile.CALL_SEARCHER_TABLE_COLUMN_INFO, items, 0)) {
+            CallerSearcherTablePanel tabTable = new CallerSearcherTablePanel(new ListTableModel<>(GotoRefFileAction.CALL_SEARCHER_TABLE_COLUMN_INFO, items, 0)) {
                 @Override
                 public boolean isCellEditable(int row, int column) {
                     if (column == 1 || column == 2) {
                         return true;
                     }
                     return super.isCellEditable(row, column);
-
                 }
             };
 
@@ -184,7 +175,7 @@ public class OpenInSearchToolWindow extends AnAction implements DumbAware {
             callSearch.getContentManager().setSelectedContent(title);
 
             ActionManager instance = ActionManager.getInstance();
-            ActionGroup ag = (ActionGroup) instance.getAction("spd.gotorefaction.callersearcher.group");
+            ActionGroup ag = (ActionGroup) instance.getAction(Constants.ACTION_GROUP_REF_TABLE_SEARCH_ID);
             PopupHandler.installPopupHandler(tabTable, ag, ActionPlaces.UPDATE_POPUP);
             PopupUtil.getPopupContainerFor(outside).dispose();
 

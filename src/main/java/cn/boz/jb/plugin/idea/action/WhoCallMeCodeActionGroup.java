@@ -27,7 +27,7 @@ public class WhoCallMeCodeActionGroup {
                     spdEditorNotification.setContent("Flow id is null");
                     spdEditorNotification.notify(anActionEvent.getProject());
                 } else {
-                    GoToRefFile.tryToSearchUsageByCodeFragment(anActionEvent, id,"process");
+                    GotoRefFileAction.tryToSearchUsageByCodeFragment(anActionEvent, id,"process");
                 }
             }
         }

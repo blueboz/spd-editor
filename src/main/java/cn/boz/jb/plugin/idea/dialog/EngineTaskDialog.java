@@ -1,6 +1,8 @@
 package cn.boz.jb.plugin.idea.dialog;
 
 import cn.boz.jb.plugin.idea.bean.EngineTask;
+import cn.boz.jb.plugin.idea.dialog.min.EngineTaskDerivePanel;
+import cn.boz.jb.plugin.idea.layoutmanager.MyLayoutManager;
 import cn.boz.jb.plugin.idea.utils.Constants;
 import com.intellij.openapi.actionSystem.ActionGroup;
 import com.intellij.openapi.actionSystem.ActionManager;

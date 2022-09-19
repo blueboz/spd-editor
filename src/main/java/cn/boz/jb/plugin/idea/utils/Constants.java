@@ -10,5 +10,7 @@ public class Constants {
 
     public static final String ACTION_GROUP_FLOW_ENGINE_RIGHTS="spd.engineright.dlg.group";
 
+    public static final String ACTION_GROUP_REF_TABLE_SEARCH_ID="spd.gotorefaction.group";
+
     public static final String NOTIFY_GROUP_GLOBAL="SpdEditorNotifyGroup";
 }

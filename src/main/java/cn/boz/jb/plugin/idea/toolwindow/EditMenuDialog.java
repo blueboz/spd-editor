@@ -2,7 +2,7 @@ package cn.boz.jb.plugin.idea.toolwindow;
 
 import cn.boz.jb.plugin.floweditor.gui.utils.StringUtils;
 import cn.boz.jb.plugin.idea.configurable.SpdEditorNormState;
-import cn.boz.jb.plugin.idea.dialog.MyLayoutManager;
+import cn.boz.jb.plugin.idea.layoutmanager.MyLayoutManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.ui.DialogWrapper;

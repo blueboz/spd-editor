@@ -38,7 +38,7 @@ import cn.boz.jb.plugin.floweditor.gui.utils.LineUtils;
 import cn.boz.jb.plugin.floweditor.gui.utils.NumberUtils;
 import cn.boz.jb.plugin.floweditor.gui.utils.ShapePos;
 import cn.boz.jb.plugin.floweditor.gui.utils.ShapeUtils;
-import cn.boz.jb.plugin.idea.action.FindInSpdEditor;
+import cn.boz.jb.plugin.idea.action.FindInSpdEditorAction;
 import cn.boz.jb.plugin.idea.configurable.SpdEditorDBState;
 import cn.boz.jb.plugin.idea.listener.ChartChangeListener;
 import cn.boz.jb.plugin.idea.listener.ProcessSaveListener;
@@ -259,7 +259,7 @@ public class ChartPanel extends JComponent implements DataProvider, MouseListene
 //        PopupHandler.installPopupMenu(myList, "VcsSelectionHistoryDialog.Popup", ActionPlaces.UPDATE_POPUP);
         PopupHandler.installPopupHandler(this, ag, ActionPlaces.UPDATE_POPUP);
         //注册Ctrl+F给对应的Action
-        new FindInSpdEditor(this).registerCustomShortcutSet(this, null);
+        new FindInSpdEditorAction(this).registerCustomShortcutSet(this, null);
     }
 
     /**

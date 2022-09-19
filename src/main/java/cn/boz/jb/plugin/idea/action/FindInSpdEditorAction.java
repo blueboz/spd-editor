@@ -15,6 +15,7 @@ import cn.boz.jb.plugin.floweditor.gui.shape.Line;
 import cn.boz.jb.plugin.floweditor.gui.shape.Shape;
 import cn.boz.jb.plugin.floweditor.gui.utils.IcoMoonUtils;
 import cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel;
+import cn.boz.jb.plugin.idea.utils.Constants;
 import com.intellij.openapi.actionSystem.ActionGroup;
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.ActionPlaces;
@@ -56,14 +57,14 @@ import javax.swing.text.Highlighter;
 import java.awt.*;
 import java.util.List;
 
-public class FindInSpdEditor extends DumbAwareAction {
+public class FindInSpdEditorAction extends DumbAwareAction {
 
-    public FindInSpdEditor() {
+    public FindInSpdEditorAction() {
     }
 
     private ChartPanel chartPanel;
 
-    public FindInSpdEditor(ChartPanel chartPanel) {
+    public FindInSpdEditorAction(ChartPanel chartPanel) {
         //拷贝快捷键
         //注册快捷
         AnAction action = ActionManager.getInstance().getAction(IdeActions.ACTION_FIND);
@@ -261,7 +262,7 @@ public class FindInSpdEditor extends DumbAwareAction {
 
         ActionManager instance = ActionManager.getInstance();
 
-        ActionGroup ag = (ActionGroup) instance.getAction("spd.gotorefaction.group");
+        ActionGroup ag = (ActionGroup) instance.getAction(Constants.ACTION_GROUP_REF_TABLE_SEARCH_ID);
 
         PopupHandler.installPopupHandler(jbTable, ag, ActionPlaces.UPDATE_POPUP);
 

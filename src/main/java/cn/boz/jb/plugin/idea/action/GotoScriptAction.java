@@ -1,9 +1,13 @@
-package cn.boz.jb.plugin.idea.dialog;
+package cn.boz.jb.plugin.idea.action;
 
 import cn.boz.jb.plugin.floweditor.gui.property.InputLongTextDialog;
 import cn.boz.jb.plugin.idea.bean.EngineTask;
+import cn.boz.jb.plugin.idea.callsearch.CallerSearcherCommentPanel;
 import cn.boz.jb.plugin.idea.callsearch.CallerSearcherDetailComment;
-import cn.boz.jb.plugin.idea.callsearch.CallerSearcherTable;
+import cn.boz.jb.plugin.idea.dialog.EngineActionDialog;
+import cn.boz.jb.plugin.idea.dialog.EngineTaskDialog;
+import cn.boz.jb.plugin.idea.dialog.min.EngineActionDerivePanel;
+import cn.boz.jb.plugin.idea.dialog.min.EngineTaskDerivePanel;
 import com.intellij.ide.actions.searcheverywhere.SearchEverywhereManager;
 import com.intellij.ide.actions.searcheverywhere.SearchEverywhereManagerImpl;
 import com.intellij.openapi.actionSystem.AnAction;
@@ -47,7 +51,7 @@ public class GotoScriptAction extends AnAction implements DumbAware {
             });
             return;
         }
-        CallerSearcherCommentPanel caller = (cn.boz.jb.plugin.idea.dialog.CallerSearcherCommentPanel) SwingUtilities.getAncestorOfClass(CallerSearcherCommentPanel.class, anActionEvent.getInputEvent().getComponent());
+        CallerSearcherCommentPanel caller = (CallerSearcherCommentPanel) SwingUtilities.getAncestorOfClass(CallerSearcherCommentPanel.class, anActionEvent.getInputEvent().getComponent());
         if (caller instanceof CallerSearcherCommentPanel) {
             String script = caller.getScript();
             processScriptContent(script, anActionEvent, caller, () -> {

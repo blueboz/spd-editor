@@ -1,4 +1,4 @@
-package cn.boz.jb.plugin.idea.dialog;
+package cn.boz.jb.plugin.idea.layoutmanager;
 
 import java.awt.*;
 

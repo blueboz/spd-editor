@@ -3,9 +3,8 @@ package cn.boz.jb.plugin.idea.callsearch;
 import cn.boz.jb.plugin.floweditor.gui.utils.StringUtils;
 import cn.boz.jb.plugin.idea.bean.EngineAction;
 import cn.boz.jb.plugin.idea.bean.EngineTask;
-import cn.boz.jb.plugin.idea.dialog.MyLayoutManager;
+import cn.boz.jb.plugin.idea.layoutmanager.MyLayoutManager;
 import cn.boz.jb.plugin.idea.utils.Constants;
-import cn.boz.jb.plugin.idea.utils.MyHighlightUtils;
 import com.intellij.openapi.actionSystem.ActionGroup;
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.ActionToolbar;
@@ -13,7 +12,6 @@ import com.intellij.ui.IdeBorderFactory;
 import com.intellij.ui.ScrollPaneFactory;
 import com.intellij.ui.components.JBPanel;
 import com.intellij.ui.table.JBTable;
-import com.intellij.util.ui.JBDimension;
 import com.intellij.util.ui.ListTableModel;
 import org.jetbrains.annotations.NotNull;
 
@@ -25,7 +23,6 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Highlighter;
 import java.awt.*;
-import java.util.concurrent.TimeUnit;
 
 public class CallerSearcherDetailComment extends JBPanel {
     private JBTable table;

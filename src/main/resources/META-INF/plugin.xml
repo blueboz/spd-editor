@@ -127,7 +127,7 @@
                         icon="AllIcons.Actions.Search">
                 </action>
             </group>
-            <action class="cn.boz.jb.plugin.idea.action.FindInSpdEditor" icon="AllIcons.Actions.Find"
+            <action class="cn.boz.jb.plugin.idea.action.FindInSpdEditorAction" icon="AllIcons.Actions.Find"
                     id="FindInSpdEditor" text="FindInSpdEditor"></action>
 
             <action class="cn.boz.jb.plugin.idea.action.GotoServiceTaskAction" id="gotoServiceTaskAction"
@@ -155,14 +155,14 @@
                 </action>
             </group>
 
-            <action class="cn.boz.jb.plugin.idea.action.GoToRefFile" id="GoToRef" text="Go To Ref"
+            <action class="cn.boz.jb.plugin.idea.action.GotoRefFileAction" id="GoToRef" text="Go To Ref"
                     icon="SpdEditorIcons.REF_16_ICON">
             </action>
             <group text="GoToAction" id="GoToActionGroup" popup="true">
-                <action class="cn.boz.jb.plugin.idea.action.GoToAnyRefAction" icon="AllIcons.Actions.Search"
+                <action class="cn.boz.jb.plugin.idea.action.GotoAnyRefAction" icon="AllIcons.Actions.Search"
                         id="GoToRefAction"
                         text="GoToAnyRefAction"></action>
-                <action class="cn.boz.jb.plugin.idea.action.GoToAnyRefExtAction" icon="AllIcons.Actions.Search"
+                <action class="cn.boz.jb.plugin.idea.action.GotoAnyRefExtAction" icon="AllIcons.Actions.Search"
                         text="GoToRefExt" id="GoToRefExt"></action>
             </group>
             <!--            <action class="cn.boz.jb.plugin.idea.codedef.action.AddCodeDefAction" id="AddCodeDef" text="Add Code Def"-->
@@ -173,35 +173,32 @@
         <!--        GoToJsFile-->
 
         <group id="spd.gotorefaction.group">
-            <action class="cn.boz.jb.plugin.idea.action.GoToRefFile$SearchIdAction" icon="AllIcons.Actions.Find"
+            <action class="cn.boz.jb.plugin.idea.action.GotoRefFileAction$SearchIdAction" icon="AllIcons.Actions.Find"
                     id="SpdEditorGotoIdAction" text="SearchId"></action>
+            <action class="cn.boz.jb.plugin.idea.action.GotoRefFileAction$ActionOrTaskDetailAction" icon="SpdEditorIcons.ACTION_16_ICON"
+                    id="SpdEditorActionOrTaskAction" text="GoDetail"
 
-
+            ></action>
         </group>
 
-        <group id="spd.gotorefaction.callersearcher.group">
-            <action class="cn.boz.jb.plugin.idea.action.GoToRefFile$SearchIdAction" icon="AllIcons.Actions.Find"
-                    id="GotoIdAction" text="SearchId"></action>
-
-        </group>
 
         <!--查看EngineAction 对话框中，功能菜单包含最小化-->
         <group id="spd.engineaction.min.dlg.group">
-            <action class="cn.boz.jb.plugin.idea.dialog.GotoScriptAction" id="gotoscriptaction" text="gotoscript"
+            <action class="cn.boz.jb.plugin.idea.action.GotoScriptAction" id="gotoscriptaction" text="gotoscript"
                     icon="AllIcons.Actions.ShowCode">
             </action>
-            <action class="cn.boz.jb.plugin.idea.dialog.OpenInSearchToolWindow" icon="AllIcons.Actions.MoveToBottomLeft"
+            <action class="cn.boz.jb.plugin.idea.action.OpenInSearchToolWindowAction" icon="AllIcons.Actions.MoveToBottomLeft"
                     id="OpenInSearchToolWindow" text="OpenInSearchToolWindow"></action>
         </group>
 
         <group id="spd.engineaction.dlg.group">
-            <action class="cn.boz.jb.plugin.idea.dialog.GotoScriptAction" id="gotoscriptaction" text="gotoscript"
+            <action class="cn.boz.jb.plugin.idea.action.GotoScriptAction" id="gotoscriptaction" text="gotoscript"
                     icon="AllIcons.Actions.ShowCode">
             </action>
         >
         </group>
         <group id="spd.engineright.dlg.group">
-            <action class="cn.boz.jb.plugin.idea.dialog.OpenInSearchToolWindow" icon="AllIcons.Actions.MoveToBottomLeft"
+            <action class="cn.boz.jb.plugin.idea.action.OpenInSearchToolWindowAction" icon="AllIcons.Actions.MoveToBottomLeft"
                     id="OpenInSearchToolWindow" text="OpenInSearchToolWindow"></action>
         </group>
         <group id="spd.menuid.spanel.group">

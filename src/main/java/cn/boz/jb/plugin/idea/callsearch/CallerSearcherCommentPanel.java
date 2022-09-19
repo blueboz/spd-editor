@@ -1,4 +1,4 @@
-package cn.boz.jb.plugin.idea.dialog;
+package cn.boz.jb.plugin.idea.callsearch;
 
 import cn.boz.jb.plugin.idea.bean.EngineAction;
 import cn.boz.jb.plugin.idea.bean.EngineTask;
