@@ -58,4 +58,12 @@ public class TranslateUtils {
         }
         return expression.replaceAll("&", "'||CHR(38)||'");
     }
+
+    public static String translate(String expression){
+        if(expression==null){
+            return null;
+        }
+        String s = translateToSql(tranExpression(expression));
+        return "'"+s+"'";
+    }
 }

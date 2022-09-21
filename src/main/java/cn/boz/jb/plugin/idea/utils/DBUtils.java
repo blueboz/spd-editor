@@ -3,6 +3,8 @@ package cn.boz.jb.plugin.idea.utils;
 import cn.boz.jb.plugin.floweditor.gui.utils.StringUtils;
 import cn.boz.jb.plugin.idea.bean.EcasMenu;
 import cn.boz.jb.plugin.idea.bean.EngineAction;
+import cn.boz.jb.plugin.idea.bean.EngineActionInput;
+import cn.boz.jb.plugin.idea.bean.EngineActionOutput;
 import cn.boz.jb.plugin.idea.bean.EngineFlow;
 import cn.boz.jb.plugin.idea.bean.EngineTask;
 import cn.boz.jb.plugin.idea.configurable.SpdEditorDBSettings;
@@ -342,31 +344,68 @@ public class DBUtils {
         }
     }
 
-    public List<Map<String, Object>> queryEngineActionOutputIdMatch(Connection connection, String actionId) throws Exception {
+    public List<EngineActionOutput> queryEngineActionOutputIdMatch(Connection connection, String actionId) throws Exception {
         try (PreparedStatement preparedStatement = connection.prepareStatement("select * from ENGINE_ACTIONOUTPUT where ACTIONID_ =?")) {
             preparedStatement.setString(1, actionId);
-            return queryForList(preparedStatement);
+            List<Map<String, Object>> maps = queryForList(preparedStatement);
+            return maps.stream().map(item->{
+                /**
+                 *   ACTIONID_  VARCHAR2(50) not null,
+                 *     BEANID_    VARCHAR2(30) not null,
+                 *     FIELDEXPR_ VARCHAR2(400),
+                 *     TARGET_    VARCHAR2(40)
+                 */
+                EngineActionOutput engineActionOutput = new EngineActionOutput();
+                engineActionOutput.setActionId((String) item.get("ACTIONID_"));
+                engineActionOutput.setBeanId((String) item.get("BEANID_"));
+                engineActionOutput.setFieldExpr((String) item.get("FIELDEXPR_"));
+                engineActionOutput.setTarget((String) item.get("TARGET_"));
+                return engineActionOutput;
+            }).collect(Collectors.toList());
         }
     }
 
-    public List<Map<String, Object>> queryEngineActionInputIdMatch(Connection connection, String actionId) throws Exception {
+    public List<EngineActionInput>  queryEngineActionInputIdMatch(Connection connection, String actionId) throws Exception {
         try (PreparedStatement preparedStatement = connection.prepareStatement("select * from ENGINE_ACTIONINPUT where ACTIONID_ =?")) {
             preparedStatement.setString(1, actionId);
-            return queryForList(preparedStatement);
+            List<Map<String, Object>> maps = queryForList(preparedStatement);
+            return maps.stream().map(item->{
+                EngineActionInput engineActionInput = new EngineActionInput();
+                engineActionInput.setActionId((String) item.get("ACTIONID"));
+                engineActionInput.setBeanId((String) item.get("BEANID_"));
+                engineActionInput.setClass_((String) item.get("CLAZZ_"));
+                engineActionInput.setFieldExpr((String) item.get("FIELDEXPR_"));
+                engineActionInput.setSource((String) item.get("SOURCE_"));
+                /**
+                 *         *     ACTIONID_  VARCHAR2(50) not null,
+                 **     BEANID_    VARCHAR2(30) not null,
+                 **     CLAZZ_     VARCHAR2(100),
+                 **     FIELDEXPR_ VARCHAR2(400),
+                 **     SOURCE_    VARCHAR2(100
+                 *
+                 */
+                return engineActionInput;
+            }).collect(Collectors.toList()) ;
         }
     }
 
-    public List<Map<String, Object>> queryEngineActionIdMatch(Connection connection, String actionId) throws Exception {
-        try (PreparedStatement preparedStatement = connection.prepareStatement("select * from engine_action where id_ = ?")) {
-            preparedStatement.setString(1, actionId);
-            return queryForList(preparedStatement);
-        }
-    }
 
-    public List<Map<String, Object>> queryEngineActionWithIdLike(Connection connection, String actionId) throws Exception {
+    public List<EngineAction> queryEngineActionWithIdLike(Connection connection, String actionId) throws Exception {
         try (PreparedStatement preparedStatement = connection.prepareStatement("select * from engine_action where id_ like ?")) {
             preparedStatement.setString(1, "%" + actionId + "%");
-            return queryForList(preparedStatement);
+            List<Map<String, Object>> maps = queryForList(preparedStatement);
+            return maps.stream().map(item->{
+                EngineAction engineAction = new EngineAction();
+                engineAction.setId((String) item.get("ID_"));
+                engineAction.setNamespace((String) item.get("NAMESPACE_"));
+                engineAction.setUrl((String) item.get("URL_"));
+                engineAction.setWindowparam((String) item.get("WINDOWPARAM_"));
+                engineAction.setActionscript((String) item.get("ACTIONSCRIPT_"));
+                engineAction.setActionintercept((String) item.get("ACTIONINTERCEPT_"));
+
+                return engineAction;
+            }).collect(Collectors.toList());
+
         }
     }
 

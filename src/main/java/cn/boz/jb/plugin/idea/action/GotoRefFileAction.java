@@ -1,6 +1,8 @@
 package cn.boz.jb.plugin.idea.action;
 
 import cn.boz.jb.plugin.idea.bean.EngineAction;
+import cn.boz.jb.plugin.idea.bean.EngineActionInput;
+import cn.boz.jb.plugin.idea.bean.EngineActionOutput;
 import cn.boz.jb.plugin.idea.bean.EngineTask;
 import cn.boz.jb.plugin.idea.callsearch.CallerSearcherTablePanel;
 import cn.boz.jb.plugin.idea.callsearch.CallerSearcherTableCellRender;
@@ -731,17 +733,19 @@ public class GotoRefFileAction extends AnAction {
 
             try (Connection connection = DBUtils.getConnection(SpdEditorDBState.getInstance());
             ) {
-                List<Map<String, Object>> actions = instance.queryEngineActionWithIdLike(connection, query);
+                List<EngineAction> actions = instance.queryEngineActionWithIdLike(connection, query);
                 if (actions.size() == 0) {
                     result.set(false);
                 } else if (actions.size() == 1) {
-                    Map<String, Object> engineAction = actions.get(0);
-                    String id_ = (String) engineAction.get("ID_");
-                    List<Map<String, Object>> actionInputs = instance.queryEngineActionInputIdMatch(connection, id_);
-                    List<Map<String, Object>> actionOutputs = instance.queryEngineActionOutputIdMatch(connection, id_);
-                    engineActionRef.set(new EngineActionDataContainer(engineAction, actionInputs, actionOutputs));
+                    EngineAction engineAction = actions.get(0);
+                    String id_ =  engineAction.getId();
+                    List<EngineActionInput> actionInputs = instance.queryEngineActionInputIdMatch(connection, id_);
+                    List<EngineActionOutput> actionOutputs = instance.queryEngineActionOutputIdMatch(connection, id_);
+                    engineAction.setInputs(actionInputs);
+                    engineAction.setOutputs(actionOutputs);
+                    engineActionRef.set(new EngineActionDataContainer(engineAction));
                 } else {
-                    List<String> ids_ = actions.stream().map(it -> (String) it.get("ID_")).collect(Collectors.toList());
+                    List<String> ids_ = actions.stream().map(it -> (String) it.getId()).collect(Collectors.toList());
                     ids.set(ids_);
                     //多选框
                 }
@@ -773,7 +777,7 @@ public class GotoRefFileAction extends AnAction {
             EngineActionDataContainer container = engineActionRef.get();
 
 
-            temporyDialog = new EngineActionDialog(container.getEngineAction(), container.getEngineActionInput(), container.getEngineActionOutput(),true);
+            temporyDialog = new EngineActionDialog(container.getEngineAction());
 
             popup = JBPopupFactory.getInstance()
                     .createComponentPopupBuilder(temporyDialog, null)

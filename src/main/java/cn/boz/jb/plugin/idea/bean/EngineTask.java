@@ -44,13 +44,16 @@ public class EngineTask {
         this.title = title;
     }
 
+    public String getExpressionRaw(){
+        return expression;
+    }
 
     public String getExpression() {
         if (expression == null) {
             return "";
         }
         if (!expression.contains("\n")) {
-            return expression.replaceAll(";", "\n");
+            return expression.replaceAll(";", ";\n");
         }
         return expression;
     }

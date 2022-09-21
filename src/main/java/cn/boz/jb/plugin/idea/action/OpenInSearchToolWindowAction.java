@@ -1,5 +1,6 @@
 package cn.boz.jb.plugin.idea.action;
 
+import cn.boz.jb.plugin.idea.callsearch.CallerSearcherCommentPanel;
 import cn.boz.jb.plugin.idea.callsearch.CallerSearcherDetailComment;
 import cn.boz.jb.plugin.idea.callsearch.CallerSearcherTablePanel;
 import cn.boz.jb.plugin.idea.dialog.EngineActionDialog;
@@ -36,27 +37,28 @@ public class OpenInSearchToolWindowAction extends AnAction implements DumbAware 
         //拿到要检索的内容，如代码片段，搜索db
 
         Component component = e.getRequiredData(PlatformDataKeys.CONTEXT_COMPONENT);
-        if(component instanceof CallerSearcherTablePanel){
-            doForCallerSearcherTable((CallerSearcherTablePanel) component,e);
-            return ;
+        if (component instanceof CallerSearcherTablePanel) {
+            doForCallerSearcherTable((CallerSearcherTablePanel) component, e);
+            return;
 
         }
         if (component instanceof EngineRightDialog) {
-            doForEngineRights(e,component);
+            doForEngineRights(e, component);
             return;
         }
         if (component instanceof EngineActionDialog) {
             doForEngineAction(e, component);
-            return ;
-
+            return;
         }
-        if(component instanceof JBScrollPane){
-            JBScrollPane jbScrollPane= (JBScrollPane) component;
+        if (component instanceof JBScrollPane) {
+            JBScrollPane jbScrollPane = (JBScrollPane) component;
             JViewport viewport = jbScrollPane.getViewport();
             Component view = viewport.getView();
-            if(view instanceof EngineTaskDialog){
+            if (view instanceof EngineTaskDialog) {
                 doForEngineTask(e, (EngineTaskDialog) view);
-                return ;
+                return;
+            } else if (view instanceof EngineRightDialog) {
+                doForEngineRights(e, view);
             }
         }
         CallerSearcherTablePanel callerSearcherTablePanel = (CallerSearcherTablePanel) SwingUtilities.getAncestorOfClass(CallerSearcherTablePanel.class, component);
@@ -67,19 +69,25 @@ public class OpenInSearchToolWindowAction extends AnAction implements DumbAware 
 
         if (callerSearcherTablePanel instanceof CallerSearcherTablePanel) {
             doForCallerSearcherTable(callerSearcherTablePanel, e);
-            return;
         }
         if (engineRightDialog instanceof EngineRightDialog) {
-            doForEngineRights(e,engineRightDialog);
-            return;
+            doForEngineRights(e, engineRightDialog);
         }
         if (engineActionDialog instanceof EngineActionDialog) {
-            doForEngineAction(e,engineActionDialog);
+            doForEngineAction(e, engineActionDialog);
         }
-        if(engineTaskDialog instanceof  EngineTaskDialog){
-            doForEngineTask(e,engineTaskDialog);
+        if (engineTaskDialog instanceof EngineTaskDialog) {
+            doForEngineTask(e, engineTaskDialog);
         }
+        CallerSearcherCommentPanel callerSearcherCommentPanel = (CallerSearcherCommentPanel) SwingUtilities.getAncestorOfClass(CallerSearcherCommentPanel.class, component);
+        if(callerSearcherCommentPanel instanceof CallerSearcherCommentPanel){
+            CallerSearcherTablePanel table = callerSearcherCommentPanel.getTable();
+            doForCallerSearcherTable(table,e);
+        }
+
+
     }
+
 
     private void doForEngineTask(AnActionEvent anActionEvent, EngineTaskDialog engineTaskDialog) {
         JComponent derive = engineTaskDialog.derive();
@@ -121,8 +129,9 @@ public class OpenInSearchToolWindowAction extends AnAction implements DumbAware 
         JComponent derive = engineRightDialog.derive();
         ToolWindow callSearch = ToolWindowManager.getInstance(anActionEvent.getProject()).getToolWindow(Constants.TOOL_WINDOW_CALLSEARCH);
         ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
-        ;
-        Content title = contentFactory.createContent(derive, engineRightDialog.getUserTask().getRights(), true);
+        JBScrollPane jbScrollPane = new JBScrollPane(derive);
+
+        Content title = contentFactory.createContent(jbScrollPane, engineRightDialog.getUserTask().getRights(), true);
         title.setCloseable(true);
         callSearch.getContentManager().addContent(title);
         callSearch.getContentManager().requestFocus(title, true);

@@ -1,5 +1,8 @@
 package cn.boz.jb.plugin.idea.dialog;
 
+import cn.boz.jb.plugin.idea.bean.EngineAction;
+import cn.boz.jb.plugin.idea.bean.EngineActionInput;
+import cn.boz.jb.plugin.idea.bean.EngineActionOutput;
 import cn.boz.jb.plugin.idea.dialog.min.EngineActionDerivePanel;
 import cn.boz.jb.plugin.idea.layoutmanager.MyLayoutManager;
 import cn.boz.jb.plugin.idea.utils.Constants;
@@ -11,38 +14,20 @@ import com.intellij.ui.components.JBScrollPane;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.util.List;
-import java.util.Map;
 
 public class EngineActionDialog extends JComponent {
 
-    private Map<String, Object> engineAction;
-    private List<Map<String, Object>> engineActionInput;
-    private List<Map<String, Object>> engineActionOutput;
+    private EngineAction engineAction;
+;
 
-    public Map<String, Object> getEngineAction() {
+    public EngineAction getEngineAction() {
         return engineAction;
     }
 
-    public void setEngineAction(Map<String, Object> engineAction) {
+    public void setEngineAction(EngineAction engineAction) {
         this.engineAction = engineAction;
     }
 
-    public List<Map<String, Object>> getEngineActionInput() {
-        return engineActionInput;
-    }
-
-    public void setEngineActionInput(List<Map<String, Object>> engineActionInput) {
-        this.engineActionInput = engineActionInput;
-    }
-
-    public List<Map<String, Object>> getEngineActionOutput() {
-        return engineActionOutput;
-    }
-
-    public void setEngineActionOutput(List<Map<String, Object>> engineActionOutput) {
-        this.engineActionOutput = engineActionOutput;
-    }
 
     private JLabel actionIdLabel;
     private JLabel namespaceLabel;
@@ -64,15 +49,15 @@ public class EngineActionDialog extends JComponent {
     private JLabel actionOutputLabel;
     private DefaultTableModel outputModel;
     private String id;
+    private String actionScript;
 
-    public EngineActionDialog(Map<String, Object> engineAction, List<Map<String, Object>> engineActionInput, List<Map<String, Object>> engineActionOutput,boolean withOpenInToolWindow) {
+    public EngineActionDialog(EngineAction engineAction ) {
         this.engineAction = engineAction;
-        this.engineActionInput = engineActionInput;
-        this.engineActionOutput = engineActionOutput;
-        String id = (String) engineAction.get("ID_");
+        String id =  engineAction.getId();
         this.id=id;
-        String namespace = (String) engineAction.get("NAMESPACE_");
-        String actionscript = (String) engineAction.get("ACTIONSCRIPT_");
+        String namespace =  engineAction.getNamespace();
+        String actionscript =  engineAction.getActionscript();
+        this.actionScript=actionscript;
         if(!actionscript.contains("\n")){
             if(actionscript.contains(";")){
                 actionscript=actionscript.replaceAll(";","\n");
@@ -103,8 +88,8 @@ public class EngineActionDialog extends JComponent {
         DefaultTableModel tableModel = new DefaultTableModel();
         tableModel.setRowCount(0);    //清空表格中的数据
         tableModel.setColumnIdentifiers(new Object[]{"BEANID", "CLAZZ", "SOURCE"});    //设置表头
-        for (Map<String, Object> actionInput : engineActionInput) {
-            tableModel.addRow(new Object[]{actionInput.get("BEANID_"), actionInput.get("CLAZZ_"), actionInput.get("SOURCE_")});
+        for (EngineActionInput actionInput : engineAction.getInputs()) {
+            tableModel.addRow(new Object[]{actionInput.getBeanId(), actionInput.getClass_(), actionInput.getSource()});
         }
         actionInputTable = new JTable(tableModel) {
         };
@@ -120,8 +105,8 @@ public class EngineActionDialog extends JComponent {
         outputModel = new DefaultTableModel();
         outputModel.setRowCount(0);    //清空表格中的数据
         outputModel.setColumnIdentifiers(new Object[]{"BEANID"});    //设置表头
-        for (Map<String, Object> actionInput : engineActionOutput) {
-            outputModel.addRow(new Object[]{actionInput.get("BEANID_")});
+        for (EngineActionOutput actionInput : engineAction.getOutputs()) {
+            outputModel.addRow(new Object[]{actionInput.getBeanId()});
         }
         actionOutputTable = new JTable(outputModel) {
         };
@@ -152,9 +137,13 @@ public class EngineActionDialog extends JComponent {
     }
 
     public EngineActionDerivePanel derive(){
-        return new EngineActionDerivePanel(engineAction,engineActionInput,engineActionOutput);
+        return new EngineActionDerivePanel(engineAction);
     }
 
+
+    public String getActionScript() {
+        return actionScript;
+    }
 
     public String getId() {
         return id;

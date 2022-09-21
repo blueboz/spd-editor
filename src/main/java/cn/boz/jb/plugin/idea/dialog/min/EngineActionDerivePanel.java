@@ -1,5 +1,8 @@
 package cn.boz.jb.plugin.idea.dialog.min;
 
+import cn.boz.jb.plugin.idea.bean.EngineAction;
+import cn.boz.jb.plugin.idea.bean.EngineActionInput;
+import cn.boz.jb.plugin.idea.bean.EngineActionOutput;
 import cn.boz.jb.plugin.idea.layoutmanager.MyLayoutManager;
 import cn.boz.jb.plugin.idea.utils.Constants;
 import com.intellij.openapi.actionSystem.ActionGroup;
@@ -10,8 +13,6 @@ import com.intellij.ui.components.JBScrollPane;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.util.List;
-import java.util.Map;
 
 public class EngineActionDerivePanel extends JComponent {
     MyLayoutManager myLayoutManager;
@@ -19,12 +20,14 @@ public class EngineActionDerivePanel extends JComponent {
     private String actionScript;
 
     private String id;
+    private EngineAction engineAction;
 
-    public EngineActionDerivePanel( Map<String, Object> engineAction,
-                                   List<Map<String, Object>> engineActionInput, List<Map<String, Object>> engineActionOutput) {
-        String id = (String) engineAction.get("ID_");
-        String namespace = (String) engineAction.get("NAMESPACE_");
-        String actionscript = (String) engineAction.get("ACTIONSCRIPT_");
+    public EngineActionDerivePanel(EngineAction engineAction ) {
+
+        this.engineAction=engineAction;
+        String id = (String) engineAction.getId();
+        String namespace = (String) engineAction.getNamespace();
+        String actionscript = (String) engineAction.getActionscript();
         this.id=id;
 
         myLayoutManager = new MyLayoutManager();
@@ -51,8 +54,8 @@ public class EngineActionDerivePanel extends JComponent {
         DefaultTableModel tableModel = new DefaultTableModel();
         tableModel.setRowCount(0);    //清空表格中的数据
         tableModel.setColumnIdentifiers(new Object[]{"BEANID", "CLAZZ", "SOURCE"});    //设置表头
-        for (Map<String, Object> actionInput : engineActionInput) {
-            tableModel.addRow(new Object[]{actionInput.get("BEANID_"), actionInput.get("CLAZZ_"), actionInput.get("SOURCE_")});
+        for (EngineActionInput actionInput : engineAction.getInputs()) {
+            tableModel.addRow(new Object[]{actionInput.getBeanId(), actionInput.getClass_(), actionInput.getSource()});
         }
         JTable actionInputTable = new JTable(tableModel) {
         };
@@ -65,8 +68,8 @@ public class EngineActionDerivePanel extends JComponent {
         DefaultTableModel outputModel = new DefaultTableModel();
         outputModel.setRowCount(0);    //清空表格中的数据
         outputModel.setColumnIdentifiers(new Object[]{"BEANID"});    //设置表头
-        for (Map<String, Object> actionInput : engineActionOutput) {
-            outputModel.addRow(new Object[]{actionInput.get("BEANID_")});
+        for (EngineActionOutput actionInput : engineAction.getOutputs()) {
+            outputModel.addRow(new Object[]{actionInput.getBeanId()});
         }
         JTable actionOutputTable = new JTable(outputModel) {
         };
@@ -109,5 +112,13 @@ public class EngineActionDerivePanel extends JComponent {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public EngineAction getEngineAction() {
+        return engineAction;
+    }
+
+    public void setEngineAction(EngineAction engineAction) {
+        this.engineAction = engineAction;
     }
 }

@@ -1,6 +1,8 @@
 package cn.boz.jb.plugin.idea.bean;
 
 
+import java.util.List;
+
 public class EngineAction {
 
     private String id;
@@ -10,6 +12,9 @@ public class EngineAction {
     private String actionscript;
     private String actionintercept;
 
+
+    private List<EngineActionInput> inputs;
+    private List<EngineActionOutput> outputs;
 
     public String getId() {
         return id;
@@ -64,4 +69,20 @@ public class EngineAction {
         this.actionintercept = actionintercept;
     }
 
+
+    public List<EngineActionInput> getInputs() {
+        return inputs;
+    }
+
+    public void setInputs(List<EngineActionInput> inputs) {
+        this.inputs = inputs;
+    }
+
+    public List<EngineActionOutput> getOutputs() {
+        return outputs;
+    }
+
+    public void setOutputs(List<EngineActionOutput> outputs) {
+        this.outputs = outputs;
+    }
 }

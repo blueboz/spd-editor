@@ -1,5 +1,8 @@
 package cn.boz.test;
 
+import cn.boz.jb.plugin.idea.bean.EngineAction;
+import cn.boz.jb.plugin.idea.bean.EngineActionInput;
+import cn.boz.jb.plugin.idea.bean.EngineActionOutput;
 import cn.boz.jb.plugin.idea.utils.DBUtils;
 import com.alibaba.fastjson.JSON;
 import org.testng.annotations.Test;
@@ -20,13 +23,13 @@ public class TestJdbc {
         String path = "D:/Code/FMS/FMSS_xfunds/xfunds/WebContent/WEB-INF/lib/orai18n-19.3.0.0.jar;D:/Code/FMS/FMSS_xfunds/xfunds/WebContent/WEB-INF/lib/ojdbc8.jar";
         DBUtils instance = DBUtils.getInstance();
         try (Connection connection = instance.getConnection("xfunds201701", "Xfunds_1234", "jdbc:oracle:thin:@21.96.5.85:1521:FMSS", path)) {
-            List<Map<String, Object>> maps = instance.queryEngineActionWithIdLike(connection, "/initFrameworkProto.do");
-            for (Map<String, Object> action : maps) {
-                String id_ = (String) action.get("ID_");
-                List<Map<String, Object>> actionInputs = instance.queryEngineActionInputIdMatch(connection, id_);
+            List<EngineAction> maps = instance.queryEngineActionWithIdLike(connection, "/initFrameworkProto.do");
+            for (EngineAction action : maps) {
+                String id_ = (String) action.getId();
+                List<EngineActionInput> actionInputs = instance.queryEngineActionInputIdMatch(connection, id_);
                 System.out.println(JSON.toJSONString(action));
                 System.out.println(JSON.toJSONString(actionInputs));
-                List<Map<String, Object>> actionOutputs = instance.queryEngineActionOutputIdMatch(connection, id_);
+                List<EngineActionOutput> actionOutputs = instance.queryEngineActionOutputIdMatch(connection, id_);
                 System.out.println(JSON.toJSONString(actionOutputs));
                 break;
             }
@@ -34,9 +37,9 @@ public class TestJdbc {
             e.printStackTrace();
         }
     }
-    private Map<String, Object> engineAction;
-    private List<Map<String, Object>> engineActionInput;
-    private List<Map<String, Object>> engineActionOutput;
+    private EngineAction engineAction;
+    private List<EngineActionInput> engineActionInput;
+    private List<EngineActionOutput> engineActionOutput;
     @Test
     public void testgui() throws InterruptedException {
         String path = "D:/Code/FMS/FMSS_xfunds/xfunds/WebContent/WEB-INF/lib/orai18n-19.3.0.0.jar;D:/Code/FMS/FMSS_xfunds/xfunds/WebContent/WEB-INF/lib/ojdbc8.jar";
@@ -44,13 +47,13 @@ public class TestJdbc {
 
         try (Connection connection = DBUtils.getConnection("xfunds201701", "Xfunds_1234", "jdbc:oracle:thin:@21.96.5.85:1521:FMSS", path)) {
             DBUtils instance = DBUtils.getInstance();
-            List<Map<String, Object>> maps = instance.queryEngineActionWithIdLike(connection, "/modifyIfaceStatus.do");
-            for (Map<String, Object> action : maps) {
-                String id_ = (String) action.get("ID_");
-                List<Map<String, Object>> actionInputs = instance.queryEngineActionInputIdMatch(connection, id_);
+            List<EngineAction> maps = instance.queryEngineActionWithIdLike(connection, "/modifyIfaceStatus.do");
+            for (EngineAction action : maps) {
+                String id_ = (String) action.getId();
+                List<EngineActionInput> actionInputs = instance.queryEngineActionInputIdMatch(connection, id_);
                 System.out.println(JSON.toJSONString(action));
                 System.out.println(JSON.toJSONString(actionInputs));
-                List<Map<String, Object>> actionOutputs = instance.queryEngineActionOutputIdMatch(connection, id_);
+                List<EngineActionOutput> actionOutputs = instance.queryEngineActionOutputIdMatch(connection, id_);
                 System.out.println(JSON.toJSONString(actionOutputs));
                 engineAction=action;
                 engineActionInput=actionInputs;

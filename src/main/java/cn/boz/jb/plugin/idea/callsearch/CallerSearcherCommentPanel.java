@@ -22,10 +22,10 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 
 public class CallerSearcherCommentPanel extends JBPanel {
-    private JBTable table;
+    private CallerSearcherTablePanel table;
     JTextArea textArea;
 
-    public CallerSearcherCommentPanel(JBTable table) {
+    public CallerSearcherCommentPanel(CallerSearcherTablePanel table) {
         this.table = table;
         textArea = new JTextArea("", 7, 30);
         table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
@@ -82,5 +82,13 @@ public class CallerSearcherCommentPanel extends JBPanel {
 
     public String getScript() {
         return textArea.getText();
+    }
+
+    public CallerSearcherTablePanel getTable() {
+        return table;
+    }
+
+    public void setTable(CallerSearcherTablePanel table) {
+        this.table = table;
     }
 }

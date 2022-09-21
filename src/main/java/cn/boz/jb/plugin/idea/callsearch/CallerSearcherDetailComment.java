@@ -25,7 +25,7 @@ import javax.swing.text.Highlighter;
 import java.awt.*;
 
 public class CallerSearcherDetailComment extends JBPanel {
-    private JBTable table;
+    private CallerSearcherTablePanel table;
     JTextArea textArea;
     JTextField jpidf;
     JTextField taskidf;
@@ -33,7 +33,7 @@ public class CallerSearcherDetailComment extends JBPanel {
     public void query() {
     }
 
-    public CallerSearcherDetailComment(JBTable table, String queryName) {
+    public CallerSearcherDetailComment(CallerSearcherTablePanel table, String queryName) {
         this.table = table;
         this.setLayout(new MyLayoutManager());
         JLabel jpidl = new JLabel("processId");
@@ -139,4 +139,9 @@ public class CallerSearcherDetailComment extends JBPanel {
     public String getScript() {
         return textArea.getText();
     }
+
+    public CallerSearcherTablePanel getTable() {
+        return table;
+    }
 }
+
