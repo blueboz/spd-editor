@@ -70,7 +70,7 @@ public class GotoAnyRefExtAction extends DumbAwareAction {
 
         Ref<List<EngineAction>> engineActionRef = new Ref<>();
         ProgressManager.getInstance().runProcessWithProgressSynchronously(() -> {
-            try (Connection connection = DBUtils.getConnection()) {
+            try (Connection connection = DBUtils.getConnection(anActionEvent.getProject())) {
                 List<EngineAction> engineActions = dbUtils.queryEngineActionByActionScript(connection, name);
                 engineActionRef.set(engineActions);
             } catch (Exception e) {

@@ -37,6 +37,7 @@ import java.util.stream.Collectors;
  */
 public class AddMenuDialog extends DialogWrapper {
 
+    private Project project;
 
     @Override
     public void validate() {
@@ -131,6 +132,7 @@ public class AddMenuDialog extends DialogWrapper {
         this.setParentMap(parentNodeData.getNodeData());
         init();
         setTitle("添加菜单");
+        this.project=project;
     }
 
     @Override
@@ -204,7 +206,7 @@ public class AddMenuDialog extends DialogWrapper {
         menuidtBtn.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                menuIdDialog = new MenuIdDialog(Integer.parseInt(getParentMapKey("APPLID"))) {
+                menuIdDialog = new MenuIdDialog(project,Integer.parseInt(getParentMapKey("APPLID"))) {
                     @Override
                     public void onChoosen(Integer chooseValue) {
                         menuidt.setText(String.valueOf(chooseValue));

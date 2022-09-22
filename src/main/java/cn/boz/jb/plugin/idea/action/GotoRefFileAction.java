@@ -263,7 +263,7 @@ public class GotoRefFileAction extends AnAction {
         Ref<List<EngineTask>> engineTaskRef = new Ref<>();
         Ref<List<EngineAction>> engineActionRef = new Ref<>();
         ProgressManager.getInstance().runProcessWithProgressSynchronously(() -> {
-            try (Connection connection = DBUtils.getConnection()) {
+            try (Connection connection = DBUtils.getConnection(anActionEvent.getProject())) {
                 List<EngineTask> engineTasks = dbUtils.queryEngineTaskByExpression(connection, name);
                 List<EngineAction> engineActions = dbUtils.queryEngineActionByActionScript(connection, name);
                 engineTaskRef.set(engineTasks);
@@ -731,7 +731,7 @@ public class GotoRefFileAction extends AnAction {
         final String query = value;
         ProgressManager.getInstance().runProcessWithProgressSynchronously(() -> {
 
-            try (Connection connection = DBUtils.getConnection(SpdEditorDBState.getInstance());
+            try (Connection connection = DBUtils.getConnection(SpdEditorDBState.getInstance(anActionEvent.getProject()));
             ) {
                 List<EngineAction> actions = instance.queryEngineActionWithIdLike(connection, query);
                 if (actions.size() == 0) {

@@ -73,7 +73,7 @@ public class GotoRightAction extends AnAction {
             String rights = userTask.getRights();
             ProgressIndicator pg = BackgroundTaskUtil.executeAndTryWait(progressIndicator -> () -> {
                 DBUtils instance = DBUtils.getInstance();
-                try (Connection connection = instance.getConnection()) {
+                try (Connection connection = instance.getConnection(anActionEvent.getProject())) {
                     //RIGHTS_, CANDIDATE_, SQLCONDITION_, DOCONDITION_
                     List<Map<String, Object>> engineRights = instance.queryEngineRights(connection, rights);
                     if (engineRights.size() < 1) {

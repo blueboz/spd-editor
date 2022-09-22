@@ -53,13 +53,7 @@ public class SpdEditorDBState implements PersistentStateComponent<SpdEditorDBSta
     }
 
 
-    public static SpdEditorDBState getInstance() {
-        ProjectManager instance = ProjectManager.getInstance();
-        @NotNull Project[] openProjects = instance.getOpenProjects();
-        for (Project openProject : openProjects) {
-            boolean open = openProject.isOpen();
-            System.out.println(open);
-        }
+    public static SpdEditorDBState getInstance(Project project) {
         return ServiceManager.getService(ProjectManager.getInstance().getOpenProjects()[0], SpdEditorDBState.class);
     }
 

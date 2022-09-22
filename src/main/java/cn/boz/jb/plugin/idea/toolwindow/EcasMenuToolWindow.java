@@ -2,6 +2,7 @@ package cn.boz.jb.plugin.idea.toolwindow;
 
 import cn.boz.jb.plugin.idea.configurable.SpdEditorDBState;
 import cn.boz.jb.plugin.idea.utils.DBUtils;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.ui.ColoredTreeCellRenderer;
@@ -27,9 +28,9 @@ import java.util.stream.Collectors;
 public class EcasMenuToolWindow extends JComponent implements ClipboardOwner {
     private Tree tree;
 
-    public EcasMenuToolWindow() {
+    public EcasMenuToolWindow(Project project) {
         try {
-            Connection connection = DBUtils.getConnection(SpdEditorDBState.getInstance());
+            Connection connection = DBUtils.getConnection(SpdEditorDBState.getInstance(project));
             DefaultMutableTreeNode tn = new DefaultMutableTreeNode("菜单项");
             List<NodeData> apps = AppNode.initLoad(connection);
             List<DefaultMutableTreeNode> appTreeNodes = apps.stream().map(app -> new DefaultMutableTreeNode(app, true)).collect(Collectors.toList());
@@ -100,7 +101,7 @@ public class EcasMenuToolWindow extends JComponent implements ClipboardOwner {
                         if (3 != result) {
                             if (1 == result) {
                                 DBUtils instance = DBUtils.getInstance();
-                                try (var conn = DBUtils.getConnection(SpdEditorDBState.getInstance())) {
+                                try (var conn = DBUtils.getConnection(SpdEditorDBState.getInstance(project))) {
                                     instance.executeSql(conn, sql);
                                 } catch (Exception e) {
                                     Messages.showErrorDialog(e.getMessage(), "数据库失败");
@@ -159,7 +160,7 @@ public class EcasMenuToolWindow extends JComponent implements ClipboardOwner {
                     int result = Messages.showDialog("execute?\n" + sql, "不可回滚，确认执行？", new String[]{"拷贝SQL", "执行删除", "取消"}, 1, Messages.getWarningIcon());
                     if (1 == result) {
                         DBUtils instance = DBUtils.getInstance();
-                        try (var conn = DBUtils.getConnection(SpdEditorDBState.getInstance())) {
+                        try (var conn = DBUtils.getConnection(SpdEditorDBState.getInstance(project))) {
                             instance.executeSql(conn, sql);
                         } catch (Exception e) {
                             Messages.showErrorDialog(e.getMessage(), "数据库失败");
@@ -197,7 +198,7 @@ public class EcasMenuToolWindow extends JComponent implements ClipboardOwner {
                             MenuNode menuNode = new MenuNode(dataMap);
                             model.insertNodeInto(new DefaultMutableTreeNode(menuNode), lastPathComponent, 0);
                             DBUtils instance = DBUtils.getInstance();
-                            try (var conn = DBUtils.getConnection(SpdEditorDBState.getInstance())) {
+                            try (var conn = DBUtils.getConnection(SpdEditorDBState.getInstance(project))) {
                                 instance.executeSql(conn, sql);
                             } catch (Exception e) {
                                 Messages.showErrorDialog(e.getMessage(), "数据库失败");

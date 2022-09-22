@@ -42,7 +42,7 @@ public class SpdDbDiffGroup {
         if (spdEditor instanceof SpdEditor) {
             ChartPanel chartPanel = spdEditor.getChartPanel();
             List<String> sqls = chartPanel.generateSql();
-            Map<String, String> dataTobeCompare = DBUtils.getInstance().fetchAndCompare(sqls, chartPanel.getId(), wrap);
+            Map<String, String> dataTobeCompare = DBUtils.getInstance().fetchAndCompare(anActionEvent.getProject(),sqls, chartPanel.getId(), wrap);
             String old = dataTobeCompare.get("old");
             String aNew = dataTobeCompare.get("new");
             CompareUtils.compare(old, "db version", aNew, "current ver", PlainTextFileType.INSTANCE, anActionEvent.getProject(), "Sql Into DbCompare");

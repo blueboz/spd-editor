@@ -4,6 +4,7 @@ import cn.boz.jb.plugin.idea.utils.DBUtils;
 import com.intellij.openapi.fileChooser.FileChooser;
 import com.intellij.openapi.fileChooser.FileTypeDescriptor;
 import com.intellij.openapi.progress.ProgressManager;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.Ref;
@@ -15,6 +16,7 @@ import com.intellij.ui.components.JBPasswordField;
 import com.intellij.ui.components.JBTextField;
 import com.intellij.util.ui.FormBuilder;
 import com.intellij.util.ui.UIUtil;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
@@ -118,8 +120,8 @@ public class SpdEditorDBSettingsComp {
         return jdbcUrlText;
     }
 
-    public void apply() {
-        SpdEditorDBState spdEditorState = SpdEditorDBState.getInstance();
+    public void apply(Project project) {
+        SpdEditorDBState spdEditorState = SpdEditorDBState.getInstance(project);
 
         spdEditorState.jdbcDriver = getJdbcDriver();
         spdEditorState.jdbcUrl = this.jdbcUrlText.getText();
@@ -148,8 +150,8 @@ public class SpdEditorDBSettingsComp {
         }
     }
 
-    public void reset() {
-        SpdEditorDBState spdEditorState = SpdEditorDBState.getInstance();
+    public void reset(Project project) {
+        SpdEditorDBState spdEditorState = SpdEditorDBState.getInstance(project);
         setJdbcDriver(spdEditorState.jdbcDriver);
         this.jdbcUrlText.setText(spdEditorState.jdbcUrl);
         this.jdbcUsername.setText(spdEditorState.jdbcUserName);
@@ -162,8 +164,8 @@ public class SpdEditorDBSettingsComp {
      *
      * @return
      */
-    public boolean isModified() {
-        SpdEditorDBState spdEditorState = SpdEditorDBState.getInstance();
+    public boolean isModified(Project project) {
+        SpdEditorDBState spdEditorState = SpdEditorDBState.getInstance(project);
         if (!spdEditorState.jdbcDriver.equals(this.getJdbcDriver())) {
             return true;
         }

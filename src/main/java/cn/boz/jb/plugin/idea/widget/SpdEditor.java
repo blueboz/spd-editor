@@ -68,12 +68,14 @@ public class SpdEditor extends JComponent implements DataProvider, MouseListener
     MyJBTable jbTable;
     private JBScrollPane jbPropertyScroll;
 
+    private Project project;
     private JBScrollPane jbMenuScroll;
     private VirtualFile virtualFile;
     private JPanel menu;
 
     public SpdEditor(Project project, VirtualFile virtualFile) {
         this.virtualFile = virtualFile;
+        this.project=project;
         this.setLayout(new BorderLayout());
         jbSplitter = new JBSplitter(false);
         jbSplitter.setShowDividerControls(true);
@@ -81,7 +83,7 @@ public class SpdEditor extends JComponent implements DataProvider, MouseListener
         jbSplitter.setSplitterProportionKey("spdEditorPropotion");
         add(jbSplitter, BorderLayout.CENTER);
 
-        jbTable = new MyJBTable();
+        jbTable = new MyJBTable(project);
 
         chartPanel = new ChartPanel(project, virtualFile, this);
         chartPanel.registerShapeSelectedListener(jbTable);
@@ -256,7 +258,7 @@ public class SpdEditor extends JComponent implements DataProvider, MouseListener
         sql.setToolTipText("Sql");
         menuPanel.add(sql);
 
-        if (SpdEditorDBState.getInstance().autoSave) {
+        if (SpdEditorDBState.getInstance(project).autoSave) {
             automation = new Button(IcoMoonUtils.getAutomation(), false, "automation", false);
             automation.addMouseListener(this);
             automation.setToolTipText("Disable AutoSave");
@@ -403,14 +405,14 @@ public class SpdEditor extends JComponent implements DataProvider, MouseListener
                 String automation = myButton.getTitle();
                 if (automation.equals(IcoMoonUtils.getAutomation())) {
                     myButton.setTitle(IcoMoonUtils.getManual());
-                    SpdEditorDBState.getInstance().autoSave = false;
+                    SpdEditorDBState.getInstance(project).autoSave = false;
                     myButton.setToolTipText("Enable AutoSave");
 
                     NotificationGroup.findRegisteredGroup("Spd Editor")
                             .createNotification("disable auto save spd editor", NotificationType.INFORMATION).notify(null);
                     repaint();
                 } else if (automation.equals(IcoMoonUtils.getManual())) {
-                    SpdEditorDBState.getInstance().autoSave = true;
+                    SpdEditorDBState.getInstance(project).autoSave = true;
                     myButton.setTitle(IcoMoonUtils.getAutomation());
 
                     myButton.setToolTipText("Disable AutoSave");
@@ -451,7 +453,7 @@ public class SpdEditor extends JComponent implements DataProvider, MouseListener
                     clipboard.setContents(selection, this);
                 } else if (idx == 1) {
                     //更新至db
-                    SpdEditorDBState instance = SpdEditorDBState.getInstance();
+                    SpdEditorDBState instance = SpdEditorDBState.getInstance(project);
                     try {
                         boolean b = DBUtils.executeSql(instance.jdbcUserName, instance.jdbcPassword, instance.jdbcUrl, instance.jdbcDriver, sqls);
                         if (b) {
@@ -527,7 +529,7 @@ public class SpdEditor extends JComponent implements DataProvider, MouseListener
 
     @Override
     public void focusGained(FocusEvent e) {
-        if (SpdEditorDBState.getInstance().autoSave) {
+        if (SpdEditorDBState.getInstance(project).autoSave) {
             if (!automation.getTitle().equals(IcoMoonUtils.getAutomation())) {
                 automation.setTitle(IcoMoonUtils.getAutomation());
                 automation.setToolTipText("Disable AutoSave");

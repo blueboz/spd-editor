@@ -5,6 +5,7 @@ import cn.boz.jb.plugin.idea.utils.DBUtils;
 import com.intellij.openapi.actionSystem.ActionGroup;
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.ActionToolbar;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.popup.JBPopup;
 import com.intellij.openapi.ui.popup.util.PopupUtil;
 import com.intellij.ui.components.JBScrollPane;
@@ -31,8 +32,7 @@ public class MenuIdDialog extends JComponent {
     public static final String ITEM_OCCUPY = "occupy";
 
     public static final String ITEM_FREE = "free";
-    private int cpageNum = SpdEditorDBState.getInstance().pageNum;
-    private int pageSize = SpdEditorDBState.getInstance().pageSize;
+;
     private Connection connection;
 
     private DBUtils instance;
@@ -46,8 +46,14 @@ public class MenuIdDialog extends JComponent {
 
     private JPanel component;
 
-    protected MenuIdDialog(Integer applid) {
+    private Project project;
+
+    private int cpageNum = SpdEditorDBState.getInstance(project).pageNum;
+    private int pageSize = SpdEditorDBState.getInstance(project).pageSize;
+    protected MenuIdDialog(Project project, Integer applid) {
+        this.project=project;
         this.applid = applid;
+
         try {
             component = createComponent();
         } catch (Exception e) {
@@ -62,7 +68,7 @@ public class MenuIdDialog extends JComponent {
         JPanel jPanel = new JPanel();
         JScrollPane panel = new JBScrollPane();
 
-        connection = DBUtils.getConnection(SpdEditorDBState.getInstance());
+        connection = DBUtils.getConnection(SpdEditorDBState.getInstance(project));
         instance = DBUtils.getInstance();
 
         tableModel = new DefaultTableModel();
@@ -148,7 +154,7 @@ public class MenuIdDialog extends JComponent {
                 } else {
                     cpageNum = ((Double) value).intValue();
                 }
-                SpdEditorDBState.getInstance().pageNum = cpageNum;
+                SpdEditorDBState.getInstance(project).pageNum = cpageNum;
                 load();
             }
         });
@@ -162,7 +168,7 @@ public class MenuIdDialog extends JComponent {
                 } else {
                     pageSize = ((Double) value).intValue();
                 }
-                SpdEditorDBState.getInstance().pageSize = pageSize;
+                SpdEditorDBState.getInstance(project).pageSize = pageSize;
                 load();
             }
         });
@@ -252,13 +258,13 @@ public class MenuIdDialog extends JComponent {
         currentPageModel.setValue(cpageNum - 1);
 
 //        cpageNum--;
-//        SpdEditorDBState.getInstance().pageNum = cpageNum;
+//        SpdEditorDBState.getInstance(project).pageNum = cpageNum;
 //        load();
     }
 
     public void loadNextPage() {
 //        cpageNum++;
-//        SpdEditorDBState.getInstance().pageNum = cpageNum;
+//        SpdEditorDBState.getInstance(project).pageNum = cpageNum;
 //        load();
         currentPageModel.setValue(cpageNum + 1);
 

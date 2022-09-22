@@ -2,7 +2,10 @@ package cn.boz.jb.plugin.idea.configurable;
 
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.ConfigurationException;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
+import com.intellij.openapi.project.ProjectManagerListener;
+import com.intellij.openapi.project.impl.ProjectLifecycleListener;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
@@ -12,7 +15,14 @@ import javax.swing.*;
  */
 public class SpdEditorDBSettings implements Configurable {
 
+    private Project project;
+
     private SpdEditorDBSettingsComp settings;
+
+    public SpdEditorDBSettings(Project project) {
+        this.project = project;
+    }
+
 
     @Override
     public String getDisplayName() {
@@ -28,18 +38,18 @@ public class SpdEditorDBSettings implements Configurable {
 
     @Override
     public boolean isModified() {
-        return settings.isModified();
+        return settings.isModified(project);
     }
 
     @Override
     public void apply() throws ConfigurationException {
         //保存方式
-        settings.apply();
+        settings.apply(project);
     }
 
     @Override
     public void reset() {
-        settings.reset();
+        settings.reset(project);
     }
 
     @Override

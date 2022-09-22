@@ -23,7 +23,7 @@ public class HtmlRefAction extends AnAction {
         String fileName = virtualFile.getName();
         DBUtils instance = DBUtils.getInstance();
         try {
-            Connection connection = DBUtils.getConnection();
+            Connection connection = DBUtils.getConnection(e.getProject());
             List<EcasMenu> result = instance.queryHtmlRefMenu(connection, fileName);
             showTablePopup(result, e.getProject());
 

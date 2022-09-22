@@ -31,7 +31,7 @@ public class GoToClientSyncBase extends AnAction {
         String syncBasePath = "D:/cdadmin/UFSM/FMSS/save/FMTM/";
         DBUtils dbUtils = DBUtils.getInstance();
 
-        try (Connection connection = DBUtils.getConnection()) {
+        try (Connection connection = DBUtils.getConnection(anActionEvent.getProject())) {
             String sysDay = dbUtils.querySysDay(connection);
             File file = new File(syncBasePath + sysDay);
             //临时目录

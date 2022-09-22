@@ -108,8 +108,8 @@ public class DBUtils {
         }
     }
 
-    public static Connection getConnection() throws MalformedURLException, SQLException, ClassNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        SpdEditorDBState instance = SpdEditorDBState.getInstance();
+    public static Connection getConnection(Project project) throws MalformedURLException, SQLException, ClassNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+        SpdEditorDBState instance = SpdEditorDBState.getInstance(project);
         return getConnection(instance);
     }
 
@@ -188,9 +188,9 @@ public class DBUtils {
     }
 
 
-    public Map<String, String> fetchAndCompare(List<String> sqls, String processId, boolean wrap) {
+    public Map<String, String> fetchAndCompare(Project project,List<String> sqls, String processId, boolean wrap) {
         HashMap<String, String> result = new HashMap<>();
-        try (Connection connection = getConnection(SpdEditorDBState.getInstance())) {
+        try (Connection connection = getConnection(SpdEditorDBState.getInstance(project))) {
 
             try {
 

@@ -1378,7 +1378,7 @@ public class ChartPanel extends JComponent implements DataProvider, MouseListene
                 shape.init(point);
                 addShape(shape);
                 repaint();
-                if (SpdEditorDBState.getInstance().autoSave) {
+                if (SpdEditorDBState.getInstance(project).autoSave) {
                     fireSavedListener();
                 }
 
@@ -1652,7 +1652,7 @@ public class ChartPanel extends JComponent implements DataProvider, MouseListene
                 lineCursorTracker = null;
                 addLine(line);
                 repaint();
-                if (SpdEditorDBState.getInstance().autoSave) {
+                if (SpdEditorDBState.getInstance(project).autoSave) {
                     fireSavedListener();
                 }
             } catch (Exception ee) {
@@ -1757,7 +1757,7 @@ public class ChartPanel extends JComponent implements DataProvider, MouseListene
                 setIdForShape(shape);
                 shape.init(rect);
                 addShape(shape);
-                if (SpdEditorDBState.getInstance().autoSave) {
+                if (SpdEditorDBState.getInstance(project).autoSave) {
                     fireSavedListener();
                 }
             } catch (InstantiationException | NoSuchMethodException | InvocationTargetException |
@@ -1798,14 +1798,14 @@ public class ChartPanel extends JComponent implements DataProvider, MouseListene
         //记录当前resizing对象
         if (dragPressObj != null) {
             doDrag();
-            if (SpdEditorDBState.getInstance().autoSave) {
+            if (SpdEditorDBState.getInstance(project).autoSave) {
                 fireSavedListener();
             }
             repaint();
         }
         if (dragLinePoint != null) {
             //记录历史操作
-            if (SpdEditorDBState.getInstance().autoSave) {
+            if (SpdEditorDBState.getInstance(project).autoSave) {
                 fireSavedListener();
             }
             BaseState dragLineAfterState = dragLine.serialize();
@@ -2026,7 +2026,7 @@ public class ChartPanel extends JComponent implements DataProvider, MouseListene
         }
         recalcBoard();
         repaint();
-        if (SpdEditorDBState.getInstance().autoSave) {
+        if (SpdEditorDBState.getInstance(project).autoSave) {
             fireSavedListener();
         }
         chartChangeListenerList.forEach(l -> l.doChartChange(this));
@@ -2143,7 +2143,7 @@ public class ChartPanel extends JComponent implements DataProvider, MouseListene
         recalcBoard();
 
         repaint();
-        if (SpdEditorDBState.getInstance().autoSave) {
+        if (SpdEditorDBState.getInstance(project).autoSave) {
             fireSavedListener();
         }
         chartChangeListenerList.forEach(l -> l.doChartChange(this));
@@ -2903,7 +2903,7 @@ public class ChartPanel extends JComponent implements DataProvider, MouseListene
         }
         recordStateChange(new StateChange(new BaseGroupState(befores), null));
         if (removed) {
-            if (SpdEditorDBState.getInstance().autoSave) {
+            if (SpdEditorDBState.getInstance(project).autoSave) {
                 fireSavedListener();
             }
         }

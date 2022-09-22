@@ -14,7 +14,7 @@ public class EcasMenuToolWindowFactory implements ToolWindowFactory {
 
     @Override
     public void createToolWindowContent(@NotNull Project project, @NotNull ToolWindow toolWindow) {
-        myToolWindow = new EcasMenuToolWindow();
+        myToolWindow = new EcasMenuToolWindow(project);
         ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
         Content title = contentFactory.createContent(myToolWindow, "Ecas Menu Tree", false);
         toolWindow.getContentManager().addContent(title);
