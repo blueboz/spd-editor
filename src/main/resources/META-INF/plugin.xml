@@ -47,11 +47,11 @@
         <projectService serviceImplementation="cn.boz.jb.plugin.idea.configurable.SpdEditorNormState"/>
         <!--项目领域的数据库配置信息-->
 
-        <applicationConfigurable parentId="tools" instance="cn.boz.jb.plugin.idea.configurable.SpdEditorDBSettings"
-                                 id="spdEditorConfigurable" displayName="SpdEditor" nonDefaultProject="true"/>
-        <applicationConfigurable parentId="spdEditorConfigurable"
-                                 instance="cn.boz.jb.plugin.idea.configurable.SpdEditorNormSettings"
-                                 id="spdEditorConfigurableConfig" displayName="BasicConfig" nonDefaultProject="true"/>
+        <projectConfigurable parentId="tools" instance="cn.boz.jb.plugin.idea.configurable.SpdEditorDBSettings"
+                             id="spdEditorConfigurable" displayName="SpdEditor" nonDefaultProject="true"/>
+        <projectConfigurable parentId="spdEditorConfigurable"
+                             instance="cn.boz.jb.plugin.idea.configurable.SpdEditorNormSettings"
+                             id="spdEditorConfigurableConfig" displayName="BasicConfig" nonDefaultProject="true"/>
         <notificationGroup id="SpdEditorNotifyGroup" displayType="BALLOON"/>
         <!--        <searchEverywhereContributor implementation="cn.boz.jb.plugin.idea.widget.SpdEditor" id="searchSpdFlow" order="last" os="freebsd"></searchEverywhereContributor>-->
         <projectService serviceImplementation="cn.boz.jb.plugin.idea.notification.SpdEditorNotification"/>
@@ -189,40 +189,44 @@
             <action class="cn.boz.jb.plugin.idea.action.engineaction.CopyQueryEngineActionScriptAction"
                     icon="AllIcons.Actions.Copy" id="SpdEditorCopyEngineAction" text="CopyQuerySql"></action>
             <action class="cn.boz.jb.plugin.idea.action.engineaction.CopyUpdateEngineActionScriptAction"
-                    icon="AllIcons.Actions.BuildLoadChanges" id="SpdEditorCopyUpdateAction" text="CopyUpdateSql"></action>
+                    icon="AllIcons.Actions.BuildLoadChanges" id="SpdEditorCopyUpdateAction"
+                    text="CopyUpdateSql"></action>
             <action class="cn.boz.jb.plugin.idea.action.engineaction.CopyDeleteEngineActionScriptAction"
                     icon="AllIcons.Actions.CloseHovered" id="SpdEditorCopyDeleteAction" text="CopyDeleteSql"></action>
             <action class="cn.boz.jb.plugin.idea.action.engineaction.CopyEngineActionAllSqlAction"
-                    icon="AllIcons.Actions.ListFiles" id="SpdEditorCopyEngineActionSql" text="CopyEngineActionSql"></action>
+                    icon="AllIcons.Actions.ListFiles" id="SpdEditorCopyEngineActionSql"
+                    text="CopyEngineActionSql"></action>
             <add-to-group group-id="spd.copy.taskaction.group" anchor="last"></add-to-group>
+        </group>
+        <group id="spd.openintoolwindow.action.group">
+            <action class="cn.boz.jb.plugin.idea.action.OpenInSearchToolWindowAction"
+                    icon="AllIcons.Actions.MoveToBottomLeft"
+                    id="OpenInSearchToolWindow" text="OpenInSearchToolWindow"></action>
+        </group>
+        <group id="spd.gotoscript.action.group">
+            <action class="cn.boz.jb.plugin.idea.action.GotoScriptAction" id="gotoscriptaction" text="gotoscript"
+                    icon="AllIcons.Actions.ShowCode">
+            </action>
         </group>
 
 
         <!--查看EngineAction 对话框中，功能菜单包含最小化-->
         <group id="spd.actiontask.min.dlg.group">
-            <action class="cn.boz.jb.plugin.idea.action.GotoScriptAction" id="gotoscriptaction" text="gotoscript"
-                    icon="AllIcons.Actions.ShowCode">
-            </action>
-            <action class="cn.boz.jb.plugin.idea.action.OpenInSearchToolWindowAction"
-                    icon="AllIcons.Actions.MoveToBottomLeft"
-                    id="OpenInSearchToolWindow" text="OpenInSearchToolWindow"></action>
+
+            <reference ref="spd.gotoscript.action.group"></reference>
             <reference ref="spd.copysql.action.group"></reference>
         </group>
 
+
         <group id="spd.actiontask.dlg.group">
-            <action class="cn.boz.jb.plugin.idea.action.GotoScriptAction" id="gotoscriptaction" text="gotoscript"
-                    icon="AllIcons.Actions.ShowCode">
-            </action>
-            <action class="cn.boz.jb.plugin.idea.action.OpenInSearchToolWindowAction"
-                    icon="AllIcons.Actions.MoveToBottomLeft"
-                    id="OpenInSearchToolWindow" text="OpenInSearchToolWindow"></action>
+            <reference ref="spd.gotoscript.action.group"></reference>
             <reference ref="spd.copysql.action.group"></reference>
+            <reference ref="spd.openintoolwindow.action.group"></reference>
         </group>
         <group id="spd.engineright.dlg.group">
-            <action class="cn.boz.jb.plugin.idea.action.OpenInSearchToolWindowAction"
-                    icon="AllIcons.Actions.MoveToBottomLeft"
-                    id="OpenInSearchToolWindow" text="OpenInSearchToolWindow"></action>
+            <reference ref="spd.openintoolwindow.action.group"></reference>
         </group>
+
         <group id="spd.menuid.spanel.group">
             <action class="cn.boz.jb.plugin.idea.toolwindow.PrevPageAction" icon="AllIcons.Actions.Play_back"></action>
             <!--            <action class="cn.boz.jb.plugin.idea.toolwindow.PageRangeAction" icon="AllIcons.Actions.FindAndShowNextMatches"></action>-->
@@ -230,12 +234,6 @@
                     icon="AllIcons.Actions.Play_forward"></action>
         </group>
 
-        <!--        <action class="cn.boz.jb.plugin.idea.action.ChangeViewAction" icon="SpdEditorIcons.FLOW_16_ICON" text="changeView" id="spdchangeview">-->
-
-        <!--            <add-to-group group-id="ChangesView.GroupBy"/>-->
-
-        <!--            <add-to-group group-id="ChangesBrowser"></add-to-group>-->
-        <!--        </action>-->
         <action class="cn.boz.jb.plugin.idea.action.FileHistoryDiffAction" icon="SpdEditorIcons.FLOW_16_ICON"
                 text="Spd Compare" id="FileHistoryDiff" description="SpdDiff">
             <add-to-group group-id="Vcs.FileHistory.ContextMenu"></add-to-group>
@@ -276,7 +274,8 @@
             <group popup="true" text="FmsTools">
                 <action class="cn.boz.jb.plugin.idea.action.fmss.GoToClientSyncBase"
                         id="ClientSyncBase" text="ClientSyncBase"></action>
-                <action class="cn.boz.jb.plugin.idea.action.fmss.StringSorterAction" id="SpdEditorStringSorter" text="StringSorter"></action>
+                <action class="cn.boz.jb.plugin.idea.action.fmss.StringSorterAction" id="SpdEditorStringSorter"
+                        text="StringSorter"></action>
             </group>
             <add-to-group group-id="MainMenu"></add-to-group>
             <add-to-group group-id="HelpMenu"></add-to-group>

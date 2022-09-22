@@ -85,10 +85,6 @@ public class CallerSearcherDetailComment extends JBPanel {
 
                     }
                 }
-                if(hint.contains(";")){
-                    hint = hint.replaceAll(";", "\r\n");
-                    hint = hint.replaceAll("\r\n\r\n", "\r\n");
-                }
 
                 textArea.setText(hint);
                 DefaultHighlighter.DefaultHighlightPainter defaultHighlightPainter = new DefaultHighlighter.DefaultHighlightPainter(Color.ORANGE);

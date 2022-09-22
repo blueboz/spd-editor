@@ -78,11 +78,23 @@ intellij {
 
 //    localPath='F:\\App\\JetBrains\\idea2022'
     localPath = 'F:\\App\\JetBrains\\ideaIU-2020.1.4.win'
+//    localSourcesPath=""
 //    localPath = 'F:\\App\\JetBrains\\IntelliJ IDEA 2021.1.1'
+//    intellijRepository="https://cache-redirector.jetbrains.com/www.jetbrains.com/intellij-repository"
+//    pluginsRepositories {
+//        marketplace()
+//        maven(repositoryUrl)
+//        custom(pluginsXmlUrl)
+//    }
+//    jreRepository
     instrumentCode = false
 //    sandboxDir.set("${project.rootDir}/.sandbox")
     sandboxDir = "${project.rootDir}/.sandbox"
-    plugins = ['com.intellij.java', 'JavaScriptLanguage', 'DatabaseTools', 'Git4Idea']
+    plugins = ['com.intellij.java',
+               'JavaScriptLanguage',
+               'DatabaseTools',
+               'Git4Idea',
+    ]
 
     //关于databasePlugins
 //    F:\App\JetBrains\IntelliJ IDEA 2021.1.1\plugins\DatabaseTools\lib\database-impl.jar!\META-INF\DatabasePlugin.xml
@@ -93,10 +105,9 @@ tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 //    options.compilerArgs +="-verbose"
 //    options.compilerArgs +="-nowarn"
-    options.compilerArgs +='-Xlint:-unchecked'
-    options.compilerArgs +='-Xlint:-deprecation'
+    options.compilerArgs += '-Xlint:-unchecked'
+    options.compilerArgs += '-Xlint:-deprecation'
 }
-
 
 
 patchPluginXml {
