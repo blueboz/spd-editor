@@ -186,7 +186,7 @@ public class EcasMenuToolWindow extends JComponent implements ClipboardOwner {
                 if (!(userObject instanceof NodeData)) {
                     return;
                 }
-                AddMenuDialog addMenuDialog = new AddMenuDialog(ProjectManager.getInstance().getDefaultProject(), true, ((NodeData) userObject));
+                AddMenuDialog addMenuDialog = new AddMenuDialog(project, true, ((NodeData) userObject));
                 boolean b = addMenuDialog.showAndGet();
                 if (b) {
                     Map<String, Object> dataMap = addMenuDialog.getDataMap();

@@ -48,9 +48,11 @@ public class MenuIdDialog extends JComponent {
 
     private Project project;
 
-    private int cpageNum = SpdEditorDBState.getInstance(project).pageNum;
-    private int pageSize = SpdEditorDBState.getInstance(project).pageSize;
+    private int cpageNum;
+    private int pageSize;
     protected MenuIdDialog(Project project, Integer applid) {
+        cpageNum=SpdEditorDBState.getInstance(project).pageNum;
+        pageSize=SpdEditorDBState.getInstance(project).pageSize;
         this.project=project;
         this.applid = applid;
 
