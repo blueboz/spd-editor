@@ -1,5 +1,6 @@
 package cn.boz.jb.plugin.idea.callsearch;
 
+import cn.boz.jb.plugin.idea.action.GotoRefFileAction;
 import com.intellij.ui.table.JBTable;
 
 import javax.swing.table.TableCellRenderer;
@@ -52,6 +53,6 @@ public class CallerSearcherTablePanel extends JBTable {
 
     @Override
     public TableCellRenderer getCellRenderer(int row, int column) {
-        return new CallerSearcherTableCellRender();
+        return GotoRefFileAction.CALL_SEARCHER_TABLE_RENDERER;
     }
 }

@@ -164,12 +164,13 @@
             <action class="cn.boz.jb.plugin.idea.action.GotoRefFileAction" id="GoToRef" text="Go To Ref"
                     icon="SpdEditorIcons.REF_16_ICON">
             </action>
-            <group text="GoToAction" id="GoToActionGroup" popup="true">
+            <group text="ExtQuery" id="SpdExtQuery" popup="true">
                 <action class="cn.boz.jb.plugin.idea.action.GotoAnyRefAction" icon="AllIcons.Actions.Search"
                         id="GoToRefAction"
-                        text="GoToAnyRefAction"></action>
+                        text="ListQueryActionByActionId"></action>
                 <action class="cn.boz.jb.plugin.idea.action.GotoAnyRefExtAction" icon="AllIcons.Actions.Search"
-                        text="GoToRefExt" id="GoToRefExt"></action>
+                        text="TableQueryActionByActionId" id="GoToRefExt"></action>
+                <action class="cn.boz.jb.plugin.idea.action.QueryExpressionUsages" text="QueryExpression" id="SpdQueryExpression"/>
             </group>
             <!--            <action class="cn.boz.jb.plugin.idea.codedef.action.AddCodeDefAction" id="AddCodeDef" text="Add Code Def"-->
             <!--                    icon="AllIcons.General.Add"></action>-->

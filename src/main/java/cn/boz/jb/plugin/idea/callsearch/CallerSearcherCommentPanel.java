@@ -63,7 +63,7 @@ public class CallerSearcherCommentPanel extends JBPanel {
 
         //增加应用
         ActionManager instance = ActionManager.getInstance();
-        ActionGroup actionGroup = (ActionGroup) instance.getAction(Constants.ACTION_GROUP_REF_ENGINE_ACTION_MIN);
+        ActionGroup actionGroup = (ActionGroup) instance.getAction(Constants.ACTION_GROUP_REF_ENGINE_ACTION);
         //建议将结果打开再ToolWindow中供方便搜索
 //        new ActionGroup(){
 //

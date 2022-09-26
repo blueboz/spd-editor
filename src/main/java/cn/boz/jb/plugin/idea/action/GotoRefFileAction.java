@@ -1,5 +1,6 @@
 package cn.boz.jb.plugin.idea.action;
 
+import cn.boz.jb.plugin.floweditor.gui.utils.StringUtils;
 import cn.boz.jb.plugin.idea.bean.EngineAction;
 import cn.boz.jb.plugin.idea.bean.EngineActionInput;
 import cn.boz.jb.plugin.idea.bean.EngineActionOutput;
@@ -79,6 +80,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -242,22 +244,32 @@ public class GotoRefFileAction extends AnAction {
             if (containingClass == null) {
                 return false;
             }
-            //进入类
+
+            String name = containingClass.getQualifiedName();
+            name = name.replaceAll("Impl", "");
+            name = name.replaceFirst(name.charAt(0) + "", (name.charAt(0) + "").toLowerCase(Locale.ROOT));
+            if (tryToSearchUsageByCodeFragment(anActionEvent, name, "")) {
+                return false;
+            }
+            return true;
         } else {
-            containingClass = containingMethod.getContainingClass();
+            //进入类
+            String name = containingMethod.getName();
+            String qualifiedName = containingMethod.getContainingClass().getQualifiedName();
+            //
+
+            if (tryToSearchUsageByCodeFragment(anActionEvent, name, qualifiedName)) {
+                return false;
+            }
+            return true;
+
+
         }
 
-        String name = containingMethod.getName();
-        String qualifiedName = containingMethod.getContainingClass().getQualifiedName();
-        //
 
-        if (tryToSearchUsageByCodeFragment(anActionEvent, name,qualifiedName)) {
-            return false;
-        }
-        return true;
     }
 
-    public static boolean tryToSearchUsageByCodeFragment(AnActionEvent anActionEvent, String name,String qualifieredName) {
+    public static boolean tryToSearchUsageByCodeFragment(AnActionEvent anActionEvent, String name, String qualifieredName) {
         DBUtils dbUtils = DBUtils.getInstance();
 
         Ref<List<EngineTask>> engineTaskRef = new Ref<>();
@@ -269,7 +281,7 @@ public class GotoRefFileAction extends AnAction {
                 engineTaskRef.set(engineTasks);
                 engineActionRef.set(engineActions);
             } catch (Exception e) {
-                DBUtils.dbExceptionProcessor(e,anActionEvent.getProject());
+                DBUtils.dbExceptionProcessor(e, anActionEvent.getProject());
             }
         }, "Loading...", true, anActionEvent.getProject());
         if (engineTaskRef.isNull() && engineActionRef.isNull()) {
@@ -298,26 +310,19 @@ public class GotoRefFileAction extends AnAction {
                     EngineTaskDialog engineTaskDialog = new EngineTaskDialog((EngineTask) selectedValue);
                     JBScrollPane jbScrollPane = new JBScrollPane(engineTaskDialog);
                     JBPopup popup;
-                    popup = JBPopupFactory.getInstance()
-                            .createComponentPopupBuilder(jbScrollPane, null)
-                            .setRequestFocus(true)
-                            .setFocusable(true)
-                            .setMovable(true)
-                            .setTitle("EngineTask")
-                            .setCancelOnOtherWindowOpen(true)
-                            .setProject(anActionEvent.getProject())
-                            .createPopup();
+                    popup = JBPopupFactory.getInstance().createComponentPopupBuilder(jbScrollPane, null).setRequestFocus(true).setFocusable(true).setMovable(true).setTitle("EngineTask").setCancelOnOtherWindowOpen(true).setProject(anActionEvent.getProject()).createPopup();
 
                     popup.showCenteredInCurrentWindow(anActionEvent.getProject());
                 }
             }
-        }, true,name,qualifieredName);
+        }, true, name, qualifieredName);
         return false;
     }
-    public static CallerSearcherTableCellRender CALL_SEARCHER_TABLE_RENDERER =new CallerSearcherTableCellRender() ;
+
+    public static CallerSearcherTableCellRender CALL_SEARCHER_TABLE_RENDERER = new CallerSearcherTableCellRender();
 
 
-    public static ColumnInfo[] CALL_SEARCHER_TABLE_COLUMN_INFO = new ColumnInfo[]{new ColumnInfo<Object, String>("type") {
+    public static ColumnInfo[] CALL_SEARCHER_TABLE_COLUMN_INFO = new ColumnInfo[]{new ColumnInfo<Object, String>("T") {
 
         @Override
         public @Nullable String valueOf(Object o) {
@@ -329,6 +334,16 @@ public class GotoRefFileAction extends AnAction {
             return "";
         }
 
+        @Override
+        public boolean isCellEditable(Object o) {
+            return false;
+        }
+    }, new ColumnInfo<Object, String>("F") {
+        @Nullable
+        @Override
+        public String valueOf(Object o) {
+            return null;
+        }
     }, new ColumnInfo<Object, String>("id") {
         @Nullable
         @Override
@@ -342,8 +357,8 @@ public class GotoRefFileAction extends AnAction {
         }
 
         @Override
-        public @Nullable TableCellRenderer getRenderer(Object o) {
-            return CALL_SEARCHER_TABLE_RENDERER;
+        public boolean isCellEditable(Object o) {
+            return true;
         }
 
 
@@ -361,8 +376,8 @@ public class GotoRefFileAction extends AnAction {
         }
 
         @Override
-        public @Nullable TableCellRenderer getRenderer(Object o) {
-            return CALL_SEARCHER_TABLE_RENDERER;
+        public boolean isCellEditable(Object o) {
+            return true;
         }
 
 
@@ -379,16 +394,18 @@ public class GotoRefFileAction extends AnAction {
         }
 
         @Override
-        public @Nullable TableCellRenderer getRenderer(Object o) {
-            return CALL_SEARCHER_TABLE_RENDERER;
+        public boolean isCellEditable(Object o) {
+            return false;
         }
+
+
     }};
 
 
     @SuppressWarnings("unchecked")
-    public static void showListPopup(final List<Object> objects, Project project, Consumer<? super Object> selectUserTaskConsumer, boolean showComments,String queryName,String qualifierName) {
+    public static void showListPopup(final List<Object> objects, Project project, Consumer<? super Object> selectUserTaskConsumer, boolean showComments, String queryName, String qualifierName) {
         //
-        CallerSearcherTablePanel jbTable = new CallerSearcherTablePanel(new ListTableModel<>(CALL_SEARCHER_TABLE_COLUMN_INFO,objects,0));
+        CallerSearcherTablePanel jbTable = new CallerSearcherTablePanel(new ListTableModel<>(CALL_SEARCHER_TABLE_COLUMN_INFO, objects, 0));
 
         jbTable.setQueryName(queryName);
         jbTable.setQualifierName(qualifierName);
@@ -413,14 +430,15 @@ public class GotoRefFileAction extends AnAction {
             //注释
             builder.setSouthComponent(new CallerSearcherCommentPanel(jbTable));
         }
-        String format = String.format("%s.%s", qualifierName, queryName);
+        String format;
+        if (StringUtils.isBlank(qualifierName)) {
+            format = String.format("%s", queryName);
+        } else {
+            format = String.format("%s.%s", qualifierName, queryName);
+        }
 
 
-        builder.setTitle("caller Searcher:"+format)
-                .setItemChoosenCallback(runnable).setResizable(true)
-                .setMovable(true)
-                .setDimensionServiceKey("callerSearcher")
-                .setMinSize(new JBDimension(800, 400));
+        builder.setTitle("caller Searcher:" + format).setItemChoosenCallback(runnable).setResizable(true).setMovable(true).setDimensionServiceKey("callerSearcher").setMinSize(new JBDimension(800, 400));
 
 
         JBPopup popup = builder.createPopup();
@@ -440,20 +458,20 @@ public class GotoRefFileAction extends AnAction {
 
     /**
      * this is beging use by
+     *
      * @see GotoRefFileAction#showListPopup(List, Project, Consumer, boolean, String, String)
      */
     public static class ActionOrTaskDetailAction extends DumbAwareAction {
 
         /**
-         *
-         * @see  GotoRefFileAction#showListPopup(List, Project, Consumer, boolean, String, String)
          * @param anActionEvent
+         * @see GotoRefFileAction#showListPopup(List, Project, Consumer, boolean, String, String)
          */
         @Override
         public void actionPerformed(@NotNull AnActionEvent anActionEvent) {
             Component com = anActionEvent.getRequiredData(PlatformDataKeys.CONTEXT_COMPONENT);
-            if(com instanceof JBTable){
-                JBTable jbTable= (JBTable) com;
+            if (com instanceof JBTable) {
+                JBTable jbTable = (JBTable) com;
                 ListTableModel model = (ListTableModel) jbTable.getModel();
                 int selectedRow = jbTable.getSelectedRow();
                 int i = jbTable.convertRowIndexToModel(selectedRow);
@@ -466,15 +484,7 @@ public class GotoRefFileAction extends AnAction {
                         EngineTaskDialog engineTaskDialog = new EngineTaskDialog((EngineTask) item);
                         JBScrollPane jbScrollPane = new JBScrollPane(engineTaskDialog);
                         JBPopup popup;
-                        popup = JBPopupFactory.getInstance()
-                                .createComponentPopupBuilder(jbScrollPane, null)
-                                .setRequestFocus(true)
-                                .setFocusable(true)
-                                .setMovable(true)
-                                .setTitle("EngineTask")
-                                .setCancelOnOtherWindowOpen(true)
-                                .setProject(anActionEvent.getProject())
-                                .createPopup();
+                        popup = JBPopupFactory.getInstance().createComponentPopupBuilder(jbScrollPane, null).setRequestFocus(true).setFocusable(true).setMovable(true).setTitle("EngineTask").setCancelOnOtherWindowOpen(true).setProject(anActionEvent.getProject()).createPopup();
 
                         popup.showCenteredInCurrentWindow(anActionEvent.getProject());
                     }
@@ -539,8 +549,7 @@ public class GotoRefFileAction extends AnAction {
 
                     //过滤框
                     selPopup.isSelectable(true);
-                    ListPopup listPopup = JBPopupFactory.getInstance()
-                            .createListPopup(selPopup);
+                    ListPopup listPopup = JBPopupFactory.getInstance().createListPopup(selPopup);
                     listPopup.showInFocusCenter();
 
 
@@ -563,7 +572,6 @@ public class GotoRefFileAction extends AnAction {
             }
         }
     }
-
 
 
     /**
@@ -731,14 +739,13 @@ public class GotoRefFileAction extends AnAction {
         final String query = value;
         ProgressManager.getInstance().runProcessWithProgressSynchronously(() -> {
 
-            try (Connection connection = DBUtils.getConnection(SpdEditorDBState.getInstance(anActionEvent.getProject()));
-            ) {
+            try (Connection connection = DBUtils.getConnection(SpdEditorDBState.getInstance(anActionEvent.getProject()));) {
                 List<EngineAction> actions = instance.queryEngineActionWithIdLike(connection, query);
                 if (actions.size() == 0) {
                     result.set(false);
                 } else if (actions.size() == 1) {
                     EngineAction engineAction = actions.get(0);
-                    String id_ =  engineAction.getId();
+                    String id_ = engineAction.getId();
                     List<EngineActionInput> actionInputs = instance.queryEngineActionInputIdMatch(connection, id_);
                     List<EngineActionOutput> actionOutputs = instance.queryEngineActionOutputIdMatch(connection, id_);
                     engineAction.setInputs(actionInputs);
@@ -779,15 +786,7 @@ public class GotoRefFileAction extends AnAction {
 
             temporyDialog = new EngineActionDialog(container.getEngineAction());
 
-            popup = JBPopupFactory.getInstance()
-                    .createComponentPopupBuilder(temporyDialog, null)
-                    .setRequestFocus(true)
-                    .setTitle("Action")
-                    .setMovable(true)
-                    .setProject(anActionEvent.getProject())
-                    .setFocusable(true)
-                    .setCancelOnOtherWindowOpen(true)
-                    .createPopup();
+            popup = JBPopupFactory.getInstance().createComponentPopupBuilder(temporyDialog, null).setRequestFocus(true).setTitle("Action").setMovable(true).setProject(anActionEvent.getProject()).setFocusable(true).setCancelOnOtherWindowOpen(true).createPopup();
 
             //应该
             popup.showCenteredInCurrentWindow(anActionEvent.getProject());
@@ -798,8 +797,7 @@ public class GotoRefFileAction extends AnAction {
         if (!ids.isNull()) {
             List<String> actionSorted = ids.get().stream().sorted().collect(Collectors.toList());
 
-            @SuppressWarnings("unchecked")
-            BaseListPopupStep selPopup = new BaseListPopupStep<String>("action", actionSorted, SpdEditorIcons.ACTION_16_ICON) {
+            @SuppressWarnings("unchecked") BaseListPopupStep selPopup = new BaseListPopupStep<String>("action", actionSorted, SpdEditorIcons.ACTION_16_ICON) {
                 @Override
                 public @Nullable PopupStep<?> onChosen(String selectedValue, boolean finalChoice) {
                     if (finalChoice) {
@@ -827,8 +825,7 @@ public class GotoRefFileAction extends AnAction {
 
             //过滤框
             selPopup.isSelectable(true);
-            ListPopup listPopup = JBPopupFactory.getInstance()
-                    .createListPopup(selPopup);
+            ListPopup listPopup = JBPopupFactory.getInstance().createListPopup(selPopup);
             listPopup.showCenteredInCurrentWindow(anActionEvent.getProject());
             return true;
         }

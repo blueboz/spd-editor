@@ -150,9 +150,6 @@ public class OpenInSearchToolWindowAction extends AnAction implements DumbAware 
             CallerSearcherTablePanel tabTable = new CallerSearcherTablePanel(new ListTableModel<>(GotoRefFileAction.CALL_SEARCHER_TABLE_COLUMN_INFO, items, 0)) {
                 @Override
                 public boolean isCellEditable(int row, int column) {
-                    if (column == 1 || column == 2) {
-                        return true;
-                    }
                     return super.isCellEditable(row, column);
                 }
             };
