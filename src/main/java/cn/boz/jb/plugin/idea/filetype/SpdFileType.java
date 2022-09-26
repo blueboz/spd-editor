@@ -10,18 +10,16 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 
 public class SpdFileType extends XmlLikeFileType {
-
-
     public static final SpdFileType INSTANCE = new SpdFileType();
 
     private SpdFileType() {
-        super(XMLLanguage.INSTANCE);
+        super(SpdLanguage.INSTANCE);
     }
 
 
     @Override
     public @NonNls @NotNull String getName() {
-        return "Spd";
+        return "Spd File";
     }
 
     @Override
@@ -36,7 +34,6 @@ public class SpdFileType extends XmlLikeFileType {
 
     @Override
     public @Nullable Icon getIcon() {
-
         return SpdEditorIcons.FLOW_GRAY_16_ICON;
     }
 

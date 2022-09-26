@@ -45,6 +45,8 @@ public class CallerSearcherTablePanel extends JBTable {
         c1.setWidth(210);
         c1.setMinWidth(250);
         setRowSorter(new TableRowSorter<>(model));
+        setShowVerticalLines(false);
+        setShowHorizontalLines(false);
 
     }
 

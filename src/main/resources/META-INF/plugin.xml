@@ -1,4 +1,4 @@
-<idea-plugin require-restart="false" allow-bundled-update="true">
+<idea-plugin >
     <id>cn.boz.jb.plugin.spd-editor</id>
     <name>Erayt Spd Editor</name>
     <vendor email="1173626291@qq.com" url="http://blog.csdn.net/blueboz">Blueboz.Chen</vendor>
@@ -18,12 +18,11 @@
          on how to target different products -->
     <depends>com.intellij.modules.lang</depends>
     <depends>com.intellij.modules.platform</depends>
-    <depends>JavaScript</depends>
     <!--    <depends>com.intellij.modules.java-capable</depends>-->
     <depends>com.intellij.java</depends>
     <depends>com.intellij.database</depends>
     <depends>Git4Idea</depends>
-    <!--    <depends>JavaScriptLanguage</depends>-->
+    <depends>JavaScript</depends>
 
 
     <extensions defaultExtensionNs="com.intellij">
@@ -40,8 +39,7 @@
         <toolWindow factoryClass="cn.boz.jb.plugin.idea.toolwindow.EcasMenuToolWindowFactory" id="EcasMenu"
                     anchor="right"
                     order="last" icon="SpdEditorIcons.MENU_16_ICON"/>
-        <fileType name="Spd" extensions="spd"
-                  implementationClass="cn.boz.jb.plugin.idea.filetype.SpdFileType" language="XML" fieldName="INSTANCE"/>
+        <fileType name="Spd" extensions="spd" implementationClass="cn.boz.jb.plugin.idea.filetype.SpdFileType" language="Spd" fieldName="INSTANCE"/>
         <themeMetadataProvider path="/META-INF/SpdEditor.themeMetadata.json"/>
         <projectService serviceImplementation="cn.boz.jb.plugin.idea.configurable.SpdEditorDBState"/>
         <projectService serviceImplementation="cn.boz.jb.plugin.idea.configurable.SpdEditorNormState"/>
@@ -55,6 +53,11 @@
         <notificationGroup id="SpdEditorNotifyGroup" displayType="BALLOON"/>
         <!--        <searchEverywhereContributor implementation="cn.boz.jb.plugin.idea.widget.SpdEditor" id="searchSpdFlow" order="last" os="freebsd"></searchEverywhereContributor>-->
         <projectService serviceImplementation="cn.boz.jb.plugin.idea.notification.SpdEditorNotification"/>
+
+<!--        <gotoSymbolContributor implementation=""></gotoSymbolContributor>-->
+        <completion.contributor language="JAVA" implementationClass="cn.boz.jb.plugin.idea.lexer.MyCompleteContributor"></completion.contributor>
+        <lang.findUsagesProvider language="Spd"
+                                 implementationClass="cn.boz.jb.plugin.idea.lexer.MyFindUsagesProvider"/>
     </extensions>
     <applicationListeners>
         <listener class="cn.boz.jb.plugin.idea.listener.SpdEditorLifeCycleListener"
@@ -84,6 +87,7 @@
 
             <add-to-group group-id="ProjectViewPopupMenu" anchor="before"
                           relative-to-action="EditorPaste"/>
+            <add-to-group group-id="EditorPopupMenu" anchor="last"></add-to-group>
 
         </group>
 

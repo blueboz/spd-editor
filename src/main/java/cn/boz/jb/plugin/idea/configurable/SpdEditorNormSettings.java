@@ -1,15 +1,19 @@
 package cn.boz.jb.plugin.idea.configurable;
 
+import com.intellij.openapi.extensions.BaseExtensionPointName;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.ConfigurationException;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import java.util.Collection;
+import java.util.Collections;
 
 /**
  * 配置项编辑器
  */
-public class SpdEditorNormSettings implements Configurable {
+public class SpdEditorNormSettings implements Configurable,Configurable.WithEpDependencies {
 
     private SpdEditorNormSettingsComp settings;
 
@@ -43,6 +47,11 @@ public class SpdEditorNormSettings implements Configurable {
     @Override
     public @Nullable JComponent getPreferredFocusedComponent() {
         return settings.getPreferredFocusedComponent();
+    }
+
+    @Override
+    public @NotNull Collection<BaseExtensionPointName<?>> getDependencies() {
+        return Collections.emptyList();
     }
 }
 

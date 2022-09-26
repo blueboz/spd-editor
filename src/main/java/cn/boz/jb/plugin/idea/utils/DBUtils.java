@@ -533,4 +533,40 @@ public class DBUtils {
             }).collect(Collectors.toList());
         }
     }
+
+    public List<EcasMenu> queryHtmlRefMenuTop(Connection connection, String fileName) throws SQLException {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(
+                " select * from ECAS_MENU where url like '%" + fileName + "%'")) {
+            List<Map<String, Object>> maps = queryForList(preparedStatement);
+            //APPLID, MENUID, NAME, LVL, URL, PARENT, IMG, ISCHILD, GROUPID
+            return maps.stream().map(ecasMenuMapper).collect(Collectors.toList());
+        }
+    }
+
+
+    public List<EcasMenu> queryMenuById(Connection connection,String menuId) throws SQLException {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(
+                " select * from ECAS_MENU where menuid= '"+menuId+"'")) {
+            List<Map<String, Object>> maps = queryForList(preparedStatement);
+            //APPLID, MENUID, NAME, LVL, URL, PARENT, IMG, ISCHILD, GROUPID
+            return maps.stream().map(ecasMenuMapper).collect(Collectors.toList());
+        }
+    }
+    public static Function<Map<String, Object>, EcasMenu> ecasMenuMapper = new Function<Map<String, Object>, EcasMenu>() {
+        @Override
+        public EcasMenu apply(Map<String, Object> it) {
+            EcasMenu ecasMenu = new EcasMenu();
+            ecasMenu.setApplid(String.valueOf( it.get("APPLID")));
+            ecasMenu.setMenuid(String.valueOf( it.get("MENUID")));
+            ecasMenu.setName(String.valueOf(it.get("NAME")));
+            ecasMenu.setLvl(String.valueOf(it.get("LVL")));
+            ecasMenu.setUrl(String.valueOf(it.get("URL")));
+            ecasMenu.setParent(String.valueOf(it.get("PARENT")));
+            ecasMenu.setImg(String.valueOf(it.get("IMG")));
+            ecasMenu.setIschild(String.valueOf(it.get("ISCHILD")));
+            ecasMenu.setGroupid(String.valueOf(it.get("GROUPID")));
+            return ecasMenu;
+        }
+    };
+
 }

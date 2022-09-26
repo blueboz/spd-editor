@@ -70,7 +70,9 @@ sourceSets {
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
-//    version = '2021.2.1'
+//    https://cache-redirector.jetbrains.com/www.jetbrains.com/intellij-repository/releases/co
+//    m/jetbrains/intellij/idea/ideaIC/2020.1.4/ideaIC-2020.1.4.zip'
+//    version = '2020.1.4'
 //    localPath = '/Volumes/Mac/App/IntelliJ IDEA.app'
 //    localPath = 'F:\\App\\JetBrains\\IntelliJ IDEA 2021.2.1'
 //    localPath = 'D:\\App\\ideaIU-2020'
@@ -81,17 +83,21 @@ intellij {
 //    localSourcesPath=""
 //    localPath = 'F:\\App\\JetBrains\\IntelliJ IDEA 2021.1.1'
 //    intellijRepository="https://cache-redirector.jetbrains.com/www.jetbrains.com/intellij-repository"
-//    pluginsRepositories {
+    pluginsRepositories {
 //        marketplace()
 //        maven(repositoryUrl)
-//        custom(pluginsXmlUrl)
-//    }
+//        custom("http://21.96.35.45:16789/plugins")
+        maven{
+            url 'http://21.96.35.45:16789/plugins'
+        }
+    }
 //    jreRepository
     instrumentCode = false
 //    sandboxDir.set("${project.rootDir}/.sandbox")
     sandboxDir = "${project.rootDir}/.sandbox"
     plugins = ['com.intellij.java',
                'JavaScriptLanguage',
+               'JavaScript',
                'DatabaseTools',
                'Git4Idea',
     ]

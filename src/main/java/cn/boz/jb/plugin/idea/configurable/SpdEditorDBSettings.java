@@ -1,19 +1,25 @@
 package cn.boz.jb.plugin.idea.configurable;
 
+import com.intellij.openapi.extensions.BaseExtensionPointName;
+import com.intellij.openapi.extensions.ProjectExtensionPointName;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.project.ProjectManagerListener;
 import com.intellij.openapi.project.impl.ProjectLifecycleListener;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 /**
  * 配置项编辑器
  */
-public class SpdEditorDBSettings implements Configurable {
+public class SpdEditorDBSettings implements Configurable,Configurable.WithEpDependencies {
 
     private Project project;
 
@@ -55,6 +61,11 @@ public class SpdEditorDBSettings implements Configurable {
     @Override
     public @Nullable JComponent getPreferredFocusedComponent() {
         return settings.getPreferredFocusedComponent();
+    }
+
+    @Override
+    public @NotNull Collection<BaseExtensionPointName<?>> getDependencies() {
+        return Collections.emptyList();
     }
 }
 

@@ -2,6 +2,7 @@ package cn.boz.jb.plugin.idea.action;
 
 import cn.boz.jb.plugin.idea.bean.EcasMenu;
 import cn.boz.jb.plugin.idea.dialog.EcasMenuDialog;
+import cn.boz.jb.plugin.idea.dialog.EcasMenuTreeDialog;
 import cn.boz.jb.plugin.idea.utils.DBUtils;
 import com.intellij.ide.highlighter.HtmlFileType;
 import com.intellij.openapi.actionSystem.AnAction;
@@ -25,7 +26,9 @@ public class HtmlRefAction extends AnAction {
         try {
             Connection connection = DBUtils.getConnection(e.getProject());
             List<EcasMenu> result = instance.queryHtmlRefMenu(connection, fileName);
-            showTablePopup(result, e.getProject());
+            EcasMenuTreeDialog ecasMenuTreeDialog = new EcasMenuTreeDialog(e.getProject(), fileName);
+            ecasMenuTreeDialog.show();
+//            showTablePopup(result, e.getProject());
 
         } catch (Exception ex) {
             DBUtils.dbExceptionProcessor(ex,e.getProject());
@@ -36,6 +39,7 @@ public class HtmlRefAction extends AnAction {
     public void showTablePopup(List<EcasMenu> ecasMenus, Project project) {
         EcasMenuDialog ecasMenuDialog = new EcasMenuDialog(ecasMenus);
         ecasMenuDialog.show();
+
     }
 
     @Override
