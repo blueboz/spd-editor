@@ -5,6 +5,7 @@ import java.util.List;
 
 public class EngineAction {
 
+    private boolean checked;
     private String id;
     private String namespace;
     private String url;
@@ -84,5 +85,13 @@ public class EngineAction {
 
     public void setOutputs(List<EngineActionOutput> outputs) {
         this.outputs = outputs;
+    }
+
+    public boolean isChecked() {
+        return checked;
+    }
+
+    public void setChecked(boolean checked) {
+        this.checked = checked;
     }
 }

@@ -2,6 +2,7 @@ package cn.boz.jb.plugin.idea.bean;
 
 
 public class EngineTask {
+    private boolean checked;
 
     private String id;
     private String type;
@@ -158,5 +159,13 @@ public class EngineTask {
                 " " + opensecond +
                 " " + bussinesid +
                 " " + tasklistener;
+    }
+
+    public boolean isChecked() {
+        return checked;
+    }
+
+    public void setChecked(boolean checked) {
+        this.checked = checked;
     }
 }

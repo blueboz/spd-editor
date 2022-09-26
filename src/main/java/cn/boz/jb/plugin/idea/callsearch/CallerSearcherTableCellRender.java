@@ -40,7 +40,14 @@ public class CallerSearcherTableCellRender implements TableCellRenderer {
                 simpleIconControl.setForeground(fg);
                 return simpleIconControl;
             }
-        } else {
+        } else if(column==1){
+            JCheckBox jCheckBox = new JCheckBox();
+            jCheckBox.getModel().setSelected((Boolean) value);
+            jCheckBox.setBackground(bg);
+            jCheckBox.setForeground(fg);
+
+            return jCheckBox;
+        }else {
             if (value != null) {
                 myComponent.append((String) value);
             } else {

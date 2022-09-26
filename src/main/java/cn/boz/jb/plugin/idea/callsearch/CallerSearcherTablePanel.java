@@ -3,6 +3,7 @@ package cn.boz.jb.plugin.idea.callsearch;
 import cn.boz.jb.plugin.idea.action.GotoRefFileAction;
 import com.intellij.ui.table.JBTable;
 
+import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
@@ -42,9 +43,14 @@ public class CallerSearcherTablePanel extends JBTable {
         c0.setMinWidth(24);
 
         final TableColumn c1 = getColumnModel().getColumn(1);
+        c1.setMaxWidth(24);
+        c1.setWidth(24);
+        c1.setMinWidth(24);
+
+        final TableColumn c2 = getColumnModel().getColumn(2);
         //设置ID列宽度
-        c1.setWidth(210);
-        c1.setMinWidth(250);
+        c2.setWidth(210);
+        c2.setMinWidth(250);
         setRowSorter(new TableRowSorter<>(model));
         setShowVerticalLines(false);
         setShowHorizontalLines(false);
@@ -54,5 +60,11 @@ public class CallerSearcherTablePanel extends JBTable {
     @Override
     public TableCellRenderer getCellRenderer(int row, int column) {
         return GotoRefFileAction.CALL_SEARCHER_TABLE_RENDERER;
+    }
+
+
+    @Override
+    public TableCellEditor getCellEditor(int row, int column) {
+        return GotoRefFileAction.CALL_SEARCHER_TABLE_EDITOR;
     }
 }

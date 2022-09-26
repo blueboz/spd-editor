@@ -5,6 +5,7 @@ import cn.boz.jb.plugin.idea.bean.EngineAction;
 import cn.boz.jb.plugin.idea.bean.EngineActionInput;
 import cn.boz.jb.plugin.idea.bean.EngineActionOutput;
 import cn.boz.jb.plugin.idea.bean.EngineTask;
+import cn.boz.jb.plugin.idea.callsearch.CallerSearcherTableCellEditor;
 import cn.boz.jb.plugin.idea.callsearch.CallerSearcherTablePanel;
 import cn.boz.jb.plugin.idea.callsearch.CallerSearcherTableCellRender;
 import cn.boz.jb.plugin.idea.configurable.SpdEditorDBState;
@@ -321,6 +322,8 @@ public class GotoRefFileAction extends AnAction {
 
     public static CallerSearcherTableCellRender CALL_SEARCHER_TABLE_RENDERER = new CallerSearcherTableCellRender();
 
+    public static CallerSearcherTableCellEditor CALL_SEARCHER_TABLE_EDITOR = new CallerSearcherTableCellEditor();
+
 
     public static ColumnInfo[] CALL_SEARCHER_TABLE_COLUMN_INFO = new ColumnInfo[]{new ColumnInfo<Object, String>("T") {
 
@@ -338,12 +341,23 @@ public class GotoRefFileAction extends AnAction {
         public boolean isCellEditable(Object o) {
             return false;
         }
-    }, new ColumnInfo<Object, String>("F") {
+    }, new ColumnInfo<Object, Boolean>("F") {
         @Nullable
         @Override
-        public String valueOf(Object o) {
-            return null;
+        public Boolean valueOf(Object o) {
+            if (o instanceof EngineTask) {
+                return ((EngineTask) o).isChecked();
+            } else if (o instanceof EngineAction) {
+                return ((EngineAction) o).isChecked();
+            }
+            return false;
         }
+
+        @Override
+        public boolean isCellEditable(Object o) {
+            return true;
+        }
+
     }, new ColumnInfo<Object, String>("id") {
         @Nullable
         @Override
