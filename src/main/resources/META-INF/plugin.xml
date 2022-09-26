@@ -281,6 +281,8 @@
                         id="ClientSyncBase" text="ClientSyncBase"></action>
                 <action class="cn.boz.jb.plugin.idea.action.fmss.StringSorterAction" id="SpdEditorStringSorter"
                         text="StringSorter"></action>
+                <action class="cn.boz.jb.plugin.idea.action.fmss.AddPluginAddress" id="SpdEditorAddPluginAddress"
+                        text="SpdAddPluginAddress" icon="AllIcons.Gutter.Colors"></action>
             </group>
             <add-to-group group-id="MainMenu"></add-to-group>
             <add-to-group group-id="HelpMenu"></add-to-group>
