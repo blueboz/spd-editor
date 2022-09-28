@@ -232,6 +232,28 @@ public class GotoRefFileAction extends AnAction {
     }
 
 
+    public String tranToSpringBeanName(String input){
+        if(input==null){
+            return "";
+        }
+        if("".equals(input.trim())){
+            return "";
+        }
+        if(input.length()==1){
+            return input.toLowerCase();
+        }
+        if(input.endsWith("Impl")){
+            input=input.substring(0,input.length()-4);
+
+        }
+        String prefix = input.substring(0, 1);
+
+        String suffix = input.substring(1);
+        System.out.println(prefix);
+        System.out.println(suffix);
+        return prefix.toLowerCase()+suffix;
+    }
+
     /**
      * 搜索在Engine_ACTION中的引用以及ENGINE_FLOW 中ENGINE_TASK 中的引用，并作列表快速搜索
      *
@@ -246,10 +268,8 @@ public class GotoRefFileAction extends AnAction {
                 return false;
             }
 
-            String name = containingClass.getQualifiedName();
-            name = name.replaceAll("Impl", "");
-            name = name.replaceFirst(name.charAt(0) + "", (name.charAt(0) + "").toLowerCase(Locale.ROOT));
-            if (tryToSearchUsageByCodeFragment(anActionEvent, name, "")) {
+            String name = containingClass.getName();
+            if (tryToSearchUsageByCodeFragment(anActionEvent, tranToSpringBeanName(name), "")) {
                 return false;
             }
             return true;

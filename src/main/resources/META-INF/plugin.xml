@@ -250,6 +250,10 @@
 
             <action class="cn.boz.jb.plugin.idea.action.GitGetAction" text="GitGet" id="GitGet"
                     icon="AllIcons.Vcs.ShelveSilent"></action>
+            <action class="cn.boz.jb.plugin.idea.action.export.GitGetExportAsSqlAction" text="GitGetSpdSql" id="GitGetSpdSql"
+                    icon="AllIcons.Vcs.ShelveSilent"></action>
+            <action class="cn.boz.jb.plugin.idea.action.export.GitGetExportAsZipAction" text="GitGetZip" id="GitGetZip"
+                    icon="AllIcons.Vcs.ShelveSilent"></action>
             <add-to-group group-id="VcsHistoryInternalGroup.Popup"></add-to-group>
             <add-to-group group-id="Vcs.RepositoryChangesBrowserMenu"></add-to-group>
             <add-to-group group-id="VcsSelectionHistoryDialog.Popup"></add-to-group>
@@ -268,9 +272,9 @@
         <group>
             <action class="cn.boz.jb.plugin.idea.action.SpdCommitDiffAction" text="SpdCommitDiff"
                     id="SpdCommitDiff" icon="SpdEditorIcons.FLOW_16_ICON"/>
-            <action class="cn.boz.jb.plugin.idea.action.ExportAsZipAction" icon="SpdEditorIcons.ZIP_16_ICON"
+            <action class="cn.boz.jb.plugin.idea.action.export.ExportAsZipAction" icon="SpdEditorIcons.ZIP_16_ICON"
                     text="ExportAsZip"></action>
-            <action class="cn.boz.jb.plugin.idea.action.ExportAllSpdSql"
+            <action class="cn.boz.jb.plugin.idea.action.export.ExportAllSpdSqlAction"
                     text="ExportAsSQL"></action>
             <add-to-group group-id="ChangesViewPopupMenu"></add-to-group>
         </group>

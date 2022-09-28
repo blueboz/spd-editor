@@ -1,5 +1,6 @@
-package cn.boz.jb.plugin.idea.action;
+package cn.boz.jb.plugin.idea.action.export;
 
+import cn.boz.jb.plugin.idea.action.export.bean.FileWrapper;
 import cn.boz.jb.plugin.idea.utils.Constants;
 import com.intellij.dvcs.repo.Repository;
 import com.intellij.dvcs.repo.VcsRepositoryManager;
@@ -28,33 +29,9 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-public class ExportAsZipAction extends AnAction {
+public class ExportAsZipAction extends ExportBaseAction {
 
-    class FileWrapper {
-        private String path;
-        private byte[] content;
 
-        public FileWrapper(String path, byte[] content) {
-            this.path = path;
-            this.content = content;
-        }
-
-        public String getPath() {
-            return path;
-        }
-
-        public void setPath(String path) {
-            this.path = path;
-        }
-
-        public byte[] getContent() {
-            return content;
-        }
-
-        public void setContent(byte[] content) {
-            this.content = content;
-        }
-    }
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent anActionEvent) {
@@ -96,42 +73,12 @@ public class ExportAsZipAction extends AnAction {
 
 
         }
+        exportSpdAction(anActionEvent,fileWrappers,false,false,"zip");
 
-
-        //选择导出的目录
-        FileChooserDescriptor fileChooserDescriptor = new FileChooserDescriptor(false, true, false, false, false, false);
-        VirtualFile virtualFile = FileChooser.chooseFile(fileChooserDescriptor, anActionEvent.getProject(), null);
-        if (virtualFile == null) {
-            return;
-        }
-
-        WriteCommandAction.runWriteCommandAction(anActionEvent.getProject(), () -> {
-            try {
-
-                String filename = "GitExport_" + new Date().getTime() + ".zip";
-                VirtualFile exportDest = virtualFile.createChildData(null, filename);
-                ZipOutputStream zos = new ZipOutputStream(exportDest.getOutputStream(null));
-
-                for (FileWrapper fileWrapper : fileWrappers) {
-                    zos.putNextEntry(new ZipEntry(fileWrapper.getPath()));
-                    zos.write(fileWrapper.getContent(), 0, fileWrapper.getContent().length);
-                    zos.closeEntry();
-                }
-                zos.close();
-
-                Notification spdEditorNotification = new Notification(Constants.NOTIFY_GROUP_GLOBAL, SpdEditorIcons.FLOW_16_ICON, NotificationType.INFORMATION);
-                spdEditorNotification.setTitle("exported");
-                spdEditorNotification.setContent("Export as zip in " + exportDest.getPath());
-                spdEditorNotification.notify(anActionEvent.getProject());
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-
-//        ZipUtils.zipFiles();
 
 
     }
+
+
 
 }
