@@ -474,7 +474,7 @@ public class DBUtils {
     public List<EngineTask> queryEngineTaskByExpression(Connection connection, String name) throws SQLException {
         try (PreparedStatement preparedStatement = connection.prepareStatement("select ID_, TYPE_, TITLE_, EXPRESSION_, RETURNVALUE_, BUSSINESKEY_, " +
                 "BUSSINESDESC_, RIGHTS_, VALIDSECOND_, LISTENER_, OPENSECOND_, BUSSINESID_, TASKLISTENER_ " +
-                " from ENGINE_TASK where EXPRESSION_ like '%" + name + "%'")) {
+                " from ENGINE_TASK where upper(EXPRESSION_) like upper('%" + name + "%')")) {
             List<Map<String, Object>> maps = queryForList(preparedStatement);
             return maps.stream().map(engineTaskMapper).collect(Collectors.toList());
         }
@@ -498,7 +498,7 @@ public class DBUtils {
     }
 
     public List<EngineAction> queryEngineActionByActionScript(Connection connection, String name) throws SQLException {
-        try (PreparedStatement preparedStatement = connection.prepareStatement("select ID_, NAMESPACE_, URL_, WINDOWPARAM_, ACTIONSCRIPT_, ACTIONINTERCEPT_  from ENGINE_ACTION where ACTIONSCRIPT_ like '%" + name + "%'")) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement("select ID_, NAMESPACE_, URL_, WINDOWPARAM_, ACTIONSCRIPT_, ACTIONINTERCEPT_  from ENGINE_ACTION where upper(ACTIONSCRIPT_) like upper('%" + name + "%')")) {
             List<Map<String, Object>> maps = queryForList(preparedStatement);
             return maps.stream().map(it -> {
                 EngineAction engineAction = new EngineAction();

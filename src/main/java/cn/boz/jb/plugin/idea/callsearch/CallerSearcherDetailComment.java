@@ -88,17 +88,25 @@ public class CallerSearcherDetailComment extends JBPanel {
 
                 textArea.setText(hint);
                 DefaultHighlighter.DefaultHighlightPainter defaultHighlightPainter = new DefaultHighlighter.DefaultHighlightPainter(Color.ORANGE);
+                String upperHint = hint.toUpperCase();
+                String upperQuery = queryName.toUpperCase();
                 Highlighter highlighter = textArea.getHighlighter();
-                if (!StringUtils.isBlank(queryName)) {
-                    int queryNameidx = hint.indexOf(queryName);
-                    if (queryNameidx != -1) {
-                        highlighter.removeAllHighlights();
-                        try {
-                            highlighter.addHighlight(queryNameidx, queryNameidx + queryName.length(), defaultHighlightPainter);
-                        } catch (BadLocationException badLocationException) {
-                            badLocationException.printStackTrace();
+                int startindex=0;
+                if (!StringUtils.isBlank(upperQuery)) {
+                    do{
+                        int queryNameidx = upperHint.indexOf(upperQuery,startindex);
+                        if (queryNameidx != -1) {
+                            highlighter.removeAllHighlights();
+                            try {
+                                highlighter.addHighlight(queryNameidx, queryNameidx + upperQuery.length(), defaultHighlightPainter);
+                            } catch (BadLocationException badLocationException) {
+                                badLocationException.printStackTrace();
+                            }
+                            startindex=queryNameidx+queryName.length();
+                        }else{
+                            break;
                         }
-                    }
+                    }while (true);
                 }
 
 //                MyHighlightUtils.installHighlightForTextArea(table, textArea);

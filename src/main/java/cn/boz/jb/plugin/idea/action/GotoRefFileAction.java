@@ -247,12 +247,7 @@ public class GotoRefFileAction extends AnAction {
             input=input.substring(0,input.length()-4);
 
         }
-        String prefix = input.substring(0, 1);
-
-        String suffix = input.substring(1);
-        System.out.println(prefix);
-        System.out.println(suffix);
-        return prefix.toLowerCase()+suffix;
+        return input;
     }
 
     /**
