@@ -16,4 +16,6 @@ public class Constants {
     public static final String ACTION_GROUP_REF_TABLE_SEARCH_ID="spd.gotorefaction.group";
 
     public static final String NOTIFY_GROUP_GLOBAL="SpdEditorNotifyGroup";
+
+    public static final String ACTION_GROUP_OPEN_IN_TOOLWINDOW="spd.openintoolwindow.action.group";
 }

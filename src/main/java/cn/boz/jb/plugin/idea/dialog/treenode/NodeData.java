@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 public abstract class NodeData {
+    private boolean loading=false;
 
     private Object nodeData;
 
@@ -35,4 +36,12 @@ public abstract class NodeData {
      * @return
      */
     public abstract List<NodeData> loadSubNodes(Connection connection);
+
+    public boolean isLoading() {
+        return loading;
+    }
+
+    public void setLoading(boolean loading) {
+        this.loading = loading;
+    }
 }

@@ -1,6 +1,9 @@
 package icons;
 
 import com.intellij.openapi.util.IconLoader;
+import com.intellij.ui.JBColor;
+import com.intellij.util.ui.JBImageIcon;
+import com.intellij.util.ui.JBUI;
 
 import javax.swing.*;
 
@@ -27,6 +30,10 @@ public class SpdEditorIcons {
     public static Icon JAVASCRIPT_16_ICON = icon("/icons/javascript.svg");
     public static Icon REFER_16_ICON = icon("/icons/refer.svg");
     public static Icon SEARCH_ITEM_16_ICON = icon("/icons/searchitem.svg");
+    public static Icon LOADING_16_ICON = icon("/icons/loading.svg");
+    public static Icon LOADING_16_ICON_D = icon("/icons/loading_dark.svg");
+    public static Icon MENUE_16_ICON = icon("/icons/menue.svg");
+    public static Icon MENUE_16_ICON_D = icon("/icons/menue_dark.svg");
 
     static Icon icon(String path) {
         Icon icon = IconLoader.getIcon(path, SpdEditorIcons.class);

@@ -54,6 +54,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.PsiMethod;
+import com.intellij.psi.PsiReference;
 import com.intellij.psi.impl.source.xml.XmlFileImpl;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
@@ -272,6 +273,8 @@ public class GotoRefFileAction extends AnAction {
             if (tryToSearchUsageByCodeFragment(anActionEvent, tranToSpringBeanName(name), "")) {
                 return false;
             }
+//            PsiReference reference = containingClass.getReference();
+
             return true;
         } else {
             //进入类
@@ -295,6 +298,7 @@ public class GotoRefFileAction extends AnAction {
 
         Ref<List<EngineTask>> engineTaskRef = new Ref<>();
         Ref<List<EngineAction>> engineActionRef = new Ref<>();
+        Ref<Exception> exceptionRef=new Ref<>();
         ProgressManager.getInstance().runProcessWithProgressSynchronously(() -> {
             try (Connection connection = DBUtils.getConnection(anActionEvent.getProject())) {
                 List<EngineTask> engineTasks = dbUtils.queryEngineTaskByExpression(connection, name);
@@ -302,10 +306,11 @@ public class GotoRefFileAction extends AnAction {
                 engineTaskRef.set(engineTasks);
                 engineActionRef.set(engineActions);
             } catch (Exception e) {
-                DBUtils.dbExceptionProcessor(e, anActionEvent.getProject());
+                exceptionRef.set(e);
             }
         }, "Loading...", true, anActionEvent.getProject());
         if (engineTaskRef.isNull() && engineActionRef.isNull()) {
+            DBUtils.dbExceptionProcessor(exceptionRef.get(), anActionEvent.getProject());
             return true;
         }
         List<Object> objects = new ArrayList<>();
@@ -337,6 +342,9 @@ public class GotoRefFileAction extends AnAction {
                 }
             }
         }, true, name, qualifieredName);
+
+
+
         return false;
     }
 

@@ -49,7 +49,7 @@ public class CallerSearcherDetailComment extends JBPanel {
         this.add(taskidf);
 
 
-        textArea = new JTextArea("", 12, 28);
+        textArea = new JTextArea("", 7, 28);
 
 
         table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {

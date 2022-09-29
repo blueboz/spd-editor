@@ -28,7 +28,7 @@ public class MenuNode extends NodeData{
             String pid = getMenuData().getParent();
             Integer.parseInt(pid);
             if(!StringUtils.isBlank(pid)){
-                ecasMenus = DBUtils.getInstance().queryMenuById(connection, getMenuData().getParent());
+                ecasMenus = DBUtils.getInstance().queryMenuById(connection, pid);
             }else{
                 return new ArrayList<>();
             }

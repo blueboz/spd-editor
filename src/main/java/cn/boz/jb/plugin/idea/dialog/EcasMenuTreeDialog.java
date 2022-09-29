@@ -1,40 +1,46 @@
 package cn.boz.jb.plugin.idea.dialog;
 
+import cn.boz.jb.plugin.floweditor.gui.utils.RandomColorUtils;
 import cn.boz.jb.plugin.idea.bean.EcasMenu;
 import cn.boz.jb.plugin.idea.dialog.treenode.MenuNode;
 import cn.boz.jb.plugin.idea.dialog.treenode.NodeData;
 import cn.boz.jb.plugin.idea.dialog.treenode.RootNode;
+import cn.boz.jb.plugin.idea.utils.Constants;
 import cn.boz.jb.plugin.idea.utils.DBUtils;
-import com.intellij.openapi.progress.ProgressIndicator;
-import com.intellij.openapi.progress.ProgressIndicatorProvider;
+import com.intellij.ide.ui.UITheme;
+import com.intellij.openapi.actionSystem.ActionGroup;
+import com.intellij.openapi.actionSystem.ActionManager;
+import com.intellij.openapi.actionSystem.ActionToolbar;
 import com.intellij.openapi.progress.ProgressManager;
-import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.components.JBTreeTable;
+import com.intellij.ui.table.JBTable;
 import com.intellij.ui.treeStructure.treetable.ListTreeTableModel;
 import com.intellij.ui.treeStructure.treetable.TreeTableModel;
 import com.intellij.util.ui.ColumnInfo;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import icons.SpdEditorIcons;
+import org.jdesktop.swingx.color.ColorUtil;
 
 import javax.swing.*;
+import javax.swing.table.TableColumn;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.TreeCellRenderer;
+import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreePath;
 import java.awt.*;
 import java.sql.Connection;
 import java.util.List;
+import java.util.concurrent.Executors;
 
-public class EcasMenuTreeDialog extends DialogWrapper {
+public class EcasMenuTreeDialog extends JComponent {
 
     private JBScrollPane jbScrollPane;
+    private String fileName;
 
     public EcasMenuTreeDialog(Project project, String fileName) {
-        super(true);
-        setTitle("ecasMenu");
+        this.fileName=fileName;
         ColumnInfo[] columns = new ColumnInfo[]{new ColumnInfo<DefaultMutableTreeNode, String>("applid") {
+
             @Override
             public String valueOf(DefaultMutableTreeNode o) {
                 Object userObject = o.getUserObject();
@@ -140,66 +146,129 @@ public class EcasMenuTreeDialog extends DialogWrapper {
 
 
         JBTreeTable jbTreeTable = new JBTreeTable(treeTableModel);
+
+
         jbTreeTable.getTree().addTreeSelectionListener(e -> {
-            TreePath path = e.getPath();
-            Object pathComponent = path.getLastPathComponent();
-            if (pathComponent instanceof DefaultMutableTreeNode) {
-                DefaultMutableTreeNode node = (DefaultMutableTreeNode) pathComponent;
-                Object userObject = node.getUserObject();
-                if (userObject instanceof NodeData) {
-                    NodeData uo = (NodeData) userObject;
-                    boolean subDataLoaded = uo.isSubDataLoaded();
-                    if (subDataLoaded == false) {
-                        uo.setSubDataLoaded(true);
-                        if (uo instanceof MenuNode) {
-                            ProgressManager.getInstance().runProcessWithProgressAsynchronously(new Task.Backgroundable(project, "loading...", true) {
-                                @Override
-                                public void run(@NotNull ProgressIndicator progressIndicator) {
-                                    try {
-                                        Connection connection = DBUtils.getConnection(project);
-                                        List<NodeData> nds = uo.loadSubNodes(connection);
-                                        for (NodeData nd : nds) {
-                                            node.add(new DefaultMutableTreeNode(nd, true));
-                                        }
-                                    } catch (Exception ex) {
-                                        DBUtils.dbExceptionProcessor(ex, project);
+
+            Runnable r = (() -> {
+                TreePath path = e.getPath();
+                Object pathComponent = path.getLastPathComponent();
+                if (pathComponent instanceof DefaultMutableTreeNode) {
+                    DefaultMutableTreeNode node = (DefaultMutableTreeNode) pathComponent;
+                    Object userObject = node.getUserObject();
+                    if (userObject instanceof NodeData) {
+                        NodeData uo = (NodeData) userObject;
+                        uo.setLoading(true);
+                        jbTreeTable.getTree().repaint();
+                        boolean subDataLoaded = uo.isSubDataLoaded();
+                        if (subDataLoaded == false) {
+                            uo.setSubDataLoaded(true);
+                            if (uo instanceof MenuNode) {
+                                try {
+                                    Connection connection = DBUtils.getConnection(project);
+                                    List<NodeData> nds = uo.loadSubNodes(connection);
+                                    for (NodeData nd : nds) {
+                                        node.add(new DefaultMutableTreeNode(nd, true));
                                     }
+                                } catch (Exception ex) {
+                                    DBUtils.dbExceptionProcessor(ex, project);
                                 }
-                            }, ProgressIndicatorProvider.getGlobalProgressIndicator());
 
-
+                            }
                         }
+                        uo.setLoading(false);
+                        jbTreeTable.getTree().repaint();
 
                     }
-                }
 
-            }
+                }
+            });
+            Executors.newSingleThreadExecutor().execute(r);
         });
-        jbTreeTable.getTree().setCellRenderer(new TreeCellRenderer() {
+        jbTreeTable.getTree().setCellRenderer(new DefaultTreeCellRenderer() {
 
             @Override
             public Component getTreeCellRendererComponent(JTree tree, Object value, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
                 //默认都认为不是leaf节点，并且在userData里面设置信息
+                super.getTreeCellRendererComponent(tree, value, selected, expanded, leaf, row, hasFocus);
                 DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
                 var uo = node.getUserObject();
                 if (uo instanceof String) {
-                    return new JLabel((String) uo);
+                    setText((String) uo);
                 } else {
                     NodeData data = (NodeData) uo;
-                    return new JLabel(data.getTitle());
+                    setText(data.getTitle());
+                    if (data.isLoading()) {
+                        setIcon(SpdEditorIcons.LOADING_16_ICON);
+                    } else {
+
+                        if (selected) {
+                            setIcon(SpdEditorIcons.MENUE_16_ICON);
+                        } else {
+                            setIcon(SpdEditorIcons.MENUE_16_ICON_D);
+
+                        }
+                    }
                 }
+                return this;
+
             }
         });
+        JBTable table = jbTreeTable.getTable();
+        final TableColumn c0 = table.getColumnModel().getColumn(0);
+        c0.setMaxWidth(64);
+        c0.setWidth(64);
+        c0.setMinWidth(64);
+
+        final TableColumn c1 = table.getColumnModel().getColumn(1);
+        c1.setMaxWidth(64);
+        c1.setWidth(64);
+        c1.setMinWidth(64);
+
+        final TableColumn c2 = table.getColumnModel().getColumn(2);
+        //设置ID列宽度
+        c2.setWidth(170);
+        c2.setMinWidth(170);
+
+        final TableColumn c3 = table.getColumnModel().getColumn(3);
+        //设置ID列宽度
+        c3.setWidth(24);
+        c3.setMinWidth(24);
+
+        final TableColumn c4 = table.getColumnModel().getColumn(4);
+        //设置ID列宽度
+        c4.setWidth(250);
+        c4.setMinWidth(250);
 
         this.jbScrollPane = new JBScrollPane(jbTreeTable);
 
-        jbScrollPane.setPreferredSize(new Dimension(900, 400));
-        init();
+        jbScrollPane.setPreferredSize(new Dimension(1000, 500));
+
+        ActionManager instance = ActionManager.getInstance();
+        ActionGroup actionGroup = (ActionGroup) instance.getAction(Constants.ACTION_GROUP_OPEN_IN_TOOLWINDOW);
+        ActionToolbar spd_tb = instance.createActionToolbar("spd tb", actionGroup, true);
+
+        JComponent gotoactionScript = spd_tb.getComponent();
+
+
+        this.setLayout(new BorderLayout());
+        this.add(jbScrollPane, BorderLayout.CENTER);
+        this.add(gotoactionScript,BorderLayout.SOUTH);
+
+        this.setFocusable(true);
 
     }
 
-    @Override
-    protected @Nullable JComponent createCenterPanel() {
+    public JBScrollPane derive() {
         return this.jbScrollPane;
+
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 }
