@@ -1,7 +1,11 @@
 package cn.boz.jb.plugin.idea.fileeditor;
 
 import cn.boz.jb.plugin.idea.widget.SpdEditor;
+import com.intellij.codeInsight.navigation.NavigationUtil;
 import com.intellij.openapi.command.WriteCommandAction;
+import com.intellij.openapi.editor.EditorCoreUtil;
+import com.intellij.openapi.editor.ex.util.EditorUIUtil;
+import com.intellij.openapi.editor.ex.util.EditorUtil;
 import com.intellij.openapi.fileEditor.FileEditor;
 import com.intellij.openapi.fileEditor.FileEditorLocation;
 import com.intellij.openapi.fileEditor.FileEditorState;
@@ -55,6 +59,8 @@ public class SpdFileEditor implements FileEditor {
                 });
             });
         });
+
+
 
 
     }

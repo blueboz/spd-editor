@@ -12,7 +12,9 @@ import com.intellij.openapi.fileChooser.FileChooser;
 import com.intellij.openapi.fileChooser.FileChooserDescriptor;
 import com.intellij.openapi.vfs.VirtualFile;
 import icons.SpdEditorIcons;
+import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 import java.io.ByteArrayInputStream;
@@ -81,6 +83,11 @@ public abstract class ExportBaseAction extends AnAction {
                 spdEditorNotification.setTitle("exported");
                 spdEditorNotification.addAction(new AnAction() {
                     @Override
+                    public @Nullable String getTemplateText() {
+                        return "Open";
+                    }
+
+                    @Override
                     public void actionPerformed(@NotNull AnActionEvent anActionEvent) {
                         File file = new File(virtualFile.getPath());
                         try {
@@ -88,6 +95,7 @@ public abstract class ExportBaseAction extends AnAction {
                         } catch (IOException ioException) {
                             ioException.printStackTrace();
                         }
+
 
                     }
                 });

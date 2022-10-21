@@ -74,6 +74,7 @@ public class SpdEditor extends JComponent implements DataProvider, MouseListener
     private JPanel menu;
 
     public SpdEditor(Project project, VirtualFile virtualFile) {
+
         this.virtualFile = virtualFile;
         this.project=project;
         this.setLayout(new BorderLayout());

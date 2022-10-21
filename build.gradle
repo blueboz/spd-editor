@@ -63,6 +63,10 @@ sourceSets {
             exclude 'icomoon/icomoon.woff'
             exclude 'flow.png'
             exclude 'fontawesome-webfont.ttf'
+            exclude 'adobe/**'
+            exclude 'font/function/function.eot'
+            exclude 'font/function/function.svg'
+            exclude 'font/function/function.woff'
         }
     }
 }

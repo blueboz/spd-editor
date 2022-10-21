@@ -1,18 +1,17 @@
 package cn.boz.jb.plugin.idea.dialog;
 
-import cn.boz.jb.plugin.floweditor.gui.utils.RandomColorUtils;
 import cn.boz.jb.plugin.idea.bean.EcasMenu;
 import cn.boz.jb.plugin.idea.dialog.treenode.MenuNode;
 import cn.boz.jb.plugin.idea.dialog.treenode.NodeData;
 import cn.boz.jb.plugin.idea.dialog.treenode.RootNode;
 import cn.boz.jb.plugin.idea.utils.Constants;
 import cn.boz.jb.plugin.idea.utils.DBUtils;
-import com.intellij.ide.ui.UITheme;
 import com.intellij.openapi.actionSystem.ActionGroup;
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.ActionToolbar;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.Project;
+import com.intellij.ui.SimpleColoredComponent;
 import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.components.JBTreeTable;
 import com.intellij.ui.table.JBTable;
@@ -20,7 +19,6 @@ import com.intellij.ui.treeStructure.treetable.ListTreeTableModel;
 import com.intellij.ui.treeStructure.treetable.TreeTableModel;
 import com.intellij.util.ui.ColumnInfo;
 import icons.SpdEditorIcons;
-import org.jdesktop.swingx.color.ColorUtil;
 
 import javax.swing.*;
 import javax.swing.table.TableColumn;
@@ -38,7 +36,7 @@ public class EcasMenuTreeDialog extends JComponent {
     private String fileName;
 
     public EcasMenuTreeDialog(Project project, String fileName) {
-        this.fileName=fileName;
+        this.fileName = fileName;
         ColumnInfo[] columns = new ColumnInfo[]{new ColumnInfo<DefaultMutableTreeNode, String>("applid") {
 
             @Override
@@ -188,9 +186,10 @@ public class EcasMenuTreeDialog extends JComponent {
         jbTreeTable.getTree().setCellRenderer(new DefaultTreeCellRenderer() {
 
             @Override
-            public Component getTreeCellRendererComponent(JTree tree, Object value, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
+            public Component getTreeCellRendererComponent(JTree tree, Object value, boolean isSelected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
                 //默认都认为不是leaf节点，并且在userData里面设置信息
-                super.getTreeCellRendererComponent(tree, value, selected, expanded, leaf, row, hasFocus);
+                SimpleColoredComponent simpleColoredComponent = new SimpleColoredComponent();
+                Component treeCellRendererComponent = super.getTreeCellRendererComponent(tree, value, selected, expanded, leaf, row, hasFocus);
                 DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
                 var uo = node.getUserObject();
                 if (uo instanceof String) {
@@ -201,7 +200,6 @@ public class EcasMenuTreeDialog extends JComponent {
                     if (data.isLoading()) {
                         setIcon(SpdEditorIcons.LOADING_16_ICON);
                     } else {
-
                         if (selected) {
                             setIcon(SpdEditorIcons.MENUE_16_ICON);
                         } else {
@@ -209,7 +207,12 @@ public class EcasMenuTreeDialog extends JComponent {
 
                         }
                     }
+
+                    //                    private final SimpleColoredComponent myComponent = new SimpleColoredComponent();
+
                 }
+
+
                 return this;
 
             }
@@ -253,7 +256,7 @@ public class EcasMenuTreeDialog extends JComponent {
 
         this.setLayout(new BorderLayout());
         this.add(jbScrollPane, BorderLayout.CENTER);
-        this.add(gotoactionScript,BorderLayout.SOUTH);
+        this.add(gotoactionScript, BorderLayout.SOUTH);
 
         this.setFocusable(true);
 

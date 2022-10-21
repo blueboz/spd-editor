@@ -49,6 +49,7 @@ import com.intellij.openapi.actionSystem.ActionPlaces;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.DataKey;
 import com.intellij.openapi.actionSystem.DataProvider;
+import com.intellij.openapi.fileEditor.ex.FileEditorManagerEx;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.Key;
@@ -3560,6 +3561,16 @@ public class ChartPanel extends JComponent implements DataProvider, MouseListene
         this.fireShapeSelected(o);
 
         //
+
+    }
+
+    public void activeCurrent() {
+        FileEditorManagerEx fileEditorManager = FileEditorManagerEx.getInstanceEx(project);
+//        if(fileEditorManager.isFileOpen(virtualFile)){
+            fileEditorManager.openFile(virtualFile,true);
+//        }else{
+            fileEditorManager.openFile(virtualFile,true);
+//        }
 
     }
 }

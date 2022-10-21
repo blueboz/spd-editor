@@ -1,6 +1,6 @@
 package cn.boz.jb.plugin.idea.action;
 
-import cn.boz.jb.plugin.idea.bean.EcasMenu;
+import cn.boz.jb.plugin.idea.action.flowSearch.FlowSearchTable;
 import cn.boz.jb.plugin.idea.callsearch.CallerSearcherCommentPanel;
 import cn.boz.jb.plugin.idea.callsearch.CallerSearcherDetailComment;
 import cn.boz.jb.plugin.idea.callsearch.CallerSearcherTablePanel;
@@ -28,7 +28,12 @@ import com.intellij.util.ui.ListTableModel;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.TableModel;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.List;
 
 
@@ -44,6 +49,10 @@ public class OpenInSearchToolWindowAction extends AnAction implements DumbAware 
             return;
 
         }
+        if (component instanceof FlowSearchTable) {
+            doForFlowSearcherTable((FlowSearchTable) component, e);
+            return;
+        }
         if (component instanceof EngineRightDialog) {
             doForEngineRights(e, component);
             return;
@@ -52,9 +61,10 @@ public class OpenInSearchToolWindowAction extends AnAction implements DumbAware 
             doForEngineAction(e, component);
             return;
         }
-        if(component instanceof EcasMenuTreeDialog){
-            doForEcasMenuTree(e,component);
+        if (component instanceof EcasMenuTreeDialog) {
+            doForEcasMenuTree(e, component);
         }
+
         if (component instanceof JBScrollPane) {
             JBScrollPane jbScrollPane = (JBScrollPane) component;
             JViewport viewport = jbScrollPane.getViewport();
@@ -64,11 +74,15 @@ public class OpenInSearchToolWindowAction extends AnAction implements DumbAware 
                 return;
             } else if (view instanceof EngineRightDialog) {
                 doForEngineRights(e, view);
-            }else if(view instanceof EcasMenuTreeDialog){
-                doForEcasMenuTree(e,view);
+            } else if (view instanceof EcasMenuTreeDialog) {
+                doForEcasMenuTree(e, view);
+            } else if (view instanceof FlowSearchTable) {
+                doForFlowSearcherTable((FlowSearchTable) view, e);
+                return;
             }
         }
         CallerSearcherTablePanel callerSearcherTablePanel = (CallerSearcherTablePanel) SwingUtilities.getAncestorOfClass(CallerSearcherTablePanel.class, component);
+        FlowSearchTable flowSearchTable = (FlowSearchTable) SwingUtilities.getAncestorOfClass(FlowSearchTable.class, component);
 
         EngineRightDialog engineRightDialog = (EngineRightDialog) SwingUtilities.getAncestorOfClass(EngineRightDialog.class, component);
         EngineActionDialog engineActionDialog = (EngineActionDialog) SwingUtilities.getAncestorOfClass(EngineActionDialog.class, component);
@@ -77,6 +91,9 @@ public class OpenInSearchToolWindowAction extends AnAction implements DumbAware 
 
         if (callerSearcherTablePanel instanceof CallerSearcherTablePanel) {
             doForCallerSearcherTable(callerSearcherTablePanel, e);
+        }
+        if (flowSearchTable instanceof FlowSearchTable) {
+            doForFlowSearcherTable(flowSearchTable, e);
         }
         if (engineRightDialog instanceof EngineRightDialog) {
             doForEngineRights(e, engineRightDialog);
@@ -88,20 +105,19 @@ public class OpenInSearchToolWindowAction extends AnAction implements DumbAware 
             doForEngineTask(e, engineTaskDialog);
         }
         CallerSearcherCommentPanel callerSearcherCommentPanel = (CallerSearcherCommentPanel) SwingUtilities.getAncestorOfClass(CallerSearcherCommentPanel.class, component);
-        if(callerSearcherCommentPanel instanceof CallerSearcherCommentPanel){
+        if (callerSearcherCommentPanel instanceof CallerSearcherCommentPanel) {
             CallerSearcherTablePanel table = callerSearcherCommentPanel.getTable();
-            doForCallerSearcherTable(table,e);
+            doForCallerSearcherTable(table, e);
         }
-        if(ecasMenuTreeDialog instanceof EcasMenuTreeDialog){
-            doForEcasMenuTree(e,ecasMenuTreeDialog);
+        if (ecasMenuTreeDialog instanceof EcasMenuTreeDialog) {
+            doForEcasMenuTree(e, ecasMenuTreeDialog);
         }
-
 
 
     }
 
     private void doForEcasMenuTree(AnActionEvent anActionEvent, Component view) {
-        EcasMenuTreeDialog ecasMenuTreeDialog= (EcasMenuTreeDialog) view;
+        EcasMenuTreeDialog ecasMenuTreeDialog = (EcasMenuTreeDialog) view;
         JBScrollPane derive = ecasMenuTreeDialog.derive();
         ToolWindow callSearch = ToolWindowManager.getInstance(anActionEvent.getProject()).getToolWindow(Constants.TOOL_WINDOW_CALLSEARCH);
         ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
@@ -173,6 +189,47 @@ public class OpenInSearchToolWindowAction extends AnAction implements DumbAware 
 
         PopupUtil.getPopupContainerFor(component).dispose();
     }
+
+    private void doForFlowSearcherTable(FlowSearchTable outside, AnActionEvent anActionEvent) {
+        if (outside == null) {
+            return;
+        }
+
+//        outside.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        ListSelectionModel selectionModel = outside.getSelectionModel();
+//        selectionModel.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        outside.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if(e.getButton()==MouseEvent.BUTTON1){
+                    ListTableModel model = (ListTableModel) outside.getModel();
+
+                    Point point = e.getPoint();
+                    int selectedRow = outside.rowAtPoint(point);
+                    int i = outside.convertRowIndexToModel(selectedRow);
+                    Object item = model.getItem(i);
+                    outside.getSelectUserTaskConsumer().consume(item);
+                }
+            }
+        });
+
+
+
+        ToolWindow callSearch = ToolWindowManager.getInstance(anActionEvent.getProject()).getToolWindow(Constants.TOOL_WINDOW_CALLSEARCH);
+        JBScrollPane jbScrollPane = new JBScrollPane(outside);
+        ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
+        Content title = contentFactory.createContent(jbScrollPane,"process:"+outside.getProcessId(), true);
+        title.setCloseable(true);
+        callSearch.getContentManager().addContent(title);
+        callSearch.getContentManager().requestFocus(title, true);
+        if (!callSearch.isActive()) {
+            callSearch.show();
+        }
+        callSearch.getContentManager().setSelectedContent(title);
+        PopupUtil.getPopupContainerFor(outside).dispose();
+
+    }
+
 
     private void doForCallerSearcherTable(CallerSearcherTablePanel outside, AnActionEvent anActionEvent) {
         if (outside != null) {

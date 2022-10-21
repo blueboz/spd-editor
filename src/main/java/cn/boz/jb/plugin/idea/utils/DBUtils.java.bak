@@ -7,7 +7,6 @@ import cn.boz.jb.plugin.idea.bean.EngineActionInput;
 import cn.boz.jb.plugin.idea.bean.EngineActionOutput;
 import cn.boz.jb.plugin.idea.bean.EngineFlow;
 import cn.boz.jb.plugin.idea.bean.EngineTask;
-import cn.boz.jb.plugin.idea.bean.XfundsBatch;
 import cn.boz.jb.plugin.idea.configurable.SpdEditorDBSettings;
 import cn.boz.jb.plugin.idea.configurable.SpdEditorDBState;
 import com.intellij.openapi.options.ShowSettingsUtil;
@@ -498,20 +497,6 @@ public class DBUtils {
 
     }
 
-    public List<XfundsBatch> queryXfundsBatchByEnterName(Connection connection, String entername) throws SQLException {
-        try (PreparedStatement preparedStatement = connection.prepareStatement("select seqno||'' seqNo,DESCR,ENTERNAME from XFUNDS_BATCH_CTL where upper(ENTERNAME)  like upper('%" + entername + "%')")) {
-            List<Map<String, Object>> maps = queryForList(preparedStatement);
-            return maps.stream().map(it -> {
-                XfundsBatch xfundsBatch = new XfundsBatch();
-                //ID_, NAMESPACE_, URL_, WINDOWPARAM_, ACTIONSCRIPT_, ACTIONINTERCEPT_
-                xfundsBatch.setSeqNo((String) it.get("SEQNO"));
-                xfundsBatch.setDescr((String) it.get("DESCR"));
-                xfundsBatch.setEnterName((String) it.get("ENTERNAME"));
-                return xfundsBatch;
-            }).collect(Collectors.toList());
-        }
-    }
-
     public List<EngineAction> queryEngineActionByActionScript(Connection connection, String name) throws SQLException {
         try (PreparedStatement preparedStatement = connection.prepareStatement("select ID_, NAMESPACE_, URL_, WINDOWPARAM_, ACTIONSCRIPT_, ACTIONINTERCEPT_  from ENGINE_ACTION where upper(ACTIONSCRIPT_) like upper('%" + name + "%')")) {
             List<Map<String, Object>> maps = queryForList(preparedStatement);
@@ -561,7 +546,7 @@ public class DBUtils {
 
     public List<EcasMenu> queryMenuById(Connection connection,String menuId) throws SQLException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(
-                " select * from ECAS_MENU where applid=999 and menuid= '"+menuId+"'")) {
+                " select * from ECAS_MENU where menuid= '"+menuId+"'")) {
             List<Map<String, Object>> maps = queryForList(preparedStatement);
             //APPLID, MENUID, NAME, LVL, URL, PARENT, IMG, ISCHILD, GROUPID
             return maps.stream().map(ecasMenuMapper).collect(Collectors.toList());

@@ -32,7 +32,8 @@ public class SimpleIconControl extends JComponent {
 
         int y = (this.getHeight() - icon.getIconHeight()) / 2;
 
-        Icon colorize = IconUtil.colorize(icon, getForeground());
+        Icon colorize = IconUtil.colorize(icon, Color.WHITE);
+
         colorize.paintIcon(this, g, x, y);
         g.dispose();
     }

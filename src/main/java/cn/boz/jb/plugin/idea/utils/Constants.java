@@ -6,6 +6,8 @@ public class Constants {
 
     public static final String ACTION_GROUP_REF_ENGINE_ACTION_MIN="spd.actiontask.min.dlg.group";
 
+    public static final String ACTION_GROUP_FLOW_SEARCH_MIN="spd.flowsearch.min.dlg.group";
+
     public static final String ACTION_GROUP_TOOLWINDOW_OPEN="spd.toolwindow.open.group";
     public static final String ACTION_GROUP_ACTIONSCRIPT_GOTO="spd.actionscript.gotoaction.group";
 

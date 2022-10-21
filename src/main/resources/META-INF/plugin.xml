@@ -222,6 +222,13 @@
             <reference ref="spd.copysql.action.group"></reference>
         </group>
 
+        <!--查看EngineAction 对话框中，功能菜单包含最小化-->
+        <group id="spd.flowsearch.min.dlg.group">
+
+            <reference id="spd.openintoolwindow.action.group"></reference>
+        </group>
+
+
 
         <group id="spd.actiontask.dlg.group">
             <reference ref="spd.gotoscript.action.group"></reference>

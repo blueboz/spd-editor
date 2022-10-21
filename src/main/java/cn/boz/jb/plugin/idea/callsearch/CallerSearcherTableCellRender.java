@@ -1,10 +1,12 @@
 package cn.boz.jb.plugin.idea.callsearch;
 
 
+import cn.boz.jb.plugin.floweditor.gui.utils.FunctionIconUtils;
 import cn.boz.jb.plugin.idea.widget.SimpleIconControl;
 import com.intellij.ui.SimpleColoredComponent;
 import com.intellij.ui.speedSearch.SpeedSearchUtil;
 import icons.SpdEditorIcons;
+import org.jdesktop.swingx.painter.AbstractLayoutPainter;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -25,20 +27,22 @@ public class CallerSearcherTableCellRender implements TableCellRenderer {
 
         Color bg = isSelected ? table.getSelectionBackground() : table.getBackground();
         Color fg = isSelected ? table.getSelectionForeground() : table.getForeground();
+
         myComponent.clear();
+        myComponent.setFont(table.getFont());
+        myComponent.setTextAlign(SwingConstants.LEFT);
 
         if (column == 0) {
-            SimpleIconControl simpleIconControl = null;
-            if ("task".equals(value)) {
-                simpleIconControl = new SimpleIconControl(SpdEditorIcons.GEAR_16_ICON);
-            } else if ("action".equals(value)) {
-                simpleIconControl = new SimpleIconControl(SpdEditorIcons.ACTION_SCRIPT_16_ICON);
 
-            }
-            if (simpleIconControl != null) {
-                simpleIconControl.setBackground(bg);
-                simpleIconControl.setForeground(fg);
-                return simpleIconControl;
+            myComponent.setTextAlign(SwingConstants.CENTER);
+
+            myComponent.setFont(FunctionIconUtils.getFont(14));
+            if ("task".equals(value)) {
+                myComponent.append(FunctionIconUtils.ICO_GEAR);
+            } else if ("action".equals(value)) {
+                myComponent.append(FunctionIconUtils.ICO_ACTION);
+            }else if("batch".equals(value)){
+                myComponent.append(FunctionIconUtils.ICO_BATCH);
             }
         } else if(column==1){
             JCheckBox jCheckBox = new JCheckBox();

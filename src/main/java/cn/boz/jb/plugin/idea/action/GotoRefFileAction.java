@@ -5,6 +5,7 @@ import cn.boz.jb.plugin.idea.bean.EngineAction;
 import cn.boz.jb.plugin.idea.bean.EngineActionInput;
 import cn.boz.jb.plugin.idea.bean.EngineActionOutput;
 import cn.boz.jb.plugin.idea.bean.EngineTask;
+import cn.boz.jb.plugin.idea.bean.XfundsBatch;
 import cn.boz.jb.plugin.idea.callsearch.CallerSearcherTableCellEditor;
 import cn.boz.jb.plugin.idea.callsearch.CallerSearcherTablePanel;
 import cn.boz.jb.plugin.idea.callsearch.CallerSearcherTableCellRender;
@@ -293,13 +294,16 @@ public class GotoRefFileAction extends AnAction {
 
         Ref<List<EngineTask>> engineTaskRef = new Ref<>();
         Ref<List<EngineAction>> engineActionRef = new Ref<>();
+        Ref<List<XfundsBatch>> xfundsBatchRef = new Ref<>();
         Ref<Exception> exceptionRef=new Ref<>();
         ProgressManager.getInstance().runProcessWithProgressSynchronously(() -> {
             try (Connection connection = DBUtils.getConnection(anActionEvent.getProject())) {
                 List<EngineTask> engineTasks = dbUtils.queryEngineTaskByExpression(connection, name);
                 List<EngineAction> engineActions = dbUtils.queryEngineActionByActionScript(connection, name);
+                List<XfundsBatch> xfundsBatches = dbUtils.queryXfundsBatchByEnterName(connection, name);
                 engineTaskRef.set(engineTasks);
                 engineActionRef.set(engineActions);
+                xfundsBatchRef.set(xfundsBatches);
             } catch (Exception e) {
                 exceptionRef.set(e);
             }
@@ -314,6 +318,9 @@ public class GotoRefFileAction extends AnAction {
         }
         if (!engineActionRef.isNull()) {
             objects.addAll(engineActionRef.get());
+        }
+        if(!xfundsBatchRef.isNull()){
+            objects.addAll(xfundsBatchRef.get());
         }
 
         if (objects.size() == 0) {
@@ -356,6 +363,8 @@ public class GotoRefFileAction extends AnAction {
                 return "task";
             } else if (o instanceof EngineAction) {
                 return "action";
+            }else if(o instanceof XfundsBatch){
+                return "batch";
             }
             return "";
         }
@@ -372,6 +381,8 @@ public class GotoRefFileAction extends AnAction {
                 return ((EngineTask) o).isChecked();
             } else if (o instanceof EngineAction) {
                 return ((EngineAction) o).isChecked();
+            }else if(o instanceof XfundsBatch){
+                return ((XfundsBatch)o).isChecked();
             }
             return false;
         }
@@ -389,6 +400,8 @@ public class GotoRefFileAction extends AnAction {
                 return ((EngineTask) o).getId();
             } else if (o instanceof EngineAction) {
                 return ((EngineAction) o).getId();
+            }else if(o instanceof XfundsBatch){
+                return ((XfundsBatch) o).getSeqNo();
             }
             return "";
         }
@@ -407,6 +420,8 @@ public class GotoRefFileAction extends AnAction {
                 return ((EngineTask) o).getTitle();
             } else if (o instanceof EngineAction) {
                 return ((EngineAction) o).getNamespace();
+            }else if(o instanceof XfundsBatch){
+                return ((XfundsBatch) o).getDescr();
             }
             return "";
 
@@ -426,6 +441,8 @@ public class GotoRefFileAction extends AnAction {
                 return ((EngineTask) o).getExpression();
             } else if (o instanceof EngineAction) {
                 return ((EngineAction) o).getActionscript();
+            }else if(o instanceof XfundsBatch){
+                return ((XfundsBatch) o).getEnterName();
             }
             return "";
         }
