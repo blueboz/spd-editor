@@ -7,9 +7,11 @@ import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationType;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.fileChooser.FileChooser;
 import com.intellij.openapi.fileChooser.FileChooserDescriptor;
+import com.intellij.openapi.project.DumbAwareAction;
 import com.intellij.openapi.vfs.VirtualFile;
 import icons.SpdEditorIcons;
 import org.jetbrains.annotations.Nls;
@@ -81,14 +83,16 @@ public abstract class ExportBaseAction extends AnAction {
 
                 Notification spdEditorNotification = new Notification(Constants.NOTIFY_GROUP_GLOBAL, SpdEditorIcons.FLOW_16_ICON, NotificationType.INFORMATION);
                 spdEditorNotification.setTitle("exported");
-                spdEditorNotification.addAction(new AnAction() {
-                    @Override
-                    public @Nullable String getTemplateText() {
-                        return "Open";
+                spdEditorNotification.addAction(new DumbAwareAction() {
+                    {
+                        Presentation presentation = this.getTemplatePresentation();
+                        presentation.setText("Open");
                     }
 
                     @Override
                     public void actionPerformed(@NotNull AnActionEvent anActionEvent) {
+
+
                         File file = new File(virtualFile.getPath());
                         try {
                             Desktop.getDesktop().open(file);

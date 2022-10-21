@@ -16,6 +16,7 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.project.DumbAware;
+import com.intellij.openapi.ui.popup.JBPopup;
 import com.intellij.openapi.ui.popup.util.PopupUtil;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowManager;
@@ -194,6 +195,7 @@ public class OpenInSearchToolWindowAction extends AnAction implements DumbAware 
         if (outside == null) {
             return;
         }
+        JBPopup popupContainerFor = PopupUtil.getPopupContainerFor(outside);
 
 //        outside.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         ListSelectionModel selectionModel = outside.getSelectionModel();
@@ -226,7 +228,7 @@ public class OpenInSearchToolWindowAction extends AnAction implements DumbAware 
             callSearch.show();
         }
         callSearch.getContentManager().setSelectedContent(title);
-        PopupUtil.getPopupContainerFor(outside).dispose();
+        popupContainerFor.dispose();
 
     }
 

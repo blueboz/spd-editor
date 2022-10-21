@@ -26,6 +26,7 @@ public class CallerSearcherCommentPanel extends JBPanel {
     JTextArea textArea;
 
     public CallerSearcherCommentPanel(CallerSearcherTablePanel table) {
+        this.setName("CallerSearcherCommentPanel");
         this.table = table;
         textArea = new JTextArea("", 7, 30);
         table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {

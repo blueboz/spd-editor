@@ -17,6 +17,7 @@ buildscript {
         classpath 'com.jcraft:jsch:0.1.55'
         classpath 'org.hidetake:gradle-ssh-plugin:2.10.1'
         classpath 'org.codehaus.groovy:groovy-all:2.5.11'
+        classpath 'net.sf.json-lib:json-lib:2.4:jdk15'
 
     }
 

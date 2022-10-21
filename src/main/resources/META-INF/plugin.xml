@@ -117,7 +117,14 @@
                         icon="AllIcons.Actions.ListFiles">
                 </action>
             </group>
-
+            <group text="ExtQuery" id="SpdExtQuery" popup="true">
+                <action class="cn.boz.jb.plugin.idea.action.GotoAnyRefAction" icon="AllIcons.Actions.Search"
+                        id="GoToRefAction"
+                        text="ListQueryActionByActionId"></action>
+                <action class="cn.boz.jb.plugin.idea.action.GotoAnyRefExtAction" icon="AllIcons.Actions.Search"
+                        text="TableQueryActionByActionId" id="GoToRefExt"></action>
+                <action class="cn.boz.jb.plugin.idea.action.QueryExpressionUsages" text="QueryExpression" id="SpdQueryExpression"/>
+            </group
             <group text="Who I Call" icon="DvcsImplIcons.Outgoing" id="goToProcessGroup" description="Go To Process"
                    popup="true"
                    class="cn.boz.jb.plugin.idea.action.GotoProcessActionGroup">
@@ -132,8 +139,8 @@
                         icon="AllIcons.Actions.Search">
                 </action>
             </group>
-            <action class="cn.boz.jb.plugin.idea.action.FindInSpdEditorAction" icon="AllIcons.Actions.Find"
-                    id="FindInSpdEditor" text="FindInSpdEditor"></action>
+<!--            <action class="cn.boz.jb.plugin.idea.action.FindInSpdEditorAction" icon="AllIcons.Actions.Find"-->
+<!--                    id="FindInSpdEditor" text="FindInSpdEditor"></action>-->
 
             <action class="cn.boz.jb.plugin.idea.action.GotoServiceTaskAction" id="gotoServiceTaskAction"
                     description="Go To ServiceTask"
@@ -176,6 +183,7 @@
             <!--                    icon="AllIcons.General.Add"></action>-->
 
             <add-to-group group-id="EditorPopupMenu" anchor="first"></add-to-group>
+
         </group>
         <!--        GoToJsFile-->
 
@@ -186,11 +194,13 @@
                     icon="SpdEditorIcons.ACTION_16_ICON"
                     id="SpdEditorActionOrTaskAction" text="GoDetail"
             ></action>
+
         </group>
         <group id="spd.copy.taskaction.group">
             <add-to-group group-id="spd.gotorefaction.group"></add-to-group>
         </group>
         <group id="spd.copysql.action.group" text="CopyGroup">
+            <action class="cn.boz.jb.plugin.idea.action.engineaction.MockStartBatchAction" id="SpdMockStartProcessAction" text="MockStartProcess" ></action>
             <action class="cn.boz.jb.plugin.idea.action.engineaction.CopyQueryEngineActionScriptAction"
                     icon="AllIcons.Actions.Copy" id="SpdEditorCopyEngineAction" text="CopyQuerySql"></action>
             <action class="cn.boz.jb.plugin.idea.action.engineaction.CopyUpdateEngineActionScriptAction"
