@@ -234,7 +234,7 @@ public class GotoRefFileAction extends AnAction {
     }
 
 
-    public String tranToSpringBeanName(String input){
+    public static String tranToSpringBeanName(String input){
         if(input==null){
             return "";
         }

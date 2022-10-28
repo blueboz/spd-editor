@@ -18,8 +18,9 @@ public class SpdEditorNormState implements PersistentStateComponent<SpdEditorNor
 
     public String webroot = "";
 
-    public SpdEditorNormState() {
+    public String mockbase = "";
 
+    public SpdEditorNormState() {
     }
 
 
@@ -30,8 +31,10 @@ public class SpdEditorNormState implements PersistentStateComponent<SpdEditorNor
 
     @Override
     public void loadState(@NotNull SpdEditorNormState spdState) {
+        if("".equals(spdState.mockbase)){
+            spdState.mockbase="http://127.0.0.1:10923";
+        }
         XmlSerializerUtil.copyBean(spdState, this);
-
     }
 
     public static SpdEditorNormState getInstance() {

@@ -208,6 +208,11 @@ public class OpenInSearchToolWindowAction extends AnAction implements DumbAware 
 
                     Point point = e.getPoint();
                     int selectedRow = outside.rowAtPoint(point);
+                    int col = outside.columnAtPoint(point);
+                    //第0行不响应，仅仅作为焦点返回
+                    if(col==0){
+                        return ;
+                    }
                     int i = outside.convertRowIndexToModel(selectedRow);
                     Object item = model.getItem(i);
                     outside.getSelectUserTaskConsumer().consume(item);
@@ -220,7 +225,10 @@ public class OpenInSearchToolWindowAction extends AnAction implements DumbAware 
         ToolWindow callSearch = ToolWindowManager.getInstance(anActionEvent.getProject()).getToolWindow(Constants.TOOL_WINDOW_CALLSEARCH);
         JBScrollPane jbScrollPane = new JBScrollPane(outside);
         ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
-        Content title = contentFactory.createContent(jbScrollPane,"process:"+outside.getProcessId(), true);
+        JPanel jPanel = new JPanel();
+        jPanel.setLayout(new BorderLayout());
+        jPanel.add(jbScrollPane,BorderLayout.CENTER);
+        Content title = contentFactory.createContent(jPanel,"process:"+outside.getProcessId(), true);
         title.setCloseable(true);
         callSearch.getContentManager().addContent(title);
         callSearch.getContentManager().requestFocus(title, true);

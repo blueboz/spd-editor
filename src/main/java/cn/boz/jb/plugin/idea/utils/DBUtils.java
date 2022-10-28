@@ -53,7 +53,7 @@ public class DBUtils {
 
     public static void dbExceptionProcessor(Exception ee, Project project){
 
-        String errMsg = generateRecrusiveException(ee);
+        String errMsg = ExceptionProcessorUtils.generateRecrusiveException(ee);
         int idx = Messages.showDialog(errMsg, "Oops!Something wrong happen!", new String[]{"Check Db Config", "Never Mind"}, 0, SpdEditorIcons.FLOW_16_ICON);
         if (idx == 0) {
 
@@ -61,29 +61,6 @@ public class DBUtils {
         }
     }
 
-    public static String generateRecrusiveException(Throwable e) {
-        if (e == null) {
-            return "";
-        }
-        StringBuilder sb = new StringBuilder();
-        StringWriter stringWriter = new StringWriter();
-        PrintWriter printWriter = new PrintWriter(stringWriter);
-        e.printStackTrace(printWriter);
-        String msg = stringWriter.toString();
-        String[] split = msg.split("\n");
-        for (String s : split) {
-            if(s.contains("at")){
-
-                if (s.contains("cn.boz")) {
-                    sb.append(s);
-                }
-            }else{
-                sb.append(s);
-            }
-
-        }
-        return sb.toString();
-    }
     /**
      * 测试连接
      *

@@ -188,8 +188,7 @@ public class EcasMenuTreeDialog extends JComponent {
             @Override
             public Component getTreeCellRendererComponent(JTree tree, Object value, boolean isSelected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
                 //默认都认为不是leaf节点，并且在userData里面设置信息
-                SimpleColoredComponent simpleColoredComponent = new SimpleColoredComponent();
-                Component treeCellRendererComponent = super.getTreeCellRendererComponent(tree, value, selected, expanded, leaf, row, hasFocus);
+                super.getTreeCellRendererComponent(tree, value, selected, expanded, leaf, row, hasFocus);
                 DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
                 var uo = node.getUserObject();
                 if (uo instanceof String) {
@@ -204,15 +203,9 @@ public class EcasMenuTreeDialog extends JComponent {
                             setIcon(SpdEditorIcons.MENUE_16_ICON);
                         } else {
                             setIcon(SpdEditorIcons.MENUE_16_ICON_D);
-
                         }
                     }
-
-                    //                    private final SimpleColoredComponent myComponent = new SimpleColoredComponent();
-
                 }
-
-
                 return this;
 
             }

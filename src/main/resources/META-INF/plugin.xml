@@ -98,13 +98,27 @@
         </action>
 
         <group id="spdEditorPopupGroup">
+
             <group popup="true" text="WhoCallMe" icon="AllIcons.General.User">
                 <action class="cn.boz.jb.plugin.idea.action.WhoCallMeCodeActionGroup$WhoCallMeCodeAction"
                         id="WhoCallMeCodeAction" text="Code" icon="SpdEditorIcons.CODE_16_ICON"></action>
                 <action class="cn.boz.jb.plugin.idea.action.WhoCallMeCodeActionGroup$WhoCallMeDBAction"
                         id="WhoCallMeDbAction" text="DB" icon="SpdEditorIcons.DATABASE_16_ICON"></action>
-
             </group>
+            <group text="ExtQuery" popup="true" >
+                <action class="cn.boz.jb.plugin.idea.action.GotoAnyRefAction" icon="AllIcons.Actions.Search"
+                        text="ListQueryActionByActionId"></action>
+                <action class="cn.boz.jb.plugin.idea.action.GotoAnyRefExtAction" icon="AllIcons.Actions.Search"
+                        text="TableQueryActionByActionId" ></action>
+                <action class="cn.boz.jb.plugin.idea.action.QueryExpressionUsages" text="QueryExpression" />
+            </group>
+            <group text="MockStart" popup="true">
+                <action class="cn.boz.jb.plugin.idea.action.engineaction.MockStartBatchWithDataAction"
+                        icon="SpdEditorIcons.MOCK_16_ICON" text="MockStartWithDataProcess" ></action>
+                <action class="cn.boz.jb.plugin.idea.action.engineaction.MockStartBatchAction"
+                        icon="SpdEditorIcons.MOCK_16_ICON" text="MockStartProcess" ></action>
+            </group>
+
             <group text="Db Diff" icon="AllIcons.Diff.Compare4LeftRight" popup="true">
                 <action class="cn.boz.jb.plugin.idea.action.SpdDbDiffGroup$SpdDbDiffKeepWrapAction"
                         description="SQLDiff"
@@ -117,14 +131,7 @@
                         icon="AllIcons.Actions.ListFiles">
                 </action>
             </group>
-            <group text="ExtQuery" id="SpdExtQuery" popup="true">
-                <action class="cn.boz.jb.plugin.idea.action.GotoAnyRefAction" icon="AllIcons.Actions.Search"
-                        id="GoToRefAction"
-                        text="ListQueryActionByActionId"></action>
-                <action class="cn.boz.jb.plugin.idea.action.GotoAnyRefExtAction" icon="AllIcons.Actions.Search"
-                        text="TableQueryActionByActionId" id="GoToRefExt"></action>
-                <action class="cn.boz.jb.plugin.idea.action.QueryExpressionUsages" text="QueryExpression" id="SpdQueryExpression"/>
-            </group
+
             <group text="Who I Call" icon="DvcsImplIcons.Outgoing" id="goToProcessGroup" description="Go To Process"
                    popup="true"
                    class="cn.boz.jb.plugin.idea.action.GotoProcessActionGroup">
@@ -171,6 +178,8 @@
             <action class="cn.boz.jb.plugin.idea.action.GotoRefFileAction" id="GoToRef" text="Go To Ref"
                     icon="SpdEditorIcons.REF_16_ICON">
             </action>
+            <action class="cn.boz.jb.plugin.idea.action.mock.MockStartMethodAction" id="SpdMockStartMethod" text="MockMethod"
+            icon="SpdEditorIcons.MOCK_16_ICON"></action>
             <group text="ExtQuery" id="SpdExtQuery" popup="true">
                 <action class="cn.boz.jb.plugin.idea.action.GotoAnyRefAction" icon="AllIcons.Actions.Search"
                         id="GoToRefAction"
@@ -200,7 +209,13 @@
             <add-to-group group-id="spd.gotorefaction.group"></add-to-group>
         </group>
         <group id="spd.copysql.action.group" text="CopyGroup">
-            <action class="cn.boz.jb.plugin.idea.action.engineaction.MockStartBatchAction" id="SpdMockStartProcessAction" text="MockStartProcess" ></action>
+            <group text="MockStart" popup="true">
+                <action class="cn.boz.jb.plugin.idea.action.engineaction.MockStartBatchWithDataAction"
+                        icon="SpdEditorIcons.MOCK_16_ICON" text="MockStartWithDataProcess" ></action>
+                <action class="cn.boz.jb.plugin.idea.action.engineaction.MockStartBatchAction"
+                        icon="SpdEditorIcons.MOCK_16_ICON" text="MockStartProcess" ></action>
+            </group>
+
             <action class="cn.boz.jb.plugin.idea.action.engineaction.CopyQueryEngineActionScriptAction"
                     icon="AllIcons.Actions.Copy" id="SpdEditorCopyEngineAction" text="CopyQuerySql"></action>
             <action class="cn.boz.jb.plugin.idea.action.engineaction.CopyUpdateEngineActionScriptAction"
@@ -213,6 +228,7 @@
                     text="CopyEngineActionSql"></action>
             <add-to-group group-id="spd.copy.taskaction.group" anchor="last"></add-to-group>
         </group>
+
         <group id="spd.openintoolwindow.action.group">
             <action class="cn.boz.jb.plugin.idea.action.OpenInSearchToolWindowAction"
                     icon="AllIcons.Actions.MoveToBottomLeft"

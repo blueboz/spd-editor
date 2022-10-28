@@ -12,6 +12,9 @@ public class SpdEditorNormSettingsComp {
 
     private TextFieldWithBrowseButton webRootEditor;
 
+    private JTextField mockBaseEditor;
+
+
     private JPanel mainComponent = null;
 
     @SuppressWarnings("unchecked")
@@ -21,8 +24,12 @@ public class SpdEditorNormSettingsComp {
                 ProjectManager.getInstance().getDefaultProject(),
                 FileChooserDescriptorFactory.createSingleFolderDescriptor());
 
+        mockBaseEditor=new JTextField();
         mainComponent = FormBuilder.createFormBuilder()
                 .addLabeledComponent(new JBLabel("WebRoot:"), webRootEditor, 1, false)
+                .addLabeledComponent(new JBLabel("MockBase:"), mockBaseEditor, 1, false)
+                .addComponentToRightColumn(new JBLabel("add VM options in tomcat to enable mock server\"-DHTTP_TEST_SERVER_ENABLED=true -DHTTP_TEST_SERVER_PORT=10923\""))
+
                 .addComponentFillVertically(new JPanel(), 0)
                 .getPanel();
 
@@ -39,9 +46,8 @@ public class SpdEditorNormSettingsComp {
 
     public void apply() {
         SpdEditorNormState spdEditorState = SpdEditorNormState.getInstance();
-
         spdEditorState.webroot = getWebRoot();
-
+        spdEditorState.mockbase=mockBaseEditor.getText();
     }
 
     @SuppressWarnings("unchecked")
@@ -56,6 +62,7 @@ public class SpdEditorNormSettingsComp {
     public void reset() {
         SpdEditorNormState spdEditorState = SpdEditorNormState.getInstance();
         setWebRoot(spdEditorState.webroot);
+        this.mockBaseEditor.setText(spdEditorState.mockbase);
     }
 
     /**
@@ -68,6 +75,10 @@ public class SpdEditorNormSettingsComp {
         if (!spdEditorState.webroot.equals(this.webRootEditor.getText())) {
             return true;
         }
+        if(!spdEditorState.mockbase.equals(this.mockBaseEditor.getText())){
+            return true;
+        }
+
         return false;
     }
 }
