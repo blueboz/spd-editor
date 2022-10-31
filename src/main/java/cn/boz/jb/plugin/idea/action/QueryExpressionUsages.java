@@ -41,7 +41,8 @@ public class QueryExpressionUsages extends DumbAwareAction {
 
         InputEvent inputEvent = anActionEvent.getInputEvent();
         MouseEvent me = (MouseEvent) inputEvent;
-        popup.show(RelativePoint.fromScreen(me.getLocationOnScreen()));
+        popup.showCenteredInCurrentWindow(anActionEvent.getProject());
+//        popup.show(RelativePoint.fromScreen(me.getLocationOnScreen()));
         go.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {

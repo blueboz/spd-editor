@@ -3,6 +3,7 @@ package cn.boz.jb.plugin.idea.configurable;
 import com.intellij.openapi.extensions.BaseExtensionPointName;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.ConfigurationException;
+import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -17,6 +18,11 @@ public class SpdEditorNormSettings implements Configurable,Configurable.WithEpDe
 
     private SpdEditorNormSettingsComp settings;
 
+    private Project project;
+
+    public SpdEditorNormSettings(Project project){
+        this.project=project;
+    }
     @Override
     public String getDisplayName() {
         return "SpdEditorBasicConfig";
@@ -31,17 +37,17 @@ public class SpdEditorNormSettings implements Configurable,Configurable.WithEpDe
 
     @Override
     public boolean isModified() {
-        return settings.isModified();
+        return settings.isModified(project);
     }
 
     @Override
     public void apply() throws ConfigurationException {
-        settings.apply();
+        settings.apply(project);
     }
 
     @Override
     public void reset() {
-        settings.reset();
+        settings.reset(project);
     }
 
     @Override
