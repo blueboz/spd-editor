@@ -242,14 +242,6 @@ runIde {
     autoReloadPlugins = true
 }
 
-task "publishPluginLocal" {
-//    dependsOn compileJava
-    doLast {
-
-        pushFileToSSh()
-
-    }
-}
 
 
 tasks.getByName("buildSearchableOptions").enabled(false)
@@ -356,4 +348,14 @@ def pushFileToSSh(String updatePlugins) {
     }
 
 
+}
+
+
+task "publishPluginLocal" {
+//    dependsOn compileJava
+    doLast {
+
+        pushFileToSSh()
+
+    }
 }

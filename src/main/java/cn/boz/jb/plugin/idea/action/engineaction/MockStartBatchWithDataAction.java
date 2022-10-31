@@ -132,7 +132,7 @@ public class MockStartBatchWithDataAction extends DumbAwareAction {
         ProgressManager progressManager = ProgressManager.getInstance();
         progressManager.executeProcessUnderProgress(()->{
             CloseableHttpClient httpClient = HttpClients.createDefault();
-            String mockbase = SpdEditorNormState.getInstance().getState().mockbase;
+            String mockbase = SpdEditorNormState.getInstance(anActionEvent.getProject()).getState().mockbase;
             HttpPost httpPost = new HttpPost(mockbase);
             RequestConfig requestConfig = RequestConfig.custom().
                     setConnectTimeout(180 * 1000).setConnectionRequestTimeout(180 * 1000)

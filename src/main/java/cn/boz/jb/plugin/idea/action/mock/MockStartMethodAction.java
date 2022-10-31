@@ -83,7 +83,8 @@ public class MockStartMethodAction extends AnAction {
             List<String> argClassNames = new ArrayList<String>();
             List<String> reqBody = new ArrayList<String>();
             JTextField urlField = new JTextField();
-            urlField.setText(SpdEditorNormState.getInstance().mockbase);
+            urlField.setText(SpdEditorNormState.getInstance(anActionEvent.getProject()).mockbase);
+            urlField.setColumns(50);
 
             formBuilder.addLabeledComponent("url", urlField);
             for (int i = 0; i < parameterList.getParametersCount(); i++) {

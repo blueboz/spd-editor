@@ -246,6 +246,8 @@
 
             <reference ref="spd.gotoscript.action.group"></reference>
             <reference ref="spd.copysql.action.group"></reference>
+            <reference id="spd.openintoolwindow.action.group"></reference>
+
         </group>
 
         <!--查看EngineAction 对话框中，功能菜单包含最小化-->

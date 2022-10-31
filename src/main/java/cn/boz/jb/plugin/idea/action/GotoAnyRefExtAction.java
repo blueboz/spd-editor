@@ -1,6 +1,8 @@
 package cn.boz.jb.plugin.idea.action;
 
 import cn.boz.jb.plugin.idea.bean.EngineAction;
+import cn.boz.jb.plugin.idea.bean.EngineTask;
+import cn.boz.jb.plugin.idea.dialog.EngineTaskDialog;
 import cn.boz.jb.plugin.idea.utils.DBUtils;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.progress.ProgressManager;
@@ -83,8 +85,18 @@ public class GotoAnyRefExtAction extends DumbAwareAction {
         }
         GotoRefFileAction.showListPopup(new ArrayList<>(engineActionRef.get()), anActionEvent.getProject(), new Consumer<Object>() {
             @Override
-            public void consume(Object o) {
+            public void consume(Object selectedValue) {
+                if (selectedValue instanceof EngineAction) {
+                    EngineAction engineAction = (EngineAction) selectedValue;
+                    GotoRefFileAction.tryToGotoAction(engineAction.getId(), anActionEvent, true);
+                } else {
+                    EngineTaskDialog engineTaskDialog = new EngineTaskDialog((EngineTask) selectedValue);
+                    JBScrollPane jbScrollPane = new JBScrollPane(engineTaskDialog);
+                    JBPopup popup;
+                    popup = JBPopupFactory.getInstance().createComponentPopupBuilder(jbScrollPane, null).setRequestFocus(true).setFocusable(true).setMovable(true).setTitle("EngineTask").setCancelOnOtherWindowOpen(true).setProject(anActionEvent.getProject()).createPopup();
 
+                    popup.showCenteredInCurrentWindow(anActionEvent.getProject());
+                }
             }
         }, true,name,"");
     }

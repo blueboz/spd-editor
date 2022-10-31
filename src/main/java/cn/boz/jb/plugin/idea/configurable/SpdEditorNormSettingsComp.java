@@ -1,6 +1,7 @@
 package cn.boz.jb.plugin.idea.configurable;
 
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.ui.TextFieldWithBrowseButton;
 import com.intellij.ui.components.JBLabel;
@@ -28,7 +29,7 @@ public class SpdEditorNormSettingsComp {
         mainComponent = FormBuilder.createFormBuilder()
                 .addLabeledComponent(new JBLabel("WebRoot:"), webRootEditor, 1, false)
                 .addLabeledComponent(new JBLabel("MockBase:"), mockBaseEditor, 1, false)
-                .addComponentToRightColumn(new JBLabel("add VM options in tomcat to enable mock server\"-DHTTP_TEST_SERVER_ENABLED=true -DHTTP_TEST_SERVER_PORT=10923\""))
+                .addComponentToRightColumn(new JBLabel("add VM options in tomcat to enable mock server\n\"-DHTTP_TEST_SERVER_ENABLED=true -DHTTP_TEST_SERVER_PORT=10923\""))
 
                 .addComponentFillVertically(new JPanel(), 0)
                 .getPanel();
@@ -44,8 +45,8 @@ public class SpdEditorNormSettingsComp {
         return webRootEditor;
     }
 
-    public void apply() {
-        SpdEditorNormState spdEditorState = SpdEditorNormState.getInstance();
+    public void apply(Project project) {
+        SpdEditorNormState spdEditorState = SpdEditorNormState.getInstance(project);
         spdEditorState.webroot = getWebRoot();
         spdEditorState.mockbase=mockBaseEditor.getText();
     }
@@ -59,8 +60,8 @@ public class SpdEditorNormSettingsComp {
         this.webRootEditor.setText(webRoot);
     }
 
-    public void reset() {
-        SpdEditorNormState spdEditorState = SpdEditorNormState.getInstance();
+    public void reset(Project project) {
+        SpdEditorNormState spdEditorState = SpdEditorNormState.getInstance(project);
         setWebRoot(spdEditorState.webroot);
         this.mockBaseEditor.setText(spdEditorState.mockbase);
     }
@@ -70,8 +71,8 @@ public class SpdEditorNormSettingsComp {
      *
      * @return
      */
-    public boolean isModified() {
-        SpdEditorNormState spdEditorState = SpdEditorNormState.getInstance();
+    public boolean isModified(Project project) {
+        SpdEditorNormState spdEditorState = SpdEditorNormState.getInstance(project);
         if (!spdEditorState.webroot.equals(this.webRootEditor.getText())) {
             return true;
         }
