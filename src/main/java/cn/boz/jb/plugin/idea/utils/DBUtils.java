@@ -52,11 +52,9 @@ public class DBUtils {
     }
 
     public static void dbExceptionProcessor(Exception ee, Project project){
-
         String errMsg = ExceptionProcessorUtils.generateRecrusiveException(ee);
         int idx = Messages.showDialog(errMsg, "Oops!Something wrong happen!", new String[]{"Check Db Config", "Never Mind"}, 0, SpdEditorIcons.FLOW_16_ICON);
         if (idx == 0) {
-
             ShowSettingsUtil.getInstance().showSettingsDialog(project, SpdEditorDBSettings.class);
         }
     }

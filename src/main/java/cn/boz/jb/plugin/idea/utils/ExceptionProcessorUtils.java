@@ -46,7 +46,8 @@ public class ExceptionProcessorUtils {
 
     public static void exceptionProcessor(Throwable ee, Project project, String prefix) {
         String errMsg = generateRecrusiveException(ee);
-        int idx = Messages.showDialog(prefix + errMsg, "OOPS!SOMETHING WRONG HAPPEN!", new String[]{"Check mockbase Config", "I DON'T CARE!"}, 0, SpdEditorIcons.FLOW_16_ICON);
+
+        int idx = Messages.showDialog( errMsg, "Oops!something wrong happen!", new String[]{"Check mockbase Config", "I don't care!"}, 0, SpdEditorIcons.FLOW_16_ICON);
         if (idx == 0) {
             ShowSettingsUtil.getInstance().showSettingsDialog(project, SpdEditorNormSettings.class);
         }

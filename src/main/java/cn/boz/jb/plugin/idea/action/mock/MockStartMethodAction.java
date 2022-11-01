@@ -109,6 +109,10 @@ public class MockStartMethodAction extends AnAction {
 
             formBuilder.addComponentToRightColumn(okBtn);
 
+//            formBuilder.setHorizontalGap(5);
+//            formBuilder.setVerticalGap(5);
+            formBuilder.setFormLeftIndent(5);
+
             JPanel formPanel = formBuilder.getPanel();
 
             ActionManager instance = ActionManager.getInstance();
@@ -129,7 +133,6 @@ public class MockStartMethodAction extends AnAction {
                 }
             };
             ActionToolbar spd_tb = instance.createActionToolbar("spd tb", actionGroup, true);
-
             JPanel contentPanel = new JPanel();
             contentPanel.setLayout(new BorderLayout());
             contentPanel.add(formPanel,BorderLayout.CENTER);

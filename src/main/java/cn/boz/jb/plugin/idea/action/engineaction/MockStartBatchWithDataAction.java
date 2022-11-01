@@ -7,6 +7,7 @@ import cn.boz.jb.plugin.idea.configurable.SpdEditorNormState;
 import cn.boz.jb.plugin.idea.utils.Constants;
 import cn.boz.jb.plugin.idea.utils.DBUtils;
 import cn.boz.jb.plugin.idea.utils.ExceptionProcessorUtils;
+import cn.boz.jb.plugin.idea.utils.MockUtils;
 import cn.boz.jb.plugin.idea.utils.NotificationUtils;
 import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationType;
@@ -132,72 +133,9 @@ public class MockStartBatchWithDataAction extends DumbAwareAction {
     }
 
     protected void httpPostRequest(String processId, AnActionEvent anActionEvent, String text) {
-        ProgressManager progressManager = ProgressManager.getInstance();
-
-        Task.Backgroundable waiting = new Task.Backgroundable(anActionEvent.getProject(), "waiting", true){
-            String msg;
-            private Exception e;
-            @Override
-            public void run(@NotNull ProgressIndicator progressIndicator) {
-                CloseableHttpClient httpClient = HttpClients.createDefault();
-                String mockbase = SpdEditorNormState.getInstance(anActionEvent.getProject()).getState().mockbase;
-                HttpPost httpPost = new HttpPost(mockbase);
-                RequestConfig requestConfig = RequestConfig.custom().
-                        setConnectTimeout(180 * 1000).setConnectionRequestTimeout(180 * 1000)
-                        .setSocketTimeout(180 * 1000).setRedirectsEnabled(true).build();
-                httpPost.setConfig(requestConfig);
-                httpPost.setHeader("Content-Type", "application/json");
-                StringBuilder reqMsg = new StringBuilder();
-                try {
-                    httpPost.setEntity(new StringEntity("{ \"beanName\": \"processEngine\", \"argsClass\": [ \"java.lang.String\", \"java.util.Map\" ], \"methodName\": \"start\", \"requestBody\": [ \"" + processId + "\", " + text + "] }", ContentType.create("application/json", "utf-8")));
-                    reqMsg.append("post url:" + httpPost);
-                    reqMsg.append("\n");
-                    reqMsg.append("post body:" + EntityUtils.toString(httpPost.getEntity()));
-                    reqMsg.append("\n");
-                    HttpResponse response = httpClient.execute(httpPost);
-                    if (response != null) {
-                        reqMsg.append("status:"+response.getStatusLine().toString());
-                        String result = EntityUtils.toString(response.getEntity());
-                        reqMsg.append("post result:" + result);
-                        reqMsg.append("\n");
-                    }else{
-                        reqMsg.append("response is null");
-                    }
-
-                } catch (Exception e) {
-//                    ExceptionProcessorUtils.exceptionProcessor(e,anActionEvent.getProject(),reqMsg.toString());
-                    throw new RuntimeException(e);
-                } finally {
-                    this.msg=reqMsg.toString();
-                    if (null != httpClient) {
-                        try {
-                            httpClient.close();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-            }
-
-            @Override
-            public void onSuccess() {
-
-            }
-
-            @Override
-            public void onThrowable(@NotNull Throwable error) {
-                ExceptionProcessorUtils.exceptionProcessor(error,anActionEvent.getProject(),msg);
-            }
-
-            @Override
-            public void onFinished() {
-
-                super.onFinished();
-            }
-        };
-        StatusBarProgress statusBarProgress = new StatusBarProgress();
-        statusBarProgress.setIndeterminate(true);
-        progressManager.runProcessWithProgressAsynchronously(waiting,statusBarProgress);
+        String body="{ \"beanName\": \"processEngine\", \"argsClass\": [ \"java.lang.String\", \"java.util.Map\" ], \"methodName\": \"start\", \"requestBody\": [ \"" + processId + "\", " + text + "] };";
+        String mockbase = SpdEditorNormState.getInstance(anActionEvent.getProject()).getState().mockbase;
+        MockUtils.httpPostRequest(anActionEvent,body,mockbase);
 
     }
 }
