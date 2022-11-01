@@ -117,9 +117,11 @@ public class EditMenuDialog extends DialogWrapper {
             Messages.showWarningDialog(e.getMessage(), "错误");
         }
     }
+    private Project project;
 
     protected EditMenuDialog(@Nullable Project project, boolean canBeParent, NodeData parentNodeData) {
         super(project, canBeParent);
+        this.project=project;
         this.setParentMap(parentNodeData.getNodeData());
         init();
         setTitle("编辑菜单");
@@ -223,7 +225,7 @@ public class EditMenuDialog extends DialogWrapper {
                     }
 
                     private void doRun(VirtualFile selectedValue) {
-                        SpdEditorNormState instance = SpdEditorNormState.getInstance();
+                        SpdEditorNormState instance = SpdEditorNormState.getInstance(project);
                         if (StringUtils.isBlank(instance.webroot)) {
                             urlt.setText(String.valueOf(selectedValue.getPath()));
                         } else {

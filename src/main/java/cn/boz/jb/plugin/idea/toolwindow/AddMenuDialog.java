@@ -129,6 +129,7 @@ public class AddMenuDialog extends DialogWrapper {
 
     protected AddMenuDialog(@Nullable Project project, boolean canBeParent, NodeData parentNodeData) {
         super(project, canBeParent);
+        this.project=project;
         this.setParentMap(parentNodeData.getNodeData());
         init();
         setTitle("添加菜单");
@@ -262,7 +263,7 @@ public class AddMenuDialog extends DialogWrapper {
                     }
 
                     private void doRun(VirtualFile selectedValue) {
-                        SpdEditorNormState instance = SpdEditorNormState.getInstance();
+                        SpdEditorNormState instance = SpdEditorNormState.getInstance(project);
                         if (StringUtils.isBlank(instance.webroot)) {
                             urlt.setText(String.valueOf(selectedValue.getPath()));
                         } else {

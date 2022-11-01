@@ -44,7 +44,7 @@ public class ExceptionProcessorUtils {
         return sb.toString();
     }
 
-    public static void exceptionProcessor(Exception ee, Project project, String prefix) {
+    public static void exceptionProcessor(Throwable ee, Project project, String prefix) {
         String errMsg = generateRecrusiveException(ee);
         int idx = Messages.showDialog(prefix + errMsg, "OOPS!SOMETHING WRONG HAPPEN!", new String[]{"Check mockbase Config", "I DON'T CARE!"}, 0, SpdEditorIcons.FLOW_16_ICON);
         if (idx == 0) {

@@ -20,7 +20,7 @@ public class MinimizeUtils {
         ToolWindow callSearch = ToolWindowManager.getInstance(project).getToolWindow(Constants.TOOL_WINDOW_CALLSEARCH);
         ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
 
-        Content titleContent = contentFactory.createContent(component,title, true);
+        Content titleContent = contentFactory.createContent(new JBScrollPane(component),title, true);
         titleContent.setCloseable(true);
         callSearch.getContentManager().addContent(titleContent);
         callSearch.getContentManager().requestFocus(titleContent, true);

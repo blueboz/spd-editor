@@ -23,9 +23,9 @@ buildscript {
 
 }
 plugins {
-    id 'org.jetbrains.intellij' version '1.9.0'
+    id 'org.jetbrains.intellij' version '1.1.6'
     id 'java'
-    //id 'groovy'
+    id 'groovy'
 }
 
 def ts = System.currentTimeMillis()
@@ -262,6 +262,7 @@ tasks.whenTaskAdded { task ->
         task.enabled = false
     }
 }
+
 publishPlugin {
 //    channels = ['beta']
     channels = ['Stable']
@@ -270,11 +271,7 @@ publishPlugin {
 }
 
 
-/**
- * 自定义方法将文件以ssh方式推送到ssh服务器
- * @return
- */
-def pushFileToSSh(String updatePlugins) {
+def sshtools(){
     try {
 
         def fpath = "$buildDir\\$distsDirName"
@@ -304,7 +301,7 @@ def pushFileToSSh(String updatePlugins) {
         def timefmt = ld.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
 
         def binding = [
-                version    : ext['simplever'] + '.' + "$dnamets",
+                version    : project.ext['simplever'] + '.' + "$dnamets",
                 changeNotes: "$cn",
                 desc       : "$patchPluginXml.description",
                 cts        : System.currentTimeMillis(),
@@ -346,16 +343,15 @@ def pushFileToSSh(String updatePlugins) {
     } catch (Exception e) {
         throw new RuntimeException(e)
     }
+}
 
+task "setupDependencies"{
 
 }
 
 
 task "publishPluginLocal" {
-//    dependsOn compileJava
     doLast {
-
-        pushFileToSSh()
-
+        sshtools()
     }
 }

@@ -102,7 +102,7 @@ public class MockStartMethodAction extends AnAction {
                 argClassNames.add(pType);
             }
             req.put("argsClass", argClassNames);
-            req.put("reqbody", reqBody);
+            req.put("requestBody", reqBody);
 
             JButton okBtn = new JButton("Go");
 
@@ -122,7 +122,7 @@ public class MockStartMethodAction extends AnAction {
                                 }
                                 @Override
                                 public void actionPerformed(@NotNull AnActionEvent anActionEvent) {
-                                    MinimizeUtils.minimize(new JBScrollPane(formPanel),project,"mockStart");
+                                    MinimizeUtils.minimize( formPanel,project,"mockStart");
                                 }
                             }
                     };

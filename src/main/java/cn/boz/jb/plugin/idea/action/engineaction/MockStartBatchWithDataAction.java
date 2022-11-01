@@ -14,8 +14,11 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.externalSystem.service.execution.ProgressExecutionMode;
+import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.ProgressIndicatorProvider;
 import com.intellij.openapi.progress.ProgressManager;
+import com.intellij.openapi.progress.Task;
+import com.intellij.openapi.progress.util.StatusBarProgress;
 import com.intellij.openapi.project.DumbAwareAction;
 import com.intellij.openapi.ui.popup.JBPopup;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
@@ -130,43 +133,71 @@ public class MockStartBatchWithDataAction extends DumbAwareAction {
 
     protected void httpPostRequest(String processId, AnActionEvent anActionEvent, String text) {
         ProgressManager progressManager = ProgressManager.getInstance();
-        progressManager.executeProcessUnderProgress(()->{
-            CloseableHttpClient httpClient = HttpClients.createDefault();
-            String mockbase = SpdEditorNormState.getInstance(anActionEvent.getProject()).getState().mockbase;
-            HttpPost httpPost = new HttpPost(mockbase);
-            RequestConfig requestConfig = RequestConfig.custom().
-                    setConnectTimeout(180 * 1000).setConnectionRequestTimeout(180 * 1000)
-                    .setSocketTimeout(180 * 1000).setRedirectsEnabled(true).build();
-            httpPost.setConfig(requestConfig);
-            httpPost.setHeader("Content-Type", "application/json");
-            StringBuilder reqMsg = new StringBuilder();
-            try {
-                httpPost.setEntity(new StringEntity("{ \"beanName\": \"processEngine\", \"argsClass\": [ \"java.lang.String\", \"java.util.Map\" ], \"methodName\": \"start\", \"requestBody\": [ \"" + processId + "\", " + text + "] }", ContentType.create("application/json", "utf-8")));
-                reqMsg.append("post url:" + httpPost);
-                reqMsg.append("\n");
-                reqMsg.append("post body:" + EntityUtils.toString(httpPost.getEntity()));
-                reqMsg.append("\n");
-                HttpResponse response = httpClient.execute(httpPost);
-                if (response != null) {
-                    reqMsg.append("status:"+response.getStatusLine().toString());
-                    String result = EntityUtils.toString(response.getEntity());
-                    reqMsg.append("post result:" + result);
+
+        Task.Backgroundable waiting = new Task.Backgroundable(anActionEvent.getProject(), "waiting", true){
+            String msg;
+            private Exception e;
+            @Override
+            public void run(@NotNull ProgressIndicator progressIndicator) {
+                CloseableHttpClient httpClient = HttpClients.createDefault();
+                String mockbase = SpdEditorNormState.getInstance(anActionEvent.getProject()).getState().mockbase;
+                HttpPost httpPost = new HttpPost(mockbase);
+                RequestConfig requestConfig = RequestConfig.custom().
+                        setConnectTimeout(180 * 1000).setConnectionRequestTimeout(180 * 1000)
+                        .setSocketTimeout(180 * 1000).setRedirectsEnabled(true).build();
+                httpPost.setConfig(requestConfig);
+                httpPost.setHeader("Content-Type", "application/json");
+                StringBuilder reqMsg = new StringBuilder();
+                try {
+                    httpPost.setEntity(new StringEntity("{ \"beanName\": \"processEngine\", \"argsClass\": [ \"java.lang.String\", \"java.util.Map\" ], \"methodName\": \"start\", \"requestBody\": [ \"" + processId + "\", " + text + "] }", ContentType.create("application/json", "utf-8")));
+                    reqMsg.append("post url:" + httpPost);
                     reqMsg.append("\n");
-                }else{
-                    reqMsg.append("response is null");
-                }
-                NotificationUtils.warnning("mockStartProcess",reqMsg.toString(),anActionEvent.getProject());
-            } catch (Exception e) {
-                ExceptionProcessorUtils.exceptionProcessor(e,anActionEvent.getProject(),reqMsg.toString());
-            } finally {
-                if (null != httpClient) {
-                    try {
-                        httpClient.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                    reqMsg.append("post body:" + EntityUtils.toString(httpPost.getEntity()));
+                    reqMsg.append("\n");
+                    HttpResponse response = httpClient.execute(httpPost);
+                    if (response != null) {
+                        reqMsg.append("status:"+response.getStatusLine().toString());
+                        String result = EntityUtils.toString(response.getEntity());
+                        reqMsg.append("post result:" + result);
+                        reqMsg.append("\n");
+                    }else{
+                        reqMsg.append("response is null");
+                    }
+
+                } catch (Exception e) {
+//                    ExceptionProcessorUtils.exceptionProcessor(e,anActionEvent.getProject(),reqMsg.toString());
+                    throw new RuntimeException(e);
+                } finally {
+                    this.msg=reqMsg.toString();
+                    if (null != httpClient) {
+                        try {
+                            httpClient.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
             }
-        }, ProgressIndicatorProvider.getGlobalProgressIndicator());
+
+            @Override
+            public void onSuccess() {
+
+            }
+
+            @Override
+            public void onThrowable(@NotNull Throwable error) {
+                ExceptionProcessorUtils.exceptionProcessor(error,anActionEvent.getProject(),msg);
+            }
+
+            @Override
+            public void onFinished() {
+
+                super.onFinished();
+            }
+        };
+        StatusBarProgress statusBarProgress = new StatusBarProgress();
+        statusBarProgress.setIndeterminate(true);
+        progressManager.runProcessWithProgressAsynchronously(waiting,statusBarProgress);
+
     }
 }
