@@ -1,6 +1,5 @@
 package cn.boz.jb.plugin.idea.utils;
 
-import cn.boz.jb.plugin.idea.dialog.EcasMenuTreeDialog;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.popup.JBPopup;
 import com.intellij.openapi.ui.popup.util.PopupUtil;
@@ -14,13 +13,18 @@ import javax.swing.*;
 
 public class MinimizeUtils {
 
-    public static void minimize(JComponent component, Project project,String title){
-        JBPopup popupContainerFor = PopupUtil.getPopupContainerFor(component);
+    public static void minimize(JBPopup popup, JComponent component, Project project, String title) {
+        JBPopup popupContainerFor;
+        if (popup == null) {
+            popupContainerFor = PopupUtil.getPopupContainerFor(component);
+        } else {
+            popupContainerFor = popup;
+        }
 
         ToolWindow callSearch = ToolWindowManager.getInstance(project).getToolWindow(Constants.TOOL_WINDOW_CALLSEARCH);
         ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
 
-        Content titleContent = contentFactory.createContent(new JBScrollPane(component),title, true);
+        Content titleContent = contentFactory.createContent(new JBScrollPane(component), title, true);
         titleContent.setCloseable(true);
         callSearch.getContentManager().addContent(titleContent);
         callSearch.getContentManager().requestFocus(titleContent, true);
@@ -29,7 +33,7 @@ public class MinimizeUtils {
         }
         callSearch.getContentManager().setSelectedContent(titleContent);
 
-        if(popupContainerFor!=null&&!popupContainerFor.isDisposed()){
+        if (popupContainerFor != null && !popupContainerFor.isDisposed()) {
 
             popupContainerFor.dispose();
         }

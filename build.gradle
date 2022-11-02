@@ -27,11 +27,13 @@ plugins {
     id 'java'
     id 'groovy'
 }
-
+project.ext {
+    simplever = "1.0.35"
+}
 def ts = System.currentTimeMillis()
-ext['simplever'] = '1.0.35'
+
 group 'cn.boz'
-version ext['simplever'] + '.' + ts
+version simplever + '.' + ts
 
 
 sourceCompatibility = 1.11
@@ -271,79 +273,6 @@ publishPlugin {
 }
 
 
-def sshtools(){
-    try {
-
-        def fpath = "$buildDir\\$distsDirName"
-        def fts = fileTree(fpath)
-        if (fts.size() == 0) {
-            System.err.println "THERE IS NOTHING FILE TO BE PUBLISH"
-            return;
-        }
-        def distributionFilePath = fts.last()
-//        def distributionFilePath = "$buildDir\\$distsDirName\\${archivesBaseName}-${version}.zip"
-//    println 'ready to publish file'+distributionFilePath
-        def dname = distributionFilePath.name
-        def dnamerem = dname.substring(0, dname.lastIndexOf('.'))
-        def dnamets = dnamerem.substring(dnamerem.lastIndexOf('.') + 1)
-
-
-//        def distributionFilePath = "$buildDir\\$distsDirName\\${archivesBaseName}-${version}.zip"
-        var cn = patchPluginXml.changeNotes.getOrNull()
-        println 'ready to publish file' + distributionFilePath
-        def file = new File(dname)
-        def flen = file.length()
-
-
-        var p = java.nio.file.Path.of("$projectDir\\updatePlugins.xml")
-        var str = Files.readString(p, StandardCharsets.UTF_8)
-        def ld = LocalDateTime.now()
-        def timefmt = ld.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
-
-        def binding = [
-                version    : project.ext['simplever'] + '.' + "$dnamets",
-                changeNotes: "$cn",
-                desc       : "$patchPluginXml.description",
-                cts        : System.currentTimeMillis(),
-                flen       : "$flen",
-                tfmt       : "$timefmt"
-        ]
-
-        def engine = new GStringTemplateEngine()
-        String template = engine.createTemplate(str).make(binding)
-
-        var jSch = new JSch();
-        jSch.addIdentity(projectDir.path + '\\' + "id_rsa.ppk");
-//        var user = 'D-DPDKZJJY-APP+cdadmin'
-//        var host = '21.96.60.156'
-        var user = 'a-dkzjjy-usr'
-        var host = '21.96.35.45'
-        var port = 18122
-        var session = jSch.getSession(user, host, port);
-        session.setConfig("StrictHostKeyChecking", "no");
-        session.connect();
-        ChannelSftp sftp = (ChannelSftp) session.openChannel("sftp");
-        sftp.connect();
-        def targetpath = "/cygdrive/e/apiserver/jetbrainsPlugins/"
-        println "pushing from $distributionFilePath.absolutePath into\n\t\t $user@$host:$port/$targetpath"
-        sftp.put(distributionFilePath.absolutePath, targetpath)
-        println 'done'
-
-        println "pushing updatePlugins.xml"
-        var bais = new ByteArrayInputStream(template.getBytes(StandardCharsets.UTF_8))
-
-        sftp.put(bais, "$targetpath/updateplugins2.xml")
-
-
-        sftp.disconnect()
-        session.disconnect();
-        fts.each { f -> f.delete() }
-
-
-    } catch (Exception e) {
-        throw new RuntimeException(e)
-    }
-}
 
 task "setupDependencies"{
 
@@ -351,7 +280,84 @@ task "setupDependencies"{
 
 
 task "publishPluginLocal" {
+    println('#########')
+    println(this)
     doLast {
-        sshtools()
+        try {
+            println('#########')
+            println(this)
+            println('#########')
+            println(getBuildDir())
+
+            def fpath = "$buildDir\\$distsDirName"
+            def fts = fileTree(fpath)
+            if (fts.size() == 0) {
+                System.err.println "THERE IS NOTHING FILE TO BE PUBLISH"
+                return;
+            }
+            def distributionFilePath = fts.last()
+//        def distributionFilePath = "$buildDir\\$distsDirName\\${archivesBaseName}-${version}.zip"
+//    println 'ready to publish file'+distributionFilePath
+            def dname = distributionFilePath.name
+            def dnamerem = dname.substring(0, dname.lastIndexOf('.'))
+            def dnamets = dnamerem.substring(dnamerem.lastIndexOf('.') + 1)
+
+
+//        def distributionFilePath = "$buildDir\\$distsDirName\\${archivesBaseName}-${version}.zip"
+            var cn = patchPluginXml.changeNotes.getOrNull()
+            println 'ready to publish file' + distributionFilePath
+            def file = new File(dname)
+            def flen = file.length()
+
+
+            var p = java.nio.file.Path.of("$projectDir\\updatePlugins.xml")
+            var str = Files.readString(p, StandardCharsets.UTF_8)
+            def ld = LocalDateTime.now()
+            def timefmt = ld.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+            println(ext)
+
+            def binding = [
+                    version    : simplever + '.' + "$dnamets",
+                    changeNotes: "$cn",
+                    desc       : "$patchPluginXml.description",
+                    cts        : System.currentTimeMillis(),
+                    flen       : "$flen",
+                    tfmt       : "$timefmt"
+            ]
+
+            def engine = new GStringTemplateEngine()
+            String template = engine.createTemplate(str).make(binding)
+
+            var jSch = new JSch();
+            jSch.addIdentity(projectDir.path + '\\' + "id_rsa.ppk");
+//        var user = 'D-DPDKZJJY-APP+cdadmin'
+//        var host = '21.96.60.156'
+            var user = 'a-dkzjjy-usr'
+            var host = '21.96.35.45'
+            var port = 18122
+            var session = jSch.getSession(user, host, port);
+            session.setConfig("StrictHostKeyChecking", "no");
+            session.connect();
+            ChannelSftp sftp = (ChannelSftp) session.openChannel("sftp");
+            sftp.connect();
+            def targetpath = "/cygdrive/e/apiserver/jetbrainsPlugins/"
+            println "pushing from $distributionFilePath.absolutePath into\n\t\t $user@$host:$port/$targetpath"
+            sftp.put(distributionFilePath.absolutePath, targetpath)
+            println 'done'
+
+            println "pushing updatePlugins.xml"
+            var bais = new ByteArrayInputStream(template.getBytes(StandardCharsets.UTF_8))
+
+            sftp.put(bais, "$targetpath/updateplugins2.xml")
+
+
+            sftp.disconnect()
+            session.disconnect();
+            fts.each { f -> f.delete() }
+
+
+        } catch (Exception e) {
+            throw new RuntimeException(e)
+        }
     }
 }

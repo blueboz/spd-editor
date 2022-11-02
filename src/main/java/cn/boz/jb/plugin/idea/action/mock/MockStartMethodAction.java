@@ -14,6 +14,7 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.fileEditor.FileEditor;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.popup.JBPopup;
@@ -33,6 +34,12 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -79,68 +86,72 @@ public class MockStartMethodAction extends AnAction {
 
             //弹出框，输入参数
             FormBuilder formBuilder = FormBuilder.createFormBuilder();
-            List<JTextArea> textAreaList = new ArrayList<>();
+            List<JTextPane> textAreaList = new ArrayList<>();
             List<String> argClassNames = new ArrayList<String>();
             List<String> reqBody = new ArrayList<String>();
             JTextField urlField = new JTextField();
             urlField.setText(SpdEditorNormState.getInstance(anActionEvent.getProject()).mockbase);
             urlField.setColumns(50);
 
-            formBuilder.addLabeledComponent("url", urlField);
+            formBuilder.addLabeledComponent("url", urlField, 1, true);
             for (int i = 0; i < parameterList.getParametersCount(); i++) {
                 PsiParameter parameter = parameterList.getParameter(i);
                 PsiType type = parameter.getType();
                 String pname = parameter.getName();
                 String pType = type.getCanonicalText();
-                JTextArea jTextArea = new JTextArea();
-                jTextArea.setAutoscrolls(true);
-                jTextArea.setLineWrap(true);
-                jTextArea.setRows(3);
-                jTextArea.setColumns(50);
-                textAreaList.add(jTextArea);
-                formBuilder.addLabeledComponent(pname + ":" + pType, jTextArea);
+
+                JTextPane info = new JTextPane();
+
+                info.setEditable(true);
+                info.setVisible(true);
+                info.setFont(new Font("微软雅黑", Font.ITALIC, 12));
+                info.setAutoscrolls(true);
+                info.setSelectedTextColor(new Color(21, 132, 0));
+                info.setSelectionColor(new Color(255, 144, 0));
+
+
+                JBScrollPane jScrollPane = new JBScrollPane(info);
+                textAreaList.add(info);
+
+                info.getStyledDocument().addDocumentListener(new DocumentListener() {
+                    @Override
+                    public void insertUpdate(DocumentEvent e) {
+                        new Thread(() -> {
+                            restyle((StyledDocument) e.getDocument());
+                        }).start();
+                    }
+
+                    @Override
+                    public void removeUpdate(DocumentEvent e) {
+                        new Thread(() -> {
+                            restyle((StyledDocument) e.getDocument());
+                        }).start();
+                    }
+
+                    @Override
+                    public void changedUpdate(DocumentEvent e) {
+
+                    }
+                });
+                formBuilder.addLabeledComponent(pType + " " + pname, jScrollPane, 1, true);
                 argClassNames.add(pType);
             }
             req.put("argsClass", argClassNames);
             req.put("requestBody", reqBody);
 
-            JButton okBtn = new JButton("Go");
+            JButton okBtn = new JButton("Post",AllIcons.Actions.Execute);
 
 
-            formBuilder.addComponentToRightColumn(okBtn);
+            formBuilder.addComponent(okBtn, 1);
 
 //            formBuilder.setHorizontalGap(5);
 //            formBuilder.setVerticalGap(5);
             formBuilder.setFormLeftIndent(5);
 
             JPanel formPanel = formBuilder.getPanel();
+            JPanel formWrapper = new JPanel();
 
-            ActionManager instance = ActionManager.getInstance();
-            ActionGroup actionGroup=new ActionGroup() {
-                @Override
-                public @NotNull AnAction[] getChildren(@Nullable AnActionEvent anActionEvent) {
-                    return new AnAction[]{
-                            new AnAction() {
-                                {
-                                    getTemplatePresentation().setIcon(AllIcons.Actions.MoveToBottomLeft);
-                                }
-                                @Override
-                                public void actionPerformed(@NotNull AnActionEvent anActionEvent) {
-                                    MinimizeUtils.minimize( formPanel,project,"mockStart");
-                                }
-                            }
-                    };
-                }
-            };
-            ActionToolbar spd_tb = instance.createActionToolbar("spd tb", actionGroup, true);
-            JPanel contentPanel = new JPanel();
-            contentPanel.setLayout(new BorderLayout());
-            contentPanel.add(formPanel,BorderLayout.CENTER);
-            contentPanel.add(spd_tb.getComponent(), BorderLayout.SOUTH);
-
-            JBScrollPane jbScrollPane = new JBScrollPane(contentPanel);
-
-
+            JBScrollPane jbScrollPane = new JBScrollPane(formWrapper);
 
             JBPopup popup = JBPopupFactory.getInstance()
                     .createComponentPopupBuilder(jbScrollPane, null)
@@ -151,17 +162,44 @@ public class MockStartMethodAction extends AnAction {
                     .setTitle("MethodInvoker")
                     .setCancelOnOtherWindowOpen(true)
                     .createPopup();
+
+            ActionManager instance = ActionManager.getInstance();
+            ActionGroup actionGroup = new ActionGroup() {
+                @Override
+                public @NotNull AnAction[] getChildren(@Nullable AnActionEvent anActionEvent) {
+                    return new AnAction[]{
+                            new AnAction() {
+                                {
+                                    getTemplatePresentation().setIcon(AllIcons.Actions.MoveToBottomLeft);
+                                }
+
+                                @Override
+                                public void actionPerformed(@NotNull AnActionEvent anActionEvent) {
+                                    MinimizeUtils.minimize(popup,formPanel, project, "mockStart");
+                                }
+                            }
+                    };
+                }
+            };
+            ActionToolbar spd_tb = instance.createActionToolbar("spd tb", actionGroup, true);
+            formWrapper.setLayout(new BorderLayout());
+            formWrapper.add(formPanel, BorderLayout.CENTER);
+            formWrapper.add(spd_tb.getComponent(), BorderLayout.SOUTH);
+
+
+
+
             popup.showCenteredInCurrentWindow(anActionEvent.getProject());
 
             okBtn.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    for (JTextArea jTextArea : textAreaList) {
+                    for (JTextPane jTextArea : textAreaList) {
                         String text = jTextArea.getText();
                         reqBody.add(text);
                     }
                     MockUtils.httpPostRequest(anActionEvent, JSON.toJSONString(req), urlField.getText());
-                    if(!popup.isDisposed()){
+                    if (!popup.isDisposed()) {
                         popup.dispose();
                     }
                 }
@@ -173,33 +211,114 @@ public class MockStartMethodAction extends AnAction {
 
 
     }
+    private static SimpleAttributeSet quoteStyle;
+    private static SimpleAttributeSet numberic;
+
+    private static SimpleAttributeSet fieldStyle;
+    public static void setColorSchemaOfLight() {
+        quoteStyle = new SimpleAttributeSet();
+        StyleConstants.setForeground(quoteStyle, new Color(0, 98, 122));
+
+        numberic = new SimpleAttributeSet();
+        StyleConstants.setForeground(numberic, new Color(23, 80, 235));
+
+        fieldStyle = new SimpleAttributeSet();
+        StyleConstants.setForeground(fieldStyle, new Color(135, 16, 148));
+    }
+
+    public static void setColorSchemaOfDark() {
+        quoteStyle = new SimpleAttributeSet();
+        StyleConstants.setForeground(quoteStyle, new Color(48, 204, 243));
+
+        numberic = new SimpleAttributeSet();
+        StyleConstants.setForeground(numberic, new Color(108, 148, 255));
+
+        fieldStyle = new SimpleAttributeSet();
+        StyleConstants.setForeground(fieldStyle, new Color(233, 91, 248));
+    }
+
+    static {
+        setColorSchemaOfLight();
+    }
+
+    public static void restyle(StyledDocument styledDocument) {
+        synchronized (MockStartMethodAction.class) {
+            try {
+                String script = styledDocument.getText(styledDocument.getStartPosition().getOffset(), styledDocument.getEndPosition().getOffset());
+                char[] chars = script.toCharArray();
+                int strstart = -1;
+                //false key true value
+                boolean keyvmode = false;
+                int numstart = -1;
+                for (int i = 0; i < chars.length; i++) {
+                    //json串
+                    char c = chars[i];
+                    if ('"' == c) {
+                        if (strstart == -1) {
+                            strstart = i;
+
+                        } else {
+                            int strend = i;
+
+                            if (keyvmode) {
+                                styledDocument.setCharacterAttributes(strstart, strend - strstart + 1, fieldStyle, false);
+                                keyvmode = false;
+                            } else {
+                                styledDocument.setCharacterAttributes(strstart, strend - strstart + 1, quoteStyle, false);
+
+                            }
+                            strstart = -1;
+
+                        }
+                    }
+                    if ('\r' == c || '\n' == c) {
+                        keyvmode = false;
+                        if (strstart != -1) {
+                            //字符串强制结束
+                            int strend = i;
+
+                            if (keyvmode) {
+                                styledDocument.setCharacterAttributes(strstart, strend - strstart + 1, fieldStyle, false);
+                                keyvmode = false;
+                            } else {
+                                styledDocument.setCharacterAttributes(strstart, strend - strstart + 1, quoteStyle, false);
+                            }
+                        }
+                        strstart = -1;
+
+                    }
+                    if (':' == c) {
+                        keyvmode = true;
+                    }
+                    if (c >= '0' && c <= '9') {
+                        if (numstart == -1 && strstart == -1) {
+                            numstart = i;
+                        }
+
+                    } else {
+                        //数字结束
+                        if (numstart != -1) {
+                            int numend = i;
+                            styledDocument.setCharacterAttributes(numstart, numend - numstart + 1, numberic, false);
+                            numstart = -1;
+
+                        }
+                    }
 
 
+                }
 
 
-//    @Override
-//    public void update(AnActionEvent e) {
+            } catch (BadLocationException e) {
+                e.printStackTrace();
+            }
 
-//        Editor editor = e.getData(CommonDataKeys.EDITOR);
-//        PsiFile psiFile = e.getData(CommonDataKeys.PSI_FILE);
-//        boolean b = editor != null && psiFile != null;
-//        if (b) {
-//            int offset = editor.getCaretModel().getOffset();
-//
-//            PsiElement element = psiFile.findElementAt(offset);
-//
-//            FileType fileType = psiFile.getFileType();
-//            if (fileType instanceof JavaFileType) {
-//                PsiMethod containingMethod = PsiTreeUtil.getParentOfType(element, PsiMethod.class);
-//                if(containingMethod!=null){
-//                    e.getPresentation().setEnabled(true);
-//                    e.getPresentation().setVisible(true);
-//                }
-//
-//            }
-//        }
 
-//    }
+        }
+
+    }
+
+
 
 
 }
