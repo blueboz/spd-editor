@@ -20,6 +20,7 @@ public class SpdEditorIcons {
     public static Icon ACTION_32_ICON = icon("/icons/action32.svg");
     public static Icon MENU_16_ICON = icon("/icons/menu.svg");
 
+    public static Icon FORMAT_16_ICON = icon("/icons/format.svg");
     public static Icon COMPARE_16_ICON = icon("/icons/compare.svg");
     public static Icon PROCESS_16_ICON = icon("/icons/process.svg");
     public static Icon ACTION_SCRIPT_16_ICON = icon("/icons/action.svg");

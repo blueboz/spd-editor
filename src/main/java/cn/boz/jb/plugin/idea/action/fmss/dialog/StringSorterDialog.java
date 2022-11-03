@@ -30,14 +30,15 @@ public class StringSorterDialog extends DialogWrapper {
         jPanel.setLayout(new MyLayoutManager());
         JTextArea textArea = new JTextArea(8, 30);
         JBScrollPane jbScrollPane = new JBScrollPane(textArea);
-        jbScrollPane.setPreferredSize(new Dimension(0,300));
+        jbScrollPane.setPreferredSize(new Dimension(0, 300));
         jPanel.add(jbScrollPane);
         ActionManager instance = ActionManager.getInstance();
 //        instance.createActionToolbar("tool",)
         ActionToolbar tool = instance.createActionToolbar("tool", new ActionGroup() {
-            @Override
-            public AnAction @NotNull [] getChildren(@Nullable AnActionEvent anActionEvent) {
-                return new AnAction[]{new AnAction() {
+            AnAction[] actions;
+
+            {
+                actions = new AnAction[]{new AnAction() {
                     {
                         this.getTemplatePresentation().setIcon(AllIcons.Actions.Execute);
                     }
@@ -49,12 +50,12 @@ public class StringSorterDialog extends DialogWrapper {
                         String[] split = text.split("[\n]");
                         if (split != null && split.length > 0) {
                             for (int i = 0; i < split.length; i++) {
-                                split[i]=split[i].trim();
+                                split[i] = split[i].trim();
                             }
                             Arrays.sort(split);
                             StringBuilder sb = new StringBuilder();
                             for (String s : split) {
-                                if("".equals(s.trim())){
+                                if ("".equals(s.trim())) {
                                     continue;
                                 }
                                 sb.append(s);
@@ -67,7 +68,12 @@ public class StringSorterDialog extends DialogWrapper {
                     }
                 }};
             }
-        }, true);
+
+            @Override
+            public AnAction @NotNull [] getChildren(@Nullable AnActionEvent anActionEvent) {
+                return actions;
+            }
+        }, false);
         jPanel.add(tool.getComponent());
 
 

@@ -5,6 +5,8 @@ import cn.boz.jb.plugin.idea.utils.MinimizeUtils;
 import cn.boz.jb.plugin.idea.utils.MockUtils;
 import cn.boz.jb.plugin.idea.utils.NotificationUtils;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.intellij.icons.AllIcons;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.actionSystem.ActionGroup;
@@ -14,7 +16,6 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.fileEditor.FileEditor;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.popup.JBPopup;
@@ -30,6 +31,7 @@ import com.intellij.psi.PsiType;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.ui.components.JBScrollPane;
 import com.intellij.util.ui.FormBuilder;
+import icons.SpdEditorIcons;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -41,8 +43,6 @@ import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -80,6 +80,7 @@ public class MockStartMethodAction extends AnAction {
             String methodName = containingMethod.getName();
 
             PsiParameterList parameterList = containingMethod.getParameterList();
+
             Map<String, Object> req = new HashMap<>();
             req.put("beanName", classQualifiedName);
             req.put("methodName", methodName);
@@ -91,9 +92,12 @@ public class MockStartMethodAction extends AnAction {
             List<String> reqBody = new ArrayList<String>();
             JTextField urlField = new JTextField();
             urlField.setText(SpdEditorNormState.getInstance(anActionEvent.getProject()).mockbase);
+
             urlField.setColumns(50);
+//            urlField.setPreferredSize(new Dimension(500,0));
 
             formBuilder.addLabeledComponent("url", urlField, 1, true);
+
             for (int i = 0; i < parameterList.getParametersCount(); i++) {
                 PsiParameter parameter = parameterList.getParameter(i);
                 PsiType type = parameter.getType();
@@ -101,16 +105,19 @@ public class MockStartMethodAction extends AnAction {
                 String pType = type.getCanonicalText();
 
                 JTextPane info = new JTextPane();
+                info.setPreferredSize(new Dimension(400, 200));
 
                 info.setEditable(true);
                 info.setVisible(true);
-                info.setFont(new Font("微软雅黑", Font.ITALIC, 12));
+//                info.setFont(new Font("微软雅黑", Font.ITALIC, 12));
                 info.setAutoscrolls(true);
-                info.setSelectedTextColor(new Color(21, 132, 0));
-                info.setSelectionColor(new Color(255, 144, 0));
+//                info.setSelectedTextColor(new JBColor(new Color(237, 237, 237),new Color(124, 124, 124)));
+//                info.setSelectionColor(new JBColor(new Color(237, 237, 237),new Color(124, 124, 124)));
+//                info.setBackground(new JBColor(new Color(237, 237, 237),new Color(124, 124, 124)));
 
 
                 JBScrollPane jScrollPane = new JBScrollPane(info);
+                jScrollPane.setPreferredSize(new Dimension(400, 200));
                 textAreaList.add(info);
 
                 info.getStyledDocument().addDocumentListener(new DocumentListener() {
@@ -139,23 +146,30 @@ public class MockStartMethodAction extends AnAction {
             req.put("argsClass", argClassNames);
             req.put("requestBody", reqBody);
 
-            JButton okBtn = new JButton("Post",AllIcons.Actions.Execute);
+//            JButton okBtn = new JButton("Post",AllIcons.Actions.Execute);
 
 
-            formBuilder.addComponent(okBtn, 1);
+//            formBuilder.addComponent(okBtn, 1);
 
 //            formBuilder.setHorizontalGap(5);
 //            formBuilder.setVerticalGap(5);
             formBuilder.setFormLeftIndent(5);
 
             JPanel formPanel = formBuilder.getPanel();
+
+
             JPanel formWrapper = new JPanel();
 
-            JBScrollPane jbScrollPane = new JBScrollPane(formWrapper);
+            JBScrollPane formScroll = new JBScrollPane(formPanel);
+            formScroll.setMinimumSize(new Dimension(600, 0));
 
+            if(parameterList.getParametersCount()>0){
+                formWrapper.setPreferredSize(new Dimension(600,400));
+            }
             JBPopup popup = JBPopupFactory.getInstance()
-                    .createComponentPopupBuilder(jbScrollPane, null)
+                    .createComponentPopupBuilder(formWrapper, null)
                     .setProject(anActionEvent.getProject())
+                    .setResizable(true)
                     .setMovable(true)
                     .setRequestFocus(true)
                     .setFocusable(true)
@@ -165,45 +179,98 @@ public class MockStartMethodAction extends AnAction {
 
             ActionManager instance = ActionManager.getInstance();
             ActionGroup actionGroup = new ActionGroup() {
-                @Override
-                public @NotNull AnAction[] getChildren(@Nullable AnActionEvent anActionEvent) {
-                    return new AnAction[]{
+                private AnAction[] actions;
+
+                {
+                    actions = new AnAction[]{
                             new AnAction() {
                                 {
+                                    getTemplatePresentation().setText("Minimize");
                                     getTemplatePresentation().setIcon(AllIcons.Actions.MoveToBottomLeft);
+                                }
+
+                                private boolean vis = true;
+
+                                @Override
+                                public void actionPerformed(@NotNull AnActionEvent anActionEvent) {
+                                    vis = false;
+                                    formWrapper.setPreferredSize(null);
+
+                                    anActionEvent.getPresentation().setEnabledAndVisible(false);
+//                                    getTemplatePresentation().setVisible(false);
+                                    MinimizeUtils.minimize(popup, formWrapper, project, "mockStart",false);
+                                }
+
+                                @Override
+                                public void update(@NotNull AnActionEvent e) {
+                                    if (!vis) {
+                                        e.getPresentation().setEnabledAndVisible(false);
+                                    }
+
+                                }
+                            },
+                            new AnAction() {
+                                {
+                                    getTemplatePresentation().setText("Execute");
+                                    getTemplatePresentation().setIcon(AllIcons.Actions.Execute);
                                 }
 
                                 @Override
                                 public void actionPerformed(@NotNull AnActionEvent anActionEvent) {
-                                    MinimizeUtils.minimize(popup,formPanel, project, "mockStart");
+                                    for (JTextPane jTextArea : textAreaList) {
+                                        String text = jTextArea.getText();
+                                        reqBody.add(text);
+                                    }
+                                    MockUtils.httpPostRequest(anActionEvent, JSON.toJSONString(req), urlField.getText());
+                                    if (!popup.isDisposed()) {
+                                        popup.dispose();
+                                    }
+                                }
+                            },
+                            new AnAction() {
+                                {
+                                    getTemplatePresentation().setText("Format");
+                                    getTemplatePresentation().setIcon(SpdEditorIcons.FORMAT_16_ICON);
+                                }
+
+                                @Override
+                                public void actionPerformed(@NotNull AnActionEvent anActionEvent) {
+                                    for (JTextPane jTextPane : textAreaList) {
+                                        String text = jTextPane.getText();
+                                        try {
+                                            JSONObject jsonObject = JSONObject.parseObject(text);
+                                            String s = JSON.toJSONString(jsonObject, SerializerFeature.PrettyFormat);
+                                            jTextPane.setText(s);
+                                        } catch (Exception e) {
+
+                                        }
+
+                                    }
                                 }
                             }
                     };
                 }
+
+                @Override
+                public @NotNull AnAction[] getChildren(@Nullable AnActionEvent anActionEvent) {
+                    return actions;
+                }
             };
+
             ActionToolbar spd_tb = instance.createActionToolbar("spd tb", actionGroup, true);
             formWrapper.setLayout(new BorderLayout());
-            formWrapper.add(formPanel, BorderLayout.CENTER);
+            formWrapper.add(formScroll, BorderLayout.CENTER);
             formWrapper.add(spd_tb.getComponent(), BorderLayout.SOUTH);
-
-
 
 
             popup.showCenteredInCurrentWindow(anActionEvent.getProject());
 
-            okBtn.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    for (JTextPane jTextArea : textAreaList) {
-                        String text = jTextArea.getText();
-                        reqBody.add(text);
-                    }
-                    MockUtils.httpPostRequest(anActionEvent, JSON.toJSONString(req), urlField.getText());
-                    if (!popup.isDisposed()) {
-                        popup.dispose();
-                    }
-                }
-            });
+//            okBtn.addMouseListener(new MouseAdapter() {
+//                @Override
+//                public void mouseClicked(MouseEvent e) {
+//
+//                }
+//            });
 
 
             return;
@@ -211,10 +278,12 @@ public class MockStartMethodAction extends AnAction {
 
 
     }
+
     private static SimpleAttributeSet quoteStyle;
     private static SimpleAttributeSet numberic;
 
     private static SimpleAttributeSet fieldStyle;
+
     public static void setColorSchemaOfLight() {
         quoteStyle = new SimpleAttributeSet();
         StyleConstants.setForeground(quoteStyle, new Color(0, 98, 122));
@@ -317,8 +386,6 @@ public class MockStartMethodAction extends AnAction {
         }
 
     }
-
-
 
 
 }

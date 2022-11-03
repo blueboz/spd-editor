@@ -10,10 +10,11 @@ import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class MinimizeUtils {
 
-    public static void minimize(JBPopup popup, JComponent component, Project project, String title) {
+    public static void minimize(JBPopup popup, JComponent component, Project project, String title,boolean wrapScroll) {
         JBPopup popupContainerFor;
         if (popup == null) {
             popupContainerFor = PopupUtil.getPopupContainerFor(component);
@@ -21,10 +22,12 @@ public class MinimizeUtils {
             popupContainerFor = popup;
         }
 
+
+
         ToolWindow callSearch = ToolWindowManager.getInstance(project).getToolWindow(Constants.TOOL_WINDOW_CALLSEARCH);
         ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
 
-        Content titleContent = contentFactory.createContent(new JBScrollPane(component), title, true);
+        Content titleContent = contentFactory.createContent(wrapScroll?new JBScrollPane(component):component, title, true);
         titleContent.setCloseable(true);
         callSearch.getContentManager().addContent(titleContent);
         callSearch.getContentManager().requestFocus(titleContent, true);
