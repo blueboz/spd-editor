@@ -4,6 +4,7 @@ import cn.boz.jb.plugin.idea.bean.EngineTask;
 import cn.boz.jb.plugin.idea.dialog.min.EngineTaskDerivePanel;
 import cn.boz.jb.plugin.idea.layoutmanager.MyLayoutManager;
 import cn.boz.jb.plugin.idea.utils.Constants;
+import cn.boz.jb.plugin.idea.utils.ScriptFormatter;
 import com.intellij.openapi.actionSystem.ActionGroup;
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.ActionToolbar;
@@ -67,7 +68,7 @@ public class EngineTaskDialog extends JComponent {
             if (expression == null) {
                 expression = "";
             }
-            expressionTA.setText(expression.replaceAll(";", ";\n"));
+            expressionTA.setText(ScriptFormatter.format(expression));
         } else {
             expressionTA.setText(expression);
         }

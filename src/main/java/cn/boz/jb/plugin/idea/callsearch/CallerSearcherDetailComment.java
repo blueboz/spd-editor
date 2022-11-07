@@ -5,6 +5,7 @@ import cn.boz.jb.plugin.idea.bean.EngineAction;
 import cn.boz.jb.plugin.idea.bean.EngineTask;
 import cn.boz.jb.plugin.idea.layoutmanager.MyLayoutManager;
 import cn.boz.jb.plugin.idea.utils.Constants;
+import cn.boz.jb.plugin.idea.utils.ScriptFormatter;
 import com.intellij.openapi.actionSystem.ActionGroup;
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.ActionToolbar;
@@ -86,7 +87,7 @@ public class CallerSearcherDetailComment extends JBPanel {
                     }
                 }
 
-                textArea.setText(hint);
+                textArea.setText(ScriptFormatter.format(hint));
                 DefaultHighlighter.DefaultHighlightPainter defaultHighlightPainter = new DefaultHighlighter.DefaultHighlightPainter(Color.ORANGE);
                 String upperHint = hint.toUpperCase();
                 String upperQuery = queryName.toUpperCase();

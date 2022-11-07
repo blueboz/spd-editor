@@ -1,6 +1,8 @@
 package cn.boz.jb.plugin.idea.bean;
 
 
+import cn.boz.jb.plugin.idea.utils.ScriptFormatter;
+
 public class EngineTask {
     private boolean checked;
 
@@ -53,10 +55,7 @@ public class EngineTask {
         if (expression == null) {
             return "";
         }
-        if (!expression.contains("\n")) {
-            return expression.replaceAll(";", ";\n");
-        }
-        return expression;
+        return ScriptFormatter.format(expression);
     }
 
     public void setExpression(String expression) {

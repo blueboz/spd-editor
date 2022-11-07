@@ -7,6 +7,7 @@ import cn.boz.jb.plugin.floweditor.gui.process.fragment.ServiceTask;
 import cn.boz.jb.plugin.floweditor.gui.process.fragment.UserTask;
 import cn.boz.jb.plugin.floweditor.gui.shape.Label;
 import cn.boz.jb.plugin.idea.utils.Constants;
+import cn.boz.jb.plugin.idea.utils.ScriptFormatter;
 import com.intellij.openapi.actionSystem.ActionGroup;
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.ActionToolbar;
@@ -46,9 +47,7 @@ public class FlowSearchCommentPanel extends JPanel {
                 String hint = "";
                 if (item instanceof ServiceTask) {
                     hint = ((ServiceTask) item).getExpression();
-                    if (!hint.contains("\n")) {
-                        hint = hint.replaceAll(";", ";\n");
-                    }
+                    hint=ScriptFormatter.format(hint);
                 } else if (item instanceof UserTask) {
                     hint = ((UserTask) item).getExpression();
                 } else if (item instanceof SequenceFlow) {

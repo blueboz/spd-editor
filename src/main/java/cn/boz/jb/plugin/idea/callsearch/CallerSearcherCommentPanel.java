@@ -4,6 +4,7 @@ import cn.boz.jb.plugin.idea.bean.EngineAction;
 import cn.boz.jb.plugin.idea.bean.EngineTask;
 import cn.boz.jb.plugin.idea.utils.Constants;
 import cn.boz.jb.plugin.idea.utils.MyHighlightUtils;
+import cn.boz.jb.plugin.idea.utils.ScriptFormatter;
 import com.intellij.openapi.actionSystem.ActionGroup;
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.ActionToolbar;
@@ -46,7 +47,7 @@ public class CallerSearcherCommentPanel extends JBPanel {
                     hint = ((EngineAction) item).getActionscript();
                 }
 
-                textArea.setText(hint);
+                textArea.setText(ScriptFormatter.format(hint));
                 MyHighlightUtils.installHighlightForTextArea(table, textArea);
 
 
