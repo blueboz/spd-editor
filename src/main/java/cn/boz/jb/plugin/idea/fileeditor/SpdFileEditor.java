@@ -116,7 +116,7 @@ public class SpdFileEditor implements FileEditor {
 
     @Override
     public @Nullable FileEditorLocation getCurrentLocation() {
-        System.out.println("get current location");
+//        System.out.println("get current location");
         return new FileEditorLocation() {
             @Override
             public @NotNull FileEditor getEditor() {

@@ -2,6 +2,9 @@ package cn.boz.jb.plugin.idea.callsearch;
 
 
 import cn.boz.jb.plugin.floweditor.gui.utils.FunctionIconUtils;
+import cn.boz.jb.plugin.idea.bean.EngineAction;
+import cn.boz.jb.plugin.idea.bean.EngineTask;
+import cn.boz.jb.plugin.idea.bean.XfundsBatch;
 import cn.boz.jb.plugin.idea.widget.SimpleIconControl;
 import com.intellij.ui.SimpleColoredComponent;
 import com.intellij.ui.speedSearch.SpeedSearchUtil;
@@ -46,10 +49,15 @@ public class CallerSearcherTableCellRender implements TableCellRenderer {
             }
         } else if(column==1){
             JCheckBox jCheckBox = new JCheckBox();
-            jCheckBox.getModel().setSelected((Boolean) value);
             jCheckBox.setBackground(bg);
             jCheckBox.setForeground(fg);
-
+            if (value instanceof EngineTask) {
+                jCheckBox.getModel().setSelected(((EngineTask)value).isChecked());
+            } else if (value instanceof EngineAction) {
+                jCheckBox.getModel().setSelected(((EngineAction) value).isChecked());
+            }else if(value instanceof XfundsBatch){
+                jCheckBox.getModel().setSelected(((XfundsBatch)value).isChecked());
+            }
             return jCheckBox;
         }else {
             if (value != null) {

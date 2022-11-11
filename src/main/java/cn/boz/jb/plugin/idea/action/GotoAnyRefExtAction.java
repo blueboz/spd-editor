@@ -10,7 +10,6 @@ import com.intellij.openapi.project.DumbAwareAction;
 import com.intellij.openapi.ui.popup.JBPopup;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.openapi.util.Ref;
-import com.intellij.ui.awt.RelativePoint;
 import com.intellij.ui.components.JBPanel;
 import com.intellij.ui.components.JBScrollPane;
 import com.intellij.util.Consumer;
@@ -77,7 +76,7 @@ public class GotoAnyRefExtAction extends DumbAwareAction {
                 List<EngineAction> engineActions = dbUtils.queryEngineActionByActionScript(connection, name);
                 engineActionRef.set(engineActions);
             } catch (Exception e) {
-                DBUtils.dbExceptionProcessor(e,anActionEvent.getProject());
+                DBUtils.dbExceptionProcessor(e, anActionEvent.getProject());
             }
         }, "Loading Engine Action...", true, anActionEvent.getProject());
 
@@ -94,11 +93,16 @@ public class GotoAnyRefExtAction extends DumbAwareAction {
                     EngineTaskDialog engineTaskDialog = new EngineTaskDialog((EngineTask) selectedValue);
                     JBScrollPane jbScrollPane = new JBScrollPane(engineTaskDialog);
                     JBPopup popup;
-                    popup = JBPopupFactory.getInstance().createComponentPopupBuilder(jbScrollPane, null).setRequestFocus(true).setFocusable(true).setMovable(true).setTitle("EngineTask").setCancelOnOtherWindowOpen(true).setProject(anActionEvent.getProject()).createPopup();
+                    popup = JBPopupFactory.getInstance()
+                            .createComponentPopupBuilder(jbScrollPane, null)
+                            .setRequestFocus(true)
+                            .setFocusable(true)
+                            .setMovable(true)
+                            .setTitle("EngineTask").setCancelOnOtherWindowOpen(true).setProject(anActionEvent.getProject()).createPopup();
 
                     popup.showCenteredInCurrentWindow(anActionEvent.getProject());
                 }
             }
-        }, true,name,"");
+        }, true, name, "");
     }
 }

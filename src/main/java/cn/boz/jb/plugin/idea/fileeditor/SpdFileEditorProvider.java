@@ -48,6 +48,15 @@ public class SpdFileEditorProvider implements FileEditorProvider, DumbAware {
 
     @Override
     public void disposeEditor(@NotNull FileEditor editor) {
+//        fileFileEditorMap.remove(editor.getFile());
+//        editor.dispose();
         FileEditorProvider.super.disposeEditor(editor);
     }
+
+    public void disposeEditorForce(VirtualFile virtualFile){
+        fileFileEditorMap.remove(virtualFile);
+
+
+    }
+
 }

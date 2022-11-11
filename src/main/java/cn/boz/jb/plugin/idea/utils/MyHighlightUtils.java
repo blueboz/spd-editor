@@ -1,6 +1,7 @@
 package cn.boz.jb.plugin.idea.utils;
 
 import com.intellij.openapi.util.TextRange;
+import com.intellij.ui.JBColor;
 import com.intellij.ui.speedSearch.SpeedSearchSupply;
 
 import javax.swing.*;
@@ -26,7 +27,7 @@ public class MyHighlightUtils {
             return;
         }
 
-        DefaultHighlighter.DefaultHighlightPainter defaultHighlightPainter = new DefaultHighlighter.DefaultHighlightPainter(Color.ORANGE);
+        DefaultHighlighter.DefaultHighlightPainter defaultHighlightPainter = new DefaultHighlighter.DefaultHighlightPainter(new JBColor(new Color(255, 125, 0, 139),new Color(170, 54, 0, 182)));
 
         for (TextRange textRange : textRanges) {
             try {

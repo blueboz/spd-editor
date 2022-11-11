@@ -42,7 +42,10 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
+import javax.swing.undo.UndoManager;
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -119,6 +122,41 @@ public class MockStartMethodAction extends AnAction {
                 JBScrollPane jScrollPane = new JBScrollPane(info);
                 jScrollPane.setPreferredSize(new Dimension(400, 200));
                 textAreaList.add(info);
+                UndoManager undoManager = new UndoManager();
+                info.getDocument().addUndoableEditListener(undoManager);
+
+
+                info.addKeyListener(new KeyAdapter() {
+
+                    private boolean ctrlPressing=false;
+
+                    @Override
+                    public void keyPressed(KeyEvent keyEvent) {
+                        if(KeyEvent.VK_CONTROL==keyEvent.getKeyCode()){
+                            ctrlPressing=true;
+                        }
+                        if(ctrlPressing&&keyEvent.getKeyCode()==KeyEvent.VK_Z){
+                            if(undoManager.canUndo()){
+                                undoManager.undo();
+                            }
+                        }
+                        if(ctrlPressing&&keyEvent.getKeyCode()==KeyEvent.VK_Y){
+                            if(undoManager.canRedo()){
+                                undoManager.redo();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void keyReleased(KeyEvent keyEvent) {
+                        if(KeyEvent.VK_CONTROL==keyEvent.getKeyCode()){
+                            ctrlPressing=false;
+                        }
+                        if(KeyEvent.VK_ESCAPE==keyEvent.getKeyCode()){
+                            info.setFocusable(false);
+                        }
+                    }
+                });
 
                 info.getStyledDocument().addDocumentListener(new DocumentListener() {
                     @Override
@@ -198,7 +236,7 @@ public class MockStartMethodAction extends AnAction {
 
                                     anActionEvent.getPresentation().setEnabledAndVisible(false);
 //                                    getTemplatePresentation().setVisible(false);
-                                    MinimizeUtils.minimize(popup, formWrapper, project, "mockStart",false);
+                                    MinimizeUtils.minimize(popup, formWrapper, project, "mock:"+classQualifiedName+"#"+methodName,false);
                                 }
 
                                 @Override
@@ -217,6 +255,7 @@ public class MockStartMethodAction extends AnAction {
 
                                 @Override
                                 public void actionPerformed(@NotNull AnActionEvent anActionEvent) {
+                                    reqBody.clear();
                                     for (JTextPane jTextArea : textAreaList) {
                                         String text = jTextArea.getText();
                                         reqBody.add(text);

@@ -15,11 +15,20 @@ import cn.boz.jb.plugin.floweditor.gui.shape.Prismatic;
 import cn.boz.jb.plugin.floweditor.gui.shape.Shape;
 import cn.boz.jb.plugin.floweditor.gui.utils.ConstantUtils;
 import cn.boz.jb.plugin.floweditor.gui.utils.IcoMoonUtils;
+import com.intellij.openapi.actionSystem.ActionGroup;
+import com.intellij.openapi.actionSystem.ActionManager;
+import com.intellij.openapi.actionSystem.ActionToolbar;
+import com.intellij.openapi.actionSystem.AnAction;
+import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.actionSystem.ToggleOptionAction;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.function.Function;
 
 
 public class FlowEditorComponent extends JComponent implements MouseListener {
@@ -44,8 +53,48 @@ public class FlowEditorComponent extends JComponent implements MouseListener {
         this.setLayout(borderLayout);
 
         this.add(gPanel, BorderLayout.CENTER);
+//        this.add(createActionBar(),BorderLayout.NORTH) ;
         this.add(menu, BorderLayout.NORTH);
         this.add(propertyEditor, BorderLayout.SOUTH);
+
+
+    }
+
+    public JComponent createActionBar() {
+        ActionManager instance = ActionManager.getInstance();
+        ActionToolbar tool = instance.createActionToolbar("tool", new ActionGroup() {
+            AnAction[] actions;
+            {
+                actions = new AnAction[]{
+                        new ToggleOptionAction(new Function<AnActionEvent, ToggleOptionAction.Option>() {
+                            @Override
+                            public ToggleOptionAction.Option apply(AnActionEvent anActionEvent) {
+                                System.out.println("apply");
+                                ToggleOptionAction.Option option=new ToggleOptionAction.Option() {
+
+                                    @Override
+                                    public boolean isSelected() {
+                                        return false;
+                                    }
+
+                                    @Override
+                                    public void setSelected(boolean b) {
+
+                                    }
+                                };
+                                return option;
+                            }
+                        })
+                };
+
+            }
+
+            @Override
+            public AnAction @NotNull [] getChildren(@Nullable AnActionEvent anActionEvent) {
+                return actions;
+            }
+        }, false);
+        return tool.getComponent();
     }
 
     /**

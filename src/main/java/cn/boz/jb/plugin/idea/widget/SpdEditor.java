@@ -19,19 +19,32 @@ import cn.boz.jb.plugin.floweditor.gui.widget.Button;
 import cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel;
 import cn.boz.jb.plugin.idea.configurable.SpdEditorDBSettings;
 import cn.boz.jb.plugin.idea.configurable.SpdEditorDBState;
+import cn.boz.jb.plugin.idea.fileeditor.SpdFileEditorProvider;
 import cn.boz.jb.plugin.idea.utils.DBUtils;
 import com.intellij.notification.NotificationGroup;
 import com.intellij.notification.NotificationType;
+import com.intellij.openapi.actionSystem.ActionGroup;
+import com.intellij.openapi.actionSystem.ActionManager;
+import com.intellij.openapi.actionSystem.ActionToolbar;
+import com.intellij.openapi.actionSystem.AnAction;
+import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.DataKey;
 import com.intellij.openapi.actionSystem.DataProvider;
+import com.intellij.openapi.actionSystem.ToggleAction;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.fileChooser.FileChooser;
 import com.intellij.openapi.fileChooser.FileChooserDescriptor;
+import com.intellij.openapi.fileEditor.FileEditor;
+import com.intellij.openapi.fileEditor.FileEditorManager;
+import com.intellij.openapi.fileEditor.FileEditorProvider;
+import com.intellij.openapi.fileEditor.ex.FileEditorManagerEx;
+import com.intellij.openapi.fileEditor.ex.FileEditorProviderManager;
 import com.intellij.openapi.options.ShowSettingsUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.project.ProjectUtil;
 import com.intellij.openapi.ui.Messages;
+import com.intellij.openapi.util.Ref;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.ui.JBSplitter;
 import com.intellij.ui.components.JBScrollBar;
@@ -76,7 +89,7 @@ public class SpdEditor extends JComponent implements DataProvider, MouseListener
     public SpdEditor(Project project, VirtualFile virtualFile) {
 
         this.virtualFile = virtualFile;
-        this.project=project;
+        this.project = project;
         this.setLayout(new BorderLayout());
         jbSplitter = new JBSplitter(false);
         jbSplitter.setShowDividerControls(true);
@@ -137,6 +150,7 @@ public class SpdEditor extends JComponent implements DataProvider, MouseListener
 
         jbMenuScroll.setViewportView(menu);
         add(jbMenuScroll, BorderLayout.NORTH);
+//        add(createActionBar(), BorderLayout.NORTH);
 
         chartPanel.addFocusListener(this);
 
@@ -145,6 +159,96 @@ public class SpdEditor extends JComponent implements DataProvider, MouseListener
 
     }
 
+    public JComponent createActionBar() {
+        ActionManager instance = ActionManager.getInstance();
+        Ref<Integer> integer = new Ref<>(0);
+        ActionToolbar tool = instance.createActionToolbar("tool", new ActionGroup() {
+            AnAction[] actions;
+
+            {
+
+                actions = new AnAction[]{
+                        new ToggleAction() {
+                            {
+                                setFont(IcoMoonUtils.getFont16());
+                                getTemplatePresentation().setText(IcoMoonUtils.getSequenceFlow());
+                            }
+
+                            @Override
+                            public boolean isSelected(@NotNull AnActionEvent anActionEvent) {
+                                Integer val = integer.get();
+                                val &= 1 << 0;
+                                return val != 0;
+                            }
+
+                            @Override
+                            public void setSelected(@NotNull AnActionEvent anActionEvent, boolean b) {
+                                Integer val = integer.get();
+                                if (b == true) {
+                                    val &= 0;
+                                    val |= 1 << 0;
+                                    integer.set(val);
+                                }
+                            }
+                        },
+                        new ToggleAction() {
+                            {
+                                setFont(IcoMoonUtils.getFont16());
+                                getTemplatePresentation().setText(IcoMoonUtils.getSequenceFlow());
+                            }
+
+                            @Override
+                            public boolean isSelected(@NotNull AnActionEvent anActionEvent) {
+                                Integer val = integer.get();
+                                val &= 1 << 1;
+                                return val != 0;
+                            }
+
+                            @Override
+                            public void setSelected(@NotNull AnActionEvent anActionEvent, boolean b) {
+                                Integer val = integer.get();
+                                if (b == true) {
+                                    val &= 0;
+                                    val |= 1 << 1;
+                                    integer.set(val);
+                                }
+                            }
+                        },
+                        new ToggleAction() {
+                            {
+                                setFont(IcoMoonUtils.getFont16());
+                                getTemplatePresentation().setText(IcoMoonUtils.getSequenceFlow());
+                            }
+
+                            @Override
+                            public boolean isSelected(@NotNull AnActionEvent anActionEvent) {
+                                Integer val = integer.get();
+                                val &= 1 << 2;
+                                return val != 0;
+                            }
+
+                            @Override
+                            public void setSelected(@NotNull AnActionEvent anActionEvent, boolean b) {
+                                Integer val = integer.get();
+                                if (b == true) {
+                                    val &= 0;
+                                    val |= 1 << 2;
+                                    integer.set(val);
+                                }
+                            }
+                        }
+
+                };
+
+            }
+
+            @Override
+            public AnAction @NotNull [] getChildren(@Nullable AnActionEvent anActionEvent) {
+                return actions;
+            }
+        }, true);
+        return tool.getComponent();
+    }
 
     private Button automation = null;
     private JLabel fileChangeHint = null;
@@ -274,6 +378,11 @@ public class SpdEditor extends JComponent implements DataProvider, MouseListener
         save.addMouseListener(this);
         save.setToolTipText("Save");
         menuPanel.add(save);
+
+        Button close = new Button(IcoMoonUtils.getClose(), false, "close", false);
+        close.addMouseListener(this);
+        close.setToolTipText("Close");
+        menuPanel.add(close);
 
         Button reload = new Button(IcoMoonUtils.getReload(), false, "reload", false);
         reload.addMouseListener(this);
@@ -447,7 +556,7 @@ public class SpdEditor extends JComponent implements DataProvider, MouseListener
 
                 //FIXME 建议SQL优化抽离为好用的方法
                 String joiningSql = sqls.stream().map(sql -> sql.replace("\n", "")).collect(Collectors.joining(";\n")) + ";";
-                int idx = Messages.showDialog(joiningSql, "SQL", new String[]{"复制Sql", "更新至DB", "打开配置项","导出到目录", "确定"}, 3, SpdEditorIcons.FLOW_16_ICON);
+                int idx = Messages.showDialog(joiningSql, "SQL", new String[]{"复制Sql", "更新至DB", "打开配置项", "导出到目录", "确定"}, 3, SpdEditorIcons.FLOW_16_ICON);
                 if (idx == 0) {
                     Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
                     StringSelection selection = new StringSelection(joiningSql);
@@ -474,7 +583,6 @@ public class SpdEditor extends JComponent implements DataProvider, MouseListener
                 } else if (idx == 3) {
                     Project project = ProjectUtil.guessProjectForFile(virtualFile);
                     FileChooserDescriptor fileChooserDescriptor = new FileChooserDescriptor(false, true, false, false, false, false);
-
                     VirtualFile selectPath = FileChooser.chooseFile(fileChooserDescriptor, project, null);
                     //当前文件名称
                     String name = virtualFile.getName();
@@ -484,17 +592,28 @@ public class SpdEditor extends JComponent implements DataProvider, MouseListener
 //                    selectPath.create
                     WriteCommandAction.runWriteCommandAction(ProjectManager.getInstance().getDefaultProject(), () -> {
 
-                        try{
+                        try {
                             byte[] bytes = joiningSql.getBytes(StandardCharsets.UTF_8);
-                            VirtualFile vfile = selectPath.createChildData(null, nameSub + ".sql");
+                            VirtualFile vfile=selectPath.findOrCreateChildData(null,nameSub+".sql");
                             vfile.setCharset(StandardCharsets.UTF_8);
                             vfile.setBOM(new byte[]{(byte) 0xef, (byte) 0xbb, (byte) 0xbf});
                             vfile.setBinaryContent(bytes);
-                        }catch (Exception ee){
+                        } catch (Exception ee) {
+                            ee.printStackTrace();
                         }
                     });
 
 
+                }
+                break;
+            case "close":
+                FileEditorProvider[] providers = FileEditorProviderManager.getInstance().getProviders(project, virtualFile);
+                for (FileEditorProvider provider : providers) {
+                    if(provider instanceof SpdFileEditorProvider){
+                        ((SpdFileEditorProvider) provider).disposeEditorForce(virtualFile);
+                        FileEditorManagerEx fileEditorManager = FileEditorManagerEx.getInstanceEx(project);
+                        fileEditorManager.closeFile(virtualFile);
+                    }
                 }
                 break;
             default:

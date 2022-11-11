@@ -86,6 +86,7 @@ public class XmlUtils {
             xmlWriter.close();
             String s = new String(byteArrayOutputStream.toByteArray());
 //            s = s.replaceAll("&amp;", "&");
+            s=s.replaceAll("\n\n","\n");
             return s;
         } catch (Exception e) {
             throw new RuntimeException(e);

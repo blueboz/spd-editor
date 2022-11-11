@@ -18,6 +18,7 @@ import cn.boz.jb.plugin.idea.utils.DBUtils;
 import com.intellij.codeInsight.navigation.NavigationUtil;
 import com.intellij.find.FindModel;
 import com.intellij.find.findInProject.FindInProjectManager;
+import com.intellij.icons.AllIcons;
 import com.intellij.ide.actions.searcheverywhere.SearchEverywhereManager;
 import com.intellij.ide.actions.searcheverywhere.SearchEverywhereManagerImpl;
 import com.intellij.ide.highlighter.HtmlFileType;
@@ -65,6 +66,7 @@ import com.intellij.psi.xml.XmlElement;
 import com.intellij.psi.xml.XmlFile;
 import com.intellij.psi.xml.XmlTag;
 import com.intellij.ui.PopupHandler;
+import com.intellij.ui.awt.RelativePoint;
 import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.table.JBTable;
 import com.intellij.util.Consumer;
@@ -75,8 +77,11 @@ import icons.SpdEditorIcons;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javax.swing.*;
 import javax.swing.table.TableCellRenderer;
 import java.awt.*;
+import java.awt.event.InputEvent;
+import java.awt.event.MouseEvent;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.sql.Connection;
@@ -373,18 +378,19 @@ public class GotoRefFileAction extends AnAction {
         public boolean isCellEditable(Object o) {
             return false;
         }
-    }, new ColumnInfo<Object, Boolean>("F") {
+    }, new ColumnInfo<Object, Object>("F") {
         @Nullable
         @Override
-        public Boolean valueOf(Object o) {
-            if (o instanceof EngineTask) {
-                return ((EngineTask) o).isChecked();
-            } else if (o instanceof EngineAction) {
-                return ((EngineAction) o).isChecked();
-            }else if(o instanceof XfundsBatch){
-                return ((XfundsBatch)o).isChecked();
-            }
-            return false;
+        public Object valueOf(Object o) {
+            return o;
+//            if (o instanceof EngineTask) {
+//                return ((EngineTask) o).isChecked();
+//            } else if (o instanceof EngineAction) {
+//                return ((EngineAction) o).isChecked();
+//            }else if(o instanceof XfundsBatch){
+//                return ((XfundsBatch)o).isChecked();
+//            }
+//            return false;
         }
 
         @Override
@@ -564,9 +570,19 @@ public class GotoRefFileAction extends AnAction {
                 String id = engineTask.getId();
                 if (id.contains("_")) {
                     String s = id.split("_")[0];
-                    List<String> collect = Stream.of(s, id).collect(Collectors.toList());
+                    List<String> collect = Stream.of("Search:"+s, "Find:"+s).collect(Collectors.toList());
 
                     BaseListPopupStep selPopup = new BaseListPopupStep<String>("id search", collect, SpdEditorIcons.ACTION_16_ICON) {
+
+                        @Override
+                        public Icon getIconFor(String value) {
+                            if(value.startsWith("Search")){
+                                return AllIcons.Actions.Search;
+                            }else{
+                                return AllIcons.Actions.Find;
+                            }
+                        }
+
                         @Override
                         public @Nullable PopupStep<?> onChosen(String selectedValue, boolean finalChoice) {
                             if (finalChoice) {
@@ -578,14 +594,14 @@ public class GotoRefFileAction extends AnAction {
 
                         private void doRun(String selectedValue) {
                             //选择的值可以进行跳转
-                            if (selectedValue.equals(s)) {
+                            if (selectedValue.startsWith("Search")) {
                                 String allContributorsGroupId = SearchEverywhereManagerImpl.ALL_CONTRIBUTORS_GROUP_ID;
                                 SearchEverywhereManager instance = SearchEverywhereManager.getInstance(anActionEvent.getProject());
                                 instance.show(allContributorsGroupId, s, anActionEvent);
                             } else {
                                 FindInProjectManager findInProjectManager = FindInProjectManager.getInstance(anActionEvent.getProject());
                                 FindModel findModel = new FindModel();
-                                findModel.setStringToFind(id);
+                                findModel.setStringToFind(s);
                                 findInProjectManager.findInProject(anActionEvent.getDataContext(), findModel);
                             }
                         }
@@ -604,7 +620,13 @@ public class GotoRefFileAction extends AnAction {
                     //过滤框
                     selPopup.isSelectable(true);
                     ListPopup listPopup = JBPopupFactory.getInstance().createListPopup(selPopup);
-                    listPopup.showInFocusCenter();
+                    InputEvent inputEvent = anActionEvent.getInputEvent();
+                    if (inputEvent instanceof MouseEvent) {
+                        MouseEvent me = (MouseEvent) inputEvent;
+                        listPopup.show(RelativePoint.fromScreen(me.getLocationOnScreen()));
+                    } else {
+                        listPopup.showInFocusCenter();
+                    }
 
 
                 } else {

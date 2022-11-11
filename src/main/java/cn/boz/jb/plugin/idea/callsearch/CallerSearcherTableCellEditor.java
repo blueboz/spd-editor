@@ -43,18 +43,18 @@ public class CallerSearcherTableCellEditor implements TableCellEditor {
             jCheckBox = new JCheckBox();
             jCheckBox.setBackground(bg);
             jCheckBox.setForeground(fg);
-            jCheckBox.getModel().setSelected((Boolean) val);
+            jCheckBox.putClientProperty("userdata",val);
+            jCheckBox.getModel().setSelected(CallerSearcherUtils.isCheck(val));
             jCheckBox.getModel().addChangeListener(new ChangeListener() {
                 @Override
                 public void stateChanged(ChangeEvent changeEvent) {
+                    Object val=jCheckBox.getClientProperty("userdata");
                     Object source = changeEvent.getSource();
                     JToggleButton.ToggleButtonModel toggleButtonModel= (JToggleButton.ToggleButtonModel) source;
-                    ListTableModel model = (ListTableModel) jTable.getModel();
-                    Object item = model.getItem(row);
-                    if(item instanceof EngineTask){
-                        ((EngineTask) item).setChecked((Boolean) toggleButtonModel.isSelected());
-                    }else if(item instanceof EngineAction){
-                        ((EngineAction) item).setChecked((Boolean) toggleButtonModel.isSelected());
+                    if(val instanceof EngineTask){
+                        ((EngineTask) val).setChecked(toggleButtonModel.isSelected());
+                    }else if(val instanceof EngineAction){
+                        ((EngineAction) val).setChecked( toggleButtonModel.isSelected());
 
                     }
                 }
