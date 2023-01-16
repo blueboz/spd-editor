@@ -6,10 +6,14 @@ import cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel;
 import com.intellij.find.FindInProjectSettings;
 import com.intellij.find.FindModel;
 import com.intellij.find.findInProject.FindInProjectManager;
+import com.intellij.find.impl.FindInProjectUtil;
 import com.intellij.ide.actions.searcheverywhere.SearchEverywhereManager;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
+import com.intellij.psi.search.GlobalSearchScopeUtil;
+import com.intellij.psi.search.LocalSearchScope;
+import com.intellij.psi.search.SearchScope;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
@@ -46,7 +50,9 @@ public class GotoProcessFindAction extends AnAction {
         FindModel findModel = new FindModel();
         findModel.setStringToFind("id=\"" + calledElement + "\"");
         findModel.setFileFilter("*.spd");
-        FindInProjectSettings settings = FindInProjectSettings.getInstance(anActionEvent.getProject());
+
+//        FindInProjectSettings settings = FindInProjectSettings.getInstance(anActionEvent.getProject());
+
         findInProjectManager.findInProject(anActionEvent.getDataContext(), findModel);
     }
 }

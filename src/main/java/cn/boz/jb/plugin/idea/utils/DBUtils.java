@@ -347,7 +347,7 @@ public class DBUtils {
             List<Map<String, Object>> maps = queryForList(preparedStatement);
             return maps.stream().map(item->{
                 EngineActionInput engineActionInput = new EngineActionInput();
-                engineActionInput.setActionId((String) item.get("ACTIONID"));
+                engineActionInput.setActionId((String) item.get("ACTIONID_"));
                 engineActionInput.setBeanId((String) item.get("BEANID_"));
                 engineActionInput.setClass_((String) item.get("CLAZZ_"));
                 engineActionInput.setFieldExpr((String) item.get("FIELDEXPR_"));
