@@ -24,7 +24,7 @@ public class CopyEngineActionAllSqlAction extends CopyScriptBaseAction {
         sqls.append(String.format("delete from ENGINE_ACTIONOUTPUT where ACTIONID_='%s';", id));
         sqls.append("\n");
         String actionTemplate="INSERT INTO ENGINE_ACTION (ID_, NAMESPACE_, URL_, WINDOWPARAM_, ACTIONSCRIPT_, ACTIONINTERCEPT_) " +
-                "VALUES (%s, %s, %s, %s, %s, %s);";
+                "VALUES (%s, %s, %s, %s, %s, %s);\n";
         sqls.append(String.format(actionTemplate,
                 TranslateUtils.translate(action.getId()),
                 TranslateUtils.translate(action.getNamespace()),
