@@ -1,6 +1,7 @@
 package cn.boz.jb.plugin.idea.action;
 
 import cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel;
+import cn.boz.jb.plugin.idea.configurable.SpdEditorDBState;
 import cn.boz.jb.plugin.idea.utils.CompareUtils;
 import cn.boz.jb.plugin.idea.utils.DBUtils;
 import cn.boz.jb.plugin.idea.widget.SpdEditor;
@@ -45,7 +46,8 @@ public class SpdDbDiffGroup {
             Map<String, String> dataTobeCompare = DBUtils.getInstance().fetchAndCompare(anActionEvent.getProject(),sqls, chartPanel.getId(), wrap);
             String old = dataTobeCompare.get("old");
             String aNew = dataTobeCompare.get("new");
-            CompareUtils.compare(old, "db version", aNew, "current ver", PlainTextFileType.INSTANCE, anActionEvent.getProject(), "Sql Into DbCompare");
+            SpdEditorDBState instance = SpdEditorDBState.getInstance(anActionEvent.getProject());
+            CompareUtils.compare(old, "db version with:"+instance.jdbcUrl, aNew, "current ver", PlainTextFileType.INSTANCE, anActionEvent.getProject(), "Sql Into DbCompare");
         }
     }
 

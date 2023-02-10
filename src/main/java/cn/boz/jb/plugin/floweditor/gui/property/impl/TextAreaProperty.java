@@ -28,6 +28,7 @@ public class TextAreaProperty extends Property {
         textArea = new JTextArea();
         textArea.setAutoscrolls(true);
         textArea.setLineWrap(true);
+        textArea.setRows(6);
         jScrollPane.setViewportView(textArea);
         MouseAdapter l = new MouseAdapter() {
             @Override

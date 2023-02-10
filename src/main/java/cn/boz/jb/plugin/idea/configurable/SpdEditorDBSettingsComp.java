@@ -1,5 +1,6 @@
 package cn.boz.jb.plugin.idea.configurable;
 
+import cn.boz.jb.plugin.floweditor.gui.utils.StringUtils;
 import cn.boz.jb.plugin.idea.utils.DBUtils;
 import com.intellij.openapi.fileChooser.FileChooser;
 import com.intellij.openapi.fileChooser.FileTypeDescriptor;
@@ -145,7 +146,9 @@ public class SpdEditorDBSettingsComp {
         if (jdbcDriver != null) {
             String[] drivers = jdbcDriver.split(";");
             for (String driver : drivers) {
-                this.jdbcDriverListModel.addElement(driver);
+                if(!StringUtils.isBlank(driver)){
+                    this.jdbcDriverListModel.addElement(driver);
+                }
             }
         }
     }

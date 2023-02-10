@@ -12,11 +12,12 @@ import io.netty.util.Constant;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import javax.swing.text.EditorKit;
 import java.awt.*;
 
 public class InputLongTextDialog extends DialogWrapper {
 
-    private JTextArea textArea = null;
+    private JTextPane textArea = null;
 
     private JBScrollPane jScrollPane = null;
 
@@ -27,7 +28,8 @@ public class InputLongTextDialog extends DialogWrapper {
 
         this.jbPanelJBPanel = new JBPanel<>();
         jbPanelJBPanel.setLayout(new BorderLayout());
-        this.textArea = new JTextArea();
+        this.textArea = new JTextPane();
+        this.textArea.setFocusable(true);
 
 
         textArea.setText(inputText);

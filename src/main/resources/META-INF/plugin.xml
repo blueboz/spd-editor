@@ -43,7 +43,12 @@
         <themeMetadataProvider path="/META-INF/SpdEditor.themeMetadata.json"/>
         <projectService serviceImplementation="cn.boz.jb.plugin.idea.configurable.SpdEditorDBState"/>
         <projectService serviceImplementation="cn.boz.jb.plugin.idea.configurable.SpdEditorNormState"/>
+        <projectService serviceImplementation="cn.boz.jb.plugin.idea.configurable.SpdEditorDBListState"/>
+
         <!--项目领域的数据库配置信息-->
+
+        <projectConfigurable parentId="tools" instance="cn.boz.jb.plugin.idea.configurable.SpdEditorDBListSettings"
+                             id="spdEditorListConfigurable" displayName="DbConfigList" nonDefaultProject="true"/>
 
         <projectConfigurable parentId="tools" instance="cn.boz.jb.plugin.idea.configurable.SpdEditorDBSettings"
                              id="spdEditorConfigurable" displayName="SpdEditor" nonDefaultProject="true"/>
@@ -130,6 +135,9 @@
                         text="Remove Wrap"
                         icon="AllIcons.Actions.ListFiles">
                 </action>
+            </group>
+            <group class="cn.boz.jb.plugin.idea.action.ChangeDbActionGroup" text="ChangeDB" popup="true">
+
             </group>
 
             <group text="Who I Call" icon="DvcsImplIcons.Outgoing" id="goToProcessGroup" description="Go To Process"
