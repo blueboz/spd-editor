@@ -1,10 +1,8 @@
 package cn.boz.jb.plugin.idea.action;
 
 import cn.boz.jb.plugin.idea.configurable.DBInfo;
-import cn.boz.jb.plugin.idea.configurable.SpdEditorDBListSettings;
 import cn.boz.jb.plugin.idea.configurable.SpdEditorDBListState;
 import cn.boz.jb.plugin.idea.configurable.SpdEditorDBState;
-import com.intellij.icons.AllIcons;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.DefaultActionGroup;
@@ -20,6 +18,8 @@ public class ChangeDbActionGroup extends DefaultActionGroup {
 
     @Override
     public AnAction[] getChildren(@Nullable AnActionEvent e) {
+        System.out.println("get child");
+        System.out.println(e);
         SpdEditorDBListState instance = SpdEditorDBListState.getInstance(e.getProject());
 
         List<DBInfo> configList = instance.configList;
@@ -47,6 +47,8 @@ public class ChangeDbActionGroup extends DefaultActionGroup {
 
     @Override
     public void update(@NotNull AnActionEvent e) {
+        System.out.println("update");
+        System.out.println(e);
         super.update(e);
     }
 }

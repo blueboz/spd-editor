@@ -47,7 +47,7 @@ public abstract class ExportBaseAction extends AnAction {
                 String nameSub = orgPath.substring(0, orgPath.lastIndexOf(".spd")) + ".sql";
                 ChartPanel cp = new ChartPanel();
                 cp.loadFromInputStream(new ByteArrayInputStream(item.getContent()));
-                List<String> sqls = cp.generateSql();
+                List<String> sqls = cp.generateSortedSql();
                 String joiningSql = sqls.stream().map(sql -> sql.replace("\n", "")).collect(Collectors.joining(";\n")) + ";";
                 byte[] bytes = joiningSql.getBytes(StandardCharsets.UTF_8);
                 item.setContent(bytes);

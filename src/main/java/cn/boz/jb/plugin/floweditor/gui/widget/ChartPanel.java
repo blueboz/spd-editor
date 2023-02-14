@@ -79,6 +79,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -228,6 +229,15 @@ public class ChartPanel extends JComponent implements DataProvider, MouseListene
     private Project project;
 
     private VirtualFile virtualFile;
+
+    public VirtualFile getVirtualFile() {
+        return virtualFile;
+    }
+
+    public void setVirtualFile(VirtualFile virtualFile) {
+        this.virtualFile = virtualFile;
+    }
+
     private SpdEditor editor;
 
     public ChartPanel(){
@@ -3364,6 +3374,37 @@ public class ChartPanel extends JComponent implements DataProvider, MouseListene
                 sqls.add(((FlowSqlAggregator) line).toSql(this.id));
             }
         }
+        return sqls;
+    }
+    public List<String> generateSortedSql(){
+        List<String> sqls = new ArrayList<>();
+        if (this.id == null || this.id.trim().equals("")) {
+            Messages.showErrorDialog("流程id未设置", "发生异常");
+            return null;
+        }
+        //注意使用转义字符
+        sqls.add("delete from ENGINE_TASK where ID_ like '" + this.id + "\\_%' escape '\\'");
+        sqls.add(String.format("delete from ENGINE_FLOW where PROCESSID_='%s'", this.id));
+        List<String> engineFlowSqls=new ArrayList<>();
+        for (int i = 0; i < shapes.size(); i++) {
+            Shape shape = shapes.get(i);
+            if (shape instanceof Label) {
+                continue;
+            }
+            if (shape instanceof SqlAggregator) {
+                engineFlowSqls.add(((SqlAggregator) shape).toSql(this.id));
+            }
+        }
+        engineFlowSqls.sort(Comparator.naturalOrder());
+        sqls.addAll(engineFlowSqls);
+        List<String> engineLineSqls=new ArrayList<>();
+        for (int i = 0; i < lines.size(); i++) {
+            Line line = lines.get(i);
+            if (line instanceof FlowSqlAggregator) {
+                engineLineSqls.add(((FlowSqlAggregator) line).toSql(this.id));
+            }
+        }
+        sqls.addAll(engineLineSqls);
         return sqls;
     }
 

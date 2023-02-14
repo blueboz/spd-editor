@@ -137,8 +137,8 @@
                 </action>
             </group>
             <group class="cn.boz.jb.plugin.idea.action.ChangeDbActionGroup" text="ChangeDB" popup="true">
-
             </group>
+            <group class="cn.boz.jb.plugin.idea.action.SqlActionGroup" text="SqlTool" popup="true"> </group>
 
             <group text="Who I Call" icon="DvcsImplIcons.Outgoing" id="goToProcessGroup" description="Go To Process"
                    popup="true"

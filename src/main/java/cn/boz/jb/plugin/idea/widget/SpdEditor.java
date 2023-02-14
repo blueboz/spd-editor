@@ -549,10 +549,11 @@ public class SpdEditor extends JComponent implements DataProvider, MouseListener
                 break;
 
             case "sql":
-                List<String> sqls = chartPanel.generateSql();
+                List<String> sqls = chartPanel.generateSortedSql();
                 if (sqls == null) {
                     return;
                 }
+                chartPanel.fireSavedListener();
 
                 //FIXME 建议SQL优化抽离为好用的方法
                 String joiningSql = sqls.stream().map(sql -> sql.replace("\n", "")).collect(Collectors.joining(";\n")) + ";";
@@ -595,6 +596,10 @@ public class SpdEditor extends JComponent implements DataProvider, MouseListener
                         try {
                             byte[] bytes = joiningSql.getBytes(StandardCharsets.UTF_8);
                             VirtualFile vfile=selectPath.findOrCreateChildData(null,nameSub+".sql");
+                            //
+                            //如果文件没有保存提示保存
+
+                            vfile.setBinaryContent(new byte[]{});
                             vfile.setCharset(StandardCharsets.UTF_8);
                             vfile.setBOM(new byte[]{(byte) 0xef, (byte) 0xbb, (byte) 0xbf});
                             vfile.setBinaryContent(bytes);
