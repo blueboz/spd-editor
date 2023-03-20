@@ -3404,7 +3404,9 @@ public class ChartPanel extends JComponent implements DataProvider, MouseListene
                 engineLineSqls.add(((FlowSqlAggregator) line).toSql(this.id));
             }
         }
+        engineLineSqls.sort(Comparator.naturalOrder());
         sqls.addAll(engineLineSqls);
+
         return sqls;
     }
 

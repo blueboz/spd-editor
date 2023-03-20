@@ -51,7 +51,7 @@ public class SqlActionGroup extends DefaultActionGroup implements ClipboardOwner
                             return;
                         }
                         SpdEditor spdEditor = (SpdEditor) SwingUtilities.getAncestorOfClass(SpdEditor.class, requiredData);
-                        if (spdEditor instanceof SpdEditor) {
+                        if (spdEditor != null) {
                             ChartPanel chartPanel = spdEditor.getChartPanel();
                             List<String> sqls = chartPanel.generateSortedSql();
                             Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
@@ -63,7 +63,7 @@ public class SqlActionGroup extends DefaultActionGroup implements ClipboardOwner
                 },
                 new AnAction() {
                     {
-                        getTemplatePresentation().setText("更新至DB");
+                        getTemplatePresentation().setText("Persist To DB");
                     }
                     @Override
                     public void actionPerformed(@NotNull AnActionEvent anActionEvent) {
@@ -72,7 +72,7 @@ public class SqlActionGroup extends DefaultActionGroup implements ClipboardOwner
                             return;
                         }
                         SpdEditor spdEditor = (SpdEditor) SwingUtilities.getAncestorOfClass(SpdEditor.class, requiredData);
-                        if (spdEditor instanceof SpdEditor) {
+                        if (spdEditor != null) {
                             ChartPanel chartPanel = spdEditor.getChartPanel();
                             List<String> sqls = chartPanel.generateSortedSql();
                             Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
@@ -88,7 +88,7 @@ public class SqlActionGroup extends DefaultActionGroup implements ClipboardOwner
                             } catch (SQLException sqlException) {
                                 int selidx = Messages.showDialog("数据库连接发生错误，检查数据库配置?" + sqlException.getMessage(), "数据库错误", new String[]{"打开配置项", "取消"}, 0, UIUtil.getErrorIcon());
                                 if (selidx == 0) {
-                                    ShowSettingsUtil.getInstance().showSettingsDialog(null, SpdEditorDBSettings.class);
+                                    ShowSettingsUtil.getInstance().showSettingsDialog(anActionEvent.getProject(), SpdEditorDBSettings.class);
                                 }
                             } catch (Exception ee) {
                                 ee.printStackTrace();
@@ -103,13 +103,13 @@ public class SqlActionGroup extends DefaultActionGroup implements ClipboardOwner
                     }
                     @Override
                     public void actionPerformed(@NotNull AnActionEvent anActionEvent) {
-                        ShowSettingsUtil.getInstance().showSettingsDialog(ProjectManager.getInstance().getDefaultProject(), SpdEditorDBSettings.class);
+                        ShowSettingsUtil.getInstance().showSettingsDialog(anActionEvent.getProject(), SpdEditorDBSettings.class);
 
                     }
                 },
                 new AnAction() {
                     {
-                        getTemplatePresentation().setText("CopySQL");
+                        getTemplatePresentation().setText("ExportSql");
                     }
                     @Override
                     public void actionPerformed(@NotNull AnActionEvent anActionEvent) {
@@ -161,7 +161,7 @@ public class SqlActionGroup extends DefaultActionGroup implements ClipboardOwner
 
     @Override
     public @NotNull AnAction[] getChildren(@Nullable AnActionEvent e) {
-        return super.getChildren(e);
+        return actions;
     }
 
     @Override
