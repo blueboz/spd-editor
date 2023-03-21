@@ -308,14 +308,14 @@ task "publishPluginLocal" {
 
 
 //        def distributionFilePath = "$buildDir\\$distsDirName\\${archivesBaseName}-${version}.zip"
-            var cn = patchPluginXml.changeNotes.getOrNull()
+            def cn = patchPluginXml.changeNotes.getOrNull()
             println 'ready to publish file' + distributionFilePath
             def file = new File(dname)
             def flen = file.length()
 
 
-            var p = java.nio.file.Path.of("$projectDir\\updatePlugins.xml")
-            var str = Files.readString(p, StandardCharsets.UTF_8)
+            def p = java.nio.file.Path.of("$projectDir"+java.io.File.separator+"updatePlugins.xml")
+            def str = Files.readString(p, StandardCharsets.UTF_8)
             def ld = LocalDateTime.now()
             def timefmt = ld.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
             println(ext)
@@ -332,14 +332,14 @@ task "publishPluginLocal" {
             def engine = new GStringTemplateEngine()
             String template = engine.createTemplate(str).make(binding)
 
-            var jSch = new JSch();
-            jSch.addIdentity(projectDir.path + '\\' + "id_rsa.ppk");
+            def jSch = new JSch();
+            jSch.addIdentity(projectDir.path + File.separator + "id_rsa.ppk");
 //        var user = 'D-DPDKZJJY-APP+cdadmin'
 //        var host = '21.96.60.156'
-            var user = 'a-dkzjjy-usr'
-            var host = '21.96.35.45'
-            var port = 18122
-            var session = jSch.getSession(user, host, port);
+            def user = 'a-dkzjjy-usr'
+            def host = '21.96.35.45'
+            def port = 18122
+            def session = jSch.getSession(user, host, port);
             session.setConfig("StrictHostKeyChecking", "no");
             session.connect();
             ChannelSftp sftp = (ChannelSftp) session.openChannel("sftp");
@@ -350,7 +350,7 @@ task "publishPluginLocal" {
             println 'done'
 
             println "pushing updatePlugins.xml"
-            var bais = new ByteArrayInputStream(template.getBytes(StandardCharsets.UTF_8))
+            def bais = new ByteArrayInputStream(template.getBytes(StandardCharsets.UTF_8))
 
             sftp.put(bais, "$targetpath/updateplugins2.xml")
 
