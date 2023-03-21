@@ -16,9 +16,13 @@ import cn.boz.jb.plugin.idea.dialog.EngineTaskDialog;
 import cn.boz.jb.plugin.idea.utils.Constants;
 import cn.boz.jb.plugin.idea.utils.DBUtils;
 import com.intellij.codeInsight.navigation.NavigationUtil;
+import com.intellij.execution.RunManagerListener;
+import com.intellij.find.FindManager;
 import com.intellij.find.FindModel;
 import com.intellij.find.findInProject.FindInProjectManager;
 import com.intellij.icons.AllIcons;
+import com.intellij.ide.IdeEventQueue;
+import com.intellij.ide.UiActivity;
 import com.intellij.ide.actions.searcheverywhere.SearchEverywhereManager;
 import com.intellij.ide.actions.searcheverywhere.SearchEverywhereManagerImpl;
 import com.intellij.ide.highlighter.HtmlFileType;
@@ -34,19 +38,27 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.fileTypes.FileType;
+import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.ProgressManager;
+import com.intellij.openapi.progress.Task;
+import com.intellij.openapi.progress.util.BackgroundTaskUtil;
 import com.intellij.openapi.project.DumbAwareAction;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.ui.popup.JBPopup;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
+import com.intellij.openapi.ui.popup.JBPopupListener;
+import com.intellij.openapi.ui.popup.LightweightWindowEvent;
 import com.intellij.openapi.ui.popup.ListPopup;
 import com.intellij.openapi.ui.popup.PopupChooserBuilder;
 import com.intellij.openapi.ui.popup.PopupStep;
 import com.intellij.openapi.ui.popup.SpeedSearchFilter;
 import com.intellij.openapi.ui.popup.util.BaseListPopupStep;
+import com.intellij.openapi.ui.popup.util.PopupUtil;
+import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.util.Ref;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.JavaPsiFacade;
@@ -68,11 +80,15 @@ import com.intellij.psi.xml.XmlTag;
 import com.intellij.ui.PopupHandler;
 import com.intellij.ui.awt.RelativePoint;
 import com.intellij.ui.components.JBScrollPane;
+import com.intellij.ui.popup.list.ListPopupImpl;
 import com.intellij.ui.table.JBTable;
 import com.intellij.util.Consumer;
+import com.intellij.util.MessageBusUtil;
+import com.intellij.util.messages.Topic;
 import com.intellij.util.ui.ColumnInfo;
 import com.intellij.util.ui.JBDimension;
 import com.intellij.util.ui.ListTableModel;
+import com.intellij.util.ui.UIUtil;
 import icons.SpdEditorIcons;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -97,6 +113,22 @@ import java.util.stream.Stream;
  * 用于导航到指定文件
  */
 public class GotoRefFileAction extends AnAction {
+
+    Topic<MyListener> findInProject = Topic.create("findInProject", MyListener.class);
+
+    abstract class MyListener{
+        abstract void doSomeghing();
+    }
+
+    public GotoRefFileAction(){
+        ApplicationManager.getApplication().getMessageBus().connect().subscribe(findInProject,new MyListener(){
+
+            @Override
+            void doSomeghing() {
+                System.out.println("done");
+            }
+        });
+    }
 
 
     @Override
@@ -484,8 +516,8 @@ public class GotoRefFileAction extends AnAction {
             jbTable.clearSelection();
         }
 
+        PopupChooserBuilder builder = JBPopupFactory.getInstance().createPopupChooserBuilder(jbTable);
 
-        PopupChooserBuilder builder = new PopupChooserBuilder(jbTable);
         if (showComments) {
             //注释
             builder.setSouthComponent(new CallerSearcherCommentPanel(jbTable));
@@ -498,10 +530,17 @@ public class GotoRefFileAction extends AnAction {
         }
 
 
-        builder.setTitle("caller Searcher:" + format).setItemChoosenCallback(runnable).setResizable(true).setMovable(true).setDimensionServiceKey("callerSearcher").setMinSize(new JBDimension(800, 400));
+        builder.setTitle("caller Searcher:" + format)
+                .setItemChoosenCallback(runnable)
+                .setResizable(true)
+                .setMovable(true)
+                .setDimensionServiceKey("callerSearcher")
+                .setMinSize(new JBDimension(800, 400));
 
 
         JBPopup popup = builder.createPopup();
+
+
         popup.showCenteredInCurrentWindow(project);
 
 
@@ -599,10 +638,12 @@ public class GotoRefFileAction extends AnAction {
                                 SearchEverywhereManager instance = SearchEverywhereManager.getInstance(anActionEvent.getProject());
                                 instance.show(allContributorsGroupId, s, anActionEvent);
                             } else {
-                                FindInProjectManager findInProjectManager = FindInProjectManager.getInstance(anActionEvent.getProject());
-                                FindModel findModel = new FindModel();
-                                findModel.setStringToFind(s);
-                                findInProjectManager.findInProject(anActionEvent.getDataContext(), findModel);
+                                EventQueue.invokeLater(()->{
+                                    FindInProjectManager findInProjectManager = FindInProjectManager.getInstance(anActionEvent.getProject());
+                                    FindModel findModel = new FindModel();
+                                    findModel.setStringToFind(s);
+                                    findInProjectManager.findInProject(anActionEvent.getDataContext(), findModel);
+                                });
                             }
                         }
 
@@ -630,20 +671,31 @@ public class GotoRefFileAction extends AnAction {
 
 
                 } else {
-                    FindInProjectManager findInProjectManager = FindInProjectManager.getInstance(anActionEvent.getProject());
-                    FindModel findModel = new FindModel();
-                    findModel.setStringToFind(id);
-                    findInProjectManager.findInProject(anActionEvent.getDataContext(), findModel);
+                    EventQueue.invokeLater(()-> {
+
+                        FindInProjectManager findInProjectManager = FindInProjectManager.getInstance(anActionEvent.getProject());
+                        FindModel findModel = new FindModel();
+                        findModel.setStringToFind(id);
+                        findInProjectManager.findInProject(anActionEvent.getDataContext(), findModel);
+                    });
                 }
             } else if (item instanceof EngineAction) {
+                JBPopup popup = PopupUtil.getPopupContainerFor(jbTable);
+                Disposer.dispose(popup);
+                while(!Disposer.isDisposed(popup)){
+
+                }
+
                 EngineAction engineAction = (EngineAction) item;
                 String id = engineAction.getId();
+                EventQueue.invokeLater(()->{
 
-                FindInProjectManager findInProjectManager = FindInProjectManager.getInstance(anActionEvent.getProject());
-                FindModel findModel = new FindModel();
-                findModel.setStringToFind(id.replaceFirst("/", ""));
-                findInProjectManager.findInProject(anActionEvent.getDataContext(), findModel);
-
+                    FindInProjectManager findInProjectManager = FindInProjectManager.getInstance(anActionEvent.getProject());
+                    FindModel findModel = new FindModel();
+                    findModel.setStringToFind(id.replaceFirst("/", ""));
+                    findModel.setFileFilter(".js");
+                    findInProjectManager.findInProject(anActionEvent.getDataContext(), findModel);
+                });
 
             }
         }
@@ -813,67 +865,76 @@ public class GotoRefFileAction extends AnAction {
         Ref<EngineActionDataContainer> engineActionRef = new Ref<>();
         Ref<List<String>> ids = new Ref<>();
         final String query = value;
-        ProgressManager.getInstance().runProcessWithProgressSynchronously(() -> {
-
-            try (Connection connection = DBUtils.getConnection(SpdEditorDBState.getInstance(anActionEvent.getProject()));) {
-                List<EngineAction> actions = instance.queryEngineActionWithIdLike(connection, query);
-                if (actions.size() == 0) {
-                    result.set(false);
-                } else if (actions.size() == 1) {
-                    EngineAction engineAction = actions.get(0);
-                    String id_ = engineAction.getId();
-                    List<EngineActionInput> actionInputs = instance.queryEngineActionInputIdMatch(connection, id_);
-                    List<EngineActionOutput> actionOutputs = instance.queryEngineActionOutputIdMatch(connection, id_);
-                    engineAction.setInputs(actionInputs);
-                    engineAction.setOutputs(actionOutputs);
-                    engineActionRef.set(new EngineActionDataContainer(engineAction));
-                } else {
-                    List<String> ids_ = actions.stream().map(it -> (String) it.getId()).collect(Collectors.toList());
-                    ids.set(ids_);
-                    //多选框
+        Task.WithResult<Object, Exception> objectExceptionWithResult = new Task.WithResult<Object, Exception>(anActionEvent.getProject(),"connect",true) {
+            @Override
+            protected Object compute(@NotNull ProgressIndicator progressIndicator) throws Exception {
+                try (Connection connection = DBUtils.getConnection(SpdEditorDBState.getInstance(anActionEvent.getProject()));) {
+                    List<EngineAction> actions = instance.queryEngineActionWithIdLike(connection, query);
+                    if (actions.size() == 0) {
+                        result.set(false);
+                    } else if (actions.size() == 1) {
+                        EngineAction engineAction = actions.get(0);
+                        String id_ = engineAction.getId();
+                        List<EngineActionInput> actionInputs = instance.queryEngineActionInputIdMatch(connection, id_);
+                        List<EngineActionOutput> actionOutputs = instance.queryEngineActionOutputIdMatch(connection, id_);
+                        engineAction.setInputs(actionInputs);
+                        engineAction.setOutputs(actionOutputs);
+                        engineActionRef.set(new EngineActionDataContainer(engineAction));
+                    } else {
+                        List<String> ids_ = actions.stream().map(it -> (String) it.getId()).collect(Collectors.toList());
+                        ids.set(ids_);
+                        //多选框
+                    }
+                    //进行连接
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                } catch (InvocationTargetException e) {
+                    e.printStackTrace();
+                } catch (NoSuchMethodException e) {
+                    e.printStackTrace();
+                } catch (InstantiationException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-
-                //进行连接
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            } catch (InvocationTargetException e) {
-                e.printStackTrace();
-            } catch (NoSuchMethodException e) {
-                e.printStackTrace();
-            } catch (InstantiationException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (Exception e) {
-                e.printStackTrace();
+                return null;
             }
+        };
+        try {
+            Object run = ProgressManager.getInstance().run(objectExceptionWithResult);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
 
-        }, "Loading...", true, ProjectManager.getInstance().getDefaultProject());
         JBPopup popup;
         EngineActionDialog temporyDialog;
         if (!engineActionRef.isNull()) {
             EngineActionDataContainer container = engineActionRef.get();
-
-
             temporyDialog = new EngineActionDialog(container.getEngineAction());
-
             popup = JBPopupFactory.getInstance().createComponentPopupBuilder(temporyDialog, null).setRequestFocus(true).setTitle("Action").setMovable(true).setProject(anActionEvent.getProject()).setFocusable(true).setCancelOnOtherWindowOpen(true).createPopup();
-
             //应该
+//            try {
+//                Thread.sleep(1000);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
             popup.showCenteredInCurrentWindow(anActionEvent.getProject());
 
             return true;
         }
 
         if (!ids.isNull()) {
-            List<String> actionSorted = ids.get().stream().sorted().collect(Collectors.toList());
+            List<String> actionSorted = ids.get().stream().sorted().limit(20).collect(Collectors.toList());
 
             @SuppressWarnings("unchecked") BaseListPopupStep selPopup = new BaseListPopupStep<String>("action", actionSorted, SpdEditorIcons.ACTION_16_ICON) {
+
                 @Override
                 public @Nullable PopupStep<?> onChosen(String selectedValue, boolean finalChoice) {
                     if (finalChoice) {
@@ -897,7 +958,10 @@ public class GotoRefFileAction extends AnAction {
                 public boolean isSpeedSearchEnabled() {
                     return true;
                 }
+
+
             };
+
 
             //过滤框
             selPopup.isSelectable(true);
@@ -908,6 +972,7 @@ public class GotoRefFileAction extends AnAction {
 
         return false;
     }
+    static ListPopup listPopup;
 
     /**
      * @param project

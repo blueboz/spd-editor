@@ -80,7 +80,14 @@ public class MockStartBatchWithDataAction extends DumbAwareAction {
             @Override
             public void mouseClicked(MouseEvent e) {
                 //搜索action或者流程?
-                popup.dispose();
+//                popup.dispose();
+//                while (!popup.isDisposed()){
+//                    try {
+//                        Thread.sleep(10);
+//                    } catch (InterruptedException interruptedException) {
+//                        interruptedException.printStackTrace();
+//                    }
+//                }
                 String text = jTextArea.getText();
                 doLogic(anActionEvent, text);
 

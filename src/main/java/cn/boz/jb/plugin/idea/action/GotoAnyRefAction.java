@@ -47,7 +47,6 @@ public class GotoAnyRefAction extends DumbAwareAction {
                 .createPopup();
 
         InputEvent inputEvent = anActionEvent.getInputEvent();
-        MouseEvent me = (MouseEvent) inputEvent;
         popup.showCenteredInCurrentWindow(anActionEvent.getProject());
 //        popup.show(RelativePoint.fromScreen(me.getLocationOnScreen()));
         go.addMouseListener(new MouseAdapter() {
@@ -55,6 +54,9 @@ public class GotoAnyRefAction extends DumbAwareAction {
             public void mouseClicked(MouseEvent e) {
                 //搜索action或者流程?
                 popup.dispose();
+//                while (!popup.isDisposed()){
+//                }
+
                 String text = jTextArea.getText();
                 GotoRefFileAction.tryToGotoAction(text, anActionEvent, false);
             }

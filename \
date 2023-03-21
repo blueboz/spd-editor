@@ -48,9 +48,7 @@ dependencies {
     testImplementation 'org.testng:testng:6.9.10'
     testImplementation 'com.alibaba:fastjson:1.2.4'
     implementation 'com.alibaba:fastjson:1.2.4'
-    testImplementation files('/home/@chenweidian-yfzx/Code/FMS/FMSS_xfunds/xfunds/WebContent/WEB-INF/lib/ojdbc8.jar','/home/@chenweidian-yfzx/Code/FMS/FMSS_xfunds/xfunds/WebContent/WEB-INF/lib/orai18n-19.3.0.0.jar')
-//    testImplementation files("~/Code/FMS/FMSS_xfunds/xfunds/WebContent/WEB-INF/lib/ojdbc8.jar", "~/Code/FMS/FMSS_xfunds/xfunds/WebContent/WEB-INF/lib/orai18n-19.3.0.0.jar")
-//    testImplementation files("F:/Code/FMS/FMSS_xfunds/xfunds/WebContent/WEB-INF/lib/ojdbc8.jar", "F:/Code/FMS/FMSS_xfunds/xfunds/WebContent/WEB-INF/lib/orai18n-19.3.0.0.jar")
+    testImplementation files("F:/Code/FMS/FMSS_xfunds/xfunds/WebContent/WEB-INF/lib/ojdbc8.jar", "F:/Code/FMS/FMSS_xfunds/xfunds/WebContent/WEB-INF/lib/orai18n-19.3.0.0.jar")
 //    implementation 'org.codehaus.groovy:groovy-all:2.5.11' <dependency>
 }
 
@@ -236,11 +234,11 @@ patchPluginXml {
 }
 test {
     useTestNG()
-    exclude '*'
-    include 'cn/boz/test/*'
-    filter{
-        includeTestsMatching("test")
-    }
+//    exclude '*'
+//    include 'cn/boz/test/*'
+//    filter{
+//        includeTestsMatching("test")
+//    }
 
 }
 

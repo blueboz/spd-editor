@@ -3,6 +3,7 @@
     <name>Erayt Spd Editor</name>
     <vendor email="1173626291@qq.com" url="http://blog.csdn.net/blueboz">Blueboz.Chen</vendor>
 
+
     <description><![CDATA[
     This is an spd editor plugin,which support features such as flow viewer,Flow editor,flow image export,flow save and so on.
     <br>
