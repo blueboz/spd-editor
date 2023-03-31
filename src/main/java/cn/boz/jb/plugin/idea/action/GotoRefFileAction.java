@@ -116,12 +116,12 @@ public class GotoRefFileAction extends AnAction {
 
     Topic<MyListener> findInProject = Topic.create("findInProject", MyListener.class);
 
-    abstract class MyListener{
+    abstract class MyListener {
         abstract void doSomeghing();
     }
 
-    public GotoRefFileAction(){
-        ApplicationManager.getApplication().getMessageBus().connect().subscribe(findInProject,new MyListener(){
+    public GotoRefFileAction() {
+        ApplicationManager.getApplication().getMessageBus().connect().subscribe(findInProject, new MyListener() {
 
             @Override
             void doSomeghing() {
@@ -156,7 +156,7 @@ public class GotoRefFileAction extends AnAction {
                 XmlAttribute attribute = PsiTreeUtil.getParentOfType(element, XmlAttribute.class);
                 if (attribute != null) {
                     //才有继续处理的必要
-                    if (tryToGotoFileRef(psiFile, project, attribute.getValue())) {
+                    if (tryToGotoFileRef(psiFile, anActionEvent, attribute.getValue())) {
                         return;
                     }
                 }
@@ -179,7 +179,7 @@ public class GotoRefFileAction extends AnAction {
                     if (context instanceof JSLiteralExpression) {
                         JSLiteralExpression jsLiteralExpression = (JSLiteralExpression) context;
                         String stringValue = jsLiteralExpression.getStringValue();
-                        boolean tryToGotoFileRef = tryToGotoFileRef(psiFile, project, stringValue);
+                        boolean tryToGotoFileRef = tryToGotoFileRef(psiFile, anActionEvent, stringValue);
                         if (tryToGotoFileRef) {
                             return;
                         }
@@ -191,8 +191,24 @@ public class GotoRefFileAction extends AnAction {
                         if (trytoGotoAction) {
                             return;
                         }
+                        boolean founded = tryToGotoHtmlFile(anActionEvent);
+                        if (founded) {
+                            return;
+                        }
                         //尝试搜索文件名
 
+                    } else {
+
+                        boolean founded = tryToGotoHtmlFile(anActionEvent);
+                        if (founded) {
+                            return;
+                        }
+                    }
+                } else {
+
+                    boolean founded = tryToGotoHtmlFile(anActionEvent);
+                    if (founded) {
+                        return;
                     }
                 }
             } catch (ClassNotFoundException classNotFoundException) {
@@ -212,6 +228,12 @@ public class GotoRefFileAction extends AnAction {
 //        SearchEverywhereManager searchEverywhereManager = SearchEverywhereManager.getInstance(project);
 //        HintManager.getInstance().showErrorHint(editor, "Cannot find declaration to go to");
 
+    }
+
+    private boolean tryToGotoHtmlFile(AnActionEvent anActionEvent) {
+        AnAction referJsUsage = ActionManager.getInstance().getAction("ReferJsUsage");
+        referJsUsage.actionPerformed(anActionEvent);
+        return true;
     }
 
 
@@ -271,18 +293,18 @@ public class GotoRefFileAction extends AnAction {
     }
 
 
-    public static String tranToSpringBeanName(String input){
-        if(input==null){
+    public static String tranToSpringBeanName(String input) {
+        if (input == null) {
             return "";
         }
-        if("".equals(input.trim())){
+        if ("".equals(input.trim())) {
             return "";
         }
-        if(input.length()==1){
+        if (input.length() == 1) {
             return input.toLowerCase();
         }
-        if(input.endsWith("Impl")){
-            input=input.substring(0,input.length()-4);
+        if (input.endsWith("Impl")) {
+            input = input.substring(0, input.length() - 4);
 
         }
         return input;
@@ -332,7 +354,7 @@ public class GotoRefFileAction extends AnAction {
         Ref<List<EngineTask>> engineTaskRef = new Ref<>();
         Ref<List<EngineAction>> engineActionRef = new Ref<>();
         Ref<List<XfundsBatch>> xfundsBatchRef = new Ref<>();
-        Ref<Exception> exceptionRef=new Ref<>();
+        Ref<Exception> exceptionRef = new Ref<>();
         ProgressManager.getInstance().runProcessWithProgressSynchronously(() -> {
             try (Connection connection = DBUtils.getConnection(anActionEvent.getProject())) {
                 List<EngineTask> engineTasks = dbUtils.queryEngineTaskByExpression(connection, name);
@@ -356,7 +378,7 @@ public class GotoRefFileAction extends AnAction {
         if (!engineActionRef.isNull()) {
             objects.addAll(engineActionRef.get());
         }
-        if(!xfundsBatchRef.isNull()){
+        if (!xfundsBatchRef.isNull()) {
             objects.addAll(xfundsBatchRef.get());
         }
 
@@ -383,7 +405,6 @@ public class GotoRefFileAction extends AnAction {
         }, true, name, qualifieredName);
 
 
-
         return false;
     }
 
@@ -400,7 +421,7 @@ public class GotoRefFileAction extends AnAction {
                 return "task";
             } else if (o instanceof EngineAction) {
                 return "action";
-            }else if(o instanceof XfundsBatch){
+            } else if (o instanceof XfundsBatch) {
                 return "batch";
             }
             return "";
@@ -438,7 +459,7 @@ public class GotoRefFileAction extends AnAction {
                 return ((EngineTask) o).getId();
             } else if (o instanceof EngineAction) {
                 return ((EngineAction) o).getId();
-            }else if(o instanceof XfundsBatch){
+            } else if (o instanceof XfundsBatch) {
                 return ((XfundsBatch) o).getSeqNo();
             }
             return "";
@@ -458,7 +479,7 @@ public class GotoRefFileAction extends AnAction {
                 return ((EngineTask) o).getTitle();
             } else if (o instanceof EngineAction) {
                 return ((EngineAction) o).getNamespace();
-            }else if(o instanceof XfundsBatch){
+            } else if (o instanceof XfundsBatch) {
                 return ((XfundsBatch) o).getDescr();
             }
             return "";
@@ -479,7 +500,7 @@ public class GotoRefFileAction extends AnAction {
                 return ((EngineTask) o).getExpression();
             } else if (o instanceof EngineAction) {
                 return ((EngineAction) o).getActionscript();
-            }else if(o instanceof XfundsBatch){
+            } else if (o instanceof XfundsBatch) {
                 return ((XfundsBatch) o).getEnterName();
             }
             return "";
@@ -609,15 +630,15 @@ public class GotoRefFileAction extends AnAction {
                 String id = engineTask.getId();
                 if (id.contains("_")) {
                     String s = id.split("_")[0];
-                    List<String> collect = Stream.of("Search:"+s, "Find:"+s).collect(Collectors.toList());
+                    List<String> collect = Stream.of("Search:" + s, "Find:" + s).collect(Collectors.toList());
 
                     BaseListPopupStep selPopup = new BaseListPopupStep<String>("id search", collect, SpdEditorIcons.ACTION_16_ICON) {
 
                         @Override
                         public Icon getIconFor(String value) {
-                            if(value.startsWith("Search")){
+                            if (value.startsWith("Search")) {
                                 return AllIcons.Actions.Search;
-                            }else{
+                            } else {
                                 return AllIcons.Actions.Find;
                             }
                         }
@@ -638,7 +659,7 @@ public class GotoRefFileAction extends AnAction {
                                 SearchEverywhereManager instance = SearchEverywhereManager.getInstance(anActionEvent.getProject());
                                 instance.show(allContributorsGroupId, s, anActionEvent);
                             } else {
-                                EventQueue.invokeLater(()->{
+                                EventQueue.invokeLater(() -> {
                                     FindInProjectManager findInProjectManager = FindInProjectManager.getInstance(anActionEvent.getProject());
                                     FindModel findModel = new FindModel();
                                     findModel.setStringToFind(s);
@@ -671,7 +692,7 @@ public class GotoRefFileAction extends AnAction {
 
 
                 } else {
-                    EventQueue.invokeLater(()-> {
+                    EventQueue.invokeLater(() -> {
 
                         FindInProjectManager findInProjectManager = FindInProjectManager.getInstance(anActionEvent.getProject());
                         FindModel findModel = new FindModel();
@@ -682,13 +703,13 @@ public class GotoRefFileAction extends AnAction {
             } else if (item instanceof EngineAction) {
                 JBPopup popup = PopupUtil.getPopupContainerFor(jbTable);
                 Disposer.dispose(popup);
-                while(!Disposer.isDisposed(popup)){
+                while (!Disposer.isDisposed(popup)) {
 
                 }
 
                 EngineAction engineAction = (EngineAction) item;
                 String id = engineAction.getId();
-                EventQueue.invokeLater(()->{
+                EventQueue.invokeLater(() -> {
 
                     FindInProjectManager findInProjectManager = FindInProjectManager.getInstance(anActionEvent.getProject());
                     FindModel findModel = new FindModel();
@@ -865,7 +886,7 @@ public class GotoRefFileAction extends AnAction {
         Ref<EngineActionDataContainer> engineActionRef = new Ref<>();
         Ref<List<String>> ids = new Ref<>();
         final String query = value;
-        Task.WithResult<Object, Exception> objectExceptionWithResult = new Task.WithResult<Object, Exception>(anActionEvent.getProject(),"connect",true) {
+        Task.WithResult<Object, Exception> objectExceptionWithResult = new Task.WithResult<Object, Exception>(anActionEvent.getProject(), "connect", true) {
             @Override
             protected Object compute(@NotNull ProgressIndicator progressIndicator) throws Exception {
                 try (Connection connection = DBUtils.getConnection(SpdEditorDBState.getInstance(anActionEvent.getProject()));) {
@@ -972,6 +993,7 @@ public class GotoRefFileAction extends AnAction {
 
         return false;
     }
+
     static ListPopup listPopup;
 
     /**
@@ -988,7 +1010,8 @@ public class GotoRefFileAction extends AnAction {
     }
 
 
-    private boolean tryToGotoFileRef(PsiFile psiFile, Project project, String value) {
+    private boolean tryToGotoFileRef(PsiFile psiFile, AnActionEvent anActionEvent, String value) {
+        Project project = anActionEvent.getProject();
         String[] split = value.split("\\?");
         VirtualFile fileByRelativePath = psiFile.getVirtualFile().getParent().findFileByRelativePath(split[0]);
         if (fileByRelativePath != null) {
@@ -996,7 +1019,7 @@ public class GotoRefFileAction extends AnAction {
             NavigationUtil.activateFileWithPsiElement(targetJsFile);
             return true;
         } else {
-            return false;
+            return tryToGotoAction(value, anActionEvent, false);
             //可以尝试类全限定名
         }
     }
