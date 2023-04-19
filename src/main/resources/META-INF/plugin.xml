@@ -21,7 +21,6 @@
     <depends>com.intellij.modules.platform</depends>
     <!--    <depends>com.intellij.modules.java-capable</depends>-->
     <depends>com.intellij.java</depends>
-    <depends>com.intellij.database</depends>
     <depends>Git4Idea</depends>
     <depends>JavaScript</depends>
 
@@ -41,7 +40,7 @@
         <toolWindow factoryClass="cn.boz.jb.plugin.idea.toolwindow.EcasMenuToolWindowFactory" id="EcasMenu"
                     anchor="right"
                     order="last" icon="SpdEditorIcons.MENU_16_ICON"/>
-        <fileType name="Spd" extensions="spd" implementationClass="cn.boz.jb.plugin.idea.filetype.SpdFileType" language="Spd" fieldName="INSTANCE"/>
+        <fileType name="SpdFile" implementationClass="cn.boz.jb.plugin.idea.filetype.SpdFileType"  fieldName="INSTANCE" extensions="spd" language="Spd"/>
         <themeMetadataProvider path="/META-INF/SpdEditor.themeMetadata.json"/>
         <projectService serviceImplementation="cn.boz.jb.plugin.idea.configurable.SpdEditorDBState"/>
         <projectService serviceImplementation="cn.boz.jb.plugin.idea.configurable.SpdEditorNormState"/>
@@ -118,12 +117,6 @@
                 <action class="cn.boz.jb.plugin.idea.action.GotoAnyRefExtAction" icon="AllIcons.Actions.Search"
                         text="TableQueryActionByActionId" ></action>
                 <action class="cn.boz.jb.plugin.idea.action.QueryExpressionUsages" text="QueryExpression" />
-            </group>
-            <group text="MockStart" popup="true">
-                <action class="cn.boz.jb.plugin.idea.action.engineaction.MockStartBatchWithDataAction"
-                        icon="SpdEditorIcons.MOCK_16_ICON" text="MockStartWithDataProcess" ></action>
-                <action class="cn.boz.jb.plugin.idea.action.engineaction.MockStartBatchAction"
-                        icon="SpdEditorIcons.MOCK_16_ICON" text="MockStartProcess" ></action>
             </group>
 
             <group text="Db Diff" icon="AllIcons.Diff.Compare4LeftRight" popup="true">
@@ -218,13 +211,10 @@
         <group id="spd.copy.taskaction.group">
             <add-to-group group-id="spd.gotorefaction.group"></add-to-group>
         </group>
+
         <group id="spd.copysql.action.group" text="CopyGroup">
-            <group text="MockStart" popup="true">
-                <action class="cn.boz.jb.plugin.idea.action.engineaction.MockStartBatchWithDataAction"
-                        icon="SpdEditorIcons.MOCK_16_ICON" text="MockStartWithDataProcess" ></action>
-                <action class="cn.boz.jb.plugin.idea.action.engineaction.MockStartBatchAction"
-                        icon="SpdEditorIcons.MOCK_16_ICON" text="MockStartProcess" ></action>
-            </group>
+
+
 
             <action class="cn.boz.jb.plugin.idea.action.engineaction.CopyQueryEngineActionScriptAction"
                     icon="AllIcons.Actions.Copy" id="SpdEditorCopyEngineAction" text="CopyQuerySql"></action>
@@ -238,7 +228,14 @@
                     text="CopyEngineActionSql"></action>
             <add-to-group group-id="spd.copy.taskaction.group" anchor="last"></add-to-group>
         </group>
-
+        <group text="MockStart" popup="true" id="spd.mokestart.action.group">
+            <action class="cn.boz.jb.plugin.idea.action.engineaction.MockStartBatchWithDataAction"
+                    icon="SpdEditorIcons.MOCK_16_ICON" text="MockStartWithDataProcess" ></action>
+            <action class="cn.boz.jb.plugin.idea.action.engineaction.MockStartBatchAction"
+                    icon="SpdEditorIcons.MOCK_16_ICON" text="MockStartProcess" ></action>
+            <add-to-group group-id="spd.copysql.action.group"></add-to-group>
+            <add-to-group group-id="spdEditorPopupGroup"></add-to-group>
+        </group>
         <group id="spd.openintoolwindow.action.group">
             <action class="cn.boz.jb.plugin.idea.action.OpenInSearchToolWindowAction"
                     icon="AllIcons.Actions.MoveToBottomLeft"

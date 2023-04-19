@@ -110,7 +110,6 @@ intellij {
     plugins = ['com.intellij.java',
                'JavaScriptLanguage',
                'JavaScript',
-               'DatabaseTools',
                'Git4Idea',
     ]
 

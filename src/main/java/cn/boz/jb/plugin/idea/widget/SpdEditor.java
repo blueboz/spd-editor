@@ -20,7 +20,9 @@ import cn.boz.jb.plugin.floweditor.gui.widget.ChartPanel;
 import cn.boz.jb.plugin.idea.configurable.SpdEditorDBSettings;
 import cn.boz.jb.plugin.idea.configurable.SpdEditorDBState;
 import cn.boz.jb.plugin.idea.fileeditor.SpdFileEditorProvider;
+import cn.boz.jb.plugin.idea.listener.ChartKeyEventListener;
 import cn.boz.jb.plugin.idea.utils.DBUtils;
+import com.intellij.ide.IdeEventQueue;
 import com.intellij.notification.NotificationGroup;
 import com.intellij.notification.NotificationType;
 import com.intellij.openapi.actionSystem.ActionGroup;
@@ -34,8 +36,6 @@ import com.intellij.openapi.actionSystem.ToggleAction;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.fileChooser.FileChooser;
 import com.intellij.openapi.fileChooser.FileChooserDescriptor;
-import com.intellij.openapi.fileEditor.FileEditor;
-import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.fileEditor.FileEditorProvider;
 import com.intellij.openapi.fileEditor.ex.FileEditorManagerEx;
 import com.intellij.openapi.fileEditor.ex.FileEditorProviderManager;
@@ -63,6 +63,7 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseWheelEvent;
@@ -306,6 +307,32 @@ public class SpdEditor extends JComponent implements DataProvider, MouseListener
         movebtn.setToolTipText("Move");
         movebtn.setToggle(true);
         menuPanel.add(movebtn);
+        chartPanel.addKeyEventListener(new ChartKeyEventListener() {
+            @Override
+            public void keyEscPress(java.awt.event.KeyEvent keyEvent) {
+                System.out.println("key esc press");
+                MouseEvent down = new MouseEvent(movebtn
+                        ,MouseEvent.MOUSE_PRESSED,System.currentTimeMillis(),
+                        MouseEvent.BUTTON1_DOWN_MASK,0,0,1,true,MouseEvent.BUTTON1);
+                IdeEventQueue.getInstance().dispatchEvent(down);;
+
+                down = new MouseEvent(movebtn
+                        ,MouseEvent.MOUSE_RELEASED,System.currentTimeMillis(),
+                        MouseEvent.BUTTON1_DOWN_MASK,0,0,1,true,MouseEvent.BUTTON1);
+                IdeEventQueue.getInstance().dispatchEvent(down);;
+                down = new MouseEvent(movebtn
+                        ,MouseEvent.MOUSE_CLICKED,System.currentTimeMillis(),
+                        MouseEvent.BUTTON1,0,0,1,true,MouseEvent.BUTTON1);
+                IdeEventQueue.getInstance().dispatchEvent(down);;
+
+//                movebtn.dispatchEvent(down);
+            }
+
+            @Override
+            public void keyEscRelease(KeyEvent keyEvent) {
+            }
+        });
+
 
         Button handbtn = new Button(IcoMoonUtils.getScale(), true, "handbtn", "oper");
         handbtn.addMouseListener(this);
@@ -424,9 +451,12 @@ public class SpdEditor extends JComponent implements DataProvider, MouseListener
 
     @Override
     public void mouseClicked(MouseEvent e) {
+        System.out.println("mosue clikevent");
         if (e.getButton() != MouseEvent.BUTTON1) {
             return;
         }
+//        JButton jButton = new JButton();
+//        jButton.doClick();
         Button myButton = (Button) e.getSource();
         switch (myButton.getId()) {
             case "linebtn":
@@ -632,11 +662,12 @@ public class SpdEditor extends JComponent implements DataProvider, MouseListener
 
     @Override
     public void mousePressed(MouseEvent e) {
-
+        System.out.println("mouse press"+e);
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
+        System.out.println("mouse release"+e);
 
     }
 

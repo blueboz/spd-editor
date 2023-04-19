@@ -41,7 +41,10 @@ import cn.boz.jb.plugin.floweditor.gui.utils.ShapeUtils;
 import cn.boz.jb.plugin.idea.action.FindInSpdEditorAction;
 import cn.boz.jb.plugin.idea.configurable.SpdEditorDBState;
 import cn.boz.jb.plugin.idea.listener.ChartChangeListener;
+import cn.boz.jb.plugin.idea.listener.ChartKeyEventListener;
 import cn.boz.jb.plugin.idea.listener.ProcessSaveListener;
+import cn.boz.jb.plugin.idea.utils.NotificationUtils;
+import cn.boz.jb.plugin.idea.utils.StackTraceUtils;
 import cn.boz.jb.plugin.idea.widget.SpdEditor;
 import com.intellij.openapi.actionSystem.ActionGroup;
 import com.intellij.openapi.actionSystem.ActionManager;
@@ -113,7 +116,7 @@ public class ChartPanel extends JComponent implements DataProvider, MouseListene
         shapeMapper.put(RectBridge.class, new RectBridge());
         shapeMapper.put(Shape.class, new Shape());
         for (Shape shape : shapeMapper.values()) {
-            shape.init(new HiPoint(0,0));
+            shape.init(new HiPoint(0, 0));
         }
     }
 
@@ -135,6 +138,7 @@ public class ChartPanel extends JComponent implements DataProvider, MouseListene
     private HiPoint copyMouseStartPoint = null;
     private List<ChartChangeListener> chartChangeListenerList = new ArrayList<>();
 
+    private List<ChartKeyEventListener> chartKeyEventListeners = new ArrayList<>();
     public static int MODE_DEFAULT = 0;
     public static int MODE_LINE = 1;
     public static int MODE_NEW_SHAPE = 2;
@@ -240,7 +244,7 @@ public class ChartPanel extends JComponent implements DataProvider, MouseListene
 
     private SpdEditor editor;
 
-    public ChartPanel(){
+    public ChartPanel() {
 
         //forexportonly
     }
@@ -326,7 +330,7 @@ public class ChartPanel extends JComponent implements DataProvider, MouseListene
 
     public void setMode(int mode) {
         this.mode = mode;
-        this.mouseCurrentPoint=new Point(-100,100);
+        this.mouseCurrentPoint = new Point(-100, 100);
         //重置状态
         this.dragPressObj = null;
         this.resizePressObj = null;
@@ -342,6 +346,7 @@ public class ChartPanel extends JComponent implements DataProvider, MouseListene
         this.setCursor(cursorByMode);
         repaint();
     }
+
 
     private Cursor getCursorByMode(int mode) {
         if (MODE_LINE == this.mode) {
@@ -790,7 +795,7 @@ public class ChartPanel extends JComponent implements DataProvider, MouseListene
 
             Shape shape = shapeMapper.get(newShapeClass);
             shape.init(point);
-            shape.drawIndicator(this ,mouseCurrentPoint);
+            shape.drawIndicator(this, mouseCurrentPoint);
 //            shape.drawContent(this);
 
         }
@@ -2742,9 +2747,14 @@ public class ChartPanel extends JComponent implements DataProvider, MouseListene
         } else if (KeyEvent.VK_ESCAPE == e.getKeyCode()) {
             //esc键
             if (mode == MODE_LINE) {
-                lineStartObj = null;
-                lineCursorTracker = null;
-                repaint();
+                if (lineStartObj != null) {
+                    lineStartObj = null;
+                    lineCursorTracker = null;
+                    repaint();
+                    return;
+                } else {
+                    setMode(MODE_DEFAULT);
+                }
             } else if (mode == MODE_NEW_SHAPE) {
                 setMode(MODE_DEFAULT);
             } else if (mode == MODE_DEFAULT) {
@@ -2756,6 +2766,13 @@ public class ChartPanel extends JComponent implements DataProvider, MouseListene
                 for (Shape shape : shapes) {
                     shape.setDraging(false);
                     shape.setResizing(false);
+                }
+            }
+            for (ChartKeyEventListener chartKeyEventListener : chartKeyEventListeners) {
+                try {
+                    chartKeyEventListener.keyEscPress(e);
+                } catch (Exception exception) {
+                    NotificationUtils.warnning("key event Listener Exception", StackTraceUtils.generateRecusiveException(exception),project);
                 }
             }
         } else if (KeyEvent.VK_DELETE == e.getKeyCode()) {
@@ -3376,7 +3393,8 @@ public class ChartPanel extends JComponent implements DataProvider, MouseListene
         }
         return sqls;
     }
-    public List<String> generateSortedSql(){
+
+    public List<String> generateSortedSql() {
         List<String> sqls = new ArrayList<>();
         if (this.id == null || this.id.trim().equals("")) {
             Messages.showErrorDialog("流程id未设置", "发生异常");
@@ -3385,7 +3403,7 @@ public class ChartPanel extends JComponent implements DataProvider, MouseListene
         //注意使用转义字符
         sqls.add("delete from ENGINE_TASK where ID_ like '" + this.id + "\\_%' escape '\\'");
         sqls.add(String.format("delete from ENGINE_FLOW where PROCESSID_='%s'", this.id));
-        List<String> engineFlowSqls=new ArrayList<>();
+        List<String> engineFlowSqls = new ArrayList<>();
         for (int i = 0; i < shapes.size(); i++) {
             Shape shape = shapes.get(i);
             if (shape instanceof Label) {
@@ -3397,7 +3415,7 @@ public class ChartPanel extends JComponent implements DataProvider, MouseListene
         }
         engineFlowSqls.sort(Comparator.naturalOrder());
         sqls.addAll(engineFlowSqls);
-        List<String> engineLineSqls=new ArrayList<>();
+        List<String> engineLineSqls = new ArrayList<>();
         for (int i = 0; i < lines.size(); i++) {
             Line line = lines.get(i);
             if (line instanceof FlowSqlAggregator) {
@@ -3610,10 +3628,19 @@ public class ChartPanel extends JComponent implements DataProvider, MouseListene
     public void activeCurrent() {
         FileEditorManagerEx fileEditorManager = FileEditorManagerEx.getInstanceEx(project);
 //        if(fileEditorManager.isFileOpen(virtualFile)){
-            fileEditorManager.openFile(virtualFile,true);
+        fileEditorManager.openFile(virtualFile, true);
 //        }else{
-            fileEditorManager.openFile(virtualFile,true);
+        fileEditorManager.openFile(virtualFile, true);
 //        }
 
     }
+
+    public void addKeyEventListener(ChartKeyEventListener chartKeyEventListener) {
+        chartKeyEventListeners.add(chartKeyEventListener);
+    }
+
+    public void removeKeyEventListener(ChartKeyEventListener chartKeyEventListener) {
+        chartKeyEventListeners.remove(chartKeyEventListener);
+    }
+
 }
