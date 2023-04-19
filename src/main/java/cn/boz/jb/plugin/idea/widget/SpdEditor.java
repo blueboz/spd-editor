@@ -573,14 +573,17 @@ public class SpdEditor extends JComponent implements DataProvider, MouseListener
                     } catch (SQLException sqlException) {
                         int selidx = Messages.showDialog("数据库连接发生错误，检查数据库配置?" + sqlException.getMessage(), "数据库错误", new String[]{"打开配置项", "取消"}, 0, UIUtil.getErrorIcon());
                         if (selidx == 0) {
-                            ShowSettingsUtil.getInstance().showSettingsDialog(null, SpdEditorDBSettings.class);
+                            Project project = ProjectUtil.guessProjectForFile(virtualFile);
+                            ShowSettingsUtil.getInstance().showSettingsDialog(project, SpdEditorDBSettings.class);
                         }
                     } catch (Exception ee) {
                         ee.printStackTrace();
                         Messages.showErrorDialog("发生错误", ee.getMessage());
                     }
                 } else if (idx == 2) {
-                    ShowSettingsUtil.getInstance().showSettingsDialog(ProjectManager.getInstance().getDefaultProject(), SpdEditorDBSettings.class);
+                    Project project = ProjectUtil.guessProjectForFile(virtualFile);
+                    ShowSettingsUtil.getInstance().showSettingsDialog(project, SpdEditorDBSettings.class);
+
                 } else if (idx == 3) {
                     Project project = ProjectUtil.guessProjectForFile(virtualFile);
                     FileChooserDescriptor fileChooserDescriptor = new FileChooserDescriptor(false, true, false, false, false, false);
