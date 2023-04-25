@@ -310,19 +310,17 @@ public class SpdEditor extends JComponent implements DataProvider, MouseListener
         chartPanel.addKeyEventListener(new ChartKeyEventListener() {
             @Override
             public void keyEscPress(java.awt.event.KeyEvent keyEvent) {
-                System.out.println("key esc press");
                 MouseEvent down = new MouseEvent(movebtn
                         ,MouseEvent.MOUSE_PRESSED,System.currentTimeMillis(),
-                        MouseEvent.BUTTON1_DOWN_MASK,0,0,1,true,MouseEvent.BUTTON1);
+                        MouseEvent.BUTTON1_DOWN_MASK,0,0,1,false,MouseEvent.BUTTON1);
                 IdeEventQueue.getInstance().dispatchEvent(down);;
-
                 down = new MouseEvent(movebtn
                         ,MouseEvent.MOUSE_RELEASED,System.currentTimeMillis(),
-                        MouseEvent.BUTTON1_DOWN_MASK,0,0,1,true,MouseEvent.BUTTON1);
+                        MouseEvent.BUTTON1_DOWN_MASK,0,0,1,false,MouseEvent.BUTTON1);
                 IdeEventQueue.getInstance().dispatchEvent(down);;
                 down = new MouseEvent(movebtn
                         ,MouseEvent.MOUSE_CLICKED,System.currentTimeMillis(),
-                        MouseEvent.BUTTON1,0,0,1,true,MouseEvent.BUTTON1);
+                        MouseEvent.BUTTON1_DOWN_MASK,0,0,1,false,MouseEvent.BUTTON1);
                 IdeEventQueue.getInstance().dispatchEvent(down);;
 
 //                movebtn.dispatchEvent(down);

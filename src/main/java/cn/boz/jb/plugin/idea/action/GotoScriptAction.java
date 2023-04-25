@@ -9,6 +9,8 @@ import cn.boz.jb.plugin.idea.dialog.EngineActionDialog;
 import cn.boz.jb.plugin.idea.dialog.EngineTaskDialog;
 import cn.boz.jb.plugin.idea.dialog.min.EngineActionDerivePanel;
 import cn.boz.jb.plugin.idea.dialog.min.EngineTaskDerivePanel;
+import com.intellij.find.FindModel;
+import com.intellij.find.findInProject.FindInProjectManager;
 import com.intellij.ide.actions.searcheverywhere.SearchEverywhereManager;
 import com.intellij.ide.actions.searcheverywhere.SearchEverywhereManagerImpl;
 import com.intellij.openapi.actionSystem.AnAction;
@@ -124,9 +126,10 @@ public class GotoScriptAction extends AnAction implements DumbAware {
 
             private void doRun(String selectedValue) {
                 //选择的值可以进行跳转
-                callback.run();
-
-                gotoSelectedValue(selectedValue, anActionEvent);
+                EventQueue.invokeLater(() -> {
+                    callback.run();
+                    gotoSelectedValue(selectedValue, anActionEvent);
+                });
 
             }
 
@@ -154,6 +157,7 @@ public class GotoScriptAction extends AnAction implements DumbAware {
             if (selectedValue.contains("(")) {
                 selectedValue = selectedValue.split("\\(")[0];
             }
+
 
             SearchEverywhereManager instance = SearchEverywhereManager.getInstance(anActionEvent.getProject());
             String allContributorsGroupId = SearchEverywhereManagerImpl.ALL_CONTRIBUTORS_GROUP_ID;
