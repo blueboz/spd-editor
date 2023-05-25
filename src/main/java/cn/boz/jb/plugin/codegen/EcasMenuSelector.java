@@ -1,5 +1,6 @@
 package cn.boz.jb.plugin.codegen;
 
+import cn.boz.jb.plugin.floweditor.gui.shape.Label;
 import cn.boz.jb.plugin.idea.bean.EcasActionPower;
 import cn.boz.jb.plugin.idea.layoutmanager.MyLayoutManager;
 import cn.boz.jb.plugin.idea.utils.DBUtils;
@@ -9,6 +10,8 @@ import org.jetbrains.annotations.NotNull;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
@@ -23,12 +26,12 @@ import java.util.Map;
 import java.util.Vector;
 import java.util.concurrent.Executors;
 
-public class EcasMenuSelector extends JFrame {
+public class PowerbitSelector extends JFrame {
     public static final String ITEM_OCCUPY = "occupy";
 
     public static final String ITEM_FREE = "free";
 
-    public EcasMenuSelector() throws Exception {
+    public PowerbitSelector() throws Exception {
         initUI();
     }
 
@@ -340,7 +343,7 @@ public class EcasMenuSelector extends JFrame {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             try {
-                new EcasMenuSelector();
+                new PowerbitSelector();
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
