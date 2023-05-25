@@ -13,16 +13,20 @@ import com.intellij.find.FindModel;
 import com.intellij.find.findInProject.FindInProjectManager;
 import com.intellij.ide.actions.searcheverywhere.SearchEverywhereManager;
 import com.intellij.ide.actions.searcheverywhere.SearchEverywhereManagerImpl;
+import com.intellij.openapi.Disposable;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
+import com.intellij.openapi.ui.popup.JBPopup;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.openapi.ui.popup.ListPopup;
 import com.intellij.openapi.ui.popup.PopupStep;
 import com.intellij.openapi.ui.popup.util.BaseListPopupStep;
+import com.intellij.openapi.ui.popup.util.PopupUtil;
+import com.intellij.openapi.util.Disposer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -43,6 +47,10 @@ public class GotoScriptAction extends AnAction implements DumbAware {
             EngineAction engineAction = engineActionDialog.getEngineAction();
             String actionscript = (String) engineAction.getActionscript();
             processScriptContent(actionscript, anActionEvent, engineActionDialog, () -> {
+                JBPopup popupContainerFor = PopupUtil.getPopupContainerFor(engineActionDialog);
+                if(popupContainerFor!=null){
+                    popupContainerFor.dispose();
+                }
             });
             return;
         }
@@ -114,7 +122,7 @@ public class GotoScriptAction extends AnAction implements DumbAware {
 
         String[] split = actionscript.split("[\n;]");
         List<String> collect = Arrays.asList(split).stream().filter(it -> it != null && !it.trim().equals("")).collect(Collectors.toList());
-        ListPopup search = JBPopupFactory.getInstance().createListPopup(new BaseListPopupStep<String>("please select", collect) {
+        final ListPopup search = JBPopupFactory.getInstance().createListPopup(new BaseListPopupStep<String>("please select", collect) {
 
             @Override
             public @Nullable PopupStep<?> onChosen(String selectedValue, boolean finalChoice) {
@@ -126,8 +134,8 @@ public class GotoScriptAction extends AnAction implements DumbAware {
 
             private void doRun(String selectedValue) {
                 //选择的值可以进行跳转
+                callback.run();
                 EventQueue.invokeLater(() -> {
-                    callback.run();
                     gotoSelectedValue(selectedValue, anActionEvent);
                 });
 

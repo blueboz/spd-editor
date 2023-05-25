@@ -473,6 +473,35 @@ public class DBUtils {
 
     }
 
+    public void textSearch(Connection connection) throws SQLException{
+        try (PreparedStatement preparedStatement = connection.prepareStatement("declare\n" +
+                "    sqlt varchar(4000);\n" +
+                "    search varchar(1000):='XFUNDS_DUEINTBANK_DAYBALANCE';\n" +
+                "begin\n" +
+                "    for i in ( select OBJECT_NAME, OBJECT_TYPE, OWNER\n" +
+                "               from dba_objects\n" +
+                "               where OBJECT_TYPE in ('PACKAGE BODY', 'FUNCTION', 'PROCEDURE')\n" +
+                "                 and owner in ('PUBLIC', 'XFUNDS201701'))\n" +
+                "        loop\n" +
+                "            begin\n" +
+                "                sqlt:=DBMS_METADATA.GET_DDL(i.OBJECT_TYPE, i.OBJECT_NAME, i.OWNER);\n" +
+                "                if instr(upper(sqlt),upper(search))>0 then\n" +
+                "                    DBMS_OUTPUT.PUT_LINE('contains '||i.OBJECT_TYPE||'->'||i.OWNER||'.'||i.OBJECT_NAME);\n" +
+                "                    DBMS_OUTPUT.PUT_LINE('DBMS_METADATA.GET_DDL('''||i.OBJECT_TYPE||''',''' ||i.OBJECT_NAME||''','''|| i.OWNER||''')');\n" +
+                "                end if;\n" +
+                "            exception\n" +
+                "                when others  then\n" +
+                "--                     dbms_output.PUT('');\n" +
+                "                    DBMS_OUTPUT.PUT_LINE('excep '||i.OBJECT_TYPE||'->'||i.OWNER||'.'||i.OBJECT_NAME);\n" +
+                "                    DBMS_OUTPUT.PUT_LINE('DBMS_METADATA.GET_DDL('''||i.OBJECT_TYPE||''',''' ||i.OBJECT_NAME||''','''|| i.OWNER||''')');\n" +
+                "            end;\n" +
+                "        end loop;\n" +
+                "end")) {
+            boolean execute = preparedStatement.execute();
+
+        }
+    }
+
     public List<XfundsBatch> queryXfundsBatchByEnterName(Connection connection, String entername) throws SQLException {
         try (PreparedStatement preparedStatement = connection.prepareStatement("select seqno||'' seqNo,DESCR,ENTERNAME from XFUNDS_BATCH_CTL where upper(ENTERNAME)  like upper('%" + entername + "%')")) {
             List<Map<String, Object>> maps = queryForList(preparedStatement);
