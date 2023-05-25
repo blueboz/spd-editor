@@ -8,6 +8,16 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 buildscript {
+    allprojects {
+        repositories {
+
+            maven { url 'https://maven.aliyun.com/repository/public' }
+            maven { url 'https://maven.aliyun.com/repository/google' }
+            maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
+            maven { url 'https://maven.aliyun.com/repository/jcenter' }
+        }
+    }
+
     dependencies {
         /**
          * 为buildScript添加的依赖，实际是帮助使用IDEA编码的时候，提示代码用，如果不引入，
@@ -16,16 +26,17 @@ buildscript {
          */
         classpath 'com.jcraft:jsch:0.1.55'
         classpath 'org.hidetake:gradle-ssh-plugin:2.10.1'
-        classpath 'org.codehaus.groovy:groovy-all:2.5.11'
+//        classpath 'org.codehaus.groovy:groovy-all:2.5.11'
         classpath 'net.sf.json-lib:json-lib:2.4:jdk15'
 
     }
 
 }
 plugins {
-    id 'org.jetbrains.intellij' version '1.1.6'
     id 'java'
     id 'groovy'
+    id "org.jetbrains.intellij" version "1.13.3"
+
 }
 project.ext {
     simplever = "1.0.35"
@@ -39,14 +50,13 @@ version simplever + '.' + ts
 sourceCompatibility = 1.11
 
 dependencies {
-    compileClasspath 'com.jcraft:jsch:0.1.55'
+    implementation  'com.jcraft:jsch:0.1.55'
     implementation('org.dom4j:dom4j:2.1.3') {
         exclude module: "pull-parser"
     }
-
+    implementation 'org.apache.commons:commons-lang3:3.9'
     implementation 'javax.annotation:javax.annotation-api:1.3.2'
     testImplementation 'org.testng:testng:6.9.10'
-    testImplementation 'com.alibaba:fastjson:1.2.4'
     implementation 'com.alibaba:fastjson:1.2.4'
     testImplementation files('/home/@chenweidian-yfzx/Code/FMS/FMSS_xfunds/xfunds/WebContent/WEB-INF/lib/ojdbc8.jar','/home/@chenweidian-yfzx/Code/FMS/FMSS_xfunds/xfunds/WebContent/WEB-INF/lib/orai18n-19.3.0.0.jar')
 //    testImplementation files("~/Code/FMS/FMSS_xfunds/xfunds/WebContent/WEB-INF/lib/ojdbc8.jar", "~/Code/FMS/FMSS_xfunds/xfunds/WebContent/WEB-INF/lib/orai18n-19.3.0.0.jar")
@@ -108,8 +118,8 @@ intellij {
 //    sandboxDir.set("${project.rootDir}/.sandbox")
     sandboxDir = "${project.rootDir}/.sandbox"
     plugins = ['com.intellij.java',
-               'JavaScriptLanguage',
                'JavaScript',
+           
                'Git4Idea',
     ]
 
@@ -242,12 +252,13 @@ test {
     }
 
 }
+
 runIde {
     autoReloadPlugins = true
 }
 
 
-
+tasks.getByName("initializeIntelliJPlugin").enabled(false)
 tasks.getByName("buildSearchableOptions").enabled(false)
 //tasks.getByName("test").enabled(false)
 tasks.whenTaskAdded { task ->
@@ -265,6 +276,9 @@ tasks.whenTaskAdded { task ->
     if (task.name.contains("buildSearchableOptions")) {
         task.enabled = false
     }
+    if (task.name.contains("initializeIntelliJPlugin")) {
+        task.enabled = false
+    }
 }
 
 publishPlugin {
@@ -276,9 +290,6 @@ publishPlugin {
 
 
 
-task "setupDependencies"{
-
-}
 
 
 task "publishPluginLocal" {

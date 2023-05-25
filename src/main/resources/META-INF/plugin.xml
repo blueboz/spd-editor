@@ -21,8 +21,9 @@
     <depends>com.intellij.modules.platform</depends>
     <!--    <depends>com.intellij.modules.java-capable</depends>-->
     <depends>com.intellij.java</depends>
+    <depends>com.intellij.database</depends>
     <depends>Git4Idea</depends>
-<!--    <depends>JavaScript</depends>-->
+    <depends>JavaScript</depends>
 
 
     <extensions defaultExtensionNs="com.intellij">
@@ -40,7 +41,7 @@
         <toolWindow factoryClass="cn.boz.jb.plugin.idea.toolwindow.EcasMenuToolWindowFactory" id="EcasMenu"
                     anchor="right"
                     order="last" icon="SpdEditorIcons.MENU_16_ICON"/>
-        <fileType name="SpdFile" implementationClass="cn.boz.jb.plugin.idea.filetype.SpdFileType"  fieldName="INSTANCE" extensions="spd" language="Spd"/>
+        <fileType name="Spd" extensions="spd" implementationClass="cn.boz.jb.plugin.idea.filetype.SpdFileType" language="Spd" fieldName="INSTANCE"/>
         <themeMetadataProvider path="/META-INF/SpdEditor.themeMetadata.json"/>
         <projectService serviceImplementation="cn.boz.jb.plugin.idea.configurable.SpdEditorDBState"/>
         <projectService serviceImplementation="cn.boz.jb.plugin.idea.configurable.SpdEditorNormState"/>
@@ -117,6 +118,12 @@
                 <action class="cn.boz.jb.plugin.idea.action.GotoAnyRefExtAction" icon="AllIcons.Actions.Search"
                         text="TableQueryActionByActionId" ></action>
                 <action class="cn.boz.jb.plugin.idea.action.QueryExpressionUsages" text="QueryExpression" />
+            </group>
+            <group text="MockStart" popup="true">
+                <action class="cn.boz.jb.plugin.idea.action.engineaction.MockStartBatchWithDataAction"
+                        icon="SpdEditorIcons.MOCK_16_ICON" text="MockStartWithDataProcess" ></action>
+                <action class="cn.boz.jb.plugin.idea.action.engineaction.MockStartBatchAction"
+                        icon="SpdEditorIcons.MOCK_16_ICON" text="MockStartProcess" ></action>
             </group>
 
             <group text="Db Diff" icon="AllIcons.Diff.Compare4LeftRight" popup="true">
@@ -211,10 +218,13 @@
         <group id="spd.copy.taskaction.group">
             <add-to-group group-id="spd.gotorefaction.group"></add-to-group>
         </group>
-
         <group id="spd.copysql.action.group" text="CopyGroup">
-
-
+            <group text="MockStart" popup="true">
+                <action class="cn.boz.jb.plugin.idea.action.engineaction.MockStartBatchWithDataAction"
+                        icon="SpdEditorIcons.MOCK_16_ICON" text="MockStartWithDataProcess" ></action>
+                <action class="cn.boz.jb.plugin.idea.action.engineaction.MockStartBatchAction"
+                        icon="SpdEditorIcons.MOCK_16_ICON" text="MockStartProcess" ></action>
+            </group>
 
             <action class="cn.boz.jb.plugin.idea.action.engineaction.CopyQueryEngineActionScriptAction"
                     icon="AllIcons.Actions.Copy" id="SpdEditorCopyEngineAction" text="CopyQuerySql"></action>
@@ -228,14 +238,7 @@
                     text="CopyEngineActionSql"></action>
             <add-to-group group-id="spd.copy.taskaction.group" anchor="last"></add-to-group>
         </group>
-        <group text="MockStart" popup="true" id="spd.mokestart.action.group">
-            <action class="cn.boz.jb.plugin.idea.action.engineaction.MockStartBatchWithDataAction"
-                    icon="SpdEditorIcons.MOCK_16_ICON" text="MockStartWithDataProcess" ></action>
-            <action class="cn.boz.jb.plugin.idea.action.engineaction.MockStartBatchAction"
-                    icon="SpdEditorIcons.MOCK_16_ICON" text="MockStartProcess" ></action>
-            <add-to-group group-id="spd.copysql.action.group"></add-to-group>
-            <add-to-group group-id="spdEditorPopupGroup"></add-to-group>
-        </group>
+
         <group id="spd.openintoolwindow.action.group">
             <action class="cn.boz.jb.plugin.idea.action.OpenInSearchToolWindowAction"
                     icon="AllIcons.Actions.MoveToBottomLeft"
@@ -279,6 +282,8 @@
             <!--            <action class="cn.boz.jb.plugin.idea.toolwindow.PageRangeAction" icon="AllIcons.Actions.FindAndShowNextMatches"></action>-->
             <action class="cn.boz.jb.plugin.idea.toolwindow.NextPageAction"
                     icon="AllIcons.Actions.Play_forward"></action>
+            <action class="cn.boz.jb.plugin.idea.action.OpenInSearchToolWindowAction"
+                    icon="AllIcons.Actions.MoveToBottomLeft"></action>
         </group>
 
         <action class="cn.boz.jb.plugin.idea.action.FileHistoryDiffAction" icon="SpdEditorIcons.FLOW_16_ICON"
@@ -321,17 +326,16 @@
             <add-to-group group-id="ChangesViewPopupMenu"></add-to-group>
         </group>
 
-        <group>
-            <group popup="true" text="FmsTools">
-                <action class="cn.boz.jb.plugin.idea.action.fmss.GoToClientSyncBase"
-                        id="ClientSyncBase" text="ClientSyncBase"></action>
-                <action class="cn.boz.jb.plugin.idea.action.fmss.StringSorterAction" id="SpdEditorStringSorter"
-                        text="StringSorter"></action>
-                <action class="cn.boz.jb.plugin.idea.action.fmss.AddPluginAddress" id="SpdEditorAddPluginAddress"
-                        text="SpdAddPluginAddress" icon="AllIcons.Gutter.Colors"></action>
-            </group>
+        <group popup="true" text="FmsTools" >
+            <action class="cn.boz.jb.plugin.idea.action.fmss.GoToClientSyncBase"
+                    id="ClientSyncBase" text="ClientSyncBase"></action>
+            <action class="cn.boz.jb.plugin.idea.action.fmss.StringSorterAction" id="SpdEditorStringSorter"
+                    text="StringSorter"></action>
+            <action class="cn.boz.jb.plugin.idea.action.fmss.AddPluginAddress" id="SpdEditorAddPluginAddress"
+                    text="SpdAddPluginAddress" icon="AllIcons.Gutter.Colors"></action>
+            <action class="cn.boz.jb.plugin.idea.action.fmss.EngineActionSelectorAction" id="EngineActionSelectorAction"
+                    text="EngineActionSelector" icon="SpdEditorIcons.KEY_16_ICON"></action>
             <add-to-group group-id="MainMenu"></add-to-group>
-            <add-to-group group-id="HelpMenu"></add-to-group>
         </group>
 
     </actions>
