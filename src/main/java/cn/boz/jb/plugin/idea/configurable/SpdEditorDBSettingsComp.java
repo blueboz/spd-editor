@@ -137,6 +137,9 @@ public class SpdEditorDBSettingsComp {
             jdbcDriverStrings.append(jdbcDriverListModel.get(i));
             jdbcDriverStrings.append(";");
         }
+        if(StringUtils.isBlank(jdbcDriverStrings.toString())){
+             return "";
+        }
         jdbcDriverStrings.deleteCharAt(jdbcDriverStrings.length() - 1);
         return jdbcDriverStrings.toString();
     }

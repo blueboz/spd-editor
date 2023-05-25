@@ -31,6 +31,8 @@ public class SpdEditorIcons {
     public static Icon ZIP_16_ICON = icon("/icons/zip.svg");
     public static Icon JAVASCRIPT_16_ICON = icon("/icons/javascript.svg");
     public static Icon REFER_16_ICON = icon("/icons/refer.svg");
+    public static Icon KEY_16_ICON = icon("/icons/key.svg");
+
     public static Icon SEARCH_ITEM_16_ICON = icon("/icons/searchitem.svg");
     public static Icon LOADING_16_ICON = icon("/icons/loading.svg");
     public static Icon LOADING_16_ICON_D = icon("/icons/loading_dark.svg");

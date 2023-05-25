@@ -35,6 +35,8 @@ public class SpdEditorDBState implements PersistentStateComponent<SpdEditorDBSta
 
     public int pageNum = 0;
     public int pageSize = 400;
+    public int actionPowerStart=0;
+    public int actionPowerPageSize=40;
 
     public SpdEditorDBState() {
 

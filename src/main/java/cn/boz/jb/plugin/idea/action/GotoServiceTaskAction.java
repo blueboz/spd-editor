@@ -13,7 +13,6 @@ import com.intellij.ui.awt.RelativePoint;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.awt.*;
 import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
 
@@ -67,9 +66,7 @@ public class GotoServiceTaskAction extends AnAction {
                     }
 
                     private void doRun(String selectedValue) {
-                        EventQueue.invokeLater(() -> {
-                            GotoScriptAction.gotoSelectedValue(selectedValue, anActionEvent);
-                        });
+                        GotoScriptAction.gotoSelectedValue(selectedValue, anActionEvent);
                     }
 
                     @Override

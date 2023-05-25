@@ -1,6 +1,8 @@
 package cn.boz.jb.plugin.idea.action;
 
+import cn.boz.jb.plugin.codegen.dlg.EngineActionSelectorDlg;
 import cn.boz.jb.plugin.idea.action.flowSearch.FlowSearchTable;
+import cn.boz.jb.plugin.idea.bean.EngineAction;
 import cn.boz.jb.plugin.idea.callsearch.CallerSearcherCommentPanel;
 import cn.boz.jb.plugin.idea.callsearch.CallerSearcherDetailComment;
 import cn.boz.jb.plugin.idea.callsearch.CallerSearcherTablePanel;
@@ -16,6 +18,7 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.project.DumbAware;
+import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.ui.popup.JBPopup;
 import com.intellij.openapi.ui.popup.util.PopupUtil;
 import com.intellij.openapi.wm.ToolWindow;
@@ -64,6 +67,11 @@ public class OpenInSearchToolWindowAction extends AnAction implements DumbAware 
         }
         if (component instanceof EcasMenuTreeDialog) {
             doForEcasMenuTree(e, component);
+        }
+        DialogWrapper instance = DialogWrapper.findInstance(component);
+        if(instance instanceof EngineActionSelectorDlg){
+            EngineActionSelectorDlg engineActionSelectorDlg= (EngineActionSelectorDlg) instance;
+            doForEngineActionSelectDlg(e,engineActionSelectorDlg);
         }
 
         if (component instanceof JBScrollPane) {
@@ -115,6 +123,21 @@ public class OpenInSearchToolWindowAction extends AnAction implements DumbAware 
         }
 
 
+    }
+
+    private void doForEngineActionSelectDlg(AnActionEvent e, EngineActionSelectorDlg engineActionSelectorDlg) {
+        JBScrollPane derive = engineActionSelectorDlg.derive();
+        ToolWindow callSearch = ToolWindowManager.getInstance(e.getProject()).getToolWindow(Constants.TOOL_WINDOW_CALLSEARCH);
+        ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
+        Content title = contentFactory.createContent(derive, "ActionPower", true);
+        title.setCloseable(true);
+        callSearch.getContentManager().addContent(title);
+        callSearch.getContentManager().requestFocus(title, true);
+        if (!callSearch.isActive()) {
+            callSearch.show();
+        }
+        callSearch.getContentManager().setSelectedContent(title);
+        engineActionSelectorDlg.disposeIfNeeded();
     }
 
     private void doForEcasMenuTree(AnActionEvent anActionEvent, Component view) {

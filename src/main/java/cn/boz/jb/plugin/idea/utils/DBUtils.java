@@ -1,13 +1,7 @@
 package cn.boz.jb.plugin.idea.utils;
 
 import cn.boz.jb.plugin.floweditor.gui.utils.StringUtils;
-import cn.boz.jb.plugin.idea.bean.EcasMenu;
-import cn.boz.jb.plugin.idea.bean.EngineAction;
-import cn.boz.jb.plugin.idea.bean.EngineActionInput;
-import cn.boz.jb.plugin.idea.bean.EngineActionOutput;
-import cn.boz.jb.plugin.idea.bean.EngineFlow;
-import cn.boz.jb.plugin.idea.bean.EngineTask;
-import cn.boz.jb.plugin.idea.bean.XfundsBatch;
+import cn.boz.jb.plugin.idea.bean.*;
 import cn.boz.jb.plugin.idea.configurable.SpdEditorDBSettings;
 import cn.boz.jb.plugin.idea.configurable.SpdEditorDBState;
 import com.intellij.openapi.options.ShowSettingsUtil;
@@ -17,8 +11,6 @@ import icons.SpdEditorIcons;
 import org.apache.commons.collections.CollectionUtils;
 
 import java.io.File;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.net.MalformedURLException;
@@ -51,7 +43,7 @@ public class DBUtils {
         return INST;
     }
 
-    public static void dbExceptionProcessor(Exception ee, Project project){
+    public static void dbExceptionProcessor(Exception ee, Project project) {
         String errMsg = ExceptionProcessorUtils.generateRecrusiveException(ee);
         int idx = Messages.showDialog(errMsg, "Oops!Something wrong happen!", new String[]{"Check Db Config", "Never Mind"}, 0, SpdEditorIcons.FLOW_16_ICON);
         if (idx == 0) {
@@ -164,7 +156,7 @@ public class DBUtils {
     }
 
 
-    public Map<String, String> fetchAndCompare(Project project,List<String> sqls, String processId, boolean wrap) {
+    public Map<String, String> fetchAndCompare(Project project, List<String> sqls, String processId, boolean wrap) {
         HashMap<String, String> result = new HashMap<>();
         try (Connection connection = getConnection(SpdEditorDBState.getInstance(project))) {
 
@@ -223,6 +215,63 @@ public class DBUtils {
         }
     }
 
+    /**
+     * 查询Ecas 菜单唯一键
+     *
+     * @param connection
+     * @param currentNum
+     * @param pageSize
+     * @param dbLinkYD01Name
+     * @param dbLinkYD03Name
+     * @return
+     * @throws Exception
+     */
+    public List<Map<String, Object>> queryActionPowerUniq(Connection connection, int currentNum, int pageSize, String dbLinkYD01Name, String dbLinkYD03Name, Integer applid) throws Exception {
+        if (StringUtils.isBlank(dbLinkYD01Name)) {
+            dbLinkYD01Name = "";
+        }
+        if (StringUtils.isBlank(dbLinkYD03Name)) {
+            dbLinkYD03Name = "";
+        }
+        if (applid == null) {
+            applid = 999;
+        }
+
+        String sql = "with numlist as (\n" +
+                "    SELECT rownum + "+(currentNum-1)+" rn\n" +
+                "    FROM dual\n" +
+                "    CONNECT BY 1 = 1\n" +
+                "           and rownum < "+pageSize+"\n" +
+                "),\n" +
+                "     dev as (\n" +
+                "         select *\n" +
+                "         from ECAS_ACTIONPOWER\n" +
+                "         where applid = 999\n" +
+                "     ),\n" +
+                "\n" +
+                "     yd01m as (\n" +
+                "         select *\n" +
+                "         from ECAS_ACTIONPOWER@YD01\n" +
+                "         where applid = "+applid+"\n" +
+                "     ),\n" +
+                "     yd03m as (\n" +
+                "         select *\n" +
+                "         from ECAS_ACTIONPOWER@YD03\n" +
+                "         where applid = "+applid+"\n" +
+                "     )\n" +
+                "select r.rn,dev.description \"description\", dev.powerbit \"dev\", yd01m.powerbit \"yd01\", yd03m.powerbit \"yd03\"\n" +
+                "from numlist r,\n" +
+                "     dev ,\n" +
+                "     yd01m,\n" +
+                "     yd03m\n" +
+                "where dev.powerbit(+) = r.rn\n" +
+                "  and yd01m.powerbit (+) = r.rn\n" +
+                "  and yd03m.powerbit(+) = r.rn\n" +
+                "order by rn";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            return queryForList(preparedStatement);
+        }
+    }
 
     /**
      * 查询Ecas 菜单唯一键
@@ -324,7 +373,7 @@ public class DBUtils {
         try (PreparedStatement preparedStatement = connection.prepareStatement("select * from ENGINE_ACTIONOUTPUT where ACTIONID_ =?")) {
             preparedStatement.setString(1, actionId);
             List<Map<String, Object>> maps = queryForList(preparedStatement);
-            return maps.stream().map(item->{
+            return maps.stream().map(item -> {
                 /**
                  *   ACTIONID_  VARCHAR2(50) not null,
                  *     BEANID_    VARCHAR2(30) not null,
@@ -341,11 +390,11 @@ public class DBUtils {
         }
     }
 
-    public List<EngineActionInput>  queryEngineActionInputIdMatch(Connection connection, String actionId) throws Exception {
+    public List<EngineActionInput> queryEngineActionInputIdMatch(Connection connection, String actionId) throws Exception {
         try (PreparedStatement preparedStatement = connection.prepareStatement("select * from ENGINE_ACTIONINPUT where ACTIONID_ =?")) {
             preparedStatement.setString(1, actionId);
             List<Map<String, Object>> maps = queryForList(preparedStatement);
-            return maps.stream().map(item->{
+            return maps.stream().map(item -> {
                 EngineActionInput engineActionInput = new EngineActionInput();
                 engineActionInput.setActionId((String) item.get("ACTIONID_"));
                 engineActionInput.setBeanId((String) item.get("BEANID_"));
@@ -361,7 +410,7 @@ public class DBUtils {
                  *
                  */
                 return engineActionInput;
-            }).collect(Collectors.toList()) ;
+            }).collect(Collectors.toList());
         }
     }
 
@@ -370,7 +419,7 @@ public class DBUtils {
         try (PreparedStatement preparedStatement = connection.prepareStatement("select * from engine_action where id_ like ?")) {
             preparedStatement.setString(1, "%" + actionId + "%");
             List<Map<String, Object>> maps = queryForList(preparedStatement);
-            return maps.stream().map(item->{
+            return maps.stream().map(item -> {
                 EngineAction engineAction = new EngineAction();
                 engineAction.setId((String) item.get("ID_"));
                 engineAction.setNamespace((String) item.get("NAMESPACE_"));
@@ -458,14 +507,15 @@ public class DBUtils {
 
     /**
      * 查询系统日期
+     *
      * @param connection
      * @return
      * @throws SQLException
      */
-    public String querySysDay(Connection connection) throws  SQLException{
+    public String querySysDay(Connection connection) throws SQLException {
         try (PreparedStatement preparedStatement = connection.prepareStatement("select PGET_SYSDATE() sd from dual")) {
             List<Map<String, Object>> maps = queryForList(preparedStatement);
-            if(CollectionUtils.isEmpty(maps)){
+            if (CollectionUtils.isEmpty(maps)) {
                 return null;
             }
             return (String) maps.get(0).get("SD");
@@ -539,8 +589,8 @@ public class DBUtils {
             //APPLID, MENUID, NAME, LVL, URL, PARENT, IMG, ISCHILD, GROUPID
             return maps.stream().map(it -> {
                 EcasMenu ecasMenu = new EcasMenu();
-                ecasMenu.setApplid(String.valueOf( it.get("APPLID")));
-                ecasMenu.setMenuid(String.valueOf( it.get("MENUID")));
+                ecasMenu.setApplid(String.valueOf(it.get("APPLID")));
+                ecasMenu.setMenuid(String.valueOf(it.get("MENUID")));
                 ecasMenu.setName(String.valueOf(it.get("NAME")));
                 ecasMenu.setLvl(String.valueOf(it.get("LVL")));
                 ecasMenu.setUrl(String.valueOf(it.get("URL")));
@@ -563,20 +613,21 @@ public class DBUtils {
     }
 
 
-    public List<EcasMenu> queryMenuById(Connection connection,String menuId) throws SQLException {
+    public List<EcasMenu> queryMenuById(Connection connection, String menuId) throws SQLException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(
-                " select * from ECAS_MENU where applid=999 and menuid= '"+menuId+"'")) {
+                " select * from ECAS_MENU where applid=999 and menuid= '" + menuId + "'")) {
             List<Map<String, Object>> maps = queryForList(preparedStatement);
             //APPLID, MENUID, NAME, LVL, URL, PARENT, IMG, ISCHILD, GROUPID
             return maps.stream().map(ecasMenuMapper).collect(Collectors.toList());
         }
     }
+
     public static Function<Map<String, Object>, EcasMenu> ecasMenuMapper = new Function<Map<String, Object>, EcasMenu>() {
         @Override
         public EcasMenu apply(Map<String, Object> it) {
             EcasMenu ecasMenu = new EcasMenu();
-            ecasMenu.setApplid(String.valueOf( it.get("APPLID")));
-            ecasMenu.setMenuid(String.valueOf( it.get("MENUID")));
+            ecasMenu.setApplid(String.valueOf(it.get("APPLID")));
+            ecasMenu.setMenuid(String.valueOf(it.get("MENUID")));
             ecasMenu.setName(String.valueOf(it.get("NAME")));
             ecasMenu.setLvl(String.valueOf(it.get("LVL")));
             ecasMenu.setUrl(String.valueOf(it.get("URL")));
@@ -587,5 +638,120 @@ public class DBUtils {
             return ecasMenu;
         }
     };
+
+    public List<String> queryUserTables(Connection connection) throws SQLException {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(
+                "select TABLE_NAME from USER_TABLES order by TABLE_NAME desc")) {
+            List<Map<String, Object>> maps = queryForList(preparedStatement);
+            //APPLID, MENUID, NAME, LVL, URL, PARENT, IMG, ISCHILD, GROUPID
+            return maps.stream().map(item -> (String) item.get("TABLE_NAME")).collect(Collectors.toList());
+        }
+    }
+
+    public List<UserTabCols> queryUserTablesCols(Connection conn, String tableName) throws SQLException {
+        List<UserTabCols> userTabColsList = new ArrayList<>();
+        try (PreparedStatement ps = conn.prepareStatement(
+                "SELECT cc.*,cm.COMMENTS FROM USER_TAB_COLS cc,USER_COL_COMMENTS cm WHERE cc.TABLE_NAME = ? and cc.COLUMN_NAME=cm.COLUMN_NAME and cc.TABLE_NAME=cm.TABLE_NAME order by COLUMN_ID asc")) {
+            ps.setString(1, tableName);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    UserTabCols userTabCols = new UserTabCols();
+                    userTabCols.setTableName(rs.getString("TABLE_NAME"));
+                    userTabCols.setColumnName(rs.getString("COLUMN_NAME"));
+                    userTabCols.setDataType(rs.getString("DATA_TYPE"));
+                    userTabCols.setDataLength(rs.getInt("DATA_LENGTH"));
+                    userTabCols.setDataPrecision(rs.getInt("DATA_PRECISION"));
+                    userTabCols.setDataScale(rs.getInt("DATA_SCALE"));
+                    userTabCols.setNullable(rs.getString("NULLABLE"));
+                    userTabCols.setColumnId(rs.getInt("COLUMN_ID"));
+                    userTabCols.setDefaultLength(rs.getInt("DEFAULT_LENGTH"));
+                    userTabCols.setDataDefault(rs.getString("DATA_DEFAULT"));
+                    userTabCols.setNumDistinct(rs.getLong("NUM_DISTINCT"));
+                    userTabCols.setLowValue(rs.getString("LOW_VALUE"));
+                    userTabCols.setHighValue(rs.getString("HIGH_VALUE"));
+                    userTabCols.setDensity(rs.getDouble("DENSITY"));
+                    userTabCols.setNumNulls(rs.getLong("NUM_NULLS"));
+                    userTabCols.setNumBuckets(rs.getLong("NUM_BUCKETS"));
+                    userTabCols.setLastAnalyzed(rs.getTimestamp("LAST_ANALYZED"));
+                    userTabCols.setSampleSize(rs.getLong("SAMPLE_SIZE"));
+                    userTabCols.setCharacterSetName(rs.getString("CHARACTER_SET_NAME"));
+                    userTabCols.setCharColDeclLength(rs.getLong("CHAR_COL_DECL_LENGTH"));
+                    userTabCols.setGlobalStats(rs.getString("GLOBAL_STATS"));
+                    userTabCols.setUserStats(rs.getString("USER_STATS"));
+                    userTabCols.setComments(rs.getString("COMMENTS"));
+                    userTabColsList.add(userTabCols);
+                }
+            }
+            return userTabColsList;
+        }
+    }
+
+    public EcasActionPower queryActionPower(int applid, int powerbit, Connection connection,String env) throws SQLException {
+        String envSql="";
+
+        if(!"DEV".equals(env)&&!"".equals(env)){
+            envSql="@"+env;
+        }
+        String sql="SELECT APPLID, POWERBIT, PATH, DESCRIPTION, ENABLED, MODULENAME, WEIGHT, ENGMODULE, ENGDESC, MENUID FROM ECAS_ACTIONPOWER"+envSql+" WHERE APPLID = ? AND POWERBIT = ?";
+        PreparedStatement statement = connection.prepareStatement(sql);
+        statement.setInt(1, applid);
+        statement.setInt(2, powerbit);
+        ResultSet resultSet = statement.executeQuery();
+        if (resultSet.next()) {
+            return new EcasActionPower(
+                    resultSet.getInt("APPLID"),
+                    resultSet.getInt("POWERBIT"),
+                    resultSet.getString("PATH"),
+                    resultSet.getString("DESCRIPTION"),
+                    resultSet.getInt("ENABLED"),
+                    resultSet.getString("MODULENAME"),
+                    resultSet.getInt("WEIGHT"),
+                    resultSet.getString("ENGMODULE"),
+                    resultSet.getString("ENGDESC"),
+                    resultSet.getInt("MENUID")
+            );
+        }
+        return null;
+    }
+
+    public List<UserColComments> queryUserColComments(Connection conn, String tableName) throws SQLException {
+        List<UserColComments> userColCommentsList = new ArrayList<>();
+        try (PreparedStatement ps = conn.prepareStatement(
+                "select * from USER_COL_COMMENTS where TABLE_NAME=?")) {
+            ps.setString(1, tableName);
+
+            try (ResultSet rs = ps.executeQuery()) {
+
+                while (rs.next()) {
+                    UserColComments userColComments = new UserColComments();
+                    userColComments.setTableName(rs.getString("TABLE_NAME"));
+                    userColComments.setColumnName(rs.getString("COLUMN_NAME"));
+                    userColComments.setComments(rs.getString("COMMENTS"));
+
+                    userColCommentsList.add(userColComments);
+                }
+            }
+
+        }
+
+        return userColCommentsList;
+    }
+
+    public List<String> queryUserTabComments(Connection conn, String tableName) throws SQLException {
+        List<String> userTabsComments = new ArrayList<>();
+        try (PreparedStatement ps = conn.prepareStatement(
+                "select COMMENTS from USER_TAB_COMMENTS where TABLE_NAME=?")) {
+            ps.setString(1, tableName);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    userTabsComments.add(rs.getString("COMMENTS"));
+                }
+            }
+
+        }
+
+        return userTabsComments;
+    }
 
 }

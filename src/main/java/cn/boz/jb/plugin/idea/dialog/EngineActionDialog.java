@@ -19,7 +19,6 @@ import java.awt.*;
 public class EngineActionDialog extends JComponent {
 
     private EngineAction engineAction;
-;
 
     public EngineAction getEngineAction() {
         return engineAction;

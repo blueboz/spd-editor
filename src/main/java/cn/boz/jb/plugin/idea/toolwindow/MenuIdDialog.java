@@ -129,24 +129,7 @@ public class MenuIdDialog extends JComponent {
         pageSizeModel = new SpinnerNumberModel(pageSize, 0, 1000, 1);
         pageSizeSpin.setModel(pageSizeModel);
 
-        JButton prev = new JButton("Prev");
-        JButton next = new JButton("Next");
-        prev.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (cpageNum <= 0) {
-                    currentPageModel.setValue(0);
-                } else {
-                    currentPageModel.setValue(cpageNum - 1);
-                }
-            }
-        });
-        next.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                currentPageModel.setValue(cpageNum + 1);
-            }
-        });
+
         currentPageSpin.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
