@@ -125,8 +125,10 @@ public class GotoScriptAction extends AnAction implements DumbAware {
             private void doRun(String selectedValue) {
                 //选择的值可以进行跳转
                 callback.run();
+                EventQueue.invokeLater(() -> {
 
-                gotoSelectedValue(selectedValue, anActionEvent);
+                    gotoSelectedValue(selectedValue, anActionEvent);
+                });
 
             }
 

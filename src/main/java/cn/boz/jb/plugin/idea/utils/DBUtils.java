@@ -226,8 +226,11 @@ public class DBUtils {
      * @return
      * @throws Exception
      */
-    public List<Map<String, Object>> queryActionPowerUniq(Connection connection, int currentNum, int pageSize, String dbLinkYD01Name, String dbLinkYD03Name, Integer applid) throws Exception {
+    public List<Map<String, Object>> queryActionPowerUniq(Connection connection, int currentNum, int pageSize, String dbLinkYD01Name,String dbLinkYD02Name, String dbLinkYD03Name, Integer applid) throws Exception {
         if (StringUtils.isBlank(dbLinkYD01Name)) {
+            dbLinkYD01Name = "";
+        }
+        if (StringUtils.isBlank(dbLinkYD02Name)) {
             dbLinkYD01Name = "";
         }
         if (StringUtils.isBlank(dbLinkYD03Name)) {
@@ -254,18 +257,29 @@ public class DBUtils {
                 "         from ECAS_ACTIONPOWER@YD01\n" +
                 "         where applid = "+applid+"\n" +
                 "     ),\n" +
+                "     yd02m as (\n" +
+                "         select *\n" +
+                "         from ECAS_ACTIONPOWER@YD02\n" +
+                "         where applid = "+applid+"\n" +
+                "     ),\n" +
                 "     yd03m as (\n" +
                 "         select *\n" +
                 "         from ECAS_ACTIONPOWER@YD03\n" +
                 "         where applid = "+applid+"\n" +
                 "     )\n" +
-                "select r.rn,dev.description \"description\", dev.powerbit \"dev\", yd01m.powerbit \"yd01\", yd03m.powerbit \"yd03\"\n" +
+                "select r.rn,dev.description \"description\", " +
+                "dev.powerbit \"dev\", " +
+                "yd02m.powerbit \"yd02\", " +
+                "yd01m.powerbit \"yd01\", " +
+                "yd03m.powerbit \"yd03\"\n" +
                 "from numlist r,\n" +
                 "     dev ,\n" +
                 "     yd01m,\n" +
+                "     yd02m,\n" +
                 "     yd03m\n" +
                 "where dev.powerbit(+) = r.rn\n" +
                 "  and yd01m.powerbit (+) = r.rn\n" +
+                "  and yd02m.powerbit (+) = r.rn\n" +
                 "  and yd03m.powerbit(+) = r.rn\n" +
                 "order by rn";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {

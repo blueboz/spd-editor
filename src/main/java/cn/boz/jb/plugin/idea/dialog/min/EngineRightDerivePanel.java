@@ -38,17 +38,17 @@ public class EngineRightDerivePanel extends JComponent {
 
     public EngineRightDerivePanel(String candidate, String sqlCondition, String doCondition, String processId, UserTask userTask) {
 
-        this.processId=processId;
-        this.candidate=candidate;
-        this.sqlCondition=sqlCondition;
-        this.doCondition=doCondition;
-        this.userTask=userTask;
+        this.processId = processId;
+        this.candidate = candidate;
+        this.sqlCondition = sqlCondition;
+        this.doCondition = doCondition;
+        this.userTask = userTask;
 
         this.setLayout(new MyLayoutManager());
         String rights = userTask.getRights();
         String id = userTask.getId();
         String name = userTask.getName();
-        String titleStr =String.format("%s->%s(%s)->%s",this.getProcessId(),id,name,rights);
+        String titleStr = String.format("%s->%s(%s)->%s", this.getProcessId(), id, name, rights);
 
         routeLabel = new JLabel("route");
         routeTextArea = new JTextArea("", 2, 30);
@@ -96,9 +96,16 @@ public class EngineRightDerivePanel extends JComponent {
         this.add(doConditionJscroll);
 
         this.setFocusable(true);
+        installOpenInToolWindowBtn();
     }
 
-
+    public void installOpenInToolWindowBtn() {
+        ActionManager instance = ActionManager.getInstance();
+        ActionGroup actionGroup = (ActionGroup) instance.getAction(Constants.ACTION_GROUP_FLOW_ENGINE_RIGHTS);
+        ActionToolbar spd_tb = instance.createActionToolbar("spdtb", actionGroup, true);
+        JComponent gotoactionScript = spd_tb.getComponent();
+        this.add(gotoactionScript);
+    }
 
     public UserTask getUserTask() {
         return userTask;

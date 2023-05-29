@@ -33,6 +33,9 @@ public class SpdEditorIcons {
     public static Icon REFER_16_ICON = icon("/icons/refer.svg");
     public static Icon KEY_16_ICON = icon("/icons/key.svg");
 
+    public static Icon SQL_16_ICON = icon("/icons/sql.svg");
+    public static Icon SQLEDIT_16_ICON = icon("/icons/sqledit.svg");
+
     public static Icon SEARCH_ITEM_16_ICON = icon("/icons/searchitem.svg");
     public static Icon LOADING_16_ICON = icon("/icons/loading.svg");
     public static Icon LOADING_16_ICON_D = icon("/icons/loading_dark.svg");

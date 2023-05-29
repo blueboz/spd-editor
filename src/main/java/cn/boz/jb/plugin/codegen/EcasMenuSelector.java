@@ -323,7 +323,7 @@ public class EcasMenuSelector extends JFrame {
 
             List<Map<String, Object>> apps = null;
             try {
-                apps = instance.queryActionPowerUniq(connection, currentNum, pageSize, "@YD01", "@YD03", 999);
+                apps = instance.queryActionPowerUniq(connection, currentNum, pageSize, "@YD01","@YD02", "@YD03", 999);
             } catch (Exception ex) {
                 ex.printStackTrace();
             }

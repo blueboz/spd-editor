@@ -60,7 +60,7 @@ public class EngineActionSelectorDlg extends DialogWrapper {
             DBUtils.dbExceptionProcessor(e, project);
         }
         init();
-        this.setSize(800, 800);
+        this.setSize(900, 800);
 
     }
 
@@ -76,7 +76,7 @@ public class EngineActionSelectorDlg extends DialogWrapper {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        mainPanel.setPreferredSize(new Dimension(800, 800));
+        mainPanel.setPreferredSize(new Dimension(900, 800));
 
         return mainPanel;
     }
@@ -89,7 +89,7 @@ public class EngineActionSelectorDlg extends DialogWrapper {
         JScrollPane panel = new JScrollPane();
 
         tableModel = new DefaultTableModel();
-        tableModel.setColumnIdentifiers(new Object[]{"rownum", "DEV", "YD01", "YD03", "description", "status"});
+        tableModel.setColumnIdentifiers(new Object[]{"rownum", "DEV", "YD01","YD02", "YD03", "description", "status"});
         actionPowerTable = new JBTable(tableModel) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -98,7 +98,7 @@ public class EngineActionSelectorDlg extends DialogWrapper {
 
             @Override
             public Object getValueAt(int row, int column) {
-                if (column == 5) {
+                if (column == 6) {
                     Object dev = getValueAt(row, 1);
                     Object yd01 = getValueAt(row, 2);
                     Object yd03 = getValueAt(row, 3);
@@ -113,7 +113,7 @@ public class EngineActionSelectorDlg extends DialogWrapper {
                     @Override
                     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
                         Component component = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-                        if (column == 5) {
+                        if (column == 6) {
                             if (ITEM_OCCUPY.equals(value)) {
                                 component.setBackground(Color.YELLOW);
                                 component.setForeground(new Color(252, 114, 114));
@@ -136,7 +136,8 @@ public class EngineActionSelectorDlg extends DialogWrapper {
         columnModel.getColumn(1).setMaxWidth(50);
         columnModel.getColumn(2).setMaxWidth(50);
         columnModel.getColumn(3).setMaxWidth(50);
-        columnModel.getColumn(5).setMaxWidth(100);
+        columnModel.getColumn(4).setMaxWidth(50);
+        columnModel.getColumn(6).setMaxWidth(100);
 
         panel.setViewportView(actionPowerTable);
         jPanel.setLayout(new BorderLayout());
@@ -324,7 +325,7 @@ public class EngineActionSelectorDlg extends DialogWrapper {
 
             List<Map<String, Object>> apps = null;
             try {
-                apps = dbUtils.queryActionPowerUniq(dbConn, currentNum, pageSize, "@YD01", "@YD03", 999);
+                apps = dbUtils.queryActionPowerUniq(dbConn, currentNum, pageSize, "@YD01","@YD02" ,"@YD03", 999);
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -332,7 +333,7 @@ public class EngineActionSelectorDlg extends DialogWrapper {
 
             for (Map<String, Object> app : apps) {
 
-                tableModel.addRow(new Object[]{app.get("RN"), app.get("dev"), app.get("yd01"), app.get("yd03"), app.get("description")});
+                tableModel.addRow(new Object[]{app.get("RN"), app.get("dev"), app.get("yd01"),app.get("yd02"), app.get("yd03"), app.get("description")});
             }
         };
         Executors.newSingleThreadExecutor().execute(r);

@@ -171,11 +171,10 @@ public class GotoRefFileAction extends AnAction {
                 }
             }
         } else {
-            try {
-                Class.forName("com.intellij.lang.javascript.JavaScriptFileType");
-
-                if (fileType instanceof JavaScriptFileType) {
+            if (fileType instanceof JavaScriptFileType) {
+                if (element != null) {
                     PsiElement context = element.getContext();
+
                     if (context instanceof JSLiteralExpression) {
                         JSLiteralExpression jsLiteralExpression = (JSLiteralExpression) context;
                         String stringValue = jsLiteralExpression.getStringValue();
@@ -197,22 +196,17 @@ public class GotoRefFileAction extends AnAction {
                         }
                         //尝试搜索文件名
 
-                    } else {
-
-                        boolean founded = tryToGotoHtmlFile(anActionEvent);
-                        if (founded) {
-                            return;
-                        }
-                    }
-                } else {
-
-                    boolean founded = tryToGotoHtmlFile(anActionEvent);
-                    if (founded) {
-                        return;
                     }
                 }
-            } catch (ClassNotFoundException classNotFoundException) {
+
+
             }
+
+            boolean founded = tryToGotoHtmlFile(anActionEvent);
+            if (founded) {
+                return;
+            }
+
 
         }
         //try to use this function else do not use it.
@@ -225,8 +219,6 @@ public class GotoRefFileAction extends AnAction {
 
         String allContributorsGroupId = SearchEverywhereManagerImpl.ALL_CONTRIBUTORS_GROUP_ID;
         SearchEverywhereManager.getInstance(project).show(allContributorsGroupId, text, anActionEvent);
-//        SearchEverywhereManager searchEverywhereManager = SearchEverywhereManager.getInstance(project);
-//        HintManager.getInstance().showErrorHint(editor, "Cannot find declaration to go to");
 
     }
 

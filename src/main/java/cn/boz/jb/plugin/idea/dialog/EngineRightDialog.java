@@ -1,6 +1,7 @@
 package cn.boz.jb.plugin.idea.dialog;
 
 import cn.boz.jb.plugin.floweditor.gui.process.fragment.UserTask;
+import cn.boz.jb.plugin.floweditor.gui.utils.TranslateUtils;
 import cn.boz.jb.plugin.idea.dialog.min.EngineRightDerivePanel;
 import cn.boz.jb.plugin.idea.layoutmanager.MyLayoutManager;
 import cn.boz.jb.plugin.idea.utils.Constants;
@@ -17,6 +18,7 @@ public class EngineRightDialog extends JComponent {
     private String sqlCondition;
     private String doCondition;
 
+    private String rights;
     JLabel candidateLabel;
     JLabel sqlConditionLabel;
     JLabel doConditionLabel;
@@ -30,13 +32,27 @@ public class EngineRightDialog extends JComponent {
     JBScrollPane doConditionJscroll;
     private UserTask userTask;
     private String processId;
-    public EngineRightDialog(String candidate, String sqlCondition, String doCondition,String processId, UserTask userTask, boolean installOpenInToolWindowBtn) {
 
-        this.processId=processId;
-        this.candidate=candidate;
-        this.sqlCondition=sqlCondition;
-        this.doCondition=doCondition;
-        this.userTask=userTask;
+    public String generateSql() {
+        return generateSqlBase(rights, candidate, sqlCondition, doCondition);
+    }
+
+    private String generateSqlBase(String r, String c, String s, String d) {
+        String sql = String.format("INSERT INTO ENGINE_RIGHTS (RIGHTS_, CANDIDATE_, SQLCONDITION_, DOCONDITION_) " +
+                "VALUES ('%s', '%s', '%s', '%s');", r, TranslateUtils.translate(c), TranslateUtils.translate(s), TranslateUtils.translate(d));
+        return sql;
+    }
+
+
+    public EngineRightDialog(String rights, String candidate, String sqlCondition, String doCondition, String processId, UserTask userTask, boolean installOpenInToolWindowBtn) {
+
+
+        this.rights = rights;
+        this.processId = processId;
+        this.candidate = candidate;
+        this.sqlCondition = sqlCondition;
+        this.doCondition = doCondition;
+        this.userTask = userTask;
 
         this.setLayout(new MyLayoutManager());
 
@@ -72,20 +88,22 @@ public class EngineRightDialog extends JComponent {
         this.add(doConditionLabel);
         this.add(doConditionJscroll);
 
-        installOpenInToolWindowBtn();
+        installOpenInToolWindowBtn(this);
         this.setFocusable(true);
     }
 
-    public void installOpenInToolWindowBtn(){
+    public void installOpenInToolWindowBtn(JComponent jComponent) {
         ActionManager instance = ActionManager.getInstance();
         ActionGroup actionGroup = (ActionGroup) instance.getAction(Constants.ACTION_GROUP_FLOW_ENGINE_RIGHTS);
         ActionToolbar spd_tb = instance.createActionToolbar("spdtb", actionGroup, true);
         JComponent gotoactionScript = spd_tb.getComponent();
-        this.add(gotoactionScript) ;
+        jComponent.add(gotoactionScript);
     }
 
     public JComponent derive() {
-      return new EngineRightDerivePanel(candidate,sqlCondition,doCondition,processId,userTask);
+        EngineRightDerivePanel engineRightDerivePanel = new EngineRightDerivePanel(candidate, sqlCondition, doCondition, processId, userTask);
+
+        return engineRightDerivePanel;
     }
 
     public UserTask getUserTask() {
@@ -94,5 +112,9 @@ public class EngineRightDialog extends JComponent {
 
     public String getProcessId() {
         return processId;
+    }
+
+    public String generateEditSql() {
+        return generateSqlBase(rights, candidateTextArea.getText(), sqlConditionTextArea.getText(), doConditionTextArea.getText());
     }
 }

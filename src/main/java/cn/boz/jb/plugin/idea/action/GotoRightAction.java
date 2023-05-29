@@ -83,11 +83,12 @@ public class GotoRightAction extends AnAction {
                         spdEditorNotification.notify(anActionEvent.getProject());
                     } else if (engineRights.size() == 1) {
                         Map<String, Object> map = engineRights.get(0);
+                        String rights_ = (String) map.get("RIGHTS_");
                         String candidate = (String) map.get("CANDIDATE_");
                         String sqlcondition = (String) map.get("SQLCONDITION_");
                         String docondition = (String) map.get("DOCONDITION_");
 
-                        engineRightDialog = new EngineRightDialog(candidate, sqlcondition, docondition,chartPanel.getId(),userTask,true);
+                        engineRightDialog = new EngineRightDialog(rights_,candidate, sqlcondition, docondition,chartPanel.getId(),userTask,true);
 
 
                         popup = JBPopupFactory.getInstance()

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  The <plugins> element contains the description of the plugins available at this repository. Required.
+-->
+<plugins>
+    <!--
+      Each <plugin> element describes one plugin in the repository. Required.
+      id - used by JetBrains IDEs to uniquely identify a plugin. Required. Must match <id> in plugin.xml
+      url - path to download the plugin JAR/ZIP file. Required. Must be HTTPS
+      version - version of this plugin. Required. Must match <version> in plugin.xml
+    -->
+    <idea-plugin url="http://21.96.35.45:16789/jetbrainsPlugins/spd-editor-${version}.zip"
+                 date="$cts"
+                 version="$version" size="$flen" downloads="155465131" updatedDate="$cts"
+                 require-restart="false" allow-bundled-update="true">
+        <id>cn.boz.jb.plugin.spd-editor</id>
+        <idea-version since-build="200.*"></idea-version>
+        <description>
+            $desc
+        </description>
+
+        <change-notes>
+            <![CDATA[
+            Release Time:$tfmt<br></br>
+
+            $changeNotes
+            ]]>
+        </change-notes>
+        <version>$version</version>
+        <rating>5</rating>
+        <vendor email="1173626291@qq.com" url="http://blog.csdn.net/blueboz">Blueboz.Chen</vendor>
+        <name>Erayt Spd Editor社区版</name>
+        <downloadUrl>http://21.96.35.45:16789/jetbrainsPlugins/spd-editor-${version}.zip</downloadUrl>
+    </idea-plugin>
+
+    <idea-plugin url="http://21.96.35.45:16789/tools/idea2021/ide-eval-resetter-2.1.6.zip"
+                 date="1639640877525"
+                 version="1.9" size="30838" downloads="10" updatedDate="1639640877525">
+        <id>idea.crack</id>
+        <idea-version since-build="100.*"></idea-version>
+        <description>
+            <![CDATA[
+            <h1>
+                <span style='color:red'>IDEA</span>
+                <span style='color:orange'>无</span>
+                <span style='color:yellow'>限</span>
+                <span style='color:green'>激</span>
+                <span style='color:#65fff1'>活</span>
+                <span style='color:blue'>认</span>
+                <span style='color:purple'>证</span>
+            </h1>
+            Help->Eval Reset->打钩->Reset重启即可
+            ]]>
+        </description>
+
+        <change-notes>
+            <![CDATA[
+
+            ]]>
+        </change-notes>
+        <version>1.9</version>
+        <rating>5</rating>
+        <vendor email="1173626291@qq.com" url="http://blog.csdn.net/blueboz">Blueboz.Chen</vendor>
+        <name>无限认证试用</name>
+        <downloadUrl>http://21.96.35.45:16789/tools/idea2021/ide-eval-resetter-2.1.6.zip</downloadUrl>
+    </idea-plugin>
+
+    <idea-plugin xmlns:xi="http://www.w3.org/2001/XInclude" url="http://21.96.35.45:16789/jetbrainsPlugins/IdeaVim.zip">
+        <name>IdeaVim</name>
+        <id>IdeaVIM</id>
+        <change-notes><![CDATA[<h3>Features:</h3>
+    <ul>
+      <li>Support <code>:global</code> and <code>:vglobal</code> commands <a
+          href="https://youtrack.jetbrains.com/issue/VIM-831">VIM-831</a>, <a
+          href="https://youtrack.jetbrains.com/issue/VIM-832">VIM-832</a></li>
+      <li>Support <code>vim-indent-object</code> extension <a
+          href="https://youtrack.jetbrains.com/issue/VIM-1151">VIM-1151</a> | <a
+          href="https://github.com/michaeljsmith/vim-indent-object">vim-indent-object</a></li>
+      <li>Support <code>:print</code> command</li>
+    </ul>
+
+    <h3>Fixes:</h3>
+    <ul>
+      <li><a href="https://youtrack.jetbrains.com/issue/VIM-2308">VIM-2308</a> Go to next tab doesn't move scrolling</li>
+    </ul>
+
+    <h3>Merged PRs:</h3>
+    <ul>
+      <li><a href="https://github.com/JetBrains/ideavim/pull/261">261</a> by <a href="https://github.com/sharat87">Shrikant
+        Sharat Kandula</a>: New extension: Indentation based text objects
+      </li>
+      <li><a href="https://github.com/JetBrains/ideavim/pull/308">308</a> by <a href="https://github.com/citizenmatt">Matt
+        Ellis</a>: Fix unnecessary caret movement when switching tabs
+      </li>
+    </ul>]]></change-notes>
+        <description><![CDATA[<p>Vim emulation plugin for IntelliJ Platform-based IDEs.</p>
+      <br/>
+      <p>IdeaVim supports many Vim features including normal/insert/visual modes, motion keys, deletion/changing,
+      marks, registers, some Ex commands, Vim regexps, configuration via ~/.ideavimrc, macros, Vim plugins, etc.</p>
+      <br/>
+      <p>See also:</p>
+      <ul>
+        <li><a href="https://github.com/JetBrains/ideavim">GitHub repository</a>: documentation and contributing</li>
+        <li><a href="https://youtrack.jetbrains.com/issues/VIM">Issue tracker</a>: feature requests and bug reports</li>
+      </ul>]]></description>
+        <version>0.68</version>
+        <vendor>JetBrains</vendor>
+        <!-- Please search for "[VERSION UPDATE]" in project in case you update the since-build version -->
+        <!-- Check for [Version Update] tag in YouTrack as well -->
+        <idea-version since-build="202.5103.13"/>
+        <!-- Mark the plugin as compatible with RubyMine and other products based on the IntelliJ platform -->
+        <downloadUrl>http://21.96.35.45:16789/jetbrainsPlugins/IdeaVim.zip</downloadUrl>
+
+    </idea-plugin>
+
+
+</plugins>

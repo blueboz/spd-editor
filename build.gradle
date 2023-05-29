@@ -63,6 +63,13 @@ dependencies {
 //    testImplementation files("~/Code/FMS/FMSS_xfunds/xfunds/WebContent/WEB-INF/lib/ojdbc8.jar", "~/Code/FMS/FMSS_xfunds/xfunds/WebContent/WEB-INF/lib/orai18n-19.3.0.0.jar")
     implementation files("F:/Code/FMS/FMSS_xfunds/xfunds/WebContent/WEB-INF/lib/ojdbc8.jar", "F:/Code/FMS/FMSS_xfunds/xfunds/WebContent/WEB-INF/lib/orai18n-19.3.0.0.jar")
 //    implementation 'org.codehaus.groovy:groovy-all:2.5.11' <dependency>
+//    compileOnly files(
+//            "F:\\App\\ideaIU-2020.1.4.win\\plugins\\JavaScriptLanguage\\lib\\completion-ranking-js-0.0.5.jar",
+//            "F:\\App\\ideaIU-2020.1.4.win\\plugins\\JavaScriptLanguage\\lib\\JavaScriptLanguage.jar",
+//            "F:\\App\\ideaIU-2020.1.4.win\\plugins\\JavaScriptLanguage\\lib\\javascript-openapi.jar",
+//            "F:\\App\\ideaIU-2020.1.4.win\\plugins\\JavaScriptLanguage\\lib\\js-test-common.jar",
+//            "F:\\App\\ideaIU-2020.1.4.win\\plugins\\JavaScriptLanguage\\lib\\resources_en.jar`",
+//    )
 }
 
 sourceSets {
@@ -103,6 +110,7 @@ intellij {
 //    localPath = 'F:\\App\\JetBrains\\ideaIU-2020.1.4.win'
 
 //    localPath="F:/Program Files/JetBrains/IntelliJ IDEA 2023.1.2"
+//    localPath="F:\\Program Files\\JetBrains\\IntelliJ IDEA Community Edition 2020.1.1"
     localPath="F:\\App\\ideaIU-2020.1.4.win"
 //	  localPath="/idea/idea-IU-201.8743.12"
 //    localSourcesPath=""
@@ -122,7 +130,6 @@ intellij {
     sandboxDir = "${project.rootDir}/.sandbox"
     plugins = ['com.intellij.java',
                'JavaScript',
-               'DatabaseTools',
                'Git4Idea',
     ]
 
@@ -293,6 +300,89 @@ publishPlugin {
 
 
 
+
+task "publishCommunityEdition" {
+    println('#########')
+    println(this)
+    doLast {
+        try {
+            println('#########')
+            println(this)
+            println('#########')
+            println(getBuildDir())
+
+            def fpath = "$buildDir\\$distsDirName"
+            def fts = fileTree(fpath)
+            if (fts.size() == 0) {
+                System.err.println "THERE IS NOTHING FILE TO BE PUBLISH"
+                return;
+            }
+            def distributionFilePath = fts.last()
+//        def distributionFilePath = "$buildDir\\$distsDirName\\${archivesBaseName}-${version}.zip"
+//    println 'ready to publish file'+distributionFilePath
+            def dname = distributionFilePath.name
+            def dnamerem = dname.substring(0, dname.lastIndexOf('.'))
+            def dnamets = dnamerem.substring(dnamerem.lastIndexOf('.') + 1)
+
+
+//        def distributionFilePath = "$buildDir\\$distsDirName\\${archivesBaseName}-${version}.zip"
+            def cn = patchPluginXml.changeNotes.getOrNull()
+            println 'ready to publish file' + distributionFilePath
+            def file = new File(dname)
+            def flen = file.length()
+
+
+            def p = java.nio.file.Path.of("$projectDir"+java.io.File.separator+"pluginCommunity.xml")
+            def str = Files.readString(p, StandardCharsets.UTF_8)
+            def ld = LocalDateTime.now()
+            def timefmt = ld.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+            println(ext)
+
+            def binding = [
+                    version    : simplever + '.' + "$dnamets",
+                    changeNotes: "$cn",
+                    desc       : "$patchPluginXml.description",
+                    cts        : System.currentTimeMillis(),
+                    flen       : "$flen",
+                    tfmt       : "$timefmt"
+            ]
+
+            def engine = new GStringTemplateEngine()
+            String template = engine.createTemplate(str).make(binding)
+
+            def jSch = new JSch();
+            jSch.addIdentity(projectDir.path + File.separator + "id_rsa.ppk");
+//        var user = 'D-DPDKZJJY-APP+cdadmin'
+//        var host = '21.96.60.156'
+            def user = 'a-dkzjjy-usr'
+            def host = '21.96.35.45'
+            def port = 18122
+            def session = jSch.getSession(user, host, port);
+            session.setConfig("StrictHostKeyChecking", "no");
+            session.connect();
+            ChannelSftp sftp = (ChannelSftp) session.openChannel("sftp");
+            sftp.connect();
+            def targetpath = "/cygdrive/e/apiserver/jetbrainsPlugins/"
+            println "pushing from $distributionFilePath.absolutePath into\n\t\t $user@$host:$port/$targetpath"
+            sftp.put(distributionFilePath.absolutePath, targetpath)
+            println 'done'
+
+            println "pushing updatePlugins.xml"
+            def bais = new ByteArrayInputStream(template.getBytes(StandardCharsets.UTF_8))
+
+            sftp.put(bais, "$targetpath/pluginCommunity.xml")
+
+
+            sftp.disconnect()
+            session.disconnect();
+            fts.each { f -> f.delete() }
+
+
+        } catch (Exception e) {
+            throw new RuntimeException(e)
+        }
+    }
+}
 
 
 task "publishPluginLocal" {
