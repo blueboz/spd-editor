@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace='com.erayt.xfunds.fund.impl.dao.FundWhiteListDao'>
+	<resultMap id='FundWhiteListMap' class='com.erayt.xfunds.fund.domain.FundWhiteList'>
+		<result property='id' column='id' />
+		<result property='companyId' column='companyId' />
+		<result property='importDate' column='importDate' />
+		<result property='signDate' column='signDate' />
+	</resultMap>
+	<select id='selectFundWhiteList' resultMap='FundWhiteListMap' parameterClass='com.erayt.xfunds.fund.domain.FundWhiteList'>
+		select id,companyId,importDate,signDate from XFUNDS_FUND_WHITELIST where 1=1
+		<isNotEmpty property='id' prepend='and'>
+			id=#id#
+		</isNotEmpty>
+		<isNotEmpty property='companyId' prepend='and'>
+			companyId=#companyId#
+		</isNotEmpty>
+		<isNotEmpty property='importDate' prepend='and'>
+			importDate=#importDate#
+		</isNotEmpty>
+		<isNotEmpty property='signDate' prepend='and'>
+			signDate=#signDate#
+		</isNotEmpty>
+	</select>
+	<update id='updateFundWhiteList' parameterClass='com.erayt.xfunds.fund.domain.FundWhiteList'>
+		update XFUNDS_FUND_WHITELIST set
+		importDate=#importDate#,
+		signDate=#signDate#,
+		companyId=#companyId#
+		where 1=1
+		<isNotEmpty property='id' prepend='and'>
+			id=#id#
+		</isNotEmpty>
+	</update>
+	<insert id='insertFundWhiteList' parameterClass='com.erayt.xfunds.fund.domain.FundWhiteList'>
+		insert into XFUNDS_FUND_WHITELIST
+		( companyId,importDate,signDate,id)
+		values
+		(#companyId#,#importDate#,#signDate#,#id#)
+	</insert>
+
+	<insert id='insertFundWhiteListBatch' parameterClass='com.erayt.xfunds.fund.domain.FundWhiteList'>
+		insert into XFUNDS_FUND_WHITELIST
+		( companyId,importDate,signDate,id)
+		values
+		(#companyId#,#importDate#,#signDate#,#id#)
+	</insert>
+
+	<delete id="deleteFundWhiteList">
+		truncate table XFUNDS_FUND_WHITELIST
+	</delete>
+
+	<delete id="deleteFundWhiteListId" parameterClass="java.lang.String">
+		delete from XFUNDS_FUND_WHITELIST where id=#value#
+	</delete>
+</sqlMap>
