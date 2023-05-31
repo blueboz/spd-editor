@@ -1,0 +1,22 @@
+{
+  "package": "com.erayt.xfunds.forex",
+  "className": "DlyReport",
+  "beanName": "dlyReport",
+  "namespace": "forex",
+  "tableName": "xfunds_forex_dlyreport",
+  "title": "基金白名单测试",
+  "columns": [
+    {
+      "fieldChName": "交易机构",
+      "fieldName": "bankId",
+      "dataType": "VARCHAR(30)",
+      "nullable": false
+    },
+    {
+      "fieldChName": "ecif客户号",
+      "fieldName": "ecifNo",
+      "dataType": "VARCHAR(60)",
+      "nullable": false
+    }
+  ]
+}

@@ -70,6 +70,9 @@ dependencies {
 //            "F:\\App\\ideaIU-2020.1.4.win\\plugins\\JavaScriptLanguage\\lib\\js-test-common.jar",
 //            "F:\\App\\ideaIU-2020.1.4.win\\plugins\\JavaScriptLanguage\\lib\\resources_en.jar`",
 //    )
+    implementation 'org.freemarker:freemarker:2.3.30'
+    implementation 'org.thymeleaf:thymeleaf:3.1.1.RELEASE'
+
 }
 
 sourceSets {

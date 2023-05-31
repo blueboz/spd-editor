@@ -2,9 +2,12 @@ package cn.boz.jb.plugin.idea.toolwindow;
 
 import cn.boz.jb.plugin.idea.configurable.SpdEditorDBState;
 import cn.boz.jb.plugin.idea.utils.DBUtils;
+import com.intellij.icons.AllIcons;
+import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.ui.Messages;
+import com.intellij.ui.AnActionButton;
 import com.intellij.ui.ColoredTreeCellRenderer;
 import com.intellij.ui.ToolbarDecorator;
 import com.intellij.ui.treeStructure.Tree;
@@ -120,6 +123,32 @@ public class EcasMenuToolWindow extends JComponent implements ClipboardOwner {
                 }
             });
 
+            decorator.addExtraAction(new AnActionButton() {
+                {
+                    getTemplatePresentation().setIcon(AllIcons.Actions.Refresh);
+                }
+
+                @Override
+                public void actionPerformed(@NotNull AnActionEvent anActionEvent) {
+                    TreePath selectionPath = tree.getSelectionPath();
+                    if (selectionPath == null) {
+                        return;
+                    }
+                    DefaultMutableTreeNode lastPathComponent = (DefaultMutableTreeNode) selectionPath.getLastPathComponent();
+                    DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
+                    Object userObject = lastPathComponent.getUserObject();
+                    if (userObject instanceof String) {
+                        return;
+                    }
+                    if (userObject instanceof AppNode) {
+                        AppNode appNode= (AppNode) userObject;
+                        appNode.setSubDataLoaded(false);
+
+                        model.removeNodeFromParent(lastPathComponent);
+                        return;
+                    }
+                }
+            });
 
             decorator.setRemoveAction(anActionButton -> {
                 TreePath selectionPath = tree.getSelectionPath();
@@ -162,16 +191,17 @@ public class EcasMenuToolWindow extends JComponent implements ClipboardOwner {
                         DBUtils instance = DBUtils.getInstance();
                         try (var conn = DBUtils.getConnection(SpdEditorDBState.getInstance(project))) {
                             instance.executeSql(conn, sql);
+                            model.removeNodeFromParent(lastPathComponent);
                         } catch (Exception e) {
                             Messages.showErrorDialog(e.getMessage(), "数据库失败");
                         }
+
                     }
                     if (0 == result) {
                         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
                         StringSelection selection = new StringSelection(sql);
                         clipboard.setContents(selection, this);
                     }
-                    model.removeNodeFromParent(lastPathComponent);
                 }
             });
             decorator.setAddAction(anActionButton -> {

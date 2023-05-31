@@ -1,0 +1,86 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+</body>
+</html>
+<html>
+	<head>
+		<title>${title}</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<link rel="stylesheet" href="../ui/eraui/css/eraui.css" />
+		<link rel="stylesheet" href="../ui/css/ui-all.css" />
+
+		<script src="../ui/sea.js" data-main="../js/fund/fundWhiteListQueryList.js"></script>
+		<style type="text/css">
+			.fielditem{
+				width: 200px;
+			}
+			.fieldlabel{
+				width: 60px;
+			}
+		</style>
+	</head>
+	<body>
+		<table class=blockTable cellspacing=0 cellpadding=0 width="100%"
+			border=0>
+			<tr>
+				<td valign="middle" class="blocktd" style="padding: 4px 8px">
+					<img src="../ui/eraui/images/title_icon.gif" style="vertical-align:middle;" />
+					<b>基金白名单</b>
+				</td>
+			</tr>
+			<tr>
+				<td>
+                    <div style="line-height: 36px;margin-left: 5px">
+						<span id="uploadfile" style="vertical-align: middle"></span>
+						<input type="button" value="数据导入" id="whiteListImport" />&nbsp;&nbsp;
+						<input type="button"  value="模板下载" onclick="fileDownload()" />
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td class=blockTd style="padding: 2px 10px" width="65%">
+					<div class=divbtn url='../fund/${className}Input.html' text='新增'
+						dlgtitle='addbtn' dlgw=500 dlgh=430 dlg_id='msgDlg'
+						icon='../ui/eraui/images/e_edit.gif' id=addbtn></div>
+					<div class=divbtn url='../fund/${className}Mod.html?modify=true' text='修改'
+						dlgtitle='modifybtn' dlgw=500 dlgh=430 dlg_id='msgDlg'
+						icon='../ui/eraui/images/e_edit.gif' id=editbtn></div>
+					<div class=divbtn url='delete${className}Batch.do' text='删除'
+						icon='../ui/eraui/images/e_del.gif' id=delbtn></div>
+				</td>
+			</tr>
+
+			<tr>
+				<td align=left style="padding: 2px 10px">
+					<form target="_top" method="POST" name="fundWhiteListQueryListForm">
+						<table>
+							<tr>
+								<td>
+									<#list columns as col>
+
+									<span class='fielditem'>
+										<span class='fieldlabel'>
+											<span >${col.fieldChName}:</span>
+										</span>
+										<span>
+											<input type='text' id='${col.fieldName}' class='inputText' style='width:105px' name='queryParam.${col.fieldName}'></input>
+										</span>
+									</span>
+									</#list>
+
+										<span class="fielditem">
+									<a href="javascript:void(0);" class="zButton"
+										style="margin-left: 5px;"><INPUT
+											onclick="if (window.tool){search();}" type='button' value='查询'> </a>
+								</span>
+								</td>
+							</tr>
+						</table>
+					</form>
+				</td>
+			</tr>
+			<tr>
+				<td id=tblct style="PADDING: 2px 6px"></td>
+			</tr>
+		</table>
+	</body>
+</html>

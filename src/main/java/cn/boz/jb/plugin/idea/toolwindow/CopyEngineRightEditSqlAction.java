@@ -1,6 +1,7 @@
 package cn.boz.jb.plugin.idea.toolwindow;
 
 import cn.boz.jb.plugin.idea.dialog.EngineRightDialog;
+import cn.boz.jb.plugin.idea.dialog.min.EngineRightDerivePanel;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
@@ -42,6 +43,15 @@ public class CopyEngineRightEditSqlAction extends AnAction  implements Clipboard
             Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
             StringSelection selection = new StringSelection(s);
             clipboard.setContents(selection, this);
+            return ;
+        }
+        Container ancestorOfClass = SwingUtilities.getAncestorOfClass(EngineRightDerivePanel.class, component);
+        if(ancestorOfClass!=null &&ancestorOfClass instanceof EngineRightDerivePanel){
+            EngineRightDerivePanel dlgPanel= (EngineRightDerivePanel) ancestorOfClass;
+            String s = dlgPanel.generateEditSql();
+            Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+            StringSelection selection = new StringSelection(s);
+            clipboard.setContents(selection, this);
         }
     }
 
@@ -49,4 +59,6 @@ public class CopyEngineRightEditSqlAction extends AnAction  implements Clipboard
     public void lostOwnership(Clipboard clipboard, Transferable contents) {
 
     }
+
+
 }

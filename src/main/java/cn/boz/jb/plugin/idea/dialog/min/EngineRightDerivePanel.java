@@ -1,6 +1,7 @@
 package cn.boz.jb.plugin.idea.dialog.min;
 
 import cn.boz.jb.plugin.floweditor.gui.process.fragment.UserTask;
+import cn.boz.jb.plugin.floweditor.gui.utils.TranslateUtils;
 import cn.boz.jb.plugin.idea.layoutmanager.MyLayoutManager;
 import cn.boz.jb.plugin.idea.utils.Constants;
 import com.intellij.openapi.actionSystem.ActionGroup;
@@ -20,6 +21,8 @@ public class EngineRightDerivePanel extends JComponent {
     private String sqlCondition;
     private String doCondition;
 
+    private String rights;
+
     JLabel candidateLabel;
     JLabel sqlConditionLabel;
     JLabel doConditionLabel;
@@ -36,8 +39,8 @@ public class EngineRightDerivePanel extends JComponent {
     private UserTask userTask;
     private String processId;
 
-    public EngineRightDerivePanel(String candidate, String sqlCondition, String doCondition, String processId, UserTask userTask) {
-
+    public EngineRightDerivePanel(String rights,String candidate, String sqlCondition, String doCondition, String processId, UserTask userTask) {
+        this.rights=rights;
         this.processId = processId;
         this.candidate = candidate;
         this.sqlCondition = sqlCondition;
@@ -45,7 +48,6 @@ public class EngineRightDerivePanel extends JComponent {
         this.userTask = userTask;
 
         this.setLayout(new MyLayoutManager());
-        String rights = userTask.getRights();
         String id = userTask.getId();
         String name = userTask.getName();
         String titleStr = String.format("%s->%s(%s)->%s", this.getProcessId(), id, name, rights);
@@ -114,4 +116,22 @@ public class EngineRightDerivePanel extends JComponent {
     public String getProcessId() {
         return processId;
     }
+
+    public String generateSql() {
+        return generateSqlBase(rights, candidate, sqlCondition, doCondition);
+    }
+
+    private String generateSqlBase(String r, String c, String s, String d) {
+        StringBuilder sqlSb = new StringBuilder();
+        sqlSb.append(String.format("delete from ENGINE_RIGHTS where rights_='%s';\n",r));
+
+        sqlSb.append(String.format("INSERT INTO ENGINE_RIGHTS (RIGHTS_, CANDIDATE_, SQLCONDITION_, DOCONDITION_) " +
+                "VALUES (%s, %s, %s, %s);",  TranslateUtils.translate(r), TranslateUtils.translate(c), TranslateUtils.translate(s), TranslateUtils.translate(d)));
+        return sqlSb.toString();
+    }
+
+    public String generateEditSql() {
+        return generateSqlBase(rights, candidateTextArea.getText(), sqlConditionTextArea.getText(), doConditionTextArea.getText());
+    }
+
 }

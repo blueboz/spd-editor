@@ -38,9 +38,12 @@ public class EngineRightDialog extends JComponent {
     }
 
     private String generateSqlBase(String r, String c, String s, String d) {
-        String sql = String.format("INSERT INTO ENGINE_RIGHTS (RIGHTS_, CANDIDATE_, SQLCONDITION_, DOCONDITION_) " +
-                "VALUES ('%s', '%s', '%s', '%s');", r, TranslateUtils.translate(c), TranslateUtils.translate(s), TranslateUtils.translate(d));
-        return sql;
+        StringBuilder sqlSb = new StringBuilder();
+        sqlSb.append(String.format("delete from ENGINE_RIGHTS where rights_='%s';\n",r));
+
+        sqlSb.append(String.format("INSERT INTO ENGINE_RIGHTS (RIGHTS_, CANDIDATE_, SQLCONDITION_, DOCONDITION_) " +
+                "VALUES (%s, %s, %s, %s);", TranslateUtils.translate(r), TranslateUtils.translate(c), TranslateUtils.translate(s), TranslateUtils.translate(d)));
+        return sqlSb.toString();
     }
 
 
@@ -101,7 +104,7 @@ public class EngineRightDialog extends JComponent {
     }
 
     public JComponent derive() {
-        EngineRightDerivePanel engineRightDerivePanel = new EngineRightDerivePanel(candidate, sqlCondition, doCondition, processId, userTask);
+        EngineRightDerivePanel engineRightDerivePanel = new EngineRightDerivePanel(rights,candidate, sqlCondition, doCondition, processId, userTask);
 
         return engineRightDerivePanel;
     }

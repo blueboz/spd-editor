@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions>
+	<process id="fundWhiteListModify" name="process">
+		<endEvent id="endevent1" name="End"/>
+		<endEvent id="endevent2" name="End"/>
+		<exclusiveGateway id="exclusivegateway1" name="For Gateway"/>
+		<exclusiveGateway id="exclusivegateway2" name="For Gateway"/>
+		<serviceTask id="servicetask1" name="交易落地" expression="fundWhiteListService.updateToDb(fundWhiteList)"/>
+		<serviceTask id="servicetask2" name="记录日志" expression="tradeLogs=fundWhiteListService.buildTradeLogForFlowRecheck(fundWhiteList,user);#LEY#tradeLogsService.addTradeLogs(tradeLogs);"/>
+		<serviceTask id="servicetask3" name="记录日志 " expression="tradeLogs=fundWhiteListService.buildTradeLogForFlowIssuerModify(fundWhiteList,user);#LEY#tradeLogsService.addTradeLogs(tradeLogs);"/>
+		<serviceTask id="servicetask4" name="记录日志" expression="tradeLogs=fundWhiteListService.buildTradeLogForFlowIssue(fundWhiteList,user);#LEY#tradeLogsService.addTradeLogs(tradeLogs);"/>
+		<startEvent id="startevent1" name="Start"/>
+		<userTask id="userTask1" name="总行复核" bussinesId="${companyId}" bussinesKey="fundWhiteList" bussinesDescrition="${description}" rights="whiteListChk" expression="{&quot;open&quot; : &quot;../fund/FundWhiteListmod.html?modify=true&amp;domReadonly=true&quot;, #LEY#&quot;ok&quot; : &quot;fundWhiteListControlTrade.do?fundWhiteList.operType=ok&amp;doneType=ok&quot;,#LEY#&quot;refuse&quot; : &quot;fundWhiteListControlTrade.do?fundWhiteList.operType=refuse&amp;doneType=refuse&quot;,#LEY#&quot;title&quot;:&quot;金市事后复核&quot;,#LEY#&quot;width&quot;:400,#LEY#&quot;height&quot;:300#LEY#}" eventListener="fundWhiteListListener" validSecond="-1" openSecond="-1"/>
+		<userTask id="userTask2" name="分行经办修改" bussinesId="${companyId}" bussinesKey="fundWhiteList" bussinesDescrition="${description}" rights="whiteListBrh" expression="{&quot;open&quot; : &quot;../fund/FundWhiteListmod.html?modify=true&amp;domReadonly=false&quot;, #LEY#&quot;ok&quot; : &quot;fundWhiteListControlTrade.do?pawnTrade.operType=ok&amp;doneType=ok&quot;,#LEY#&quot;refuse&quot; : &quot;fundWhiteListControlTrade.do?pawnTrade.operType=refuse&amp;doneType=refuse&quot;,#LEY#&quot;title&quot;:&quot;金市事后复核&quot;,#LEY#&quot;width&quot;:400,#LEY#&quot;height&quot;:300#LEY#}" eventListener="fundWhiteListListener" validSecond="-1" openSecond="-1"/>
+		<sequenceFlow id="flow3" name="to 分行经办修改" sourceRef="exclusivegateway1" targetRef="userTask2" conditionExpression="doneType=='refuse'"/>
+		<sequenceFlow id="flow6" name="to 总行复核" sourceRef="exclusivegateway2" targetRef="userTask1" conditionExpression="doneType=='ok'"/>
+		<sequenceFlow id="flow7" name="to End" sourceRef="exclusivegateway2" targetRef="endevent2" conditionExpression="doneType=='refuse'"/>
+		<sequenceFlow id="flow8" name="to 交易落地" sourceRef="exclusivegateway1" targetRef="servicetask1" conditionExpression="doneType=='ok'"/>
+		<sequenceFlow id="flow9" name="to End" sourceRef="servicetask1" targetRef="endevent1"/>
+		<sequenceFlow id="flow10" name="to Service Task" sourceRef="userTask1" targetRef="servicetask2"/>
+		<sequenceFlow id="flow11" name="to For Gateway" sourceRef="servicetask2" targetRef="exclusivegateway1"/>
+		<sequenceFlow id="flow12" name="to Service Task" sourceRef="userTask2" targetRef="servicetask3"/>
+		<sequenceFlow id="flow13" name="to For Gateway" sourceRef="servicetask3" targetRef="exclusivegateway2"/>
+		<sequenceFlow id="flow14" name="to 记录日志" sourceRef="startevent1" targetRef="servicetask4"/>
+		<sequenceFlow id="flow15" name="to 总行复核" sourceRef="servicetask4" targetRef="userTask1"/>
+	</process>
+	<Diagram id="Diagram_fundWhiteListModify">
+		<Shape Element="endevent1" id="Shape_endevent1">
+			<Bounds height="35" width="35" x="107" y="864"/>
+		</Shape>
+		<Shape Element="endevent2" id="Shape_endevent2">
+			<Bounds height="35" width="35" x="490" y="332"/>
+		</Shape>
+		<Shape Element="exclusivegateway1" id="Shape_exclusivegateway1">
+			<Bounds height="40" width="40" x="105" y="604"/>
+		</Shape>
+		<Shape Element="exclusivegateway2" id="Shape_exclusivegateway2">
+			<Bounds height="40" width="40" x="306" y="329"/>
+		</Shape>
+		<Shape Element="servicetask1" id="Shape_servicetask1">
+			<Bounds height="55" width="105" x="72" y="738"/>
+		</Shape>
+		<Shape Element="servicetask2" id="Shape_servicetask2">
+			<Bounds height="55" width="105" x="72" y="464"/>
+		</Shape>
+		<Shape Element="servicetask3" id="Shape_servicetask3">
+			<Bounds height="55" width="105" x="274" y="464"/>
+		</Shape>
+		<Shape Element="servicetask4" id="Shape_servicetask4">
+			<Bounds height="55" width="105" x="72" y="175"/>
+		</Shape>
+		<Shape Element="startevent1" id="Shape_startevent1">
+			<Bounds height="35" width="35" x="107" y="73"/>
+		</Shape>
+		<Shape Element="userTask1" id="Shape_userTask1">
+			<Bounds height="55" width="105" x="72" y="322"/>
+		</Shape>
+		<Shape Element="userTask2" id="Shape_userTask2">
+			<Bounds height="55" width="105" x="274" y="596"/>
+		</Shape>
+		<Edge Element="flow3" id="Edge_flow3">
+			<Waypoint x="145" y="624"/>
+			<Waypoint x="274" y="624"/>
+			<Label>
+				<Bounds height="20" width="108" x="0" y="0"/>
+			</Label>
+		</Edge>
+		<Edge Element="flow6" id="Edge_flow6">
+			<Waypoint x="306" y="349"/>
+			<Waypoint x="177" y="349"/>
+			<Label>
+				<Bounds height="20" width="80" x="0" y="0"/>
+			</Label>
+		</Edge>
+		<Edge Element="flow7" id="Edge_flow7">
+			<Waypoint x="346" y="349"/>
+			<Waypoint x="490" y="349"/>
+			<Label>
+				<Bounds height="20" width="48" x="0" y="0"/>
+			</Label>
+		</Edge>
+		<Edge Element="flow8" id="Edge_flow8">
+			<Waypoint x="125" y="644"/>
+			<Waypoint x="125" y="738"/>
+			<Label>
+				<Bounds height="20" width="80" x="0" y="0"/>
+			</Label>
+		</Edge>
+		<Edge Element="flow9" id="Edge_flow9">
+			<Waypoint x="124" y="793"/>
+			<Waypoint x="124" y="864"/>
+		</Edge>
+		<Edge Element="flow10" id="Edge_flow10">
+			<Waypoint x="125" y="377"/>
+			<Waypoint x="125" y="464"/>
+		</Edge>
+		<Edge Element="flow11" id="Edge_flow11">
+			<Waypoint x="125" y="519"/>
+			<Waypoint x="125" y="604"/>
+		</Edge>
+		<Edge Element="flow12" id="Edge_flow12">
+			<Waypoint x="326" y="596"/>
+			<Waypoint x="326" y="519"/>
+		</Edge>
+		<Edge Element="flow13" id="Edge_flow13">
+			<Waypoint x="326" y="464"/>
+			<Waypoint x="326" y="369"/>
+		</Edge>
+		<Edge Element="flow14" id="Edge_flow14">
+			<Waypoint x="124" y="108"/>
+			<Waypoint x="124" y="175"/>
+		</Edge>
+		<Edge Element="flow15" id="Edge_flow15">
+			<Waypoint x="124" y="230"/>
+			<Waypoint x="124" y="322"/>
+		</Edge>
+	</Diagram>
+</definitions>
