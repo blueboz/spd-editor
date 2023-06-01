@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<formset>
+
+    <form Name="FundWhiteListInputForm" Path="/fund/FundWhiteListInput.html">
+            <item Name="fundWhiteList.importDate"  DataType="DateField" Require="0" Message="导入时间" Tips="导入时间" />
+            <item Name="fundWhiteList.signDate"  DataType="DateField" Require="0" Message="签批时间" Tips="签批时间"/>
+    </form>
+
+    <form Name="FundWhiteListInputForm" Path="/fund/FundWhiteListmod.html">
+        <item Name="fundWhiteList.importDate"  DataType="DateField" Require="0" Message="导入时间" Tips="导入时间" />
+        <item Name="fundWhiteList.signDate"  DataType="DateField" Require="0" Message="签批时间" Tips="签批时间"/>
+    </form>
+
+    <form Name="fundWhiteListQueryListForm" Path="/fund/FundWhiteListQueryList.html">
+        <item Name="queryParam.importDateStart"  DataType="DateField" Require="1" Message="导入时间起始" Tips="导入时间起始" />
+        <item Name="queryParam.importDateEnd"  DataType="DateField" Require="1" Message="导入时间终止" Tips="导入时间终止"/>
+    </form>
+
+</formset>

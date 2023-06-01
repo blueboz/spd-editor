@@ -3,11 +3,7 @@ package com.erayt.xfunds.fund.impl;
 import com.erayt.ecas.domain.User;
 import com.erayt.solar2.engine.facade.ActionContext;
 import com.erayt.solar2.engine.process.ProcessEngine;
-import com.erayt.xfunds.base.BankRepository;
-import com.erayt.xfunds.base.EnginePoControlService;
-import com.erayt.xfunds.base.SequenceRepository;
-import com.erayt.xfunds.base.SysParamRepository;
-import com.erayt.xfunds.base.TradeLogsService;
+import com.erayt.xfunds.base.*;
 import com.erayt.xfunds.base.domain.Bank;
 import com.erayt.xfunds.base.domain.SequenceConstant;
 import com.erayt.xfunds.base.domain.SysParam;
@@ -16,16 +12,12 @@ import com.erayt.xfunds.common.DateHelper;
 import com.erayt.xfunds.common.StringHelper;
 import com.erayt.xfunds.common.XfundsBaseException;
 import com.erayt.xfunds.common.fund.XfundsFundException;
-import com.erayt.xfunds.fund.FundWhiteListService;
-import com.erayt.xfunds.fund.domain.FundWhiteList;
-import com.erayt.xfunds.fund.impl.dao.FundWhiteListDao;
+import com.erayt.xfunds.fund.${className}Service;
+import com.erayt.xfunds.fund.domain.${className};
+import com.erayt.xfunds.fund.impl.dao.${className}Dao;
 import com.erayt.xfunds.tools.OracleStringUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.ss.usermodel.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
@@ -33,19 +25,11 @@ import org.springframework.util.CollectionUtils;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
-public class FundWhiteListServiceImpl implements FundWhiteListService {
-    //最多可以录入10000行
-    int maxRows = 10000; // Maximum number of rows to process
-    //每行最大字符数
-    int maxStrLen = 100; // Maximum length of string
-
-    private FundWhiteListDao fundWhiteListDao;
+public class ${className}ServiceImpl implements ${className}Service {
+ 
+    private ${className}Dao ${className}Dao;
 
     private SequenceRepository sequenceRepository;
 
@@ -88,8 +72,8 @@ public class FundWhiteListServiceImpl implements FundWhiteListService {
     }
 
     @Override
-    public FundWhiteList findFundWhiteList(FundWhiteList fundWhiteList) {
-        return fundWhiteList;
+    public ${className} find${className}(${className} ${className}) {
+        return ${className};
     }
 
     /**
@@ -98,7 +82,7 @@ public class FundWhiteListServiceImpl implements FundWhiteListService {
      * @param bean
      * @return
      */
-    private void validate(FundWhiteList bean) {
+    private void validate(${className} bean) {
         if (bean.getCompanyId() == null) {
             throw new RuntimeException("companyId非空");
         }
@@ -120,10 +104,9 @@ public class FundWhiteListServiceImpl implements FundWhiteListService {
      * @return
      */
     @Override
-    public void addFundWhiteList(FundWhiteList bean) {
+    public void add${className}(${className} bean) {
         validate(bean);
-        bean.setId(UUID.randomUUID().toString().replaceAll("-", ""));
-        fundWhiteListDao.insertFundWhiteList(bean);
+        ${className}Dao.insert${className}(bean);
     }
 
     private EnginePoControlService enginePoControlService;
@@ -146,10 +129,6 @@ public class FundWhiteListServiceImpl implements FundWhiteListService {
         this.processEngine = processEngine;
     }
 
-    @Override
-    public void updateToDb(FundWhiteList fundWhiteList) {
-        fundWhiteListDao.updateFundWhiteList(fundWhiteList);
-    }
 
     /**
      * 更新数据
@@ -158,37 +137,37 @@ public class FundWhiteListServiceImpl implements FundWhiteListService {
      * @return
      */
     @Override
-    public void updateFundWhiteList(FundWhiteList bean, User user) {
+    public void update${className}(${className} bean, User user) {
         validate(bean);
 
-        FundWhiteList byId = findById(bean.getId());
+        ${className} byId = findById(bean.getId());
         if (byId == null) {
             throw new XfundsFundException("数据有误");
         }
         if (StringUtils.equals(byId.getCompanyId(), bean.getCompanyId())) {
             bean.setDescription(String.format("白名单调整|从%s->%s", byId.getCompanyId(), bean.getCompanyId()));
-            fundWhiteListDao.updateFundWhiteList(bean);
+            ${className}Dao.update${className}(bean);
             TradeLogs tradeLogs = buildTradeLogForModDirectly(bean , user);
             tradeLogsService.addTradeLogs(tradeLogs);
         } else {
             bean.setDescription(String.format("白名单调整|从%s->%s", byId.getCompanyId(), bean.getCompanyId()));
             enginePoControlService.initEngineRightPo(bean, user);
             ActionContext actionContext = new ActionContext();
-            actionContext.put("fundWhiteList", bean);
+            actionContext.put("${className}", bean);
             actionContext.put("user", user);
-            processEngine.start("fundWhiteListModify", actionContext);
+            processEngine.start("${className}Modify", actionContext);
         }
 
 
     }
 
-    public FundWhiteList findById(String id) {
-        FundWhiteList fundWhiteList = new FundWhiteList();
-        fundWhiteList.setId(id);
-        return fundWhiteListDao.selectFundWhiteList(fundWhiteList);
+    public ${className} findById(String id) {
+        ${className} ${className} = new ${className}();
+        ${className}.setId(id);
+        return ${className}Dao.select${className}(${className});
     }
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(FundWhiteListService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(${className}Service.class);
 
     /**
      * 根据Excel 生成白名单
@@ -196,8 +175,8 @@ public class FundWhiteListServiceImpl implements FundWhiteListService {
      * @param file
      * @return
      */
-    public List<FundWhiteList> buildWhiteList(File file) {
-        List<FundWhiteList> result = new ArrayList<FundWhiteList>();
+    public List<${className}> buildWhiteList(File file) {
+        List<${className}> result = new ArrayList<${className}>();
         Workbook wb = null;
         int sysDate = DateHelper.sysDate();
         try (InputStream inp = new FileInputStream(file);) {
@@ -239,14 +218,11 @@ public class FundWhiteListServiceImpl implements FundWhiteListService {
                 dataRows.add(data);
             }
             for (String dataRow : dataRows) {
-                FundWhiteList fundWhiteList = new FundWhiteList();
-                fundWhiteList.setCompanyId(dataRow);
-                fundWhiteList.setImportDate(String.valueOf(sysDate));
-                fundWhiteList.setId(UUID.randomUUID().toString().replaceAll("-",""));
-                result.add(fundWhiteList);
+                ${className} ${className} = new ${className}();
+                result.add(${className});
             }
         } catch (Exception e) {
-            LOGGER.error("分行期权优惠点差导入异常e={}", e.getLocalizedMessage());
+            LOGGER.error("${title}Excel导入发生异常e={}", e.getLocalizedMessage());
             throw new XfundsFundException(e.getMessage());
 
         }
@@ -257,26 +233,26 @@ public class FundWhiteListServiceImpl implements FundWhiteListService {
 
     @Override
     public void doImportExcel(File file, User user) {
-        List<FundWhiteList> fundWhiteLists = buildWhiteList(file);
+        List<${className}> ${className}s = buildWhiteList(file);
         LOGGER.info(String.format("用户%s执行了批量导入",user.getLogonid()));
-        if(CollectionUtils.isEmpty(fundWhiteLists)){
+        if(CollectionUtils.isEmpty(${className}s)){
             throw new XfundsFundException("未录入任何数据，导入被终止");
         }
         LOGGER.info("导入的数据有");
-        for (FundWhiteList fundWhiteList : fundWhiteLists) {
-            LOGGER.info(fundWhiteList.toString());
+        for (${className} ${className} : ${className}s) {
+            LOGGER.info(${className}.toString());
         }
-        fundWhiteListDao.deleteFundWhiteList();
-        fundWhiteListDao.insertFundWhiteListBatch(fundWhiteLists);
+        ${className}Dao.delete${className}();
+        ${className}Dao.insert${className}Batch(${className}s);
     }
 
     @Override
-    public void deleteFundWhiteListBatch(FundWhiteList[] fundWhiteLists) {
-        if (fundWhiteLists != null && fundWhiteLists.length == 0) {
+    public void delete${className}Batch(${className}[] ${className}s) {
+        if (${className}s != null && ${className}s.length == 0) {
             return;
         }
-        for (FundWhiteList fundWhiteList : fundWhiteLists) {
-            fundWhiteListDao.deleteFundWhiteListId(fundWhiteList.getId());
+        for (${className} ${className} : ${className}s) {
+            ${className}Dao.delete${className}Id(${className}.getId());
         }
     }
 
@@ -287,28 +263,28 @@ public class FundWhiteListServiceImpl implements FundWhiteListService {
      * @return result
      */
     @Override
-    public FundWhiteList queryFundWhiteList(FundWhiteList bean) {
-        return fundWhiteListDao.selectFundWhiteList(bean);
+    public ${className} query${className}(${className} bean) {
+        return ${className}Dao.select${className}(bean);
     }
 
-    public FundWhiteListDao getFundWhiteListDao() {
-        return fundWhiteListDao;
+    public ${className}Dao get${className}Dao() {
+        return ${className}Dao;
     }
 
-    public void setFundWhiteListDao(FundWhiteListDao fundWhiteListDao) {
-        this.fundWhiteListDao = fundWhiteListDao;
+    public void set${className}Dao(${className}Dao ${className}Dao) {
+        this.${className}Dao = ${className}Dao;
     }
 
     /**
      * 缺少TransName y
-     * @param anyFundWhiteList
+     * @param any${className}
      * @param user
      * @return
      */
-    private TradeLogs buildTradeLogBase(FundWhiteList anyFundWhiteList,User user){
+    private TradeLogs buildTradeLogBase(${className} any${className},User user){
         TradeLogs tradeLogs = new TradeLogs();
         tradeLogs.setDownloadKey(sequenceRepository.findSequenceByType(SequenceConstant.TRADLOG_SEQ));
-        tradeLogs.setBusinessNo(anyFundWhiteList.getCompanyId());
+        tradeLogs.setBusinessNo(any${className}.getCompanyId());
         tradeLogs.setTellerId(user.getLogonid());
         tradeLogs.setTellerName(user.getName());
         tradeLogs.setBlockNumber(sequenceRepository.findSequenceByType(SequenceConstant.TRADLOG_SEQ));
@@ -325,53 +301,5 @@ public class FundWhiteListServiceImpl implements FundWhiteListService {
     }
 
 
-    @Override
-    public TradeLogs buildTradeLogForModDirectly(FundWhiteList toWhiteList, User user) {
-        TradeLogs tradeLogs = buildTradeLogBase(toWhiteList, user);
-        tradeLogs.setTransName("行员" + user.getName() + "[" + user.getLogonid() + "]"
-                + "修改" + toWhiteList.getDescription()+ " 白名单信息");
-        tradeLogs.setVerMemo(toWhiteList.toString());
-        return tradeLogs;
-    }
-
-    @Override
-    public TradeLogs buildTradeLogForFlowIssue(FundWhiteList fundWhiteList, User user){
-        TradeLogs tradeLogs = buildTradeLogBase(fundWhiteList, user);
-        tradeLogs.setTransName("行员" + user.getName() + "[" + user.getLogonid() + "]"
-                + "发起修改 " + fundWhiteList.getDescription()+ " 白名单信息 操作类型:"+fundWhiteList.getOperTypeString());
-        tradeLogs.setVerMemo(fundWhiteList.toString());
-        return tradeLogs;
-    }
-
-    @Override
-    public TradeLogs buildTradeLogForFlowRecheck(FundWhiteList fundWhiteList, User user){
-
-        TradeLogs tradeLogs = buildTradeLogBase(fundWhiteList, user);
-
-        tradeLogs.setTransName("行员" + user.getName() + "[" + user.getLogonid() + "]"
-                + "总行复核复核 " + fundWhiteList.getDescription()+ " 白名单信息 操作类型:"+fundWhiteList.getOperTypeString());
-        tradeLogs.setVerMemo(fundWhiteList.toString());
-        return tradeLogs;
-    }
-
-    @Override
-    public TradeLogs buildTradeLogForFlowIssuerModify(FundWhiteList fundWhiteList, User user){
-        TradeLogs tradeLogs = buildTradeLogBase(fundWhiteList, user);
-        tradeLogs.setTransName("行员" + user.getName() + "[" + user.getLogonid() + "]"
-                + "发起经办修改 " + fundWhiteList.getDescription()+ " 白名单信息 操作类型:"+fundWhiteList.getOperTypeString());
-        tradeLogs.setVerMemo(fundWhiteList.toString());
-        return tradeLogs;
-    }
-
-    @Override
-    public boolean checkIfCompanyIdInWhiteList(String company) {
-        FundWhiteList queryCondition = new FundWhiteList();
-        queryCondition.setCompanyId(company);
-        FundWhiteList fundWhiteList = fundWhiteListDao.selectFundWhiteList(queryCondition);
-        if(fundWhiteList!=null){
-            return true;
-        }
-        return false;
-    }
 
 }

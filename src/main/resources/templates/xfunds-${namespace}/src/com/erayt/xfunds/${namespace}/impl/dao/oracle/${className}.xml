@@ -1,56 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
-<sqlMap namespace='com.erayt.xfunds.fund.impl.dao.FundWhiteListDao'>
-	<resultMap id='FundWhiteListMap' class='com.erayt.xfunds.fund.domain.FundWhiteList'>
-		<result property='id' column='id' />
-		<result property='companyId' column='companyId' />
-		<result property='importDate' column='importDate' />
-		<result property='signDate' column='signDate' />
+<list namespace='com.erayt.xfunds.${namespace}.impl.dao.${className}Dao'>
+	<resultMap id='${className}Map' class='com.erayt.xfunds.${namespace}.domain.${className}'>
+		<#list columns as col>
+			<result property='${col.fieldName}' column='${col.fieldName}' />
+		</#list>
 	</resultMap>
-	<select id='selectFundWhiteList' resultMap='FundWhiteListMap' parameterClass='com.erayt.xfunds.fund.domain.FundWhiteList'>
-		select id,companyId,importDate,signDate from XFUNDS_FUND_WHITELIST where 1=1
-		<isNotEmpty property='id' prepend='and'>
-			id=#id#
-		</isNotEmpty>
-		<isNotEmpty property='companyId' prepend='and'>
-			companyId=#companyId#
-		</isNotEmpty>
-		<isNotEmpty property='importDate' prepend='and'>
-			importDate=#importDate#
-		</isNotEmpty>
-		<isNotEmpty property='signDate' prepend='and'>
-			signDate=#signDate#
-		</isNotEmpty>
+	<select id='select${className}' resultMap='${className}Map' parameterClass='com.erayt.xfunds.${namespace}.domain.${className}'>
+		select <#list columns as col> ${col.fieldName}<#sep>,</#list>
+		from ${tableName} where 1=1
+		<#list columns as col>
+			<isNotEmpty property='${col.fieldName}' prepend='and'>
+				${col.fieldName}=#${col.fieldName}#
+			</isNotEmpty>
+		</#list>
 	</select>
-	<update id='updateFundWhiteList' parameterClass='com.erayt.xfunds.fund.domain.FundWhiteList'>
-		update XFUNDS_FUND_WHITELIST set
-		importDate=#importDate#,
-		signDate=#signDate#,
-		companyId=#companyId#
+	<update id='update${className}' parameterClass='com.erayt.xfunds.${namespace}.domain.${className}'>
+		update ${tableName} set
+		<#list columns as col>
+		${col.fieldName}=#${col.fieldName}# <#sep>,
+		</#list>
 		where 1=1
 		<isNotEmpty property='id' prepend='and'>
 			id=#id#
 		</isNotEmpty>
 	</update>
-	<insert id='insertFundWhiteList' parameterClass='com.erayt.xfunds.fund.domain.FundWhiteList'>
-		insert into XFUNDS_FUND_WHITELIST
-		( companyId,importDate,signDate,id)
+	<insert id='insert${className}' parameterClass='com.erayt.xfunds.${namespace}.domain.${className}'>
+		insert into ${tableName}
+		(<#list columns as col> ${col.fieldName}<#sep>, </#list>)
 		values
-		(#companyId#,#importDate#,#signDate#,#id#)
+		(<#list columns as col> #${col.fieldName}#<#sep>, </#list>)
 	</insert>
 
-	<insert id='insertFundWhiteListBatch' parameterClass='com.erayt.xfunds.fund.domain.FundWhiteList'>
-		insert into XFUNDS_FUND_WHITELIST
-		( companyId,importDate,signDate,id)
+	<insert id='insert${className}Batch' parameterClass='com.erayt.xfunds.${namespace}.domain.${className}'>
+		insert into ${tableName}
+		(<#list columns as col> ${col.fieldName}<#sep>, </#list>)
 		values
-		(#companyId#,#importDate#,#signDate#,#id#)
+		(<#list columns as col> #${col.fieldName}#<#sep>, </#list>)
 	</insert>
 
-	<delete id="deleteFundWhiteList">
-		truncate table XFUNDS_FUND_WHITELIST
+	<delete id="delete${className}">
+		truncate table ${tableName}
 	</delete>
 
-	<delete id="deleteFundWhiteListId" parameterClass="java.lang.String">
-		delete from XFUNDS_FUND_WHITELIST where id=#value#
+	<delete id="delete${className}Id" parameterClass="com.erayt.xfunds.${namespace}.domain.${className}">
+	delete from ${tableName} where 1=1  <#list columns as col> <#if col.isId??> <#if col.isId==true> and ${col.fieldName}=#${col.fieldName}# </#if></#if></#list>
 	</delete>
 </sqlMap>

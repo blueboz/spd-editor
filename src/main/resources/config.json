@@ -10,13 +10,15 @@
       "fieldChName": "交易机构",
       "fieldName": "bankId",
       "dataType": "VARCHAR(30)",
-      "nullable": false
+      "nullable": false,
+      "isId": true
     },
     {
       "fieldChName": "ecif客户号",
       "fieldName": "ecifNo",
       "dataType": "VARCHAR(60)",
-      "nullable": false
+      "nullable": false,
+      "isId": false
     }
   ]
 }

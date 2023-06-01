@@ -1,52 +1,45 @@
 package com.erayt.xfunds.fund;
 import com.erayt.ecas.domain.User;
 import com.erayt.xfunds.base.domain.TradeLogs;
-import com.erayt.xfunds.fund.domain.FundWhiteList;
+import com.erayt.xfunds.${namespace}.domain.${className};
 
 import java.io.File;
 
-public interface FundWhiteListService {
-	FundWhiteList findFundWhiteList(FundWhiteList fundWhiteList);
+public interface ${className}Service {
 
 	/**
-	*数据入库
+	* 数据入库${title}
 	* @param bean
 	* @return
 	*/
-	public void addFundWhiteList(FundWhiteList bean);
+	public void add${className}(${className} bean);
 
 	/**
-	 * 直接入库
-	 * @param fundWhiteList
+	* 更新数据${title}
+	* @param bean
+	* @return
+	*/
+	void update${className}(${className} bean, User user);
+
+	/**
+	 * 删除${title}
+	 * @params ${className}s
 	 */
-	void updateToDb(FundWhiteList fundWhiteList);
-
-	/**
-	*更新数据
-	* @param bean
-	* @return
-	*/
-	void updateFundWhiteList(FundWhiteList bean, User user);
-
-	void doImportExcel(File file, User user);
-
-
-	public void deleteFundWhiteListBatch(FundWhiteList[] fundWhiteLists);
+	public void delete${className}Batch(${className}[] ${className}s);
 
 	/*
-	*查询数据
-	* @param bean
+	* 查询数据${title}
+	* @param ${className}
 	* @return result
 	*/
-	public FundWhiteList queryFundWhiteList(FundWhiteList bean);
+	public ${className} query${className}(${className} ${className});
 
-	TradeLogs buildTradeLogForModDirectly(FundWhiteList toWhiteList, User user);
+	/*
+	 * 查询数据${title}
+	 * @param ${className}
+	 * @return result
+	 */
+	public ${className} query${className}(${className} ${className});
 
-	TradeLogs buildTradeLogForFlowIssue(FundWhiteList fundWhiteList, User user);
 
-	TradeLogs buildTradeLogForFlowRecheck(FundWhiteList fundWhiteList, User user);
-
-	TradeLogs buildTradeLogForFlowIssuerModify(FundWhiteList fundWhiteList, User user);
-
-	boolean checkIfCompanyIdInWhiteList(String company);
 }
