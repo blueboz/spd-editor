@@ -27,7 +27,7 @@ buildscript {
 
         classpath 'com.jcraft:jsch:0.1.55'
         classpath 'org.hidetake:gradle-ssh-plugin:2.10.1'
-//        classpath 'org.codehaus.groovy:groovy-all:2.5.11'
+        classpath 'org.codehaus.groovy:groovy-all:2.5.11'
         classpath 'net.sf.json-lib:json-lib:2.4:jdk15'
 
     }
@@ -59,9 +59,8 @@ dependencies {
     implementation 'javax.annotation:javax.annotation-api:1.3.2'
     testImplementation 'org.testng:testng:6.9.10'
     implementation 'com.alibaba:fastjson:1.2.4'
-//    implementation files('/home/@chenweidian-yfzx/Code/FMS/FMSS_xfunds/xfunds/WebContent/WEB-INF/lib/ojdbc8.jar','/home/@chenweidian-yfzx/Code/FMS/FMSS_xfunds/xfunds/WebContent/WEB-INF/lib/orai18n-19.3.0.0.jar')
-//    testImplementation files("~/Code/FMS/FMSS_xfunds/xfunds/WebContent/WEB-INF/lib/ojdbc8.jar", "~/Code/FMS/FMSS_xfunds/xfunds/WebContent/WEB-INF/lib/orai18n-19.3.0.0.jar")
-    implementation files("F:/Code/FMS/FMSS_xfunds/xfunds/WebContent/WEB-INF/lib/ojdbc8.jar", "F:/Code/FMS/FMSS_xfunds/xfunds/WebContent/WEB-INF/lib/orai18n-19.3.0.0.jar")
+    implementation files('/home/@chenweidian-yfzx/Code/FMS/FMSS_xfunds/xfunds/WebContent/WEB-INF/lib/ojdbc8.jar','/home/@chenweidian-yfzx/Code/FMS/FMSS_xfunds/xfunds/WebContent/WEB-INF/lib/orai18n-19.3.0.0.jar')
+//    implementation files("F:/Code/FMS/FMSS_xfunds/xfunds/WebContent/WEB-INF/lib/ojdbc8.jar", "F:/Code/FMS/FMSS_xfunds/xfunds/WebContent/WEB-INF/lib/orai18n-19.3.0.0.jar")
 //    implementation 'org.codehaus.groovy:groovy-all:2.5.11' <dependency>
 //    compileOnly files(
 //            "F:\\App\\ideaIU-2020.1.4.win\\plugins\\JavaScriptLanguage\\lib\\completion-ranking-js-0.0.5.jar",
@@ -113,9 +112,8 @@ intellij {
 //    localPath = 'F:\\App\\JetBrains\\ideaIU-2020.1.4.win'
 
 //    localPath="F:/Program Files/JetBrains/IntelliJ IDEA 2023.1.2"
-//    localPath="F:\\Program Files\\JetBrains\\IntelliJ IDEA Community Edition 2020.1.1"
-    localPath="F:\\App\\ideaIU-2020.1.4.win"
-//	  localPath="/idea/idea-IU-201.8743.12"
+//    localPath="F:\\App\\ideaIU-2020.1.4.win"
+	  localPath="/idea/idea-IU-201.8743.12"
 //    localSourcesPath=""
 //    localPath = 'F:\\App\\JetBrains\\IntelliJ IDEA 2021.1.1'
 //    intellijRepository="https://cache-redirector.jetbrains.com/www.jetbrains.com/intellij-repository"
@@ -133,6 +131,7 @@ intellij {
     sandboxDir = "${project.rootDir}/.sandbox"
     plugins = ['com.intellij.java',
                'JavaScript',
+               'DatabaseTools',
                'Git4Idea',
     ]
 

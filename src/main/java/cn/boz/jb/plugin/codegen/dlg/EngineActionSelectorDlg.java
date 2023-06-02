@@ -49,6 +49,7 @@ public class EngineActionSelectorDlg extends DialogWrapper {
 
     public EngineActionSelectorDlg(@Nullable Project project, boolean canBeParent) {
         super(project, canBeParent);
+        setTitle("Ecas Action Power 占用列表");
         this.setModal(false);
         this.project = project;
         currentNum=SpdEditorDBState.getInstance(project).actionPowerStart;
@@ -101,8 +102,9 @@ public class EngineActionSelectorDlg extends DialogWrapper {
                 if (column == 6) {
                     Object dev = getValueAt(row, 1);
                     Object yd01 = getValueAt(row, 2);
-                    Object yd03 = getValueAt(row, 3);
-                    return checkStatus(dev, yd01, yd03);
+                    Object yd02 = getValueAt(row, 3);
+                    Object yd03 = getValueAt(row, 4);
+                    return checkStatus(dev, yd01,yd02, yd03);
                 }
                 return super.getValueAt(row, column);
             }
@@ -214,7 +216,7 @@ public class EngineActionSelectorDlg extends DialogWrapper {
                 if (e.getClickCount() == 2) {
                     int selectedRow = actionPowerTable.getSelectedRow();
                     Vector vector = tableModel.getDataVector().elementAt(selectedRow);
-                    String status = checkStatus(vector.get(1), vector.get(2), vector.get(3));
+                    String status = checkStatus(vector.get(1), vector.get(2), vector.get(3),vector.get(4));
                     if (ITEM_OCCUPY.equals(status)) {
                     } else {
                         onChoosen(((BigDecimal) vector.get(0)).intValue());
@@ -308,8 +310,8 @@ public class EngineActionSelectorDlg extends DialogWrapper {
 
 
     @NotNull
-    private String checkStatus(Object dev, Object yd01, Object yd03) {
-        if (dev == null && yd01 == null && yd03 == null) {
+    private String checkStatus(Object dev, Object yd01, Object yd02,Object yd03) {
+        if (dev == null && yd01 == null && yd03 == null&&yd02==null) {
             return ITEM_FREE;
         } else {
             return ITEM_OCCUPY;

@@ -1,12 +1,13 @@
 package cn.boz.jb.plugin.idea.action;
 
+import cn.boz.jb.plugin.codegen.dlg.EcasMenuIdSelectorDlg;
 import cn.boz.jb.plugin.codegen.dlg.EngineActionSelectorDlg;
 import cn.boz.jb.plugin.idea.action.flowSearch.FlowSearchTable;
-import cn.boz.jb.plugin.idea.bean.EngineAction;
 import cn.boz.jb.plugin.idea.callsearch.CallerSearcherCommentPanel;
 import cn.boz.jb.plugin.idea.callsearch.CallerSearcherDetailComment;
 import cn.boz.jb.plugin.idea.callsearch.CallerSearcherTablePanel;
 import cn.boz.jb.plugin.idea.dialog.EcasMenuTreeDialog;
+import cn.boz.jb.plugin.idea.dialog.EcasMenuTreeTableDialog;
 import cn.boz.jb.plugin.idea.dialog.EngineActionDialog;
 import cn.boz.jb.plugin.idea.dialog.EngineRightDialog;
 import cn.boz.jb.plugin.idea.dialog.EngineTaskDialog;
@@ -32,9 +33,6 @@ import com.intellij.util.ui.ListTableModel;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.table.TableModel;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -43,6 +41,31 @@ import java.util.List;
 
 public class OpenInSearchToolWindowAction extends AnAction implements DumbAware {
 
+    public <T > T findComponentWithAllPossible(Component component,Class<T> targetComponet){
+        if(component==null){
+            return null;
+        }
+        if(component.getClass().isAssignableFrom(targetComponet)){
+            return (T) component;
+        }
+        DialogWrapper inst = DialogWrapper.findInstance(component);
+        if(inst !=null&&inst.getClass().isAssignableFrom(targetComponet)){
+            return (T)inst;
+        }
+        if(component instanceof JBScrollPane){
+            JBScrollPane jbScrollPane = (JBScrollPane) component;
+            JViewport viewport = jbScrollPane.getViewport();
+            Component view = viewport.getView();
+            if(view.getClass().isAssignableFrom(targetComponet)){
+                return (T)component;
+            }
+        }
+        T result = (T) SwingUtilities.getAncestorOfClass(targetComponet, component);
+        if(result!=null){
+            return result;
+        }
+        return null;
+    }
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
         //拿到要检索的内容，如代码片段，搜索db
@@ -51,7 +74,6 @@ public class OpenInSearchToolWindowAction extends AnAction implements DumbAware 
         if (component instanceof CallerSearcherTablePanel) {
             doForCallerSearcherTable((CallerSearcherTablePanel) component, e);
             return;
-
         }
         if (component instanceof FlowSearchTable) {
             doForFlowSearcherTable((FlowSearchTable) component, e);
@@ -68,6 +90,15 @@ public class OpenInSearchToolWindowAction extends AnAction implements DumbAware 
         if (component instanceof EcasMenuTreeDialog) {
             doForEcasMenuTree(e, component);
         }
+        EcasMenuTreeTableDialog ecasMenuTreeTableDialog = findComponentWithAllPossible(component, EcasMenuTreeTableDialog.class);
+        if(ecasMenuTreeTableDialog!=null){
+            doForEcasTreeTable(e,ecasMenuTreeTableDialog);
+        }
+        EcasMenuIdSelectorDlg ecasMenuIdSelectorDlg = findComponentWithAllPossible(component, EcasMenuIdSelectorDlg.class);
+        if(ecasMenuIdSelectorDlg!=null){
+            doForEcasMenuIdSelectDlg(e,ecasMenuIdSelectorDlg);
+        }
+
         DialogWrapper instance = DialogWrapper.findInstance(component);
         if(instance instanceof EngineActionSelectorDlg){
             EngineActionSelectorDlg engineActionSelectorDlg= (EngineActionSelectorDlg) instance;
@@ -124,6 +155,33 @@ public class OpenInSearchToolWindowAction extends AnAction implements DumbAware 
 
 
     }
+
+    private void doForEcasMenuIdSelectDlg(AnActionEvent e, EcasMenuIdSelectorDlg ecasMenuIdSelectorDlg) {
+        JBScrollPane derive = ecasMenuIdSelectorDlg.derive();
+       addToToolWindow(e,derive,"EcasMenuIdSelector");
+        ecasMenuIdSelectorDlg.disposeIfNeeded();
+    }
+
+    private void doForEcasTreeTable(AnActionEvent e, EcasMenuTreeTableDialog ecasMenuTreeTableDialog) {
+        JBScrollPane derive = ecasMenuTreeTableDialog.derive();
+        addToToolWindow(e,derive,"Ecas 菜单树表");
+        ecasMenuTreeTableDialog.disposeIfNeeded();
+    }
+
+    public void addToToolWindow(AnActionEvent e,JComponent component,String titleStr){
+        ToolWindow callSearch = ToolWindowManager.getInstance(e.getProject()).getToolWindow(Constants.TOOL_WINDOW_CALLSEARCH);
+        ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
+        Content title = contentFactory.createContent(component, titleStr, true);
+        title.setCloseable(true);
+        callSearch.getContentManager().addContent(title);
+        callSearch.getContentManager().requestFocus(title, true);
+        if (!callSearch.isActive()) {
+            callSearch.show();
+        }
+        callSearch.getContentManager().setSelectedContent(title);
+    }
+
+
 
     private void doForEngineActionSelectDlg(AnActionEvent e, EngineActionSelectorDlg engineActionSelectorDlg) {
         JBScrollPane derive = engineActionSelectorDlg.derive();

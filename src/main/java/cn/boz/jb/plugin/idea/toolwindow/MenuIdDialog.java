@@ -86,8 +86,9 @@ public class MenuIdDialog extends JComponent {
                 if (column == 4) {
                     Object dev = getValueAt(row, 1);
                     Object yd01 = getValueAt(row, 2);
-                    Object yd03 = getValueAt(row, 3);
-                    return checkStatus(dev, yd01, yd03);
+                    Object yd02 = getValueAt(row, 3);
+                    Object yd03 = getValueAt(row, 4);
+                    return checkStatus(dev, yd01,yd02, yd03);
                 }
                 return super.getValueAt(row, column);
             }
@@ -98,7 +99,7 @@ public class MenuIdDialog extends JComponent {
                     @Override
                     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
                         Component component = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-                        if (column == 4) {
+                        if (column == 5) {
                             if (ITEM_OCCUPY.equals(value)) {
                                 component.setBackground(Color.YELLOW);
                                 component.setForeground(new Color(252, 114, 114));
@@ -172,7 +173,7 @@ public class MenuIdDialog extends JComponent {
                 if (e.getClickCount() == 2) {
                     int selectedRow = jTable.getSelectedRow();
                     Vector vector = tableModel.getDataVector().elementAt(selectedRow);
-                    String status = checkStatus(vector.get(1), vector.get(2), vector.get(3));
+                    String status = checkStatus(vector.get(1), vector.get(2), vector.get(3),vector.get(4));
                     if (ITEM_OCCUPY.equals(status)) {
                     } else {
                         JBPopup popupContainerFor = PopupUtil.getPopupContainerFor(jPanel);
@@ -198,8 +199,8 @@ public class MenuIdDialog extends JComponent {
     }
 
     @NotNull
-    private String checkStatus(Object dev, Object yd01, Object yd03) {
-        if (dev == null && yd01 == null && yd03 == null) {
+    private String checkStatus(Object dev, Object yd01,Object yd02, Object yd03) {
+        if (dev == null && yd01 == null && yd03 == null&&yd02!=null) {
             return ITEM_FREE;
         } else {
             return ITEM_OCCUPY;
@@ -220,7 +221,7 @@ public class MenuIdDialog extends JComponent {
 
             List<Map<String, Object>> apps = null;
             try {
-                apps = instance.queryEcasMenuIdUniq(connection, cpageNum, pageSize, "@YD01", "@YD03", applid);
+                apps = instance.queryEcasMenuIdUniq(connection, cpageNum, pageSize, "@YD01", "@YD02","@YD03", applid);
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -228,7 +229,7 @@ public class MenuIdDialog extends JComponent {
 
             for (Map<String, Object> app : apps) {
 
-                tableModel.addRow(new Object[]{app.get("RN"), app.get("dev"), app.get("yd01"), app.get("yd03")});
+                tableModel.addRow(new Object[]{app.get("RN"), app.get("dev"), app.get("yd01"),app.get("yd02"), app.get("yd03")});
             }
         };
         Executors.newSingleThreadExecutor().execute(r);

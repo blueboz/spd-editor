@@ -241,10 +241,10 @@ public class DBUtils {
         }
 
         String sql = "with numlist as (\n" +
-                "    SELECT rownum + "+(currentNum-1)+" rn\n" +
+                "    SELECT rownum + " + (currentNum - 1) + " rn\n" +
                 "    FROM dual\n" +
                 "    CONNECT BY 1 = 1\n" +
-                "           and rownum < "+pageSize+"\n" +
+                "           and rownum < " + pageSize + "\n" +
                 "),\n" +
                 "     dev as (\n" +
                 "         select *\n" +
@@ -255,7 +255,7 @@ public class DBUtils {
                 "     yd01m as (\n" +
                 "         select *\n" +
                 "         from ECAS_ACTIONPOWER@YD01\n" +
-                "         where applid = "+applid+"\n" +
+                "         where applid = " + applid + "\n" +
                 "     ),\n" +
                 "     yd02m as (\n" +
                 "         select *\n" +
@@ -265,7 +265,7 @@ public class DBUtils {
                 "     yd03m as (\n" +
                 "         select *\n" +
                 "         from ECAS_ACTIONPOWER@YD03\n" +
-                "         where applid = "+applid+"\n" +
+                "         where applid = " + applid + "\n" +
                 "     )\n" +
                 "select r.rn,dev.description \"description\", " +
                 "dev.powerbit \"dev\", " +
@@ -291,14 +291,14 @@ public class DBUtils {
      * 查询Ecas 菜单唯一键
      *
      * @param connection
-     * @param pageNum
+     * @param  startNumber
      * @param pageSize
      * @param dbLinkYD01Name
      * @param dbLinkYD03Name
      * @return
      * @throws Exception
      */
-    public List<Map<String, Object>> queryEcasMenuIdUniq(Connection connection, int pageNum, int pageSize, String dbLinkYD01Name, String dbLinkYD03Name, Integer applid) throws Exception {
+    public List<Map<String, Object>> queryEcasMenuIdUniq(Connection connection, int startNumber, int pageSize, String dbLinkYD01Name, String dbLinkYD02Name,String dbLinkYD03Name, Integer applid) throws Exception {
         if (StringUtils.isBlank(dbLinkYD01Name)) {
             dbLinkYD01Name = "";
         }
@@ -310,7 +310,7 @@ public class DBUtils {
         }
 
         String sql = "with numlist as (\n" +
-                "    SELECT rownum + " + pageNum * pageSize + " rn\n" +
+                "    SELECT rownum + " +  startNumber  + " rn\n" +
                 "    FROM dual\n" +
                 "    CONNECT BY 1 = 1\n" +
                 "           and rownum < " + pageSize + "\n" +
@@ -326,18 +326,25 @@ public class DBUtils {
                 "         from ECAS_MENU" + dbLinkYD01Name + "\n" +
                 "         where applid = " + applid + "\n" +
                 "     ),\n" +
+                "     yd02m as (\n" +
+                "         select *\n" +
+                "         from ECAS_MENU" + dbLinkYD02Name + "\n" +
+                "         where applid = " + applid + "\n" +
+                "     ),\n" +
                 "     yd03m as (\n" +
                 "         select *\n" +
                 "         from ECAS_MENU" + dbLinkYD03Name + "\n" +
                 "         where applid = " + applid + "\n" +
                 "     )\n" +
-                "select r.rn, dev.menuid \"dev\", yd01m.menuid \"yd01\", yd03m.menuid \"yd03\"\n" +
+                "select r.rn, dev.menuid \"dev\", dev.name \"name\", yd01m.menuid \"yd01\",yd02m.menuid \"yd02\", yd03m.menuid \"yd03\"\n" +
                 "from numlist r,\n" +
                 "     dev ,\n" +
                 "     yd01m,\n" +
+                "     yd02m,\n" +
                 "     yd03m\n" +
                 "where dev.menuid(+) = r.rn\n" +
                 "  and yd01m.menuid (+) = r.rn\n" +
+                "  and yd02m.menuid (+) = r.rn\n" +
                 "  and yd03m.menuid(+) = r.rn\n" +
                 "order by rn";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -537,7 +544,7 @@ public class DBUtils {
 
     }
 
-    public void textSearch(Connection connection) throws SQLException{
+    public void textSearch(Connection connection) throws SQLException {
         try (PreparedStatement preparedStatement = connection.prepareStatement("declare\n" +
                 "    sqlt varchar(4000);\n" +
                 "    search varchar(1000):='XFUNDS_DUEINTBANK_DAYBALANCE';\n" +
@@ -700,13 +707,39 @@ public class DBUtils {
         }
     }
 
-    public EcasActionPower queryActionPower(int applid, int powerbit, Connection connection,String env) throws SQLException {
-        String envSql="";
+    /**
+     * 通过Id
+     * @param applid
+     * @param menuId
+     * @param connection
+     * @param env
+     * @return
+     * @throws SQLException
+     */
+    public EcasMenu queryEcasMenu(int applid, int menuId, Connection connection, String env) throws SQLException {
+        String envSql = "";
 
-        if(!"DEV".equals(env)&&!"".equals(env)){
-            envSql="@"+env;
+        if (!"DEV".equals(env) && !"".equals(env)) {
+            envSql = "@" + env;
         }
-        String sql="SELECT APPLID, POWERBIT, PATH, DESCRIPTION, ENABLED, MODULENAME, WEIGHT, ENGMODULE, ENGDESC, MENUID FROM ECAS_ACTIONPOWER"+envSql+" WHERE APPLID = ? AND POWERBIT = ?";
+        String sql = "SELECT APPLID, MENUID, NAME, LVL, URL, PARENT, IMG, ISCHILD, GROUPID FROM ECAS_MENU" + envSql + " WHERE APPLID=? AND MENUID=?";
+        PreparedStatement statement = connection.prepareStatement(sql);
+        statement.setInt(1, applid);
+        statement.setInt(2, menuId);
+        ResultSet resultSet = statement.executeQuery();
+        if (resultSet.next()) {
+            return ecasMenuMapper(resultSet);
+        }
+        return null;
+    }
+
+    public EcasActionPower queryActionPower(int applid, int powerbit, Connection connection, String env) throws SQLException {
+        String envSql = "";
+
+        if (!"DEV".equals(env) && !"".equals(env)) {
+            envSql = "@" + env;
+        }
+        String sql = "SELECT APPLID, POWERBIT, PATH, DESCRIPTION, ENABLED, MODULENAME, WEIGHT, ENGMODULE, ENGDESC, MENUID FROM ECAS_ACTIONPOWER" + envSql + " WHERE APPLID = ? AND POWERBIT = ?";
         PreparedStatement statement = connection.prepareStatement(sql);
         statement.setInt(1, applid);
         statement.setInt(2, powerbit);
@@ -767,5 +800,57 @@ public class DBUtils {
 
         return userTabsComments;
     }
+    public EcasMenu ecasMenuMapper(ResultSet rs) throws SQLException {
+        EcasMenu menu = new EcasMenu();
+        menu.setApplid(rs.getString("APPLID"));
+        menu.setMenuid(rs.getString("MENUID"));
+        menu.setName(rs.getString("NAME"));
+        menu.setLvl(rs.getString("LVL"));
+        menu.setUrl(rs.getString("URL"));
+        menu.setParent(rs.getString("PARENT"));
+        menu.setImg(rs.getString("IMG"));
+        menu.setIschild(rs.getString("ISCHILD"));
+        menu.setGroupid(rs.getString("GROUPID"));
+        return menu;
+    }
+
+    public List<EcasMenu> queryRootMenus(String applid, Connection connection) {
+        List<EcasMenu> menus = new ArrayList<>();
+        try (PreparedStatement stmt = connection.prepareStatement(
+                "select applid, menuid, name, lvl, url, parent, img, ischild, groupid from ECAS_MENU where parent is null and applid=?")) {
+            stmt.setString(1, applid);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                EcasMenu menu = ecasMenuMapper(rs);
+                // Set other properties as necessary
+                menus.add(menu);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            // Handle exception
+        }
+        return menus;
+    }
+
+    public List<EcasMenu> querySubMenus(String applid,String parent, Connection connection) {
+        List<EcasMenu> menus = new ArrayList<>();
+        try (PreparedStatement stmt = connection.prepareStatement(
+                "select applid, menuid, name, lvl, url, parent, img, ischild, groupid from ECAS_MENU where parent =?  and applid=?")) {
+            stmt.setString(1, parent);
+            stmt.setString(2, applid);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                EcasMenu menu = ecasMenuMapper(rs);
+                // Set other properties as necessary
+                menus.add(menu);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            // Handle exception
+        }
+        return menus;
+    }
+
+
 
 }
