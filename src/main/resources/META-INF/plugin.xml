@@ -186,8 +186,8 @@
             </group>
 
             <action class="cn.boz.jb.plugin.idea.action.GotoRefFileAction" id="GoToRef" text="Go To Ref"
-                    icon="SpdEditorIcons.REF_16_ICON">
-            </action>
+                    icon="SpdEditorIcons.REF_16_ICON"></action>
+            <action class="cn.boz.jb.plugin.idea.action.GenerateEngineActionAction"  text="Gen Engine Action"/>
             <action class="cn.boz.jb.plugin.idea.action.mock.MockStartMethodAction" id="SpdMockStartMethod" text="MockMethod"
             icon="SpdEditorIcons.MOCK_16_ICON"></action>
             <group text="ExtQuery" id="SpdExtQuery" popup="true">
