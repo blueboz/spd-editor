@@ -1,9 +1,9 @@
 package cn.boz.jb.plugin.idea.dialog;
 
-import cn.boz.jb.plugin.idea.bean.EcasMenu;
-import cn.boz.jb.plugin.idea.dialog.treetable.MenuNode;
-import cn.boz.jb.plugin.idea.dialog.treetable.NodeData;
-import cn.boz.jb.plugin.idea.dialog.treetable.RootNode;
+import cn.boz.jb.plugin.idea.bean.EcasActionPower;
+import cn.boz.jb.plugin.idea.dialog.powertable.ActionPoweNode;
+import cn.boz.jb.plugin.idea.dialog.powertable.NodeData;
+import cn.boz.jb.plugin.idea.dialog.powertable.RootNode;
 import cn.boz.jb.plugin.idea.utils.Constants;
 import cn.boz.jb.plugin.idea.utils.DBUtils;
 import com.intellij.openapi.actionSystem.ActionGroup;
@@ -31,7 +31,7 @@ import java.sql.Connection;
 import java.util.List;
 import java.util.concurrent.Executors;
 
-public class EcasMenuTreeTableDialog extends DialogWrapper {
+public class ActionPowerTreeTableDialog extends DialogWrapper {
 
     JPanel centerCompoent;
     private JBScrollPane jbScrollPane;
@@ -41,19 +41,19 @@ public class EcasMenuTreeTableDialog extends DialogWrapper {
             @Override
             public String valueOf(DefaultMutableTreeNode o) {
                 Object userObject = o.getUserObject();
-                if (userObject instanceof MenuNode) {
-                    EcasMenu ecasMenu = (EcasMenu) ((MenuNode) userObject).getNodeData();
-                    return ecasMenu.getMenuid();
+                if (userObject instanceof ActionPoweNode) {
+                    EcasActionPower EcasActionPower = (EcasActionPower) ((ActionPoweNode) userObject).getNodeData();
+                    return EcasActionPower.getPowerbit()+"";
                 }
-                return "1";
+                return "";
             }
         }, new ColumnInfo<DefaultMutableTreeNode, String>("parent") {
             @Override
             public String valueOf(DefaultMutableTreeNode o) {
                 Object userObject = o.getUserObject();
-                if (userObject instanceof MenuNode) {
-                    EcasMenu ecasMenu = (EcasMenu) ((MenuNode) userObject).getNodeData();
-                    return ecasMenu.getParent();
+                if (userObject instanceof ActionPoweNode) {
+                    EcasActionPower EcasActionPower = (EcasActionPower) ((ActionPoweNode) userObject).getNodeData();
+                    return EcasActionPower.getDescription();
                 }
                 return "";
             }
@@ -61,9 +61,9 @@ public class EcasMenuTreeTableDialog extends DialogWrapper {
             @Override
             public String valueOf(DefaultMutableTreeNode o) {
                 Object userObject = o.getUserObject();
-                if (userObject instanceof MenuNode) {
-                    EcasMenu ecasMenu = (EcasMenu) ((MenuNode) userObject).getNodeData();
-                    return ecasMenu.getName();
+                if (userObject instanceof ActionPoweNode) {
+                    EcasActionPower EcasActionPower = (EcasActionPower) ((ActionPoweNode) userObject).getNodeData();
+                    return EcasActionPower.getPath();
                 }
                 return "";
             }
@@ -71,9 +71,9 @@ public class EcasMenuTreeTableDialog extends DialogWrapper {
             @Override
             public String valueOf(DefaultMutableTreeNode o) {
                 Object userObject = o.getUserObject();
-                if (userObject instanceof MenuNode) {
-                    EcasMenu ecasMenu = (EcasMenu) ((MenuNode) userObject).getNodeData();
-                    return ecasMenu.getLvl();
+                if (userObject instanceof ActionPoweNode) {
+                    EcasActionPower EcasActionPower = (EcasActionPower) ((ActionPoweNode) userObject).getNodeData();
+                    return EcasActionPower.getEnabled()+"";
                 }
                 return "";
             }
@@ -81,9 +81,9 @@ public class EcasMenuTreeTableDialog extends DialogWrapper {
             @Override
             public String valueOf(DefaultMutableTreeNode o) {
                 Object userObject = o.getUserObject();
-                if (userObject instanceof MenuNode) {
-                    EcasMenu ecasMenu = (EcasMenu) ((MenuNode) userObject).getNodeData();
-                    return ecasMenu.getUrl();
+                if (userObject instanceof ActionPoweNode) {
+                    EcasActionPower EcasActionPower = (EcasActionPower) ((ActionPoweNode) userObject).getNodeData();
+                    return EcasActionPower.getWeight()+"";
                 }
                 return "";
             }
@@ -91,44 +91,12 @@ public class EcasMenuTreeTableDialog extends DialogWrapper {
             @Override
             public String valueOf(DefaultMutableTreeNode o) {
                 Object userObject = o.getUserObject();
-                if (userObject instanceof MenuNode) {
-                    EcasMenu ecasMenu = (EcasMenu) ((MenuNode) userObject).getNodeData();
-                    return ecasMenu.getImg();
+                if (userObject instanceof ActionPoweNode) {
+                    EcasActionPower EcasActionPower = (EcasActionPower) ((ActionPoweNode) userObject).getNodeData();
+                    return EcasActionPower.getMenuId()+"";
                 }
                 return "";
             }
-        }, new ColumnInfo<DefaultMutableTreeNode, String>("ischild") {
-            @Override
-            public String valueOf(DefaultMutableTreeNode o) {
-                Object userObject = o.getUserObject();
-                if (userObject instanceof MenuNode) {
-                    EcasMenu ecasMenu = (EcasMenu) ((MenuNode) userObject).getNodeData();
-                    return ecasMenu.getIschild();
-                }
-                return "";
-            }
-        }, new ColumnInfo<DefaultMutableTreeNode, String>("groupid") {
-            @Override
-            public String valueOf(DefaultMutableTreeNode o) {
-                Object userObject = o.getUserObject();
-                if (userObject instanceof MenuNode) {
-                    EcasMenu ecasMenu = (EcasMenu) ((MenuNode) userObject).getNodeData();
-                    return ecasMenu.getGroupid();
-                }
-                return "";
-            }
-        },new ColumnInfo<DefaultMutableTreeNode, String>("applid") {
-
-            @Override
-            public String valueOf(DefaultMutableTreeNode o) {
-                Object userObject = o.getUserObject();
-                if (userObject instanceof MenuNode) {
-                    EcasMenu ecasMenu = (EcasMenu) ((MenuNode) userObject).getNodeData();
-                    return ecasMenu.getApplid();
-                }
-                return "";
-            }
-
         }
         };
 
@@ -161,12 +129,12 @@ public class EcasMenuTreeTableDialog extends DialogWrapper {
                         boolean subDataLoaded = uo.isSubDataLoaded();
                         if (subDataLoaded == false) {
                             uo.setSubDataLoaded(true);
-                            if (uo instanceof MenuNode) {
+                            if (uo instanceof RootNode) {
                                 try {
                                     Connection connection = DBUtils.getConnection(project);
                                     List<NodeData> nds = uo.loadSubNodes(connection);
                                     for (NodeData nd : nds) {
-                                        node.add(new DefaultMutableTreeNode(nd, true));
+                                        node.add(new DefaultMutableTreeNode(nd, false));
                                     }
                                 } catch (Exception ex) {
                                     DBUtils.dbExceptionProcessor(ex, project);
@@ -257,11 +225,11 @@ public class EcasMenuTreeTableDialog extends DialogWrapper {
     }
     private Project project;
 
-    public EcasMenuTreeTableDialog(@Nullable Project project, boolean canBeParent) {
+    public ActionPowerTreeTableDialog(@Nullable Project project, boolean canBeParent) {
         super(project, canBeParent);
         this.project=project;
         initialCompoent();
-        setTitle("Ecas 树表");
+        setTitle("ActionPower 树表");
         init();
     }
 

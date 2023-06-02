@@ -6,6 +6,7 @@ import cn.boz.jb.plugin.idea.action.flowSearch.FlowSearchTable;
 import cn.boz.jb.plugin.idea.callsearch.CallerSearcherCommentPanel;
 import cn.boz.jb.plugin.idea.callsearch.CallerSearcherDetailComment;
 import cn.boz.jb.plugin.idea.callsearch.CallerSearcherTablePanel;
+import cn.boz.jb.plugin.idea.dialog.ActionPowerTreeTableDialog;
 import cn.boz.jb.plugin.idea.dialog.EcasMenuTreeDialog;
 import cn.boz.jb.plugin.idea.dialog.EcasMenuTreeTableDialog;
 import cn.boz.jb.plugin.idea.dialog.EngineActionDialog;
@@ -99,6 +100,12 @@ public class OpenInSearchToolWindowAction extends AnAction implements DumbAware 
             doForEcasMenuIdSelectDlg(e,ecasMenuIdSelectorDlg);
         }
 
+        ActionPowerTreeTableDialog actionPowerTreeTableDialog = findComponentWithAllPossible(component, ActionPowerTreeTableDialog.class);
+        if(actionPowerTreeTableDialog!=null){
+            doForActionpowerTreeTableDlg(e,actionPowerTreeTableDialog);
+        }
+
+
         DialogWrapper instance = DialogWrapper.findInstance(component);
         if(instance instanceof EngineActionSelectorDlg){
             EngineActionSelectorDlg engineActionSelectorDlg= (EngineActionSelectorDlg) instance;
@@ -154,6 +161,12 @@ public class OpenInSearchToolWindowAction extends AnAction implements DumbAware 
         }
 
 
+    }
+
+    private void doForActionpowerTreeTableDlg(AnActionEvent e, ActionPowerTreeTableDialog actionPowerTreeTableDialog) {
+        JBScrollPane derive = actionPowerTreeTableDialog.derive();
+        addToToolWindow(e,derive,"actionPowerTreeTable ");
+        actionPowerTreeTableDialog.disposeIfNeeded();
     }
 
     private void doForEcasMenuIdSelectDlg(AnActionEvent e, EcasMenuIdSelectorDlg ecasMenuIdSelectorDlg) {

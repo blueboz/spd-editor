@@ -872,5 +872,45 @@ public class DBUtils {
     }
 
 
+    public List<String> queryRootActionPower(String s, Connection connection) {
+        List<String> menus = new ArrayList<>();
+        try (PreparedStatement stmt = connection.prepareStatement(
+                "select distinct MODULENAME as \"MODULENAME\" from ECAS_ACTIONPOWER where APPLID=999  order by MODULENAME")) {
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                // Set other properties as necessary
+                menus.add(rs.getString("MODULENAME"));
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return menus;
+    }
 
+    public List<EcasActionPower> querySubActionPower(String s, Connection connection) {
+        List<EcasActionPower> menus = new ArrayList<>();
+        try (PreparedStatement stmt = connection.prepareStatement(
+                "select applid, powerbit, path, description, enabled, modulename, weight," +
+                        " engmodule, engdesc, menuid from ECAS_ACTIONPOWER where MODULENAME=?")) {
+            stmt.setString(1,s);
+            ResultSet resultSet = stmt.executeQuery();
+            while (resultSet.next()) {
+                EcasActionPower ecasActionPower = new EcasActionPower();
+                ecasActionPower.setApplid(resultSet.getInt("APPLID"));
+                ecasActionPower.setPowerbit(resultSet.getInt("POWERBIT"));
+                ecasActionPower.setPath(resultSet.getString("PATH"));
+                ecasActionPower.setDescription(resultSet.getString("DESCRIPTION"));
+                ecasActionPower.setEnabled(resultSet.getInt("ENABLED"));
+                ecasActionPower.setModuleName(resultSet.getString("MODULENAME"));
+                ecasActionPower.setWeight(resultSet.getInt("WEIGHT"));
+                ecasActionPower.setEngModule(resultSet.getString("ENGMODULE"));
+                ecasActionPower.setEngDesc(resultSet.getString("ENGDESC"));
+                ecasActionPower.setMenuId(resultSet.getInt("MENUID"));
+                menus.add(ecasActionPower);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return menus;
+    }
 }

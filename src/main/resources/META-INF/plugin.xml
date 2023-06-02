@@ -337,10 +337,14 @@
                     text="SpdAddPluginAddress" icon="AllIcons.Gutter.Colors"></action>
             <action class="cn.boz.jb.plugin.idea.action.fmss.EngineActionSelectorAction"
                     text="EngineActionSelector" icon="SpdEditorIcons.KEY_16_ICON"></action>
+
             <action class="cn.boz.jb.plugin.idea.action.fmss.EcasMenuSelectorAction"
                     text="EcasMenuSelector" icon="SpdEditorIcons.KEY_16_ICON"></action>
+
             <action class="cn.boz.jb.plugin.idea.action.fmss.EcasMenuTreeTableAction"
-                    text="EcasMenuListAction" ></action>
+                    text="EcasMenuList" ></action>
+            <action class="cn.boz.jb.plugin.idea.action.fmss.ActionPowerTreeTableAction"
+                    text="ActionPowerTreeTable" ></action>
             <add-to-group group-id="MainMenu"></add-to-group>
         </group>
 

@@ -55,6 +55,7 @@ public class EcasMenuIdSelectorDlg extends DialogWrapper {
 
     public EcasMenuIdSelectorDlg(@Nullable Project project, boolean canBeParent) {
         super(project, canBeParent);
+        setTitle("Ecas 菜单Id占用选择器");
         this.setModal(false);
         this.project = project;
         currentNum=SpdEditorDBState.getInstance(project).actionPowerStart;

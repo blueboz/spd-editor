@@ -65,10 +65,9 @@ public class GenerateEngineActionAction  extends AnAction implements ClipboardOw
             Map<String, Object> pmap = new HashMap<>();
             PsiType type = parameter.getType();
             if(type instanceof PsiPrimitiveType){
-                pmap.put("className",((PsiPrimitiveType) type).getCanonicalText());
-
+                pmap.put("className", type.getCanonicalText());
             }else if(type instanceof PsiArrayType){
-                pmap.put("className","[L"+((PsiArrayType) type).getDeepComponentType().getCanonicalText());
+                pmap.put("className","[L"+ type.getDeepComponentType().getCanonicalText());
             }else{
                 pmap.put("className",((PsiClassReferenceType) type).rawType().getCanonicalText());
             }
@@ -78,12 +77,16 @@ public class GenerateEngineActionAction  extends AnAction implements ClipboardOw
         mapper.put("parameters", parameterNames);
         mapper.put("actionId", "/" + method.getName() + ".do");
         PsiType returnType = method.getReturnType();
-        String retType = MyStringUtils.firstCharLower(returnType.getPresentableText());
         mapper.put("needOutput",true);
-        if("void".equals(retType)){
-            mapper.put("needOutput",false);
+
+        if(returnType instanceof PsiPrimitiveType){
+            mapper.put("retBeanName", returnType.getCanonicalText());
+        }else if(returnType instanceof PsiArrayType){
+            mapper.put("retBeanName",""+ returnType.getDeepComponentType().getCanonicalText()+"s");
+        }else{
+            mapper.put("retBeanName",((PsiClassReferenceType) returnType).rawType().getCanonicalText());
         }
-        mapper.put("retBeanName",retType);
+        mapper.put("retBeanName",MyStringUtils.firstCharLower((String)mapper.get("retBeanName")));
 
         String packageName = javaFile.getPackageName();
         String findStr = "com.erayt.xfunds.";
