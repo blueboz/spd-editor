@@ -891,7 +891,7 @@ public class DBUtils {
         List<EcasActionPower> menus = new ArrayList<>();
         try (PreparedStatement stmt = connection.prepareStatement(
                 "select applid, powerbit, path, description, enabled, modulename, weight," +
-                        " engmodule, engdesc, menuid from ECAS_ACTIONPOWER where MODULENAME=?")) {
+                        " engmodule, engdesc, menuid from ECAS_ACTIONPOWER where MODULENAME=?  order by description")) {
             stmt.setString(1,s);
             ResultSet resultSet = stmt.executeQuery();
             while (resultSet.next()) {

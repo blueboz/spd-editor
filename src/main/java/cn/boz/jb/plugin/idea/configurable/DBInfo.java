@@ -7,11 +7,11 @@ public class DBInfo {
     public String showName = "";
     public String id = "";
 
-    public String jdbcUrl = "";
+    public String jdbcUrl = "jdbc:oracle:thin:@21.96.5.85:1521:FMSS";
 
-    public String jdbcUserName = "";
+    public String jdbcUserName = "xfunds201701";
 
-    public String jdbcPassword = "";
+    public String jdbcPassword = "Xfunds_1234";
 
     public String jdbcDriver = "";
 

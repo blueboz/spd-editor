@@ -37,7 +37,7 @@ public class ActionPowerTreeTableDialog extends DialogWrapper {
     private JBScrollPane jbScrollPane;
 
     public void initialCompoent(  ) {
-        ColumnInfo[] columns = new ColumnInfo[]{ new ColumnInfo<DefaultMutableTreeNode, String>("menuid") {
+        ColumnInfo[] columns = new ColumnInfo[]{ new ColumnInfo<DefaultMutableTreeNode, String>("Powerbit") {
             @Override
             public String valueOf(DefaultMutableTreeNode o) {
                 Object userObject = o.getUserObject();
@@ -47,17 +47,7 @@ public class ActionPowerTreeTableDialog extends DialogWrapper {
                 }
                 return "";
             }
-        }, new ColumnInfo<DefaultMutableTreeNode, String>("parent") {
-            @Override
-            public String valueOf(DefaultMutableTreeNode o) {
-                Object userObject = o.getUserObject();
-                if (userObject instanceof ActionPoweNode) {
-                    EcasActionPower EcasActionPower = (EcasActionPower) ((ActionPoweNode) userObject).getNodeData();
-                    return EcasActionPower.getDescription();
-                }
-                return "";
-            }
-        }, new ColumnInfo<DefaultMutableTreeNode, String>("name") {
+        }, new ColumnInfo<DefaultMutableTreeNode, String>("path") {
             @Override
             public String valueOf(DefaultMutableTreeNode o) {
                 Object userObject = o.getUserObject();
@@ -67,7 +57,7 @@ public class ActionPowerTreeTableDialog extends DialogWrapper {
                 }
                 return "";
             }
-        }, new ColumnInfo<DefaultMutableTreeNode, String>("lvl") {
+        }, new ColumnInfo<DefaultMutableTreeNode, String>("enable") {
             @Override
             public String valueOf(DefaultMutableTreeNode o) {
                 Object userObject = o.getUserObject();
@@ -77,7 +67,7 @@ public class ActionPowerTreeTableDialog extends DialogWrapper {
                 }
                 return "";
             }
-        }, new ColumnInfo<DefaultMutableTreeNode, String>("url") {
+        }, new ColumnInfo<DefaultMutableTreeNode, String>("weight") {
             @Override
             public String valueOf(DefaultMutableTreeNode o) {
                 Object userObject = o.getUserObject();
@@ -87,7 +77,7 @@ public class ActionPowerTreeTableDialog extends DialogWrapper {
                 }
                 return "";
             }
-        }, new ColumnInfo<DefaultMutableTreeNode, String>("img") {
+        }, new ColumnInfo<DefaultMutableTreeNode, String>("menuId") {
             @Override
             public String valueOf(DefaultMutableTreeNode o) {
                 Object userObject = o.getUserObject();
