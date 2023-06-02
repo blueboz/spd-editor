@@ -1,8 +1,7 @@
-package com.erayt.xfunds.fund.impl.dao;
-import com.erayt.xfunds.fund.domain.${className};
+package com.erayt.xfunds.${namespace}.impl.dao;
+import com.erayt.xfunds.${namespace}.domain.${className};
 
 import java.util.List;
-
 public interface ${className}Dao {
 	/**
 	*数据入库
@@ -38,8 +37,8 @@ public interface ${className}Dao {
 
 	/**
 	 * 按照管理人进行删除
-	 * @param companyId
+	 * @param ${beanName}
 	 */
-	public void delete${className}Id(String id);
+	public void delete${className}Id(${className} ${beanName});
 
 }

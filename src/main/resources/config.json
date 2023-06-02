@@ -4,12 +4,20 @@
   "beanName": "dlyReport",
   "namespace": "forex",
   "tableName": "xfunds_forex_dlyreport",
+  "menuId": "1441",
+  "pmenuId": "1430",
+  "powerbits": "10,20,30",
+  "moduleName": "J-基金管理",
+  "functionbase": "基金管理",
   "title": "基金白名单测试",
+  "exceptionFullName": "com.erayt.xfunds.common.XfundsForexException",
+  "exceptionName": "XfundsForexException",
   "columns": [
     {
       "fieldChName": "交易机构",
       "fieldName": "bankId",
       "dataType": "VARCHAR(30)",
+      "maxLenInOracle": 30,
       "nullable": false,
       "isId": true
     },
@@ -18,6 +26,7 @@
       "fieldName": "ecifNo",
       "dataType": "VARCHAR(60)",
       "nullable": false,
+      "maxLenInOracle": 60,
       "isId": false
     }
   ]

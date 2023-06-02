@@ -1,4 +1,4 @@
-package com.erayt.xfunds.fund.impl;
+package com.erayt.xfunds.${namespace}.impl;
 
 import com.erayt.ecas.domain.User;
 import com.erayt.solar2.engine.facade.ActionContext;
@@ -11,10 +11,10 @@ import com.erayt.xfunds.base.domain.TradeLogs;
 import com.erayt.xfunds.common.DateHelper;
 import com.erayt.xfunds.common.StringHelper;
 import com.erayt.xfunds.common.XfundsBaseException;
-import com.erayt.xfunds.common.fund.XfundsFundException;
-import com.erayt.xfunds.fund.${className}Service;
-import com.erayt.xfunds.fund.domain.${className};
-import com.erayt.xfunds.fund.impl.dao.${className}Dao;
+import ${exceptionFullName};
+import com.erayt.xfunds.${namespace}.${className}Service;
+import com.erayt.xfunds.${namespace}.domain.${className};
+import com.erayt.xfunds.${namespace}.impl.dao.${className}Dao;
 import com.erayt.xfunds.tools.OracleStringUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.poi.ss.usermodel.*;
@@ -28,8 +28,9 @@ import java.io.InputStream;
 import java.util.*;
 
 public class ${className}ServiceImpl implements ${className}Service {
+    private int maxRows=10000;
  
-    private ${className}Dao ${className}Dao;
+    private ${className}Dao ${beanName}Dao;
 
     private SequenceRepository sequenceRepository;
 
@@ -71,10 +72,6 @@ public class ${className}ServiceImpl implements ${className}Service {
         this.sysParamRepository = sysParamRepository;
     }
 
-    @Override
-    public ${className} find${className}(${className} ${className}) {
-        return ${className};
-    }
 
     /**
      * 数据验证
@@ -83,18 +80,20 @@ public class ${className}ServiceImpl implements ${className}Service {
      * @return
      */
     private void validate(${className} bean) {
-        if (bean.getCompanyId() == null) {
-            throw new RuntimeException("companyId非空");
+        <#list columns as col>
+        <#assign uname= myutils("upper_case_first",col.fieldName)>
+        <#if col.nullable==false>
+
+        if (bean.get${uname}() == null) {
+            throw new ${exceptionName}("${col.fieldName}非空");
         }
-        if (bean.getCompanyId() != null && StringHelper.stringByteLength(bean.getCompanyId()) > 100) {
-            throw new RuntimeException("companyId长度不能超过10");
+        </#if>
+        if (bean.get${uname}() != null && StringHelper.stringByteLength(bean.get${uname}()) > ${col.maxLenInOracle}) {
+            throw new ${exceptionName}("${col.fieldName}长度不能超过${col.maxLenInOracle}");
         }
-        if (bean.getImportDate() != null && StringHelper.stringByteLength(bean.getImportDate()) > 8) {
-            throw new RuntimeException("importDate长度不能超过60");
-        }
-        if (bean.getSignDate() != null && String.valueOf(bean.getSignDate()).length() > 8) {
-            throw new RuntimeException("signDate长度不能超过8");
-        }
+        </#list>
+
+
     }
 
     /**
@@ -106,7 +105,7 @@ public class ${className}ServiceImpl implements ${className}Service {
     @Override
     public void add${className}(${className} bean) {
         validate(bean);
-        ${className}Dao.insert${className}(bean);
+        ${beanName}Dao.insert${className}(bean);
     }
 
     private EnginePoControlService enginePoControlService;
@@ -140,31 +139,22 @@ public class ${className}ServiceImpl implements ${className}Service {
     public void update${className}(${className} bean, User user) {
         validate(bean);
 
-        ${className} byId = findById(bean.getId());
+        ${className} byId = findById(bean);
         if (byId == null) {
-            throw new XfundsFundException("数据有误");
+            throw new ${exceptionName}("数据有误");
         }
-        if (StringUtils.equals(byId.getCompanyId(), bean.getCompanyId())) {
-            bean.setDescription(String.format("白名单调整|从%s->%s", byId.getCompanyId(), bean.getCompanyId()));
-            ${className}Dao.update${className}(bean);
-            TradeLogs tradeLogs = buildTradeLogForModDirectly(bean , user);
-            tradeLogsService.addTradeLogs(tradeLogs);
-        } else {
-            bean.setDescription(String.format("白名单调整|从%s->%s", byId.getCompanyId(), bean.getCompanyId()));
-            enginePoControlService.initEngineRightPo(bean, user);
-            ActionContext actionContext = new ActionContext();
-            actionContext.put("${className}", bean);
-            actionContext.put("user", user);
-            processEngine.start("${className}Modify", actionContext);
-        }
+        ${beanName}Dao.update${className}(bean);
 
 
     }
 
-    public ${className} findById(String id) {
-        ${className} ${className} = new ${className}();
-        ${className}.setId(id);
-        return ${className}Dao.select${className}(${className});
+    public ${className} findById(${className} ${beanName}) {
+        ${className} bean = new ${className}();
+        <#list columns as col>
+        <#assign uname= myutils("upper_case_first",col.fieldName)>
+        bean.set${uname}(${beanName}.get${uname}());
+        </#list>
+        return ${beanName}Dao.select${className}(bean);
     }
 
     private static final Logger LOGGER = LoggerFactory.getLogger(${className}Service.class);
@@ -196,24 +186,24 @@ public class ${className}ServiceImpl implements ${className}Service {
             for (int i = 1; i <= sheet.getLastRowNum(); i++) { // Start from row 1, assumes first row is header
                 Row row = sheet.getRow(i);
                 if (row == null) {
-                    throw new XfundsFundException(String.format("第%d行为空", i));
+                    throw new ${exceptionName}(String.format("第%d行为空", i));
                 }
 
                 Cell cell = row.getCell(0);
                 if (cell == null) {
-                    throw new XfundsFundException(String.format("第%d行第0列为空", i));
+                    throw new ${exceptionName}(String.format("第%d行第0列为空", i));
                 }
                 if (cell.getCellType() != Cell.CELL_TYPE_STRING) {
-                    throw new XfundsFundException(String.format("第%d行第0列不是字符串", i));
+                    throw new ${exceptionName}(String.format("第%d行第0列不是字符串", i));
                 }
                 String data = cell.getStringCellValue().trim();
                 if (StringUtils.isBlank(data)) {
-                    throw new XfundsFundException(String.format("第%d行第0列是空字符串", i));
+                    throw new ${exceptionName}(String.format("第%d行第0列是空字符串", i));
                 }
                 int realLeninOracle = OracleStringUtils.realLengthInOracle(data);
-                if (realLeninOracle > maxStrLen) {
-                    throw new XfundsFundException(String.format("第一行数据长度超长,最大长度:%d 实际长度:%d", maxStrLen, realLeninOracle));
-                }
+//                if (realLeninOracle > maxStrLen) {
+//                    throw new ${exceptionName}(String.format("第一行数据长度超长,最大长度:%d 实际长度:%d", maxStrLen, realLeninOracle));
+//                }
 
                 dataRows.add(data);
             }
@@ -223,7 +213,7 @@ public class ${className}ServiceImpl implements ${className}Service {
             }
         } catch (Exception e) {
             LOGGER.error("${title}Excel导入发生异常e={}", e.getLocalizedMessage());
-            throw new XfundsFundException(e.getMessage());
+            throw new ${exceptionName}(e.getMessage());
 
         }
 
@@ -236,23 +226,23 @@ public class ${className}ServiceImpl implements ${className}Service {
         List<${className}> ${className}s = buildWhiteList(file);
         LOGGER.info(String.format("用户%s执行了批量导入",user.getLogonid()));
         if(CollectionUtils.isEmpty(${className}s)){
-            throw new XfundsFundException("未录入任何数据，导入被终止");
+            throw new ${exceptionName}("未录入任何数据，导入被终止");
         }
         LOGGER.info("导入的数据有");
         for (${className} ${className} : ${className}s) {
             LOGGER.info(${className}.toString());
         }
-        ${className}Dao.delete${className}();
-        ${className}Dao.insert${className}Batch(${className}s);
+        ${beanName}Dao.delete${className}();
+        ${beanName}Dao.insert${className}Batch(${className}s);
     }
 
     @Override
-    public void delete${className}Batch(${className}[] ${className}s) {
-        if (${className}s != null && ${className}s.length == 0) {
+    public void delete${className}Batch(${className}[] ${beanName}s) {
+        if (${beanName}s != null && ${beanName}s.length == 0) {
             return;
         }
-        for (${className} ${className} : ${className}s) {
-            ${className}Dao.delete${className}Id(${className}.getId());
+        for (${className} ${beanName} : ${beanName}s) {
+            ${beanName}Dao.delete${className}Id(${beanName});
         }
     }
 
@@ -263,16 +253,16 @@ public class ${className}ServiceImpl implements ${className}Service {
      * @return result
      */
     @Override
-    public ${className} query${className}(${className} bean) {
-        return ${className}Dao.select${className}(bean);
+    public ${className} find${className}(${className} bean) {
+        return ${beanName}Dao.select${className}(bean);
     }
 
     public ${className}Dao get${className}Dao() {
-        return ${className}Dao;
+        return ${beanName}Dao;
     }
 
-    public void set${className}Dao(${className}Dao ${className}Dao) {
-        this.${className}Dao = ${className}Dao;
+    public void set${className}Dao(${className}Dao ${beanName}Dao) {
+        this.${beanName}Dao = ${beanName}Dao;
     }
 
     /**
@@ -284,14 +274,13 @@ public class ${className}ServiceImpl implements ${className}Service {
     private TradeLogs buildTradeLogBase(${className} any${className},User user){
         TradeLogs tradeLogs = new TradeLogs();
         tradeLogs.setDownloadKey(sequenceRepository.findSequenceByType(SequenceConstant.TRADLOG_SEQ));
-        tradeLogs.setBusinessNo(any${className}.getCompanyId());
         tradeLogs.setTellerId(user.getLogonid());
         tradeLogs.setTellerName(user.getName());
         tradeLogs.setBlockNumber(sequenceRepository.findSequenceByType(SequenceConstant.TRADLOG_SEQ));
         Bank bank = bankRepository.findBankInfo(tradeLogs.getBankId() != null ? tradeLogs.getBankId() : user.getBankid());
         if (bank == null) {
             LOGGER.error("机构不存在 Bankid={}", user.getBankid());
-            throw new XfundsBaseException("机构不存在");
+            throw new ${exceptionName}("机构不存在");
         }
         tradeLogs.setBankId(bank.getBankId());
         tradeLogs.setBankName(bank.getDipName());

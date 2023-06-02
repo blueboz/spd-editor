@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
-<list namespace='com.erayt.xfunds.${namespace}.impl.dao.${className}Dao'>
+<sqlMap namespace='com.erayt.xfunds.${namespace}.impl.dao.${className}Dao'>
 	<resultMap id='${className}Map' class='com.erayt.xfunds.${namespace}.domain.${className}'>
 		<#list columns as col>
 			<result property='${col.fieldName}' column='${col.fieldName}' />

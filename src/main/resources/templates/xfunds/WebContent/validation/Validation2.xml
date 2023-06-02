@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<formset>
+
+    <form Name="${className}InputForm" Path="/fund/${className}Input.html">
+    <#list columns as col>
+        <item Name="${beanName}.${col.fieldName}"  DataType="LimitB" Min="0" Max="50" Require="0" Message="${col.fieldChName}" Tips="${col.fieldChName}" />
+    </#list>
+    </form>
+
+    <form Name="${className}InputForm" Path="/${namespace}/${className}mod.html">
+    <#list columns as col>
+        <item Name="${beanName}.${col.fieldName}"  DataType="LimitB" Min="0" Max="50" Require="0" Message="${col.fieldChName}" Tips="${col.fieldChName}" />
+    </#list>
+    </form>
+
+    <form Name="${beanName}QueryListForm" Path="/${namespace}/${className}QueryList.html">
+    <#list columns as col>
+        <item Name="queryParam.${col.fieldName}"  DataType="LimitB" Min="0" Max="50" Require="0" Message="${col.fieldChName}" Tips="${col.fieldChName}" />
+    </#list>
+    </form>
+
+</formset>

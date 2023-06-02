@@ -16,6 +16,7 @@ import org.jetbrains.annotations.NotNull;
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
@@ -43,26 +44,12 @@ public class EcasMenuToolWindow extends JComponent implements ClipboardOwner {
 
             tree = new Tree(tn);
             tree.setDragEnabled(true);
+
             tree.addTreeSelectionListener(e -> {
                 TreePath path = e.getPath();
-                Object pathComponent = path.getLastPathComponent();
-                if (!(pathComponent instanceof DefaultMutableTreeNode)) {
-                    return;
-                }
-                DefaultMutableTreeNode node = (DefaultMutableTreeNode) pathComponent;
-                Object userObject = node.getUserObject();
-                if (!(userObject instanceof NodeData)) {
-                    return;
-                }
-                NodeData uo = (NodeData) userObject;
-                if (!uo.isSubDataLoaded()) {
-                    List<NodeData> subNodes = uo.loadSubNodes(connection);
-                    uo.setSubDataLoaded(true);
-                    List<DefaultMutableTreeNode> collect = subNodes.stream().map(sn -> new DefaultMutableTreeNode(sn, true)).collect(Collectors.toList());
-                    for (DefaultMutableTreeNode o : collect) {
-                        node.add(o);
-                    }
-                }
+                DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) path.getLastPathComponent();
+                loadTreeNode(selectedNode,connection);
+
             });
             //用于树
             ToolbarDecorator decorator = ToolbarDecorator.createDecorator(tree);
@@ -134,17 +121,24 @@ public class EcasMenuToolWindow extends JComponent implements ClipboardOwner {
                     if (selectionPath == null) {
                         return;
                     }
-                    DefaultMutableTreeNode lastPathComponent = (DefaultMutableTreeNode) selectionPath.getLastPathComponent();
+                    DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) selectionPath.getLastPathComponent();
                     DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
-                    Object userObject = lastPathComponent.getUserObject();
+                    Object userObject = selectedNode.getUserObject();
                     if (userObject instanceof String) {
                         return;
                     }
                     if (userObject instanceof AppNode) {
                         AppNode appNode= (AppNode) userObject;
-                        appNode.setSubDataLoaded(false);
 
-                        model.removeNodeFromParent(lastPathComponent);
+                        if(appNode.isSubDataLoaded()){
+                            appNode.setSubDataLoaded(false);
+
+                            while(selectedNode.getChildCount()>0){
+                                DefaultMutableTreeNode firstChild = (DefaultMutableTreeNode) selectedNode.getFirstChild();
+                                selectedNode.remove(firstChild);
+                            }
+                            model.reload(selectedNode);
+                        }
                         return;
                     }
                 }
@@ -267,6 +261,25 @@ public class EcasMenuToolWindow extends JComponent implements ClipboardOwner {
         }
 
 
+    }
+    public void loadTreeNode(DefaultMutableTreeNode selectedNode,Connection connection) {
+//        DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) path.getLastPathComponent();
+        Object userObject = selectedNode.getUserObject();
+        if (!(userObject instanceof NodeData)) {
+            return;
+        }
+        NodeData uo = (NodeData) userObject;
+        if (!uo.isSubDataLoaded()) {
+            List<NodeData> subNodes = uo.loadSubNodes(connection);
+            uo.setSubDataLoaded(true);
+            List<DefaultMutableTreeNode> collect = subNodes
+                    .stream()
+                    .map(sn -> new DefaultMutableTreeNode(sn, true))
+                    .collect(Collectors.toList());
+            for (DefaultMutableTreeNode o : collect) {
+                selectedNode.add(o);
+            }
+        }
     }
 
     @Override

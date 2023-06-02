@@ -28,7 +28,7 @@ public class ${className}Listener implements EventListener, TaskListener{
 			return ;
 		}
 		${className} trade = (${className})obj ;
-		trade.setTaskName(task.getTitle());
+//		trade.setTaskName(task.getTitle());
 	}
 
 	@Override
@@ -41,7 +41,7 @@ public class ${className}Listener implements EventListener, TaskListener{
 			return ;
 		}
 		${className} trade = (${className})obj ;
-		trade.setTaskName(task.getTitle());
+//		trade.setTaskName(task.getTitle());
 	}
 
 	@Override
@@ -54,9 +54,9 @@ public class ${className}Listener implements EventListener, TaskListener{
 			return ;
 		}
 		${className} trade = (${className})obj ;
-		trade.setEventId(event.getId());
-		trade.setOperType(event.getDoneType());
-		trade.setTaskName(task.getTitle());
+//		trade.setEventId(event.getId());
+//		trade.setOperType(event.getDoneType());
+//		trade.setTaskName(task.getTitle());
 	}
 
 }

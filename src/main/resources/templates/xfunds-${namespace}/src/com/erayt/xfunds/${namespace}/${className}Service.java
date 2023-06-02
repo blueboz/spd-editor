@@ -1,4 +1,4 @@
-package com.erayt.xfunds.fund;
+package com.erayt.xfunds.${namespace};
 import com.erayt.ecas.domain.User;
 import com.erayt.xfunds.base.domain.TradeLogs;
 import com.erayt.xfunds.${namespace}.domain.${className};
@@ -32,14 +32,13 @@ public interface ${className}Service {
 	* @param ${className}
 	* @return result
 	*/
-	public ${className} query${className}(${className} ${className});
+	public ${className} find${className}(${className} ${className});
 
-	/*
-	 * 查询数据${title}
-	 * @param ${className}
-	 * @return result
+
+	/**
+	 * Excel 数据导入
 	 */
-	public ${className} query${className}(${className} ${className});
+	public void doImportExcel(File file, User user) ;
 
 
 }

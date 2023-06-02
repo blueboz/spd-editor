@@ -1,4 +1,4 @@
-package com.erayt.xfunds.fund.domain;
+package com.erayt.xfunds.${namespace}.domain;
 
 import com.erayt.xfunds.base.domain.EngineRightPo;
 
@@ -11,7 +11,7 @@ public class ${className} extends EngineRightPo {
 
 	</#list>
 	<#list columns as col>
-	public void se${col.fieldName?substring(0,1)?upper_case}${col.fieldName?substring(1)}(String ${col.fieldName}){
+	public void set${col.fieldName?substring(0,1)?upper_case}${col.fieldName?substring(1)}(String ${col.fieldName}){
 		this.${col.fieldName}=${col.fieldName};
 	}
 
