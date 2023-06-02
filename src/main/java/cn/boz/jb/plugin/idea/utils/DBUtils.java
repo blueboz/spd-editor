@@ -134,6 +134,26 @@ public class DBUtils {
         return true;
 
     }
+    public static boolean executeSqlBatchs(Connection connection,String sqlText){
+        try  {
+            String[] sqls = sqlText.split(";");
+            Statement statement = connection.createStatement();
+            for (String sql : sqls) {
+                if(StringUtils.isBlank(sql)){
+                    continue;
+                }
+                //非空条件判断
+                statement.execute(sql);
+            }
+            statement.executeBatch();
+            //PROBLEMS's
+            statement.close();
+
+        }catch (Exception e){
+
+        }
+        return true;
+    }
 
     private String listMapToCsv(List<Map<String, Object>> listmap, boolean wrap, String type) {
         StringBuilder result = new StringBuilder();

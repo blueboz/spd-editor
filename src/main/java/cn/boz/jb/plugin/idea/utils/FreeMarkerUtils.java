@@ -9,7 +9,11 @@ import java.util.Map;
 
 public class FreeMarkerUtils {
 
-    public static final FreeMarkerUtils INST = new FreeMarkerUtils();
+    private static final FreeMarkerUtils INST = new FreeMarkerUtils();
+
+    public static FreeMarkerUtils getINST() {
+        return INST;
+    }
 
     Configuration configuration;
 
@@ -17,7 +21,7 @@ public class FreeMarkerUtils {
 
         // 创建 Configuration 对象
         configuration = new Configuration(Configuration.VERSION_2_3_30);
-        configuration.setClassForTemplateLoading(FreeMarkerUtils.class, "temps");
+        configuration.setClassForTemplateLoading(FreeMarkerUtils.class, "/temps");
     }
 
     public String process(String templateName, Map<String, Object> mapper) {
