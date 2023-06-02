@@ -8,5 +8,7 @@ VALUES ('${actionId}', '${namespace}', null, null,
 INSERT INTO ENGINE_ACTIONINPUT (ACTIONID_, BEANID_, CLAZZ_, FIELDEXPR_, SOURCE_)
 VALUES ('${actionId}', '${par.shortName}', '${par.className}', null, null);
 </#list>
+<#if needOutput==true>
 INSERT INTO ENGINE_ACTIONOUTPUT (ACTIONID_, BEANID_, FIELDEXPR_, TARGET_)
 VALUES ('${actionId}', '${retBeanName}', null, null);
+</#if>

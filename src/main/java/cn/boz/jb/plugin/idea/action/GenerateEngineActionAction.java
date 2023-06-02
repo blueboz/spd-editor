@@ -78,7 +78,13 @@ public class GenerateEngineActionAction  extends AnAction implements ClipboardOw
         mapper.put("parameters", parameterNames);
         mapper.put("actionId", "/" + method.getName() + ".do");
         PsiType returnType = method.getReturnType();
-        mapper.put("retBeanName", MyStringUtils.firstCharLower(returnType.getPresentableText()));
+        String retType = MyStringUtils.firstCharLower(returnType.getPresentableText());
+        mapper.put("needOutput",true);
+        if("void".equals(retType)){
+            mapper.put("needOutput",false);
+        }
+        mapper.put("retBeanName",retType);
+
         String packageName = javaFile.getPackageName();
         String findStr = "com.erayt.xfunds.";
         String namespace = packageName;
