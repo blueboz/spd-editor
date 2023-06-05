@@ -17,10 +17,12 @@ import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
+import com.intellij.openapi.ui.popup.JBPopup;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.openapi.ui.popup.ListPopup;
 import com.intellij.openapi.ui.popup.PopupStep;
 import com.intellij.openapi.ui.popup.util.BaseListPopupStep;
+import com.intellij.openapi.ui.popup.util.PopupUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -41,6 +43,8 @@ public class GotoScriptAction extends AnAction implements DumbAware {
             EngineAction engineAction = engineActionDialog.getEngineAction();
             String actionscript = (String) engineAction.getActionscript();
             processScriptContent(actionscript, anActionEvent, engineActionDialog, () -> {
+                JBPopup popup = PopupUtil.getPopupContainerFor(engineActionDialog);
+                popup.dispose();
             });
             return;
         }
@@ -49,6 +53,7 @@ public class GotoScriptAction extends AnAction implements DumbAware {
             EngineTask engineTask = engineTaskDialog.getEngineTask();
             String expression = engineTask.getExpression();
             processScriptContent(expression, anActionEvent, engineTaskDialog, () -> {
+
             });
             return;
         }
@@ -142,11 +147,12 @@ public class GotoScriptAction extends AnAction implements DumbAware {
             Pattern pattern = Pattern.compile("processEngine\\.start\\(\"(\\w+)\",CONTEXT\\)");
             Matcher matcher = pattern.matcher(selectedValue);
             if (matcher.find()) {
-                String group = matcher.group(1);
-                Project defaultProject = ProjectManager.getInstance().getDefaultProject();
-                SearchEverywhereManager instance = SearchEverywhereManager.getInstance(defaultProject);
-                String allContributorsGroupId = SearchEverywhereManagerImpl.ALL_CONTRIBUTORS_GROUP_ID;
-                instance.show(allContributorsGroupId, group, anActionEvent);
+                EventQueue.invokeLater(() -> {
+                    String group = matcher.group(1);
+                    SearchEverywhereManager instance = SearchEverywhereManager.getInstance(anActionEvent.getProject());
+                    String allContributorsGroupId = SearchEverywhereManagerImpl.ALL_CONTRIBUTORS_GROUP_ID;
+                    instance.show(allContributorsGroupId, group, anActionEvent);
+                });
             }
             //支持另外的一种形式
         } else {
@@ -157,10 +163,12 @@ public class GotoScriptAction extends AnAction implements DumbAware {
                 selectedValue = selectedValue.split("\\(")[0];
             }
 
-            SearchEverywhereManager instance = SearchEverywhereManager.getInstance(anActionEvent.getProject());
-            String allContributorsGroupId = SearchEverywhereManagerImpl.ALL_CONTRIBUTORS_GROUP_ID;
-            instance.show(allContributorsGroupId, selectedValue, anActionEvent);
-
+            String finalSelectedValue = selectedValue;
+            EventQueue.invokeLater(() -> {
+                SearchEverywhereManager instance = SearchEverywhereManager.getInstance(anActionEvent.getProject());
+                String allContributorsGroupId = SearchEverywhereManagerImpl.ALL_CONTRIBUTORS_GROUP_ID;
+                instance.show(allContributorsGroupId, finalSelectedValue, anActionEvent);
+            });
         }
     }
 

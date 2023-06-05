@@ -185,6 +185,7 @@
                 </action>
             </group>
 
+            <action class="cn.boz.jb.plugin.idea.action.fmss.XFunCodeDefInvoker" text="CodeDef"></action>
             <action class="cn.boz.jb.plugin.idea.action.GotoRefFileAction" id="GoToRef" text="Go To Ref"
                     icon="SpdEditorIcons.REF_16_ICON"></action>
             <action class="cn.boz.jb.plugin.idea.action.GenerateEngineActionAction"  text="Gen Engine Action"/>

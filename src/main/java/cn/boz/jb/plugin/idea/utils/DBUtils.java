@@ -10,6 +10,7 @@ import cn.boz.jb.plugin.idea.bean.EngineFlow;
 import cn.boz.jb.plugin.idea.bean.EngineTask;
 import cn.boz.jb.plugin.idea.bean.UserColComments;
 import cn.boz.jb.plugin.idea.bean.UserTabCols;
+import cn.boz.jb.plugin.idea.bean.XFunCodeDef;
 import cn.boz.jb.plugin.idea.bean.XfundsBatch;
 import cn.boz.jb.plugin.idea.configurable.SpdEditorDBSettings;
 import cn.boz.jb.plugin.idea.configurable.SpdEditorDBState;
@@ -948,5 +949,35 @@ public class DBUtils {
             return menus;
         }
     }
+
+    public List<XFunCodeDef> queryXfundsCodeDef(Project project,String codeType)throws Exception{
+        String sql = "SELECT id, parentid, type, codeval, isval, name, sname, dispseq, rmk1, rmk2, rmk3, rmk4 FROM XFUNDS_BASE_CODEDEF WHERE type=?";
+        try(Connection connection = getConnection(project);){
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, codeType);
+
+            ResultSet rs = ps.executeQuery();
+            List<XFunCodeDef> list = new ArrayList<>();
+            while (rs.next()) {
+                XFunCodeDef obj = new XFunCodeDef();
+                obj.setId(rs.getString("ID"));
+                obj.setParentId(rs.getString("PARENTID"));
+                obj.setType(rs.getString("TYPE"));
+                obj.setCodeVal(rs.getString("CODEVAL"));
+                obj.setIsVal(rs.getString("ISVAL"));
+                obj.setName(rs.getString("NAME"));
+                obj.setsName(rs.getString("SNAME"));
+                obj.setDispSeq(rs.getInt("DISPSEQ"));
+                obj.setRmk1(rs.getString("RMK1"));
+                obj.setRmk2(rs.getString("RMK2"));
+                obj.setRmk3(rs.getString("RMK3"));
+                obj.setRmk4(rs.getString("RMK4"));
+                list.add(obj);
+            }
+            return list;
+        }
+
+    }
+
 
 }

@@ -2,6 +2,7 @@ package cn.boz.jb.plugin.idea.action;
 
 import cn.boz.jb.plugin.codegen.dlg.EcasMenuIdSelectorDlg;
 import cn.boz.jb.plugin.codegen.dlg.EngineActionSelectorDlg;
+import cn.boz.jb.plugin.codegen.dlg.XFunCodeDefDlg;
 import cn.boz.jb.plugin.idea.action.flowSearch.FlowSearchTable;
 import cn.boz.jb.plugin.idea.callsearch.CallerSearcherCommentPanel;
 import cn.boz.jb.plugin.idea.callsearch.CallerSearcherDetailComment;
@@ -104,6 +105,10 @@ public class OpenInSearchToolWindowAction extends AnAction implements DumbAware 
         if(actionPowerTreeTableDialog!=null){
             doForActionpowerTreeTableDlg(e,actionPowerTreeTableDialog);
         }
+        XFunCodeDefDlg xFunCodeDefDlg = findComponentWithAllPossible(component, XFunCodeDefDlg.class);
+        if(xFunCodeDefDlg!=null){
+            doForXfunCodeDefDlg(e,xFunCodeDefDlg);
+        }
 
 
         DialogWrapper instance = DialogWrapper.findInstance(component);
@@ -161,6 +166,12 @@ public class OpenInSearchToolWindowAction extends AnAction implements DumbAware 
         }
 
 
+    }
+
+    private void doForXfunCodeDefDlg(AnActionEvent e, XFunCodeDefDlg xFunCodeDefDlg) {
+        JBScrollPane derive = xFunCodeDefDlg.derive();
+        addToToolWindow(e,derive,"codeDef ");
+        xFunCodeDefDlg.disposeIfNeeded();
     }
 
     private void doForActionpowerTreeTableDlg(AnActionEvent e, ActionPowerTreeTableDialog actionPowerTreeTableDialog) {
