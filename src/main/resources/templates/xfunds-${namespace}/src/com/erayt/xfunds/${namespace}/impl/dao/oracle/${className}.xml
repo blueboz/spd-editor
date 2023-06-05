@@ -20,10 +20,14 @@
 		<#list columns as col>
 		${col.fieldName}=#${col.fieldName}# <#sep>,
 		</#list>
-		where 1=1
-		<isNotEmpty property='id' prepend='and'>
-			id=#id#
-		</isNotEmpty>
+
+		<dynamic prepend="where">
+			<#list columns?filter(item->item.isId) as col>
+			<isNotEmpty property='${col.fieldName}' prepend='and'>
+				${col.fieldName}=#${col.fieldName}#
+			</isNotEmpty>
+			</#list>
+		</dynamic>
 	</update>
 	<insert id='insert${className}' parameterClass='com.erayt.xfunds.${namespace}.domain.${className}'>
 		insert into ${tableName}

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="${namespace}">
+
+	<resultMap class="java.util.HashMap" id="${beanName}ResultMap">
+		<result property="ROW_ID" column="ROW_ID" />
+		<result property="COUNTNUM" column="COUNTNUM" />
+		<#list columns as col>
+			<result property='${col.fieldName}' column='${col.fieldName}' />
+		</#list>
+	</resultMap>
+
+	<select id="query${className}List" resultMap="${beanName}ResultMap" parameterClass="com.erayt.solar2.engine.query.QueryParam">
+		SELECT A.ROW_ID,A.COUNTNUM,
+		<#list columns as col> A.${col.fieldName}<#sep>,</#list>
+		FROM (
+		SELECT ROW_NUMBER() OVER(ORDER BY <#list columns?filter(item -> item.isId ==true) as col>${col.fieldName}<#sep>,</#list>) ROW_ID,COUNT(<#list columns?filter(item->item.isId==true) as col>${col.fieldName}<#sep>,</#list>) OVER() COUNTNUM,
+		<#list columns as col> T.${col.fieldName}<#sep>,</#list>
+		FROM ${tableName?upper_case} T
+		WHERE 1=1
+		<#list columns as col>
+		<isNotEmpty property='${col.fieldName}' prepend='and'>
+			T.${col.fieldName} like '%'||trim(#${col.fieldName}#)||'%'
+		</isNotEmpty>
+		</#list>
+		) A
+		<dynamic prepend="where">
+			<isEqual property="pageCtrl" compareValue="true">
+				ROW_ID BETWEEN #start:INTEGER# AND #limit:INTEGER#
+			</isEqual>
+		</dynamic>
+	</select>
+
+</sqlMap>

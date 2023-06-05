@@ -76,6 +76,15 @@ public class FreeMarkerDemo {
             return pathOrg;
         }
     }
+    private boolean deletemode=false;
+
+    public boolean isDeletemode() {
+        return deletemode;
+    }
+
+    public void setDeletemode(boolean deletemode) {
+        this.deletemode = deletemode;
+    }
 
     public void process(String path) {
         try {
@@ -100,6 +109,11 @@ public class FreeMarkerDemo {
             if(Files.isRegularFile(joinPath)){
                 Files.delete(joinPath);
             }
+            if(deletemode){
+                return ;
+            }
+
+
             try (BufferedWriter bufferedWriter = Files.newBufferedWriter(joinPath, StandardOpenOption.CREATE)) {
                 template.process(mapper, bufferedWriter);
                 bufferedWriter.flush();
@@ -152,6 +166,7 @@ public class FreeMarkerDemo {
 
     public static void main(String[] args) throws IOException, TemplateException {
         FreeMarkerDemo freeMarkerDemo = new FreeMarkerDemo();
+        freeMarkerDemo.setDeletemode(true);
         freeMarkerDemo.iterTemplatePath();
     }
 

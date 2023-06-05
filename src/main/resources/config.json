@@ -1,31 +1,56 @@
 {
+
   "package": "com.erayt.xfunds.forex",
-  "className": "DlyReport",
-  "beanName": "dlyReport",
+  "className": "MyTestFun",
+  "beanName": "myTestFun",
   "namespace": "forex",
-  "tableName": "xfunds_forex_dlyreport",
-  "menuId": "1441",
-  "pmenuId": "1430",
-  "powerbits": "10,20,30",
-  "moduleName": "J-基金管理",
-  "functionbase": "基金管理",
-  "title": "基金白名单测试",
+  "tableName": "xfunds_forex_MyTestFun",
+  "menuId": "747",
+  "pmenuId": "7",
+  "powerbits": "721,722,723",
+  "moduleName": "6-外汇处理",
+  "functionbase": "测试代码",
+  "title": "测试自动生成代码",
   "exceptionFullName": "com.erayt.xfunds.common.XfundsForexException",
   "exceptionName": "XfundsForexException",
   "columns": [
+    {
+      "fieldChName": "后台编号",
+      "fieldName": "downloadKey",
+      "dataType": "VARCHAR(60)",
+      "maxLenInOracle": 60,
+      "nullable": false,
+      "isId": true
+    },
+    {
+      "fieldChName": "业务编号",
+      "fieldName": "businessNo",
+      "dataType": "VARCHAR(60)",
+      "maxLenInOracle": 60,
+      "nullable": false,
+      "isId": false
+    },
     {
       "fieldChName": "交易机构",
       "fieldName": "bankId",
       "dataType": "VARCHAR(30)",
       "maxLenInOracle": 30,
-      "nullable": false,
-      "isId": true
+      "nullable": true,
+      "isId": false
     },
     {
       "fieldChName": "ecif客户号",
       "fieldName": "ecifNo",
       "dataType": "VARCHAR(60)",
-      "nullable": false,
+      "nullable": true,
+      "maxLenInOracle": 60,
+      "isId": false
+    },
+    {
+      "fieldChName": "客户名称",
+      "fieldName": "name",
+      "dataType": "VARCHAR(60)",
+      "nullable": true,
       "maxLenInOracle": 60,
       "isId": false
     }

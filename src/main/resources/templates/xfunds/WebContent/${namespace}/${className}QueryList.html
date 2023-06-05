@@ -8,7 +8,7 @@
 		<link rel="stylesheet" href="../ui/eraui/css/eraui.css" />
 		<link rel="stylesheet" href="../ui/css/ui-all.css" />
 
-		<script src="../ui/sea.js" data-main="../js/fund/fundWhiteListQueryList.js"></script>
+		<script src="../ui/sea.js" data-main="../js/${namespace}/${beanName}QueryList.js"></script>
 		<style type="text/css">
 			.fielditem{
 				width: 200px;
@@ -38,10 +38,10 @@
 			</tr>
 			<tr>
 				<td class=blockTd style="padding: 2px 10px" width="65%">
-					<div class=divbtn url='../fund/${className}Input.html' text='新增'
+					<div class=divbtn url='../${namespace}/${className}Input.html' text='新增'
 						dlgtitle='addbtn' dlgw=500 dlgh=430 dlg_id='msgDlg'
 						icon='../ui/eraui/images/e_edit.gif' id=addbtn></div>
-					<div class=divbtn url='../fund/${className}Mod.html?modify=true' text='修改'
+					<div class=divbtn url='../${namespace}/${className}Mod.html?modify=true' text='修改'
 						dlgtitle='modifybtn' dlgw=500 dlgh=430 dlg_id='msgDlg'
 						icon='../ui/eraui/images/e_edit.gif' id=editbtn></div>
 					<div class=divbtn url='delete${className}Batch.do' text='删除'

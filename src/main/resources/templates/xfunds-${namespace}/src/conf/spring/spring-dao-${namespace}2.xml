@@ -11,7 +11,7 @@
            
 
 	<bean id="${beanName}Dao" class="com.erayt.solar2.db.DaoProxyFactoryBean">
-		<property name="daoInterface" value="com.erayt.xfunds.fund.impl.dao.${className}Dao" />
+		<property name="daoInterface" value="com.erayt.xfunds.${namespace}.impl.dao.${className}Dao" />
 		<property name="sqlMapClient" ref="sqlMapClient" />
 	</bean>
 </beans>

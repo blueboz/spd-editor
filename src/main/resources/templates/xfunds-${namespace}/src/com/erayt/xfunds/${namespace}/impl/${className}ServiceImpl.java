@@ -141,7 +141,7 @@ public class ${className}ServiceImpl implements ${className}Service {
 
         ${className} byId = findById(bean);
         if (byId == null) {
-            throw new ${exceptionName}("数据有误");
+            throw new ${exceptionName}("所给ID无法定位到原交易");
         }
         ${beanName}Dao.update${className}(bean);
 
@@ -150,7 +150,7 @@ public class ${className}ServiceImpl implements ${className}Service {
 
     public ${className} findById(${className} ${beanName}) {
         ${className} bean = new ${className}();
-        <#list columns as col>
+        <#list columns?filter(item->item.isId==true) as col>
         <#assign uname= myutils("upper_case_first",col.fieldName)>
         bean.set${uname}(${beanName}.get${uname}());
         </#list>

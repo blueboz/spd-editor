@@ -9,9 +9,9 @@
            http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd"
            default-autowire="byName"  >
            
-	<bean id="${beanName}Service" class="com.erayt.xfunds.fund.impl.${className}ServiceImpl"/>
+	<bean id="${beanName}Service" class="com.erayt.xfunds.${namespace}.impl.${className}ServiceImpl"/>
 
-	<bean id="${beanName}Listener" class="com.erayt.xfunds.fund.listener.${className}Listener"></bean>
+	<bean id="${beanName}Listener" class="com.erayt.xfunds.${namespace}.listener.${className}Listener"></bean>
 
 </beans>
 

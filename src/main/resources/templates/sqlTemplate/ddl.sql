@@ -4,7 +4,7 @@ VN_COUNT INTEGER;
 BEGIN
     -- 建表ddl语句
 SELECT COUNT(*) INTO VN_COUNT FROM USER_TABLES
-WHERE TABLE_NAME = 'XFUNDS_FUND_WHITELIST';
+WHERE TABLE_NAME = '${tableName?upper_case}';
 IF (VN_COUNT < 1) THEN
         V_SQL := 'create table ${tableName?upper_case}
 (
@@ -12,7 +12,7 @@ IF (VN_COUNT < 1) THEN
      ${col.fieldName?upper_case}      ${col.dataType} <#if col.nullable==false> not null </#if><#if col.isId==true >primary key</#if><#sep>,
     </#list>
 
-) tablespace TBS_XFUNDS_DAT';
+) tablespace TBS_XFUNDS_DATA';
 -- EXECUTE IMMEDIATE V_SQL;
 -- V_SQL := 'create index FUND_WHITELIST_IDX1 on XFUNDS_FUND_WHITELIST(COMPANY) TABLESPACE TBS_XFUNDS_INDEX';
 EXECUTE IMMEDIATE V_SQL;
