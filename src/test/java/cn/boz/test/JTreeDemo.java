@@ -28,10 +28,8 @@ public class JTreeDemo {
         JScrollPane panel = new JScrollPane();
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("教师学历信息");
 
-        Connection connection = DBUtils.getConnection("xfunds201701", "Xfunds_1234", "jdbc:oracle:thin:@21.96.5.85:1521:FMSS",
-                "D:/Code/FMS/FMSS_xfunds/xfunds/WebContent/WEB-INF/lib/ojdbc8.jar");
         DBUtils instance = DBUtils.getInstance();
-        List<Map<String, Object>> apps = instance.queryEcasAppl(connection);
+        List<Map<String, Object>> apps = instance.queryEcasAppl(null);
         for (Map<String, Object> app : apps) {
             NodeData nodeData = new NodeData("ECASAPPL", app);
             nodeData.setSubDataLoaded(false);
@@ -57,7 +55,7 @@ public class JTreeDemo {
                             Map nodeData = (Map) uo.getNodeData();
                             if(nodeType.equals("ECASAPPL")){
                                 try {
-                                    List<Map<String, Object>> topMenus= instance.queryTopMenuOfApp(connection, (BigDecimal) nodeData.get("APPLID"));
+                                    List<Map<String, Object>> topMenus= instance.queryTopMenuOfApp(null, (BigDecimal) nodeData.get("APPLID"));
                                     for (Map<String, Object> topMenu: topMenus) {
                                         NodeData menu = new NodeData("MENU", topMenu);
                                         node.add(new DefaultMutableTreeNode(menu,true));
@@ -69,7 +67,7 @@ public class JTreeDemo {
                                 List<Map<String, Object>> menus= null;
                                 try {
                                     System.out.println("submenu");
-                                    menus = instance.queryMenuOfAppMenu(connection, (BigDecimal)nodeData.get("MENUID"),(BigDecimal) nodeData.get("APPLID"));
+                                    menus = instance.queryMenuOfAppMenu(null, (BigDecimal)nodeData.get("MENUID"),(BigDecimal) nodeData.get("APPLID"));
                                     for (Map<String, Object> menudata: menus) {
                                         NodeData menu = new NodeData("MENU", menudata);
                                         node.add(new DefaultMutableTreeNode(menu,true));

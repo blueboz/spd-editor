@@ -348,14 +348,16 @@ public class GotoRefFileAction extends AnAction {
         Ref<List<XfundsBatch>> xfundsBatchRef = new Ref<>();
         Ref<Exception> exceptionRef = new Ref<>();
         ProgressManager.getInstance().runProcessWithProgressSynchronously(() -> {
-            try (Connection connection = DBUtils.getConnection(anActionEvent.getProject())) {
-                List<EngineTask> engineTasks = dbUtils.queryEngineTaskByExpression(connection, name);
-                List<EngineAction> engineActions = dbUtils.queryEngineActionByActionScript(connection, name);
-                List<XfundsBatch> xfundsBatches = dbUtils.queryXfundsBatchByEnterName(connection, name);
+            Project project = anActionEvent.getProject();
+            try {
+                List<EngineTask> engineTasks = dbUtils.queryEngineTaskByExpression(project, name);
+                List<EngineAction> engineActions = dbUtils.queryEngineActionByActionScript(project, name);
+                List<XfundsBatch> xfundsBatches = dbUtils.queryXfundsBatchByEnterName(project, name);
                 engineTaskRef.set(engineTasks);
                 engineActionRef.set(engineActions);
                 xfundsBatchRef.set(xfundsBatches);
             } catch (Exception e) {
+                DBUtils.dbExceptionProcessor(e,project);
                 exceptionRef.set(e);
             }
         }, "Loading...", true, anActionEvent.getProject());
@@ -881,15 +883,16 @@ public class GotoRefFileAction extends AnAction {
         Task.WithResult<Object, Exception> objectExceptionWithResult = new Task.WithResult<Object, Exception>(anActionEvent.getProject(), "connect", true) {
             @Override
             protected Object compute(@NotNull ProgressIndicator progressIndicator) throws Exception {
-                try (Connection connection = DBUtils.getConnection(SpdEditorDBState.getInstance(anActionEvent.getProject()));) {
-                    List<EngineAction> actions = instance.queryEngineActionWithIdLike(connection, query);
+                try {
+                    Project project = anActionEvent.getProject();
+                    List<EngineAction> actions = instance.queryEngineActionWithIdLike(project, query);
                     if (actions.size() == 0) {
                         result.set(false);
                     } else if (actions.size() == 1) {
                         EngineAction engineAction = actions.get(0);
                         String id_ = engineAction.getId();
-                        List<EngineActionInput> actionInputs = instance.queryEngineActionInputIdMatch(connection, id_);
-                        List<EngineActionOutput> actionOutputs = instance.queryEngineActionOutputIdMatch(connection, id_);
+                        List<EngineActionInput> actionInputs = instance.queryEngineActionInputIdMatch(project, id_);
+                        List<EngineActionOutput> actionOutputs = instance.queryEngineActionOutputIdMatch(project, id_);
                         engineAction.setInputs(actionInputs);
                         engineAction.setOutputs(actionOutputs);
                         engineActionRef.set(new EngineActionDataContainer(engineAction));

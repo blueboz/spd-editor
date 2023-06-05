@@ -33,7 +33,6 @@ public class MenuIdDialog extends JComponent {
 
     public static final String ITEM_FREE = "free";
 ;
-    private Connection connection;
 
     private DBUtils instance;
     private DefaultTableModel tableModel;
@@ -70,7 +69,6 @@ public class MenuIdDialog extends JComponent {
         JPanel jPanel = new JPanel();
         JScrollPane panel = new JBScrollPane();
 
-        connection = DBUtils.getConnection(SpdEditorDBState.getInstance(project));
         instance = DBUtils.getInstance();
 
         tableModel = new DefaultTableModel();
@@ -221,9 +219,9 @@ public class MenuIdDialog extends JComponent {
 
             List<Map<String, Object>> apps = null;
             try {
-                apps = instance.queryEcasMenuIdUniq(connection, cpageNum, pageSize, "@YD01", "@YD02","@YD03", applid);
+                apps = instance.queryEcasMenuIdUniq(project, cpageNum, pageSize, "@YD01", "@YD02","@YD03", applid);
             } catch (Exception ex) {
-                ex.printStackTrace();
+                DBUtils.dbExceptionProcessor(ex,project);
             }
             tableModel.setRowCount(0);
 

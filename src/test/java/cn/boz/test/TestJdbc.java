@@ -25,25 +25,22 @@ public class TestJdbc {
 
     @Test
     public void test2() {
-        String path = "D:/Code/FMS/FMSS_xfunds/xfunds/WebContent/WEB-INF/lib/orai18n-19.3.0.0.jar;D:/Code/FMS/FMSS_xfunds/xfunds/WebContent/WEB-INF/lib/ojdbc8.jar";
-        DBUtils instance = DBUtils.getInstance();
-        try (Connection connection = instance.getConnection("xfunds201701", "Xfunds_1234", "jdbc:oracle:thin:@21.96.5.85:1521:FMSS", path)) {
-            try (PreparedStatement preparedStatement = connection.prepareStatement("select * from engine_event")) {
-//                preparedStatement.setString(1, "");
-                List<Map<String, Object>> maps = queryForList(preparedStatement);
-                maps.stream().map(item->{
-                    System.out.println(item);
-
-                    BLOB blob= (BLOB) item.get("START_OBJECT_");
-
-
-                    return null;
-                }).collect(Collectors.toList());
-
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        DBUtils instance = DBUtils.getInstance();
+//        Connection connection = instance.getConnection(null);
+//        try (PreparedStatement preparedStatement = connection.prepareStatement("select * from engine_event")) {
+////                preparedStatement.setString(1, "");
+//            List<Map<String, Object>> maps = queryForList(preparedStatement);
+//            maps.stream().map(item -> {
+//                System.out.println(item);
+//
+//                BLOB blob = (BLOB) item.get("START_OBJECT_");
+//
+//
+//                return null;
+//            }).collect(Collectors.toList());
+//
+//        }
+      
     }
 
     private List<Map<String, Object>> queryForList(PreparedStatement preparedStatement) throws SQLException {
@@ -64,49 +61,40 @@ public class TestJdbc {
     }
 
     @Test
-    public void test() {
-        String path = "D:/Code/FMS/FMSS_xfunds/xfunds/WebContent/WEB-INF/lib/orai18n-19.3.0.0.jar;D:/Code/FMS/FMSS_xfunds/xfunds/WebContent/WEB-INF/lib/ojdbc8.jar";
+    public void test() throws Exception {
         DBUtils instance = DBUtils.getInstance();
-        try (Connection connection = instance.getConnection("xfunds201701", "Xfunds_1234", "jdbc:oracle:thin:@21.96.5.85:1521:FMSS", path)) {
-            List<EngineAction> maps = instance.queryEngineActionWithIdLike(connection, "/initFrameworkProto.do");
-            for (EngineAction action : maps) {
-                String id_ = (String) action.getId();
-                List<EngineActionInput> actionInputs = instance.queryEngineActionInputIdMatch(connection, id_);
-                System.out.println(JSON.toJSONString(action));
-                System.out.println(JSON.toJSONString(actionInputs));
-                List<EngineActionOutput> actionOutputs = instance.queryEngineActionOutputIdMatch(connection, id_);
-                System.out.println(JSON.toJSONString(actionOutputs));
-                break;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        List<EngineAction> maps = instance.queryEngineActionWithIdLike(null, "/initFrameworkProto.do");
+        for (EngineAction action : maps) {
+            String id_ = (String) action.getId();
+            List<EngineActionInput> actionInputs = instance.queryEngineActionInputIdMatch(null, id_);
+            System.out.println(JSON.toJSONString(action));
+            System.out.println(JSON.toJSONString(actionInputs));
+            List<EngineActionOutput> actionOutputs = instance.queryEngineActionOutputIdMatch(null, id_);
+            System.out.println(JSON.toJSONString(actionOutputs));
+            break;
         }
     }
+
     private EngineAction engineAction;
     private List<EngineActionInput> engineActionInput;
     private List<EngineActionOutput> engineActionOutput;
+
     @Test
-    public void testgui() throws InterruptedException {
-        String path = "D:/Code/FMS/FMSS_xfunds/xfunds/WebContent/WEB-INF/lib/orai18n-19.3.0.0.jar;D:/Code/FMS/FMSS_xfunds/xfunds/WebContent/WEB-INF/lib/ojdbc8.jar";
+    public void testgui() throws Exception {
 
-
-        try (Connection connection = DBUtils.getConnection("xfunds201701", "Xfunds_1234", "jdbc:oracle:thin:@21.96.5.85:1521:FMSS", path)) {
-            DBUtils instance = DBUtils.getInstance();
-            List<EngineAction> maps = instance.queryEngineActionWithIdLike(connection, "/modifyIfaceStatus.do");
-            for (EngineAction action : maps) {
-                String id_ = (String) action.getId();
-                List<EngineActionInput> actionInputs = instance.queryEngineActionInputIdMatch(connection, id_);
-                System.out.println(JSON.toJSONString(action));
-                System.out.println(JSON.toJSONString(actionInputs));
-                List<EngineActionOutput> actionOutputs = instance.queryEngineActionOutputIdMatch(connection, id_);
-                System.out.println(JSON.toJSONString(actionOutputs));
-                engineAction=action;
-                engineActionInput=actionInputs;
-                engineActionOutput=actionOutputs;
-                break;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        DBUtils instance = DBUtils.getInstance();
+        List<EngineAction> maps = instance.queryEngineActionWithIdLike(null, "/modifyIfaceStatus.do");
+        for (EngineAction action : maps) {
+            String id_ = (String) action.getId();
+            List<EngineActionInput> actionInputs = instance.queryEngineActionInputIdMatch(null, id_);
+            System.out.println(JSON.toJSONString(action));
+            System.out.println(JSON.toJSONString(actionInputs));
+            List<EngineActionOutput> actionOutputs = instance.queryEngineActionOutputIdMatch(null, id_);
+            System.out.println(JSON.toJSONString(actionOutputs));
+            engineAction = action;
+            engineActionInput = actionInputs;
+            engineActionOutput = actionOutputs;
+            break;
         }
         SwingUtilities.invokeLater(() -> {
             try {

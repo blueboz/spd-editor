@@ -48,7 +48,6 @@ public class EcasMenuIdSelectorDlg extends DialogWrapper {
     private int pageSize ;
     DefaultTableModel tableModel;
     DBUtils dbUtils;
-    Connection dbConn;
     JBTable actionPowerTable;
     JPanel mainPanel;
 
@@ -61,7 +60,6 @@ public class EcasMenuIdSelectorDlg extends DialogWrapper {
         currentNum=SpdEditorDBState.getInstance(project).actionPowerStart;
         pageSize=SpdEditorDBState.getInstance(project).actionPowerPageSize;
         try {
-            dbConn = DBUtils.getConnection(project);
             dbUtils = DBUtils.getInstance();
         } catch (Exception e) {
             DBUtils.dbExceptionProcessor(e, project);
@@ -271,8 +269,8 @@ public class EcasMenuIdSelectorDlg extends DialogWrapper {
         EcasMenu ecasActionPower = null;
         try {
             String selectedItem = (String) envCombo.getSelectedItem();
-            ecasActionPower = dbUtils.queryEcasMenu(999, ((BigDecimal) valueAt).intValue(), dbConn, selectedItem);
-        } catch (SQLException ex) {
+            ecasActionPower = dbUtils.queryEcasMenu(999, ((BigDecimal) valueAt).intValue(), project, selectedItem);
+        } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
         if (ecasActionPower != null) {
@@ -341,7 +339,7 @@ public class EcasMenuIdSelectorDlg extends DialogWrapper {
 
             List<Map<String, Object>> apps = null;
             try {
-                apps = dbUtils.queryEcasMenuIdUniq(dbConn, currentNum, pageSize, "@YD01","@YD02" ,"@YD03", 999);
+                apps = dbUtils.queryEcasMenuIdUniq(project, currentNum, pageSize, "@YD01","@YD02" ,"@YD03", 999);
             } catch (Exception ex) {
                 ex.printStackTrace();
             }

@@ -121,8 +121,7 @@ public class ActionPowerTreeTableDialog extends DialogWrapper {
                             uo.setSubDataLoaded(true);
                             if (uo instanceof RootNode) {
                                 try {
-                                    Connection connection = DBUtils.getConnection(project);
-                                    List<NodeData> nds = uo.loadSubNodes(connection);
+                                    List<NodeData> nds = uo.loadSubNodes(project);
                                     for (NodeData nd : nds) {
                                         node.add(new DefaultMutableTreeNode(nd, false));
                                     }

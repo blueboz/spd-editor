@@ -38,11 +38,10 @@ public class EngineActionSelectorDlg extends DialogWrapper {
 
     private Project project;
     public static final String ITEM_FREE = "free";
-    private int currentNum ;
-    private int pageSize ;
+    private int currentNum;
+    private int pageSize;
     DefaultTableModel tableModel;
     DBUtils dbUtils;
-    Connection dbConn;
     JBTable actionPowerTable;
     JPanel mainPanel;
 
@@ -52,10 +51,9 @@ public class EngineActionSelectorDlg extends DialogWrapper {
         setTitle("Ecas Action Power 占用列表");
         this.setModal(false);
         this.project = project;
-        currentNum=SpdEditorDBState.getInstance(project).actionPowerStart;
-        pageSize=SpdEditorDBState.getInstance(project).actionPowerPageSize;
+        currentNum = SpdEditorDBState.getInstance(project).actionPowerStart;
+        pageSize = SpdEditorDBState.getInstance(project).actionPowerPageSize;
         try {
-            dbConn = DBUtils.getConnection(project);
             dbUtils = DBUtils.getInstance();
         } catch (Exception e) {
             DBUtils.dbExceptionProcessor(e, project);
@@ -81,16 +79,18 @@ public class EngineActionSelectorDlg extends DialogWrapper {
 
         return mainPanel;
     }
+
     JSpinner startNumberSpinner;
     SpinnerNumberModel startNumberModel;
     JSpinner pageSizeSpinner;
     SpinnerNumberModel pageSizeModel;
+
     private JPanel createListComponent() throws Exception {
         JPanel jPanel = new JPanel();
         JScrollPane panel = new JScrollPane();
 
         tableModel = new DefaultTableModel();
-        tableModel.setColumnIdentifiers(new Object[]{"rownum", "DEV", "YD01","YD02", "YD03", "description", "status"});
+        tableModel.setColumnIdentifiers(new Object[]{"rownum", "DEV", "YD01", "YD02", "YD03", "description", "status"});
         actionPowerTable = new JBTable(tableModel) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -104,7 +104,7 @@ public class EngineActionSelectorDlg extends DialogWrapper {
                     Object yd01 = getValueAt(row, 2);
                     Object yd02 = getValueAt(row, 3);
                     Object yd03 = getValueAt(row, 4);
-                    return checkStatus(dev, yd01,yd02, yd03);
+                    return checkStatus(dev, yd01, yd02, yd03);
                 }
                 return super.getValueAt(row, column);
             }
@@ -166,7 +166,7 @@ public class EngineActionSelectorDlg extends DialogWrapper {
                 } else {
                     currentNum = ((Double) value).intValue();
                 }
-                SpdEditorDBState.getInstance(project).actionPowerStart= currentNum;
+                SpdEditorDBState.getInstance(project).actionPowerStart = currentNum;
 
                 load();
             }
@@ -181,7 +181,7 @@ public class EngineActionSelectorDlg extends DialogWrapper {
                 } else {
                     pageSize = ((Double) value).intValue();
                 }
-                SpdEditorDBState.getInstance(project).actionPowerPageSize= pageSize;
+                SpdEditorDBState.getInstance(project).actionPowerPageSize = pageSize;
                 startNumberModel.setStepSize(pageSize);
 
                 load();
@@ -216,7 +216,7 @@ public class EngineActionSelectorDlg extends DialogWrapper {
                 if (e.getClickCount() == 2) {
                     int selectedRow = actionPowerTable.getSelectedRow();
                     Vector vector = tableModel.getDataVector().elementAt(selectedRow);
-                    String status = checkStatus(vector.get(1), vector.get(2), vector.get(3),vector.get(4));
+                    String status = checkStatus(vector.get(1), vector.get(2), vector.get(3), vector.get(4));
                     if (ITEM_OCCUPY.equals(status)) {
                     } else {
                         onChoosen(((BigDecimal) vector.get(0)).intValue());
@@ -265,9 +265,9 @@ public class EngineActionSelectorDlg extends DialogWrapper {
         EcasActionPower ecasActionPower = null;
         try {
             String selectedItem = (String) envCombo.getSelectedItem();
-            ecasActionPower = dbUtils.queryActionPower(999, ((BigDecimal) valueAt).intValue(), dbConn, selectedItem);
-        } catch (SQLException ex) {
-            throw new RuntimeException(ex);
+            ecasActionPower = dbUtils.queryActionPower(999, ((BigDecimal) valueAt).intValue(), project, selectedItem);
+        } catch (Exception ex) {
+            DBUtils.dbExceptionProcessor(ex,project);
         }
         if (ecasActionPower != null) {
 
@@ -310,8 +310,8 @@ public class EngineActionSelectorDlg extends DialogWrapper {
 
 
     @NotNull
-    private String checkStatus(Object dev, Object yd01, Object yd02,Object yd03) {
-        if (dev == null && yd01 == null && yd03 == null&&yd02==null) {
+    private String checkStatus(Object dev, Object yd01, Object yd02, Object yd03) {
+        if (dev == null && yd01 == null && yd03 == null && yd02 == null) {
             return ITEM_FREE;
         } else {
             return ITEM_OCCUPY;
@@ -327,7 +327,7 @@ public class EngineActionSelectorDlg extends DialogWrapper {
 
             List<Map<String, Object>> apps = null;
             try {
-                apps = dbUtils.queryActionPowerUniq(dbConn, currentNum, pageSize, "@YD01","@YD02" ,"@YD03", 999);
+                apps = dbUtils.queryActionPowerUniq(project, currentNum, pageSize, "@YD01", "@YD02", "@YD03", 999);
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -335,7 +335,7 @@ public class EngineActionSelectorDlg extends DialogWrapper {
 
             for (Map<String, Object> app : apps) {
 
-                tableModel.addRow(new Object[]{app.get("RN"), app.get("dev"), app.get("yd01"),app.get("yd02"), app.get("yd03"), app.get("description")});
+                tableModel.addRow(new Object[]{app.get("RN"), app.get("dev"), app.get("yd01"), app.get("yd02"), app.get("yd03"), app.get("description")});
             }
         };
         Executors.newSingleThreadExecutor().execute(r);
@@ -366,12 +366,13 @@ public class EngineActionSelectorDlg extends DialogWrapper {
         jPanel.add(actionPowerMenuIdTE);
         return jPanel;
     }
+
     public void loadPrevPage() {
         int i = currentNum - pageSize;
-        if(i<=0){
-            startNumberModel.setValue(0 );
-        }else{
-            startNumberModel.setValue(i );
+        if (i <= 0) {
+            startNumberModel.setValue(0);
+        } else {
+            startNumberModel.setValue(i);
         }
 
 //        cpageNum--;

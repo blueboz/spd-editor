@@ -1,42 +1,53 @@
 package cn.boz.jb.plugin.idea.utils;
 
 import cn.boz.jb.plugin.floweditor.gui.utils.StringUtils;
-import cn.boz.jb.plugin.idea.bean.*;
+import cn.boz.jb.plugin.idea.bean.EcasActionPower;
+import cn.boz.jb.plugin.idea.bean.EcasMenu;
+import cn.boz.jb.plugin.idea.bean.EngineAction;
+import cn.boz.jb.plugin.idea.bean.EngineActionInput;
+import cn.boz.jb.plugin.idea.bean.EngineActionOutput;
+import cn.boz.jb.plugin.idea.bean.EngineFlow;
+import cn.boz.jb.plugin.idea.bean.EngineTask;
+import cn.boz.jb.plugin.idea.bean.UserColComments;
+import cn.boz.jb.plugin.idea.bean.UserTabCols;
+import cn.boz.jb.plugin.idea.bean.XfundsBatch;
 import cn.boz.jb.plugin.idea.configurable.SpdEditorDBSettings;
 import cn.boz.jb.plugin.idea.configurable.SpdEditorDBState;
 import com.intellij.openapi.options.ShowSettingsUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 import icons.SpdEditorIcons;
+import oracle.jdbc.driver.OracleDriver;
 import org.apache.commons.collections.CollectionUtils;
 
-import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.sql.Connection;
-import java.sql.Driver;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class DBUtils {
 
     private static final DBUtils INST = new DBUtils();
+    private Map<String, HikariDataSource> dataSourceMapper = new HashMap<>();
 
     private DBUtils() {
         //应该怎么初始化，作为一个Service?
+
+
     }
 
     public static DBUtils getInstance() {
@@ -66,22 +77,24 @@ public class DBUtils {
      * @throws NoSuchMethodException
      * @throws SQLException
      */
-    public static boolean testConnection(String jdbcUser, String jdbcPass, String jdbcUrl, String jdbcDriverText) {
+    public boolean testConnection(String jdbcUser, String jdbcPass, String jdbcUrl, String jdbcDriverText) throws Exception {
         try (Connection connection = getConnection(jdbcUser, jdbcPass, jdbcUrl, jdbcDriverText)) {
             Statement statement = connection.createStatement();
             boolean execute = statement.execute("select * from dual");
             return execute;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
         }
     }
 
-    public static Connection getConnection(Project project) throws MalformedURLException, SQLException, ClassNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        SpdEditorDBState instance = SpdEditorDBState.getInstance(project);
-        return getConnection(instance);
+    private Connection getConnection(Project project) throws MalformedURLException, SQLException, ClassNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+        if (project == null) {
+            return getConnection("xfunds201701", "Xfunds_1234", "jdbc:oracle:thin:@21.96.5.85:1521:FMSS", OracleDriver.class.getName());
+        } else {
+            SpdEditorDBState instance = SpdEditorDBState.getInstance(project);
+            return getConnection(instance);
+        }
     }
 
-    public static Connection getConnection(SpdEditorDBState state) throws MalformedURLException, SQLException, ClassNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+    private Connection getConnection(SpdEditorDBState state) throws MalformedURLException, SQLException, ClassNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         return getConnection(state.jdbcUserName, state.jdbcPassword, state.jdbcUrl, state.jdbcDriver);
     }
 
@@ -90,35 +103,36 @@ public class DBUtils {
      * @param jdbcUser
      * @param jdbcPass
      * @param jdbcUrl
-     * @return
+     * @return please do not call this method unless you need ant known what it mean's
      */
     @SuppressWarnings("unchecked")
-    public static Connection getConnection(String jdbcUser, String jdbcPass, String jdbcUrl, String jdbcDriver) throws ClassNotFoundException, MalformedURLException, NoSuchMethodException, SQLException, InvocationTargetException, InstantiationException, IllegalAccessException {
-        String[] driverpaths = jdbcDriver.split(";");
-        URL[] urls = new URL[driverpaths.length];
-        for (int i = 0; i < driverpaths.length; i++) {
-            String driverpath = driverpaths[i];
-            urls[i] = new File(driverpath).toURI().toURL();
+    private Connection getConnection(String jdbcUser, String jdbcPass, String jdbcUrl, String jdbcDriver) throws ClassNotFoundException, MalformedURLException, NoSuchMethodException, SQLException, InvocationTargetException, InstantiationException, IllegalAccessException {
+        String key = Base64.getEncoder().encodeToString((jdbcUser + jdbcPass + jdbcUrl).getBytes());
+        if (!dataSourceMapper.containsKey(key)) {
+            HikariConfig hikariConfig = new HikariConfig();
+            hikariConfig.setJdbcUrl(jdbcUrl);
+            hikariConfig.setUsername(jdbcUser);
+            hikariConfig.setPassword(jdbcPass);
+
+            hikariConfig.setDriverClassName(OracleDriver.class.getName());
+            HikariDataSource dataSource = new HikariDataSource(hikariConfig);
+            dataSourceMapper.put(key, dataSource);
+            return dataSourceMapper.get(key).getConnection();
+        } else {
+            HikariDataSource hikariDataSource = dataSourceMapper.get(key);
+            return hikariDataSource.getConnection();
         }
-        URLClassLoader loader = new URLClassLoader(urls);
-        Class clazz = loader.loadClass("oracle.jdbc.driver.OracleDriver");
-        Driver driver = (Driver) clazz.getDeclaredConstructor().newInstance();
-        Properties p = new Properties();
-        p.put("user", jdbcUser);
-        p.put("password", jdbcPass);
-        Connection connect = driver.connect(jdbcUrl, p);
-        return connect;
+
+
     }
 
     /**
-     * @param jdbcUser WYSIWYG
-     * @param jdbcPass WYSIWYG
-     * @param jdbcUrl  WYSIWYG
-     * @param sqls     SQL can be split with \n
+     * @param sqls SQL can be split with \n
      * @return
      */
-    public static boolean executeSql(String jdbcUser, String jdbcPass, String jdbcUrl, String jdbcDriver, List<String> sqls) throws MalformedURLException, SQLException, ClassNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        try (Connection connection = getConnection(jdbcUser, jdbcPass, jdbcUrl, jdbcDriver)) {
+    public boolean executeSql(Project project, List<String> sqls) throws MalformedURLException, SQLException, ClassNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+        try (Connection connection = getConnection(project)) {
+
             Statement statement = connection.createStatement();
             for (String s : sqls) {
                 //非空条件判断
@@ -129,17 +143,16 @@ public class DBUtils {
             statement.executeBatch();
             //PROBLEMS's
             statement.close();
-
+            return true;
         }
-        return true;
-
     }
-    public static boolean executeSqlBatchs(Connection connection,String sqlText){
-        try  {
-            String[] sqls = sqlText.split(";");
+
+    public boolean executeSqlBatchs(Project project, String sqlText) throws Exception {
+        String[] sqls = sqlText.split(";");
+        try (Connection connection = getConnection(project)) {
             Statement statement = connection.createStatement();
             for (String sql : sqls) {
-                if(StringUtils.isBlank(sql)){
+                if (StringUtils.isBlank(sql)) {
                     continue;
                 }
                 //非空条件判断
@@ -149,10 +162,9 @@ public class DBUtils {
             //PROBLEMS's
             statement.close();
 
-        }catch (Exception e){
 
+            return true;
         }
-        return true;
     }
 
     private String listMapToCsv(List<Map<String, Object>> listmap, boolean wrap, String type) {
@@ -176,61 +188,39 @@ public class DBUtils {
     }
 
 
-    public Map<String, String> fetchAndCompare(Project project, List<String> sqls, String processId, boolean wrap) {
+    public Map<String, String> fetchAndCompare(Project project, List<String> sqls, String processId, boolean wrap) throws Exception {
         HashMap<String, String> result = new HashMap<>();
-        try (Connection connection = getConnection(SpdEditorDBState.getInstance(project))) {
+        try (Connection connection = getConnection(project)) {
 
-            try {
 
-                connection.setAutoCommit(false);
-                List<EngineTask> engineTasks = queryEngineTaskByIdLike(connection, processId);
-                List<EngineFlow> engineFlows = queryEngineFlowById(connection, processId);
-                String taskString = engineTasks.stream().map(enginetask -> enginetask.toCsv(wrap)).collect(Collectors.joining("\n"));
-                String flowString = engineFlows.stream().map(engineFlow -> engineFlow.toCsv(wrap)).collect(Collectors.joining("\n"));
+            connection.setAutoCommit(false);
+            List<EngineTask> engineTasks = queryEngineTaskByIdLike(project, processId);
+            List<EngineFlow> engineFlows = queryEngineFlowById(project, processId);
+            String taskString = engineTasks.stream().map(enginetask -> enginetask.toCsv(wrap)).collect(Collectors.joining("\n"));
+            String flowString = engineFlows.stream().map(engineFlow -> engineFlow.toCsv(wrap)).collect(Collectors.joining("\n"));
 
-                result.put("old", taskString + "\n" + flowString);
-                Statement statement = connection.createStatement();
-                for (String s : sqls) {
-                    //非空条件判断
-                    if (s != null && !s.trim().equals("")) {
-                        statement.execute(s);
-                    }
+            result.put("old", taskString + "\n" + flowString);
+            Statement statement = connection.createStatement();
+            for (String s : sqls) {
+                //非空条件判断
+                if (s != null && !s.trim().equals("")) {
+                    statement.execute(s);
                 }
-
-                List<EngineTask> engineTasksNew = queryEngineTaskByIdLike(connection, processId);
-                List<EngineFlow> engineFlowsNew = queryEngineFlowById(connection, processId);
-                String taskStringNew = engineTasksNew.stream().map(enginetask -> enginetask.toCsv(wrap)).collect(Collectors.joining("\n"));
-                String flowStringNew = engineFlowsNew.stream().map(engineFlow -> engineFlow.toCsv(wrap)).collect(Collectors.joining("\n"));
-
-                result.put("new", taskStringNew + "\n" + flowStringNew);
-            } finally {
-                connection.rollback();
             }
 
-
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } finally {
-
+            List<EngineTask> engineTasksNew = queryEngineTaskByIdLike(project, processId);
+            List<EngineFlow> engineFlowsNew = queryEngineFlowById(project, processId);
+            String taskStringNew = engineTasksNew.stream().map(enginetask -> enginetask.toCsv(wrap)).collect(Collectors.joining("\n"));
+            String flowStringNew = engineFlowsNew.stream().map(engineFlow -> engineFlow.toCsv(wrap)).collect(Collectors.joining("\n"));
+            result.put("new", taskStringNew + "\n" + flowStringNew);
+            return result;
         }
-        return result;
     }
 
+    public void executeSql(Project project, String sql) throws Exception {
+        try (Connection connection = getConnection(project)) {
 
-    public void executeSql(Connection connection, String sql) throws Exception {
-        try (Statement statement = connection.createStatement();) {
+            Statement statement = connection.createStatement();
             statement.execute(sql);
         }
     }
@@ -238,7 +228,7 @@ public class DBUtils {
     /**
      * 查询Ecas 菜单唯一键
      *
-     * @param connection
+     * @param
      * @param currentNum
      * @param pageSize
      * @param dbLinkYD01Name
@@ -246,7 +236,7 @@ public class DBUtils {
      * @return
      * @throws Exception
      */
-    public List<Map<String, Object>> queryActionPowerUniq(Connection connection, int currentNum, int pageSize, String dbLinkYD01Name,String dbLinkYD02Name, String dbLinkYD03Name, Integer applid) throws Exception {
+    public List<Map<String, Object>> queryActionPowerUniq(Project project, int currentNum, int pageSize, String dbLinkYD01Name, String dbLinkYD02Name, String dbLinkYD03Name, Integer applid) throws Exception {
         if (StringUtils.isBlank(dbLinkYD01Name)) {
             dbLinkYD01Name = "";
         }
@@ -280,7 +270,7 @@ public class DBUtils {
                 "     yd02m as (\n" +
                 "         select *\n" +
                 "         from ECAS_ACTIONPOWER@YD02\n" +
-                "         where applid = "+applid+"\n" +
+                "         where applid = " + applid + "\n" +
                 "     ),\n" +
                 "     yd03m as (\n" +
                 "         select *\n" +
@@ -302,7 +292,9 @@ public class DBUtils {
                 "  and yd02m.powerbit (+) = r.rn\n" +
                 "  and yd03m.powerbit(+) = r.rn\n" +
                 "order by rn";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+        try (Connection connection = getConnection(project)) {
+
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
             return queryForList(preparedStatement);
         }
     }
@@ -310,15 +302,15 @@ public class DBUtils {
     /**
      * 查询Ecas 菜单唯一键
      *
-     * @param connection
-     * @param  startNumber
+     * @param
+     * @param startNumber
      * @param pageSize
      * @param dbLinkYD01Name
      * @param dbLinkYD03Name
      * @return
      * @throws Exception
      */
-    public List<Map<String, Object>> queryEcasMenuIdUniq(Connection connection, int startNumber, int pageSize, String dbLinkYD01Name, String dbLinkYD02Name,String dbLinkYD03Name, Integer applid) throws Exception {
+    public List<Map<String, Object>> queryEcasMenuIdUniq(Project project, int startNumber, int pageSize, String dbLinkYD01Name, String dbLinkYD02Name, String dbLinkYD03Name, Integer applid) throws Exception {
         if (StringUtils.isBlank(dbLinkYD01Name)) {
             dbLinkYD01Name = "";
         }
@@ -330,7 +322,7 @@ public class DBUtils {
         }
 
         String sql = "with numlist as (\n" +
-                "    SELECT rownum + " +  startNumber  + " rn\n" +
+                "    SELECT rownum + " + startNumber + " rn\n" +
                 "    FROM dual\n" +
                 "    CONNECT BY 1 = 1\n" +
                 "           and rownum < " + pageSize + "\n" +
@@ -367,7 +359,9 @@ public class DBUtils {
                 "  and yd02m.menuid (+) = r.rn\n" +
                 "  and yd03m.menuid(+) = r.rn\n" +
                 "order by rn";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+        try (Connection connection = getConnection(project)) {
+
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
             return queryForList(preparedStatement);
         }
     }
@@ -375,43 +369,52 @@ public class DBUtils {
     /**
      * 查询权限
      *
-     * @param connection
+     * @param
      * @param right
      * @return
      * @throws Exception
      */
-    public List<Map<String, Object>> queryEngineRights(Connection connection, String right) throws Exception {
-        try (PreparedStatement preparedStatement = connection.prepareStatement("select * from ENGINE_RIGHTS where RIGHTS_ = ?")) {
+    public List<Map<String, Object>> queryEngineRights(Project project, String right) throws Exception {
+        try (Connection connection = getConnection(project)) {
+
+            PreparedStatement preparedStatement = connection.prepareStatement("select * from ENGINE_RIGHTS where RIGHTS_ = ?");
             preparedStatement.setString(1, right);
             return queryForList(preparedStatement);
         }
     }
 
-    public List<Map<String, Object>> queryEcasAppl(Connection connection) throws Exception {
-        try (PreparedStatement preparedStatement = connection.prepareStatement("select * from ECAS_APPL")) {
+
+    public List<Map<String, Object>> queryEcasAppl(Project project) throws Exception {
+        try (Connection connection = getConnection(project)) {
+
+            PreparedStatement preparedStatement = connection.prepareStatement("select * from ECAS_APPL");
             return queryForList(preparedStatement);
         }
     }
 
-    public List<Map<String, Object>> queryTopMenuOfApp(Connection connection, BigDecimal applid) throws Exception {
-        try (PreparedStatement preparedStatement = connection.prepareStatement("select * from ECAS_MENU where parent is null and applid=?")) {
+    public List<Map<String, Object>> queryTopMenuOfApp(Project project, BigDecimal applid) throws Exception {
+        try (Connection connection = getConnection(project)) {
+
+            PreparedStatement preparedStatement = connection.prepareStatement("select * from ECAS_MENU where parent is null and applid=?");
             preparedStatement.setBigDecimal(1, applid);
             return queryForList(preparedStatement);
         }
     }
 
-    public List<Map<String, Object>> queryMenuOfAppMenu(Connection connection, BigDecimal parentId, BigDecimal applid) throws Exception {
-        try (PreparedStatement preparedStatement = connection.prepareStatement("select * from ECAS_MENU where parent =? and applid=?")) {
-//            System.out.println("parent:"+parentId+" appid:"+applid);
+    public List<Map<String, Object>> queryMenuOfAppMenu(Project project, BigDecimal parentId, BigDecimal applid) throws Exception {
+        try (Connection connection = getConnection(project)) {
 
+            PreparedStatement preparedStatement = connection.prepareStatement("select * from ECAS_MENU where parent =? and applid=?");
             preparedStatement.setBigDecimal(1, parentId);
             preparedStatement.setBigDecimal(2, applid);
             return queryForList(preparedStatement);
         }
     }
 
-    public List<EngineActionOutput> queryEngineActionOutputIdMatch(Connection connection, String actionId) throws Exception {
-        try (PreparedStatement preparedStatement = connection.prepareStatement("select * from ENGINE_ACTIONOUTPUT where ACTIONID_ =?")) {
+    public List<EngineActionOutput> queryEngineActionOutputIdMatch(Project project, String actionId) throws Exception {
+        try (Connection connection = getConnection(project)) {
+
+            PreparedStatement preparedStatement = connection.prepareStatement("select * from ENGINE_ACTIONOUTPUT where ACTIONID_ =?");
             preparedStatement.setString(1, actionId);
             List<Map<String, Object>> maps = queryForList(preparedStatement);
             return maps.stream().map(item -> {
@@ -431,8 +434,10 @@ public class DBUtils {
         }
     }
 
-    public List<EngineActionInput> queryEngineActionInputIdMatch(Connection connection, String actionId) throws Exception {
-        try (PreparedStatement preparedStatement = connection.prepareStatement("select * from ENGINE_ACTIONINPUT where ACTIONID_ =?")) {
+    public List<EngineActionInput> queryEngineActionInputIdMatch(Project project, String actionId) throws Exception {
+        try (Connection connection = getConnection(project)) {
+
+            PreparedStatement preparedStatement = connection.prepareStatement("select * from ENGINE_ACTIONINPUT where ACTIONID_ =?");
             preparedStatement.setString(1, actionId);
             List<Map<String, Object>> maps = queryForList(preparedStatement);
             return maps.stream().map(item -> {
@@ -456,8 +461,10 @@ public class DBUtils {
     }
 
 
-    public List<EngineAction> queryEngineActionWithIdLike(Connection connection, String actionId) throws Exception {
-        try (PreparedStatement preparedStatement = connection.prepareStatement("select * from engine_action where id_ like ?")) {
+    public List<EngineAction> queryEngineActionWithIdLike(Project project, String actionId) throws Exception {
+        try (Connection connection = getConnection(project)) {
+
+            PreparedStatement preparedStatement = connection.prepareStatement("select * from engine_action where id_ like ?");
             preparedStatement.setString(1, "%" + actionId + "%");
             List<Map<String, Object>> maps = queryForList(preparedStatement);
             return maps.stream().map(item -> {
@@ -471,7 +478,6 @@ public class DBUtils {
 
                 return engineAction;
             }).collect(Collectors.toList());
-
         }
     }
 
@@ -512,18 +518,21 @@ public class DBUtils {
         }
     };
 
-    public List<EngineTask> queryEngineTaskByIdLike(Connection connection, String id) throws SQLException {
-        ;
+    public List<EngineTask> queryEngineTaskByIdLike(Project project, String id) throws Exception {
         String sql = "select id_, type_, title_, expression_, returnvalue_, bussineskey_, bussinesdesc_, rights_, validsecond_, listener_, opensecond_, bussinesid_, tasklistener_ from ENGINE_TASK where id_ like '" + id + "/_%' escape '/' order by ID_";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(sql);) {
+        try (Connection connection = getConnection(project)) {
+
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
             List<Map<String, Object>> maps = queryForList(preparedStatement);
             return maps.stream().map(engineTaskMapper).collect(Collectors.toList());
         }
     }
 
-    public List<EngineFlow> queryEngineFlowById(Connection connection, String id) throws SQLException {
+    public List<EngineFlow> queryEngineFlowById(Project project, String id) throws Exception {
         String sql = "select processid_, source_, target_, condition_, order_ from ENGINE_FLOW where PROCESSID_='" + id + "' order by SOURCE_,TARGET_";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(sql);) {
+        try (Connection connection = getConnection(project)) {
+
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
             List<Map<String, Object>> maps = queryForList(preparedStatement);
             return maps.stream().map(map -> {
                 EngineFlow engineFlow = new EngineFlow();
@@ -537,10 +546,12 @@ public class DBUtils {
         }
     }
 
-    public List<EngineTask> queryEngineTaskByExpression(Connection connection, String name) throws SQLException {
-        try (PreparedStatement preparedStatement = connection.prepareStatement("select ID_, TYPE_, TITLE_, EXPRESSION_, RETURNVALUE_, BUSSINESKEY_, " +
-                "BUSSINESDESC_, RIGHTS_, VALIDSECOND_, LISTENER_, OPENSECOND_, BUSSINESID_, TASKLISTENER_ " +
-                " from ENGINE_TASK where upper(EXPRESSION_) like upper('%" + name + "%')")) {
+    public List<EngineTask> queryEngineTaskByExpression(Project project, String name) throws SQLException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, MalformedURLException, ClassNotFoundException {
+        try (Connection connection = getConnection(project)) {
+
+            PreparedStatement preparedStatement = connection.prepareStatement("select ID_, TYPE_, TITLE_, EXPRESSION_, RETURNVALUE_, BUSSINESKEY_, " +
+                    "BUSSINESDESC_, RIGHTS_, VALIDSECOND_, LISTENER_, OPENSECOND_, BUSSINESID_, TASKLISTENER_ " +
+                    " from ENGINE_TASK where upper(EXPRESSION_) like upper('%" + name + "%')");
             List<Map<String, Object>> maps = queryForList(preparedStatement);
             return maps.stream().map(engineTaskMapper).collect(Collectors.toList());
         }
@@ -549,52 +560,58 @@ public class DBUtils {
     /**
      * 查询系统日期
      *
-     * @param connection
+     * @param
      * @return
      * @throws SQLException
      */
-    public String querySysDay(Connection connection) throws SQLException {
-        try (PreparedStatement preparedStatement = connection.prepareStatement("select PGET_SYSDATE() sd from dual")) {
+    public String querySysDay(Project project) throws SQLException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, MalformedURLException, ClassNotFoundException {
+        try (Connection connection = getConnection(project)) {
+
+            PreparedStatement preparedStatement = connection.prepareStatement("select PGET_SYSDATE() sd from dual");
             List<Map<String, Object>> maps = queryForList(preparedStatement);
             if (CollectionUtils.isEmpty(maps)) {
                 return null;
             }
             return (String) maps.get(0).get("SD");
         }
-
     }
 
-    public void textSearch(Connection connection) throws SQLException {
-        try (PreparedStatement preparedStatement = connection.prepareStatement("declare\n" +
-                "    sqlt varchar(4000);\n" +
-                "    search varchar(1000):='XFUNDS_DUEINTBANK_DAYBALANCE';\n" +
-                "begin\n" +
-                "    for i in ( select OBJECT_NAME, OBJECT_TYPE, OWNER\n" +
-                "               from dba_objects\n" +
-                "               where OBJECT_TYPE in ('PACKAGE BODY', 'FUNCTION', 'PROCEDURE')\n" +
-                "                 and owner in ('PUBLIC', 'XFUNDS201701'))\n" +
-                "        loop\n" +
-                "            begin\n" +
-                "                sqlt:=DBMS_METADATA.GET_DDL(i.OBJECT_TYPE, i.OBJECT_NAME, i.OWNER);\n" +
-                "                if instr(upper(sqlt),upper(search))>0 then\n" +
-                "                    DBMS_OUTPUT.PUT_LINE('contains '||i.OBJECT_TYPE||'->'||i.OWNER||'.'||i.OBJECT_NAME);\n" +
-                "                    DBMS_OUTPUT.PUT_LINE('DBMS_METADATA.GET_DDL('''||i.OBJECT_TYPE||''',''' ||i.OBJECT_NAME||''','''|| i.OWNER||''')');\n" +
-                "                end if;\n" +
-                "            exception\n" +
-                "                when others  then\n" +
-                "--                     dbms_output.PUT('');\n" +
-                "                    DBMS_OUTPUT.PUT_LINE('excep '||i.OBJECT_TYPE||'->'||i.OWNER||'.'||i.OBJECT_NAME);\n" +
-                "                    DBMS_OUTPUT.PUT_LINE('DBMS_METADATA.GET_DDL('''||i.OBJECT_TYPE||''',''' ||i.OBJECT_NAME||''','''|| i.OWNER||''')');\n" +
-                "            end;\n" +
-                "        end loop;\n" +
-                "end")) {
-            boolean execute = preparedStatement.execute();
 
+    public void textSearch(Project project) throws SQLException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, MalformedURLException, ClassNotFoundException {
+        try (Connection connection = getConnection(project)) {
+
+            PreparedStatement preparedStatement = connection.prepareStatement("declare\n" +
+                    "    sqlt varchar(4000);\n" +
+                    "    search varchar(1000):='XFUNDS_DUEINTBANK_DAYBALANCE';\n" +
+                    "begin\n" +
+                    "    for i in ( select OBJECT_NAME, OBJECT_TYPE, OWNER\n" +
+                    "               from dba_objects\n" +
+                    "               where OBJECT_TYPE in ('PACKAGE BODY', 'FUNCTION', 'PROCEDURE')\n" +
+                    "                 and owner in ('PUBLIC', 'XFUNDS201701'))\n" +
+                    "        loop\n" +
+                    "            begin\n" +
+                    "                sqlt:=DBMS_METADATA.GET_DDL(i.OBJECT_TYPE, i.OBJECT_NAME, i.OWNER);\n" +
+                    "                if instr(upper(sqlt),upper(search))>0 then\n" +
+                    "                    DBMS_OUTPUT.PUT_LINE('contains '||i.OBJECT_TYPE||'->'||i.OWNER||'.'||i.OBJECT_NAME);\n" +
+                    "                    DBMS_OUTPUT.PUT_LINE('DBMS_METADATA.GET_DDL('''||i.OBJECT_TYPE||''',''' ||i.OBJECT_NAME||''','''|| i.OWNER||''')');\n" +
+                    "                end if;\n" +
+                    "            exception\n" +
+                    "                when others  then\n" +
+                    "--                     dbms_output.PUT('');\n" +
+                    "                    DBMS_OUTPUT.PUT_LINE('excep '||i.OBJECT_TYPE||'->'||i.OWNER||'.'||i.OBJECT_NAME);\n" +
+                    "                    DBMS_OUTPUT.PUT_LINE('DBMS_METADATA.GET_DDL('''||i.OBJECT_TYPE||''',''' ||i.OBJECT_NAME||''','''|| i.OWNER||''')');\n" +
+                    "            end;\n" +
+                    "        end loop;\n" +
+                    "end");
+            preparedStatement.execute();
         }
+
     }
 
-    public List<XfundsBatch> queryXfundsBatchByEnterName(Connection connection, String entername) throws SQLException {
-        try (PreparedStatement preparedStatement = connection.prepareStatement("select seqno||'' seqNo,DESCR,ENTERNAME from XFUNDS_BATCH_CTL where upper(ENTERNAME)  like upper('%" + entername + "%')")) {
+    public List<XfundsBatch> queryXfundsBatchByEnterName(Project project, String entername) throws SQLException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, MalformedURLException, ClassNotFoundException {
+        try (Connection connection = getConnection(project)) {
+
+            PreparedStatement preparedStatement = connection.prepareStatement("select seqno||'' seqNo,DESCR,ENTERNAME from XFUNDS_BATCH_CTL where upper(ENTERNAME)  like upper('%" + entername + "%')");
             List<Map<String, Object>> maps = queryForList(preparedStatement);
             return maps.stream().map(it -> {
                 XfundsBatch xfundsBatch = new XfundsBatch();
@@ -607,8 +624,10 @@ public class DBUtils {
         }
     }
 
-    public List<EngineAction> queryEngineActionByActionScript(Connection connection, String name) throws SQLException {
-        try (PreparedStatement preparedStatement = connection.prepareStatement("select ID_, NAMESPACE_, URL_, WINDOWPARAM_, ACTIONSCRIPT_, ACTIONINTERCEPT_  from ENGINE_ACTION where upper(ACTIONSCRIPT_) like upper('%" + name + "%')")) {
+    public List<EngineAction> queryEngineActionByActionScript(Project project, String name) throws SQLException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, MalformedURLException, ClassNotFoundException {
+        try (Connection connection = getConnection(project)) {
+
+            PreparedStatement preparedStatement = connection.prepareStatement("select ID_, NAMESPACE_, URL_, WINDOWPARAM_, ACTIONSCRIPT_, ACTIONINTERCEPT_  from ENGINE_ACTION where upper(ACTIONSCRIPT_) like upper('%" + name + "%')");
             List<Map<String, Object>> maps = queryForList(preparedStatement);
             return maps.stream().map(it -> {
                 EngineAction engineAction = new EngineAction();
@@ -624,8 +643,10 @@ public class DBUtils {
         }
     }
 
-    public List<EcasMenu> queryHtmlRefMenu(Connection connection, String fileName) throws SQLException {
-        try (PreparedStatement preparedStatement = connection.prepareStatement("select * from ecas_menu start with menuid=( select menuid from ECAS_MENU where url like '%" + fileName + "%' ) connect by prior parent=menuid ")) {
+    public List<EcasMenu> queryHtmlRefMenu(Project project, String fileName) throws SQLException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, MalformedURLException, ClassNotFoundException {
+        try (Connection connection = getConnection(project)) {
+
+            PreparedStatement preparedStatement = connection.prepareStatement("select * from ecas_menu start with menuid=( select menuid from ECAS_MENU where url like '%" + fileName + "%' ) connect by prior parent=menuid ");
             List<Map<String, Object>> maps = queryForList(preparedStatement);
             //APPLID, MENUID, NAME, LVL, URL, PARENT, IMG, ISCHILD, GROUPID
             return maps.stream().map(it -> {
@@ -644,9 +665,11 @@ public class DBUtils {
         }
     }
 
-    public List<EcasMenu> queryHtmlRefMenuTop(Connection connection, String fileName) throws SQLException {
-        try (PreparedStatement preparedStatement = connection.prepareStatement(
-                " select * from ECAS_MENU where url like '%" + fileName + "%'")) {
+    public List<EcasMenu> queryHtmlRefMenuTop(Project project, String fileName) throws SQLException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, MalformedURLException, ClassNotFoundException {
+        try (Connection connection = getConnection(project)) {
+
+            PreparedStatement preparedStatement = connection.prepareStatement(
+                    " select * from ECAS_MENU where url like '%" + fileName + "%'");
             List<Map<String, Object>> maps = queryForList(preparedStatement);
             //APPLID, MENUID, NAME, LVL, URL, PARENT, IMG, ISCHILD, GROUPID
             return maps.stream().map(ecasMenuMapper).collect(Collectors.toList());
@@ -654,9 +677,11 @@ public class DBUtils {
     }
 
 
-    public List<EcasMenu> queryMenuById(Connection connection, String menuId) throws SQLException {
-        try (PreparedStatement preparedStatement = connection.prepareStatement(
-                " select * from ECAS_MENU where applid=999 and menuid= '" + menuId + "'")) {
+    public List<EcasMenu> queryMenuById(Project project, String menuId) throws SQLException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, MalformedURLException, ClassNotFoundException {
+        try (Connection connection = getConnection(project)) {
+
+            PreparedStatement preparedStatement = connection.prepareStatement(
+                    " select * from ECAS_MENU where applid=999 and menuid= '" + menuId + "'");
             List<Map<String, Object>> maps = queryForList(preparedStatement);
             //APPLID, MENUID, NAME, LVL, URL, PARENT, IMG, ISCHILD, GROUPID
             return maps.stream().map(ecasMenuMapper).collect(Collectors.toList());
@@ -680,48 +705,51 @@ public class DBUtils {
         }
     };
 
-    public List<String> queryUserTables(Connection connection) throws SQLException {
-        try (PreparedStatement preparedStatement = connection.prepareStatement(
-                "select TABLE_NAME from USER_TABLES order by TABLE_NAME desc")) {
+    public List<String> queryUserTables(Project project) throws SQLException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, MalformedURLException, ClassNotFoundException {
+        try (Connection connection = getConnection(project)) {
+
+            PreparedStatement preparedStatement = connection.prepareStatement(
+                    "select TABLE_NAME from USER_TABLES order by TABLE_NAME desc");
             List<Map<String, Object>> maps = queryForList(preparedStatement);
             //APPLID, MENUID, NAME, LVL, URL, PARENT, IMG, ISCHILD, GROUPID
             return maps.stream().map(item -> (String) item.get("TABLE_NAME")).collect(Collectors.toList());
         }
     }
 
-    public List<UserTabCols> queryUserTablesCols(Connection conn, String tableName) throws SQLException {
+    public List<UserTabCols> queryUserTablesCols(Project project, String tableName) throws SQLException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, MalformedURLException, ClassNotFoundException {
         List<UserTabCols> userTabColsList = new ArrayList<>();
-        try (PreparedStatement ps = conn.prepareStatement(
-                "SELECT cc.*,cm.COMMENTS FROM USER_TAB_COLS cc,USER_COL_COMMENTS cm WHERE cc.TABLE_NAME = ? and cc.COLUMN_NAME=cm.COLUMN_NAME and cc.TABLE_NAME=cm.TABLE_NAME order by COLUMN_ID asc")) {
+        try (Connection connection = getConnection(project)) {
+
+            PreparedStatement ps = connection.prepareStatement(
+                    "SELECT cc.*,cm.COMMENTS FROM USER_TAB_COLS cc,USER_COL_COMMENTS cm WHERE cc.TABLE_NAME = ? and cc.COLUMN_NAME=cm.COLUMN_NAME and cc.TABLE_NAME=cm.TABLE_NAME order by COLUMN_ID asc");
             ps.setString(1, tableName);
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    UserTabCols userTabCols = new UserTabCols();
-                    userTabCols.setTableName(rs.getString("TABLE_NAME"));
-                    userTabCols.setColumnName(rs.getString("COLUMN_NAME"));
-                    userTabCols.setDataType(rs.getString("DATA_TYPE"));
-                    userTabCols.setDataLength(rs.getInt("DATA_LENGTH"));
-                    userTabCols.setDataPrecision(rs.getInt("DATA_PRECISION"));
-                    userTabCols.setDataScale(rs.getInt("DATA_SCALE"));
-                    userTabCols.setNullable(rs.getString("NULLABLE"));
-                    userTabCols.setColumnId(rs.getInt("COLUMN_ID"));
-                    userTabCols.setDefaultLength(rs.getInt("DEFAULT_LENGTH"));
-                    userTabCols.setDataDefault(rs.getString("DATA_DEFAULT"));
-                    userTabCols.setNumDistinct(rs.getLong("NUM_DISTINCT"));
-                    userTabCols.setLowValue(rs.getString("LOW_VALUE"));
-                    userTabCols.setHighValue(rs.getString("HIGH_VALUE"));
-                    userTabCols.setDensity(rs.getDouble("DENSITY"));
-                    userTabCols.setNumNulls(rs.getLong("NUM_NULLS"));
-                    userTabCols.setNumBuckets(rs.getLong("NUM_BUCKETS"));
-                    userTabCols.setLastAnalyzed(rs.getTimestamp("LAST_ANALYZED"));
-                    userTabCols.setSampleSize(rs.getLong("SAMPLE_SIZE"));
-                    userTabCols.setCharacterSetName(rs.getString("CHARACTER_SET_NAME"));
-                    userTabCols.setCharColDeclLength(rs.getLong("CHAR_COL_DECL_LENGTH"));
-                    userTabCols.setGlobalStats(rs.getString("GLOBAL_STATS"));
-                    userTabCols.setUserStats(rs.getString("USER_STATS"));
-                    userTabCols.setComments(rs.getString("COMMENTS"));
-                    userTabColsList.add(userTabCols);
-                }
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                UserTabCols userTabCols = new UserTabCols();
+                userTabCols.setTableName(rs.getString("TABLE_NAME"));
+                userTabCols.setColumnName(rs.getString("COLUMN_NAME"));
+                userTabCols.setDataType(rs.getString("DATA_TYPE"));
+                userTabCols.setDataLength(rs.getInt("DATA_LENGTH"));
+                userTabCols.setDataPrecision(rs.getInt("DATA_PRECISION"));
+                userTabCols.setDataScale(rs.getInt("DATA_SCALE"));
+                userTabCols.setNullable(rs.getString("NULLABLE"));
+                userTabCols.setColumnId(rs.getInt("COLUMN_ID"));
+                userTabCols.setDefaultLength(rs.getInt("DEFAULT_LENGTH"));
+                userTabCols.setDataDefault(rs.getString("DATA_DEFAULT"));
+                userTabCols.setNumDistinct(rs.getLong("NUM_DISTINCT"));
+                userTabCols.setLowValue(rs.getString("LOW_VALUE"));
+                userTabCols.setHighValue(rs.getString("HIGH_VALUE"));
+                userTabCols.setDensity(rs.getDouble("DENSITY"));
+                userTabCols.setNumNulls(rs.getLong("NUM_NULLS"));
+                userTabCols.setNumBuckets(rs.getLong("NUM_BUCKETS"));
+                userTabCols.setLastAnalyzed(rs.getTimestamp("LAST_ANALYZED"));
+                userTabCols.setSampleSize(rs.getLong("SAMPLE_SIZE"));
+                userTabCols.setCharacterSetName(rs.getString("CHARACTER_SET_NAME"));
+                userTabCols.setCharColDeclLength(rs.getLong("CHAR_COL_DECL_LENGTH"));
+                userTabCols.setGlobalStats(rs.getString("GLOBAL_STATS"));
+                userTabCols.setUserStats(rs.getString("USER_STATS"));
+                userTabCols.setComments(rs.getString("COMMENTS"));
+                userTabColsList.add(userTabCols);
             }
             return userTabColsList;
         }
@@ -729,97 +757,102 @@ public class DBUtils {
 
     /**
      * 通过Id
+     *
      * @param applid
      * @param menuId
-     * @param connection
+     * @param
      * @param env
      * @return
      * @throws SQLException
      */
-    public EcasMenu queryEcasMenu(int applid, int menuId, Connection connection, String env) throws SQLException {
+    public EcasMenu queryEcasMenu(int applid, int menuId, Project project, String env) throws SQLException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, MalformedURLException, ClassNotFoundException {
         String envSql = "";
 
         if (!"DEV".equals(env) && !"".equals(env)) {
             envSql = "@" + env;
         }
-        String sql = "SELECT APPLID, MENUID, NAME, LVL, URL, PARENT, IMG, ISCHILD, GROUPID FROM ECAS_MENU" + envSql + " WHERE APPLID=? AND MENUID=?";
-        PreparedStatement statement = connection.prepareStatement(sql);
-        statement.setInt(1, applid);
-        statement.setInt(2, menuId);
-        ResultSet resultSet = statement.executeQuery();
-        if (resultSet.next()) {
-            return ecasMenuMapper(resultSet);
+        try (Connection connection = getConnection(project)) {
+
+            String sql = "SELECT APPLID, MENUID, NAME, LVL, URL, PARENT, IMG, ISCHILD, GROUPID FROM ECAS_MENU" + envSql + " WHERE APPLID=? AND MENUID=?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, applid);
+            statement.setInt(2, menuId);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return ecasMenuMapper(resultSet);
+            }
+            return null;
         }
-        return null;
     }
 
-    public EcasActionPower queryActionPower(int applid, int powerbit, Connection connection, String env) throws SQLException {
+    public EcasActionPower queryActionPower(int applid, int powerbit, Project project, String env) throws SQLException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, MalformedURLException, ClassNotFoundException {
         String envSql = "";
 
         if (!"DEV".equals(env) && !"".equals(env)) {
             envSql = "@" + env;
         }
         String sql = "SELECT APPLID, POWERBIT, PATH, DESCRIPTION, ENABLED, MODULENAME, WEIGHT, ENGMODULE, ENGDESC, MENUID FROM ECAS_ACTIONPOWER" + envSql + " WHERE APPLID = ? AND POWERBIT = ?";
-        PreparedStatement statement = connection.prepareStatement(sql);
-        statement.setInt(1, applid);
-        statement.setInt(2, powerbit);
-        ResultSet resultSet = statement.executeQuery();
-        if (resultSet.next()) {
-            return new EcasActionPower(
-                    resultSet.getInt("APPLID"),
-                    resultSet.getInt("POWERBIT"),
-                    resultSet.getString("PATH"),
-                    resultSet.getString("DESCRIPTION"),
-                    resultSet.getInt("ENABLED"),
-                    resultSet.getString("MODULENAME"),
-                    resultSet.getInt("WEIGHT"),
-                    resultSet.getString("ENGMODULE"),
-                    resultSet.getString("ENGDESC"),
-                    resultSet.getInt("MENUID")
-            );
+        try (Connection connection = getConnection(project)) {
+
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, applid);
+            statement.setInt(2, powerbit);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return new EcasActionPower(
+                        resultSet.getInt("APPLID"),
+                        resultSet.getInt("POWERBIT"),
+                        resultSet.getString("PATH"),
+                        resultSet.getString("DESCRIPTION"),
+                        resultSet.getInt("ENABLED"),
+                        resultSet.getString("MODULENAME"),
+                        resultSet.getInt("WEIGHT"),
+                        resultSet.getString("ENGMODULE"),
+                        resultSet.getString("ENGDESC"),
+                        resultSet.getInt("MENUID")
+                );
+            }
+            return null;
         }
-        return null;
     }
 
-    public List<UserColComments> queryUserColComments(Connection conn, String tableName) throws SQLException {
+    public List<UserColComments> queryUserColComments(Project project, String tableName) throws SQLException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, MalformedURLException, ClassNotFoundException {
         List<UserColComments> userColCommentsList = new ArrayList<>();
-        try (PreparedStatement ps = conn.prepareStatement(
-                "select * from USER_COL_COMMENTS where TABLE_NAME=?")) {
+        try (Connection connection = getConnection(project)) {
+
+            PreparedStatement ps = connection.prepareStatement(
+                    "select * from USER_COL_COMMENTS where TABLE_NAME=?");
             ps.setString(1, tableName);
 
-            try (ResultSet rs = ps.executeQuery()) {
+            ResultSet rs = ps.executeQuery();
 
-                while (rs.next()) {
-                    UserColComments userColComments = new UserColComments();
-                    userColComments.setTableName(rs.getString("TABLE_NAME"));
-                    userColComments.setColumnName(rs.getString("COLUMN_NAME"));
-                    userColComments.setComments(rs.getString("COMMENTS"));
+            while (rs.next()) {
+                UserColComments userColComments = new UserColComments();
+                userColComments.setTableName(rs.getString("TABLE_NAME"));
+                userColComments.setColumnName(rs.getString("COLUMN_NAME"));
+                userColComments.setComments(rs.getString("COMMENTS"));
 
-                    userColCommentsList.add(userColComments);
-                }
+                userColCommentsList.add(userColComments);
             }
-
+            return userColCommentsList;
         }
-
-        return userColCommentsList;
     }
 
-    public List<String> queryUserTabComments(Connection conn, String tableName) throws SQLException {
+    public List<String> queryUserTabComments(Project project, String tableName) throws SQLException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, MalformedURLException, ClassNotFoundException {
         List<String> userTabsComments = new ArrayList<>();
-        try (PreparedStatement ps = conn.prepareStatement(
-                "select COMMENTS from USER_TAB_COMMENTS where TABLE_NAME=?")) {
+        try (Connection connection = getConnection(project)) {
+
+            PreparedStatement ps = connection.prepareStatement(
+                    "select COMMENTS from USER_TAB_COMMENTS where TABLE_NAME=?");
             ps.setString(1, tableName);
-
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    userTabsComments.add(rs.getString("COMMENTS"));
-                }
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                userTabsComments.add(rs.getString("COMMENTS"));
             }
-
+            return userTabsComments;
         }
-
-        return userTabsComments;
     }
+
     public EcasMenu ecasMenuMapper(ResultSet rs) throws SQLException {
         EcasMenu menu = new EcasMenu();
         menu.setApplid(rs.getString("APPLID"));
@@ -834,10 +867,12 @@ public class DBUtils {
         return menu;
     }
 
-    public List<EcasMenu> queryRootMenus(String applid, Connection connection) {
+    public List<EcasMenu> queryRootMenus(String applid, Project project) throws Exception {
         List<EcasMenu> menus = new ArrayList<>();
-        try (PreparedStatement stmt = connection.prepareStatement(
-                "select applid, menuid, name, lvl, url, parent, img, ischild, groupid from ECAS_MENU where parent is null and applid=?")) {
+        try (Connection connection = getConnection(project)) {
+
+            PreparedStatement stmt = connection.prepareStatement(
+                    "select applid, menuid, name, lvl, url, parent, img, ischild, groupid from ECAS_MENU where parent is null and applid=?");
             stmt.setString(1, applid);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
@@ -845,17 +880,17 @@ public class DBUtils {
                 // Set other properties as necessary
                 menus.add(menu);
             }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            // Handle exception
         }
+
         return menus;
     }
 
-    public List<EcasMenu> querySubMenus(String applid,String parent, Connection connection) {
+    public List<EcasMenu> querySubMenus(String applid, String parent, Project project) throws Exception {
         List<EcasMenu> menus = new ArrayList<>();
-        try (PreparedStatement stmt = connection.prepareStatement(
-                "select applid, menuid, name, lvl, url, parent, img, ischild, groupid from ECAS_MENU where parent =?  and applid=?")) {
+        try (Connection connection = getConnection(project)) {
+
+            PreparedStatement stmt = connection.prepareStatement(
+                    "select applid, menuid, name, lvl, url, parent, img, ischild, groupid from ECAS_MENU where parent =?  and applid=?");
             stmt.setString(1, parent);
             stmt.setString(2, applid);
             ResultSet rs = stmt.executeQuery();
@@ -864,35 +899,36 @@ public class DBUtils {
                 // Set other properties as necessary
                 menus.add(menu);
             }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            // Handle exception
+
+            return menus;
         }
-        return menus;
     }
 
 
-    public List<String> queryRootActionPower(String s, Connection connection) {
+    public List<String> queryRootActionPower(String s, Project project) throws Exception {
         List<String> menus = new ArrayList<>();
-        try (PreparedStatement stmt = connection.prepareStatement(
-                "select distinct MODULENAME as \"MODULENAME\" from ECAS_ACTIONPOWER where APPLID=999  order by MODULENAME")) {
+        try (Connection connection = getConnection(project)) {
+
+            PreparedStatement stmt = connection.prepareStatement(
+                    "select distinct MODULENAME as \"MODULENAME\" from ECAS_ACTIONPOWER where APPLID=999  order by MODULENAME");
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 // Set other properties as necessary
                 menus.add(rs.getString("MODULENAME"));
             }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
+
+            return menus;
         }
-        return menus;
     }
 
-    public List<EcasActionPower> querySubActionPower(String s, Connection connection) {
+    public List<EcasActionPower> querySubActionPower(String s, Project project) throws Exception {
         List<EcasActionPower> menus = new ArrayList<>();
-        try (PreparedStatement stmt = connection.prepareStatement(
-                "select applid, powerbit, path, description, enabled, modulename, weight," +
-                        " engmodule, engdesc, menuid from ECAS_ACTIONPOWER where MODULENAME=?  order by description")) {
-            stmt.setString(1,s);
+        try (Connection connection = getConnection(project)) {
+
+            PreparedStatement stmt = connection.prepareStatement(
+                    "select applid, powerbit, path, description, enabled, modulename, weight," +
+                            " engmodule, engdesc, menuid from ECAS_ACTIONPOWER where MODULENAME=?  order by description");
+            stmt.setString(1, s);
             ResultSet resultSet = stmt.executeQuery();
             while (resultSet.next()) {
                 EcasActionPower ecasActionPower = new EcasActionPower();
@@ -908,9 +944,9 @@ public class DBUtils {
                 ecasActionPower.setMenuId(resultSet.getInt("MENUID"));
                 menus.add(ecasActionPower);
             }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
+
+            return menus;
         }
-        return menus;
     }
+
 }

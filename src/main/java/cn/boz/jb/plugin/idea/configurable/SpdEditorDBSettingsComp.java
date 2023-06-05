@@ -83,7 +83,7 @@ public class SpdEditorDBSettingsComp {
                 final Ref<Exception> exception = Ref.create();
                 ProgressManager.getInstance().runProcessWithProgressSynchronously(() -> {
                     try {
-                        DBUtils.testConnection(jdbcUser, jdbcPass, jdbcUrl, jdbcDriverText);
+                        DBUtils.getInstance().testConnection(jdbcUser, jdbcPass, jdbcUrl, jdbcDriverText);
                     } catch (Exception ee) {
                         exception.set(ee);
                     }

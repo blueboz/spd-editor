@@ -79,9 +79,8 @@ public class SqlActionGroup extends DefaultActionGroup implements ClipboardOwner
                             String joiningSql = sqls.stream().map(sql -> sql.replace("\n", "")).collect(Collectors.joining(";\n")) + ";";
                             StringSelection selection = new StringSelection(joiningSql);
                             clipboard.setContents(selection, SqlActionGroup.this);
-                            SpdEditorDBState instance = SpdEditorDBState.getInstance(anActionEvent.getProject());
                             try {
-                                boolean b = DBUtils.executeSql(instance.jdbcUserName, instance.jdbcPassword, instance.jdbcUrl, instance.jdbcDriver, sqls);
+                                boolean b = DBUtils.getInstance().executeSql(anActionEvent.getProject(), sqls);
                                 if (b) {
                                     Messages.showMessageDialog("更新成功!!", "更新成功", UIUtil.getInformationIcon());
                                 }

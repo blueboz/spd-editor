@@ -592,9 +592,8 @@ public class SpdEditor extends JComponent implements DataProvider, MouseListener
                     clipboard.setContents(selection, this);
                 } else if (idx == 1) {
                     //更新至db
-                    SpdEditorDBState instance = SpdEditorDBState.getInstance(project);
                     try {
-                        boolean b = DBUtils.executeSql(instance.jdbcUserName, instance.jdbcPassword, instance.jdbcUrl, instance.jdbcDriver, sqls);
+                        boolean b = DBUtils.getInstance().executeSql(project, sqls);
                         if (b) {
                             Messages.showMessageDialog("更新成功!!", "更新成功", UIUtil.getInformationIcon());
                         }

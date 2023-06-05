@@ -1,6 +1,7 @@
 package cn.boz.jb.plugin.idea.toolwindow;
 
 import cn.boz.jb.plugin.idea.utils.DBUtils;
+import com.intellij.openapi.project.Project;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
@@ -14,10 +15,10 @@ public class AppNode extends NodeData {
         super(nodeData);
     }
 
-    public static List<NodeData> initLoad(Connection connection) {
+    public static List<NodeData> initLoad(Project project) {
         try {
-            DBUtils instance = DBUtils.getInstance();
-            List<Map<String, Object>> apps = instance.queryEcasAppl(connection);
+
+            List<Map<String, Object>> apps = DBUtils.getInstance().queryEcasAppl(project);
             return apps.stream().map(app -> new AppNode(app)).collect(Collectors.toList());
         } catch (Exception e) {
             e.printStackTrace();
@@ -31,7 +32,7 @@ public class AppNode extends NodeData {
     }
 
     @Override
-    public List<NodeData> loadSubNodes(Connection connection) {
+    public List<NodeData> loadSubNodes(Project project) {
         if (isSubDataLoaded()) {
             return new ArrayList<>();
         }
@@ -39,7 +40,7 @@ public class AppNode extends NodeData {
         DBUtils instance = DBUtils.getInstance();
         List<Map<String, Object>> topMenus = null;
         try {
-            topMenus = instance.queryTopMenuOfApp(connection, (BigDecimal) getNodeData().get("APPLID"));
+            topMenus = instance.queryTopMenuOfApp(project, (BigDecimal) getNodeData().get("APPLID"));
             return topMenus.stream().map(it -> new MenuNode(it)).collect(Collectors.toList());
         } catch (Exception e) {
             e.printStackTrace();

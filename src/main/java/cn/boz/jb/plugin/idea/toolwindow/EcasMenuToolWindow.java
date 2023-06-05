@@ -34,9 +34,8 @@ public class EcasMenuToolWindow extends JComponent implements ClipboardOwner {
 
     public EcasMenuToolWindow(Project project) {
         try {
-            Connection connection = DBUtils.getConnection(SpdEditorDBState.getInstance(project));
             DefaultMutableTreeNode tn = new DefaultMutableTreeNode("菜单项");
-            List<NodeData> apps = AppNode.initLoad(connection);
+            List<NodeData> apps = AppNode.initLoad(project);
             List<DefaultMutableTreeNode> appTreeNodes = apps.stream().map(app -> new DefaultMutableTreeNode(app, true)).collect(Collectors.toList());
             appTreeNodes.stream().forEach(appTreeNode -> {
                 tn.add(appTreeNode);
@@ -48,7 +47,7 @@ public class EcasMenuToolWindow extends JComponent implements ClipboardOwner {
             tree.addTreeSelectionListener(e -> {
                 TreePath path = e.getPath();
                 DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) path.getLastPathComponent();
-                loadTreeNode(selectedNode,connection);
+                loadTreeNode(selectedNode,project);
 
             });
             //用于树
@@ -90,11 +89,10 @@ public class EcasMenuToolWindow extends JComponent implements ClipboardOwner {
                         int result = Messages.showDialog("SQL 如下，是否入库?\n" + sql, "确认", new String[]{"只复制Sql", "更新至DB(并复制sql)", "只入库", "取消"}, 1, Messages.getInformationIcon());
                         if (3 != result) {
                             if (1 == result) {
-                                DBUtils instance = DBUtils.getInstance();
-                                try (var conn = DBUtils.getConnection(SpdEditorDBState.getInstance(project))) {
-                                    instance.executeSql(conn, sql);
-                                } catch (Exception e) {
-                                    Messages.showErrorDialog(e.getMessage(), "数据库失败");
+                                try{
+                                    DBUtils.getInstance().executeSql(project, sql);
+                                }catch (Exception e){
+                                    DBUtils.dbExceptionProcessor(e,project);
                                 }
                             }
                             if (2 != result) {
@@ -183,11 +181,11 @@ public class EcasMenuToolWindow extends JComponent implements ClipboardOwner {
                     int result = Messages.showDialog("execute?\n" + sql, "不可回滚，确认执行？", new String[]{"拷贝SQL", "执行删除", "取消"}, 1, Messages.getWarningIcon());
                     if (1 == result) {
                         DBUtils instance = DBUtils.getInstance();
-                        try (var conn = DBUtils.getConnection(SpdEditorDBState.getInstance(project))) {
-                            instance.executeSql(conn, sql);
+                        try  {
+                            instance.executeSql(project, sql);
                             model.removeNodeFromParent(lastPathComponent);
                         } catch (Exception e) {
-                            Messages.showErrorDialog(e.getMessage(), "数据库失败");
+                            DBUtils.dbExceptionProcessor(e,project);
                         }
 
                     }
@@ -222,10 +220,10 @@ public class EcasMenuToolWindow extends JComponent implements ClipboardOwner {
                             MenuNode menuNode = new MenuNode(dataMap);
                             model.insertNodeInto(new DefaultMutableTreeNode(menuNode), lastPathComponent, 0);
                             DBUtils instance = DBUtils.getInstance();
-                            try (var conn = DBUtils.getConnection(SpdEditorDBState.getInstance(project))) {
-                                instance.executeSql(conn, sql);
+                            try {
+                                instance.executeSql(project, sql);
                             } catch (Exception e) {
-                                Messages.showErrorDialog(e.getMessage(), "数据库失败");
+                                DBUtils.dbExceptionProcessor(e,project);
                             }
                         }
                         if (2 != result) {
@@ -262,7 +260,7 @@ public class EcasMenuToolWindow extends JComponent implements ClipboardOwner {
 
 
     }
-    public void loadTreeNode(DefaultMutableTreeNode selectedNode,Connection connection) {
+    public void loadTreeNode(DefaultMutableTreeNode selectedNode,Project project) {
 //        DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) path.getLastPathComponent();
         Object userObject = selectedNode.getUserObject();
         if (!(userObject instanceof NodeData)) {
@@ -270,7 +268,7 @@ public class EcasMenuToolWindow extends JComponent implements ClipboardOwner {
         }
         NodeData uo = (NodeData) userObject;
         if (!uo.isSubDataLoaded()) {
-            List<NodeData> subNodes = uo.loadSubNodes(connection);
+            List<NodeData> subNodes = uo.loadSubNodes(project);
             uo.setSubDataLoaded(true);
             List<DefaultMutableTreeNode> collect = subNodes
                     .stream()

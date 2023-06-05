@@ -163,8 +163,7 @@ public class EcasMenuTreeTableDialog extends DialogWrapper {
                             uo.setSubDataLoaded(true);
                             if (uo instanceof MenuNode) {
                                 try {
-                                    Connection connection = DBUtils.getConnection(project);
-                                    List<NodeData> nds = uo.loadSubNodes(connection);
+                                    List<NodeData> nds = uo.loadSubNodes(project);
                                     for (NodeData nd : nds) {
                                         node.add(new DefaultMutableTreeNode(nd, true));
                                     }

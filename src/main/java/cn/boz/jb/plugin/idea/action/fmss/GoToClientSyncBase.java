@@ -31,8 +31,8 @@ public class GoToClientSyncBase extends AnAction {
         String syncBasePath = "D:/cdadmin/UFSM/FMSS/save/FMTM/";
         DBUtils dbUtils = DBUtils.getInstance();
 
-        try (Connection connection = DBUtils.getConnection(anActionEvent.getProject())) {
-            String sysDay = dbUtils.querySysDay(connection);
+        try {
+            String sysDay = dbUtils.querySysDay(anActionEvent.getProject());
             File file = new File(syncBasePath + sysDay);
             //临时目录
             if (!file.exists()) {
@@ -40,7 +40,7 @@ public class GoToClientSyncBase extends AnAction {
             }
             Desktop.getDesktop().open(file);
         } catch (Exception e) {
-            SpdEditorNotification.get(anActionEvent.getProject()).notifyDbInvalid();
+            DBUtils.dbExceptionProcessor(e,anActionEvent.getProject());
         }
 
     }

@@ -18,15 +18,9 @@ public class EcasMenuTreeTableModel extends AbstractTreeTableModel {
 
     private List<EcasMenu> data;
 
-    Connection connection;
     public EcasMenuTreeTableModel(List<EcasMenu> data) {
         super(new Object());
-        try {
-            connection = DBUtils.getConnection("xfunds201701", "Xfunds_1234", "jdbc:oracle:thin:@A-FMS-DB01.KF01.yfzx.cn:1521:FMSS", OracleDriver.class.getName());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-       this.data = data;
+        this.data = data;
     }
 
     @Override
@@ -151,7 +145,7 @@ public class EcasMenuTreeTableModel extends AbstractTreeTableModel {
         List<EcasMenu> result = new ArrayList<>();
         // TODO: 加载 applid、parent 下的所有子节点
         try {
-            List<EcasMenu> maps = DBUtils.getInstance().queryRootMenus("999",connection);
+            List<EcasMenu> maps = DBUtils.getInstance().queryRootMenus("999", null);
             result.addAll(maps);
         } catch (Exception e) {
             e.printStackTrace();
@@ -162,10 +156,10 @@ public class EcasMenuTreeTableModel extends AbstractTreeTableModel {
     private List<EcasMenu> getRoots() {
         // 使用数据库等方式加载顶级节点数据
         List<EcasMenu> result = new ArrayList<>();
-        try{
-            List<EcasMenu> maps = DBUtils.getInstance().queryRootMenus("999",connection);
+        try {
+            List<EcasMenu> maps = DBUtils.getInstance().queryRootMenus("999", null);
             result.addAll(maps);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return result;
@@ -174,7 +168,7 @@ public class EcasMenuTreeTableModel extends AbstractTreeTableModel {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             try {
-                List<EcasMenu>list=new ArrayList<EcasMenu>();
+                List<EcasMenu> list = new ArrayList<EcasMenu>();
                 EcasMenuTreeTableModel model = new EcasMenuTreeTableModel(list);
                 JXTreeTable jxTreeTable = new JXTreeTable(model);
                 jxTreeTable.setTreeTableModel(model);

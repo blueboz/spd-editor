@@ -30,7 +30,7 @@ public class DialogUtils {
         } else if (idx == 1) {
             //更新至db
             try {
-                boolean b = DBUtils.executeSqlBatchs(DBUtils.getConnection(project), text);
+                boolean b = DBUtils.getInstance().executeSqlBatchs(project, text);
                 if (b) {
                     Messages.showMessageDialog("更新成功!!", "更新成功", UIUtil.getInformationIcon());
                 }

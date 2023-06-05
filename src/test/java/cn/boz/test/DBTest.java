@@ -12,9 +12,7 @@ public class DBTest {
 
     @Test
     public void dbTest() throws NoSuchMethodException, InvocationTargetException, InstantiationException, SQLException, IllegalAccessException, MalformedURLException, ClassNotFoundException {
-        Connection connection = DBUtils.getConnection("xfunds201701", "Xfunds_1234", "jdbc:oracle:thin:@21.96.5.85:1521:FMSS", "oracle.jdbc.OracleDriver");
-
-        String s = DBUtils.getInstance().querySysDay(connection);
+        String s = DBUtils.getInstance().querySysDay(null);
         System.out.println(s);
     }
 }

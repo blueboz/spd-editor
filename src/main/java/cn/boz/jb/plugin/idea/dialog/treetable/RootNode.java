@@ -19,10 +19,8 @@ public class RootNode extends NodeData {
 
     public List<DefaultMutableTreeNode> initLoad(Project project) {
         List<DefaultMutableTreeNode> lis=new ArrayList<>();
-        Connection connection = null;
         try {
-            connection = DBUtils.getConnection(project);
-            List<NodeData> nds =loadSubNodes(connection);
+            List<NodeData> nds =loadSubNodes(project);
             for (NodeData nd : nds) {
                 lis.add(new DefaultMutableTreeNode(nd,true));
             }
@@ -38,10 +36,10 @@ public class RootNode extends NodeData {
     }
 
     @Override
-    public List<NodeData> loadSubNodes(Connection connection) {
+    public List<NodeData> loadSubNodes(Project project) {
         List<EcasMenu> ecasMenus = null;
         try {
-            ecasMenus = DBUtils.getInstance().queryRootMenus("999", connection);
+            ecasMenus = DBUtils.getInstance().queryRootMenus("999", project);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

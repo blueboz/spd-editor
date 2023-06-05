@@ -33,7 +33,6 @@ public class CodeGenFrame extends JFrame {
         initUI();
     }
 
-    Connection connection = DBUtils.getConnection("xfunds201701", "Xfunds_1234", "jdbc:oracle:thin:@21.96.5.85:1521:FMSS", OracleDriver.class.getName());
 
     private void alignCenter() {
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
@@ -122,7 +121,7 @@ public class CodeGenFrame extends JFrame {
     JList<String> tableList;
 
     private JScrollPane createTableListScrollPane(JTextField searchField) throws SQLException, ClassNotFoundException, IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException, MalformedURLException {
-        List<String> tableNames = DBUtils.getInstance().queryUserTables(connection);
+        List<String> tableNames = DBUtils.getInstance().queryUserTables(null);
         tableList = new JList<String>();
         tableListListModel = new FilteredListModel<>(tableNames);
         tableList.setCellRenderer(new HighlightingListCellRenderer());
@@ -140,7 +139,7 @@ public class CodeGenFrame extends JFrame {
                             packageName.setText("com.erayt.xfunds."+StringUtils.lowerCase(nsTName[0]));
                             clzName.setText(StringUtils.capitalize(StringUtils.lowerCase(nsTName[1])));
                         }
-                        List<UserTabCols> userTabCols = DBUtils.getInstance().queryUserTablesCols(connection, selectedValue);
+                        List<UserTabCols> userTabCols = DBUtils.getInstance().queryUserTablesCols(null, selectedValue);
 
                         defaultTableModel.setRowCount(0);
                         for (UserTabCols tabCols : userTabCols) {
@@ -232,6 +231,7 @@ public class CodeGenFrame extends JFrame {
             setOpaque(true);
         }
 
+        @Override
         public void setText(String text) {
             if (pattern == null) {
                 super.setText(text);

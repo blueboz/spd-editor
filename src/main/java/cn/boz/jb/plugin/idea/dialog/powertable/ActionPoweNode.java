@@ -4,6 +4,7 @@ import cn.boz.jb.plugin.floweditor.gui.utils.StringUtils;
 import cn.boz.jb.plugin.idea.bean.EcasActionPower;
 import cn.boz.jb.plugin.idea.bean.EcasMenu;
 import cn.boz.jb.plugin.idea.utils.DBUtils;
+import com.intellij.openapi.project.Project;
 
 import java.sql.Connection;
 import java.util.ArrayList;
@@ -22,7 +23,8 @@ public class ActionPoweNode extends NodeData {
     }
 
     @Override
-    public List<NodeData> loadSubNodes(Connection connection) {
+    public List<NodeData> loadSubNodes(Project project) {
+
         return new ArrayList<>();
 //        List<EcasMenu> ecasMenus = null;
 //        try {

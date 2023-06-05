@@ -25,10 +25,8 @@ public class RootNode extends NodeData {
 
     public List<DefaultMutableTreeNode> initLoad(Project project) {
         List<DefaultMutableTreeNode> lis=new ArrayList<>();
-        Connection connection = null;
         try {
-            connection = DBUtils.getConnection(project);
-            List<NodeData> nds =loadRoot(connection);
+            List<NodeData> nds =loadRoot(project);
             for (NodeData nd : nds) {
                 lis.add(new DefaultMutableTreeNode(nd,true));
             }
@@ -43,10 +41,10 @@ public class RootNode extends NodeData {
         return title;
     }
 
-    public List<NodeData> loadRoot(Connection connection){
+    public List<NodeData> loadRoot(Project project){
         List<String> ecasMenus = null;
         try {
-            ecasMenus = DBUtils.getInstance().queryRootActionPower("999", connection);
+            ecasMenus = DBUtils.getInstance().queryRootActionPower("999", null);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -60,10 +58,10 @@ public class RootNode extends NodeData {
     }
     @Override
 
-    public List<NodeData> loadSubNodes(Connection connection) {
+    public List<NodeData> loadSubNodes(Project project) {
         List<EcasActionPower> ecasMenus = null;
         try {
-            ecasMenus = DBUtils.getInstance().querySubActionPower(getTitle(), connection);
+            ecasMenus = DBUtils.getInstance().querySubActionPower(getTitle(), project);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

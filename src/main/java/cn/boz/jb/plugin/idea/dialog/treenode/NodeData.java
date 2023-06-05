@@ -1,5 +1,7 @@
 package cn.boz.jb.plugin.idea.dialog.treenode;
 
+import com.intellij.openapi.project.Project;
+
 import java.sql.Connection;
 import java.util.List;
 import java.util.Map;
@@ -35,7 +37,7 @@ public abstract class NodeData {
      * @param connection 数据库连接对象
      * @return
      */
-    public abstract List<NodeData> loadSubNodes(Connection connection);
+    public abstract List<NodeData> loadSubNodes(Project project);
 
     public boolean isLoading() {
         return loading;

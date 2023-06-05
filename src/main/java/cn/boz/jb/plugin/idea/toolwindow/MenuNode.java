@@ -1,6 +1,7 @@
 package cn.boz.jb.plugin.idea.toolwindow;
 
 import cn.boz.jb.plugin.idea.utils.DBUtils;
+import com.intellij.openapi.project.Project;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
@@ -32,7 +33,7 @@ public class MenuNode extends NodeData {
     }
 
     @Override
-    public List<NodeData> loadSubNodes(Connection connection) {
+    public List<NodeData> loadSubNodes(Project project) {
         if (isSubDataLoaded()) {
             return new ArrayList<>();
         }
@@ -40,7 +41,7 @@ public class MenuNode extends NodeData {
         DBUtils instance = DBUtils.getInstance();
         List<Map<String, Object>> subMenus;
         try {
-            subMenus = instance.queryMenuOfAppMenu(connection, (BigDecimal) getData().get("MENUID"), (BigDecimal) getData().get("APPLID"));
+            subMenus = instance.queryMenuOfAppMenu(project, (BigDecimal) getData().get("MENUID"), (BigDecimal) getData().get("APPLID"));
             return subMenus.stream().map(it -> new MenuNode(it)).collect(Collectors.toList());
         } catch (Exception e) {
             e.printStackTrace();

@@ -73,9 +73,9 @@ public class GotoRightAction extends AnAction {
             String rights = userTask.getRights();
             ProgressIndicator pg = BackgroundTaskUtil.executeAndTryWait(progressIndicator -> () -> {
                 DBUtils instance = DBUtils.getInstance();
-                try (Connection connection = instance.getConnection(anActionEvent.getProject())) {
+                try {
                     //RIGHTS_, CANDIDATE_, SQLCONDITION_, DOCONDITION_
-                    List<Map<String, Object>> engineRights = instance.queryEngineRights(connection, rights);
+                    List<Map<String, Object>> engineRights = instance.queryEngineRights(anActionEvent.getProject(), rights);
                     if (engineRights.size() < 1) {
                         Notification spdEditorNotification = new Notification(Constants.NOTIFY_GROUP_GLOBAL, SpdEditorIcons.FLOW_16_ICON, NotificationType.INFORMATION);
                         spdEditorNotification.setTitle("switcher");

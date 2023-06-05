@@ -41,10 +41,10 @@ public class CopyEngineActionAllSqlAction extends CopyScriptBaseAction {
                 "(%s, %s, %s, %s);";
         if(action.getInputs()==null||action.getOutputs()==null){
             ProgressManager.getInstance().runProcessWithProgressSynchronously(() -> {
-                try (Connection connection = DBUtils.getConnection(currentAnAction.getProject())) {
-                    List<EngineActionInput> engineActionInputs = DBUtils.getInstance().queryEngineActionInputIdMatch(connection, action.getId());
+                try {
+                    List<EngineActionInput> engineActionInputs = DBUtils.getInstance().queryEngineActionInputIdMatch(currentAnAction.getProject(), action.getId());
                     action.setInputs(engineActionInputs);
-                    List<EngineActionOutput> engineActionOutputs = DBUtils.getInstance().queryEngineActionOutputIdMatch(DBUtils.getConnection(currentAnAction.getProject()), action.getId());
+                    List<EngineActionOutput> engineActionOutputs = DBUtils.getInstance().queryEngineActionOutputIdMatch(currentAnAction.getProject(), action.getId());
                     action.setOutputs(engineActionOutputs);
 
                 } catch (Exception e) {

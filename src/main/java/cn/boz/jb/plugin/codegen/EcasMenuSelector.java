@@ -15,7 +15,9 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.awt.event.*;
+import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
+import java.net.MalformedURLException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
@@ -112,15 +114,14 @@ public class EcasMenuSelector extends JFrame {
     private int pageSize = 30;
     DefaultTableModel tableModel;
     DBUtils instance;
-    Connection connection;
     JTable jTable;
 
     private JPanel createComponent() throws Exception {
         JPanel jPanel = new JPanel();
         JScrollPane panel = new JScrollPane();
-        connection = DBUtils.getConnection("xfunds201701", "Xfunds_1234", "jdbc:oracle:thin:@21.96.5.85:1521:FMSS", OracleDriver.class.getName());
-
-        instance = DBUtils.getInstance();
+//        connection = DBUtils.getInstance().getConnection("xfunds201701", "Xfunds_1234", "jdbc:oracle:thin:@21.96.5.85:1521:FMSS", OracleDriver.class.getName());
+//
+//        instance = DBUtils.getInstance();
 
         tableModel = new DefaultTableModel();
         tableModel.setColumnIdentifiers(new Object[]{"rownum", "DEV", "YD01", "YD03", "description","status"});
@@ -289,9 +290,9 @@ public class EcasMenuSelector extends JFrame {
         EcasActionPower ecasActionPower = null;
         try {
             String selectedItem = (String) envCombo.getSelectedItem();
-            ecasActionPower = instance.queryActionPower(999, ((BigDecimal)valueAt).intValue(), connection,selectedItem);
-        } catch (SQLException ex) {
-            throw new RuntimeException(ex);
+            ecasActionPower = instance.queryActionPower(999, ((BigDecimal)valueAt).intValue(), null,selectedItem);
+        } catch (Exception e){
+            throw new RuntimeException(e);
         }
         if(ecasActionPower!=null){
 
@@ -323,7 +324,7 @@ public class EcasMenuSelector extends JFrame {
 
             List<Map<String, Object>> apps = null;
             try {
-                apps = instance.queryActionPowerUniq(connection, currentNum, pageSize, "@YD01","@YD02", "@YD03", 999);
+                apps = instance.queryActionPowerUniq(null, currentNum, pageSize, "@YD01","@YD02", "@YD03", 999);
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
