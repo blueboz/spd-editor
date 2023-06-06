@@ -169,29 +169,32 @@ public class ActionPowerTreeTableDialog extends DialogWrapper {
         });
         JBTable table = jbTreeTable.getTable();
         final TableColumn c0 = table.getColumnModel().getColumn(0);
-        c0.setMaxWidth(64);
-        c0.setWidth(64);
-        c0.setMinWidth(64);
+//        c0.setMaxWidth(84);
+        c0.setWidth(84);
+//        c0.setMinWidth(84);
 
-        final TableColumn c1 = table.getColumnModel().getColumn(1);
-        c1.setMaxWidth(64);
-        c1.setWidth(64);
-        c1.setMinWidth(64);
+//        final TableColumn c1 = table.getColumnModel().getColumn(1);
+//        c1.setMaxWidth(64);
+//        c1.setWidth(64);
+//        c1.setMinWidth(64);
 
         final TableColumn c2 = table.getColumnModel().getColumn(2);
         //设置ID列宽度
-        c2.setWidth(170);
-        c2.setMinWidth(170);
+        c2.setMaxWidth(64);
+        c2.setWidth(64);
+        c2.setMinWidth(64);
 
         final TableColumn c3 = table.getColumnModel().getColumn(3);
         //设置ID列宽度
-        c3.setWidth(24);
-        c3.setMinWidth(24);
+        c3.setMaxWidth(64);
+        c3.setWidth(64);
+        c3.setMinWidth(64);
 
         final TableColumn c4 = table.getColumnModel().getColumn(4);
         //设置ID列宽度
-        c4.setWidth(250);
-        c4.setMinWidth(250);
+        c4.setMaxWidth(64);
+        c4.setWidth(64);
+        c4.setMinWidth(64);
 
         this.jbScrollPane = new JBScrollPane(jbTreeTable);
 
