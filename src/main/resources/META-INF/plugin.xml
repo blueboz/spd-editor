@@ -82,6 +82,10 @@
                     text="AddBom"
                     icon="SpdEditorIcons.BOM_16_ICON">
             </action>
+            <action class="cn.boz.jb.plugin.addbom.SftpPushCommandAction" description="SCP push cmd copier"
+                    text="Copy Scp Push Cmd"
+                    >
+            </action>
             <action class="cn.boz.jb.plugin.idea.action.HtmlRefAction" id="htmlRefAction"
                     description="check who refer me in ecas menu"
                     text="HtmlRef">
