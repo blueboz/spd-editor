@@ -1008,14 +1008,18 @@ public class GotoRefFileAction extends AnAction {
     private boolean tryToGotoFileRef(PsiFile psiFile, AnActionEvent anActionEvent, String value) {
         Project project = anActionEvent.getProject();
         String[] split = value.split("\\?");
-        VirtualFile fileByRelativePath = psiFile.getVirtualFile().getParent().findFileByRelativePath(split[0]);
-        if (fileByRelativePath != null) {
-            PsiFile targetJsFile = PsiManager.getInstance(project).findFile(fileByRelativePath);
-            NavigationUtil.activateFileWithPsiElement(targetJsFile);
-            return true;
-        } else {
-            return tryToGotoAction(value, anActionEvent, false);
-            //可以尝试类全限定名
+        VirtualFile virtualFile = psiFile.getVirtualFile();
+        while(true){
+            virtualFile = virtualFile.getParent();
+            VirtualFile fileByRelativePath = virtualFile.findFileByRelativePath(split[0]);
+            if (fileByRelativePath != null) {
+                PsiFile targetJsFile = PsiManager.getInstance(project).findFile(fileByRelativePath);
+                NavigationUtil.activateFileWithPsiElement(targetJsFile);
+                return true;
+            } else {
+                return tryToGotoAction(value, anActionEvent, false);
+                //可以尝试类全限定名
+            }
         }
     }
 

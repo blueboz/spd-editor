@@ -134,7 +134,7 @@ public class EngineActionSelectorDlg extends DialogWrapper {
         load();
 
         TableColumnModel columnModel = actionPowerTable.getTableHeader().getColumnModel();
-        columnModel.getColumn(0).setMaxWidth(50);
+        columnModel.getColumn(0).setMaxWidth(60);
         columnModel.getColumn(1).setMaxWidth(50);
         columnModel.getColumn(2).setMaxWidth(50);
         columnModel.getColumn(3).setMaxWidth(50);

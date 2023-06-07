@@ -19,6 +19,9 @@ public class SpdEditorIcons {
     public static Icon ACTION_16_ICON = icon("/icons/action16.svg");
     public static Icon ACTION_32_ICON = icon("/icons/action32.svg");
     public static Icon MENU_16_ICON = icon("/icons/menu.svg");
+    public static Icon MENU2_16_ICON = icon("/icons/menu2.svg");
+    public static Icon APP_16_ICON = icon("/icons/app.svg");
+    public static Icon ROOT_16_ICON = icon("/icons/root.svg");
 
     public static Icon FORMAT_16_ICON = icon("/icons/format.svg");
     public static Icon COMPARE_16_ICON = icon("/icons/compare.svg");
@@ -38,6 +41,8 @@ public class SpdEditorIcons {
 
     public static Icon SEARCH_ITEM_16_ICON = icon("/icons/searchitem.svg");
     public static Icon LOADING_16_ICON = icon("/icons/loading.svg");
+    public static Icon FOLDER_16_ICON = icon("/icons/folder.svg");
+    public static Icon RIGHTS_16_ICON = icon("/icons/rights.svg");
     public static Icon LOADING_16_ICON_D = icon("/icons/loading_dark.svg");
     public static Icon MENUE_16_ICON = icon("/icons/menue.svg");
     public static Icon MENUE_16_ICON_D = icon("/icons/menue_dark.svg");

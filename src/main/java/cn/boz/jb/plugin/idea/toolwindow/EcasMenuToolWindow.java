@@ -1,6 +1,5 @@
 package cn.boz.jb.plugin.idea.toolwindow;
 
-import cn.boz.jb.plugin.idea.configurable.SpdEditorDBState;
 import cn.boz.jb.plugin.idea.utils.DBUtils;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.actionSystem.AnActionEvent;
@@ -11,12 +10,12 @@ import com.intellij.ui.AnActionButton;
 import com.intellij.ui.ColoredTreeCellRenderer;
 import com.intellij.ui.ToolbarDecorator;
 import com.intellij.ui.treeStructure.Tree;
+import icons.SpdEditorIcons;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
@@ -24,7 +23,6 @@ import java.awt.datatransfer.ClipboardOwner;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.math.BigDecimal;
-import java.sql.Connection;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -41,7 +39,9 @@ public class EcasMenuToolWindow extends JComponent implements ClipboardOwner {
                 tn.add(appTreeNode);
             });
 
+
             tree = new Tree(tn);
+
             tree.setDragEnabled(true);
 
             tree.addTreeSelectionListener(e -> {
@@ -248,7 +248,17 @@ public class EcasMenuToolWindow extends JComponent implements ClipboardOwner {
                     } else {
                         NodeData data = (NodeData) uo;
                         append(data.getTitle());
+
                     }
+
+                    if(uo instanceof String){
+                        setIcon(SpdEditorIcons.ROOT_16_ICON);
+                    }else if(uo instanceof AppNode){
+                        setIcon(SpdEditorIcons.APP_16_ICON);
+                    }else if(uo instanceof MenuNode){
+                        setIcon(SpdEditorIcons.MENU2_16_ICON);
+                    }
+
                 }
             });
             this.setLayout(new BorderLayout());

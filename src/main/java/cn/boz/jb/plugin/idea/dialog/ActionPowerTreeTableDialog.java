@@ -12,6 +12,7 @@ import com.intellij.openapi.actionSystem.ActionToolbar;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
+import com.intellij.ui.ColoredTreeCellRenderer;
 import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.components.JBTreeTable;
 import com.intellij.ui.table.JBTable;
@@ -19,6 +20,7 @@ import com.intellij.ui.treeStructure.treetable.ListTreeTableModel;
 import com.intellij.ui.treeStructure.treetable.TreeTableModel;
 import com.intellij.util.ui.ColumnInfo;
 import icons.SpdEditorIcons;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
@@ -140,36 +142,33 @@ public class ActionPowerTreeTableDialog extends DialogWrapper {
             });
             Executors.newSingleThreadExecutor().execute(r);
         });
-        jbTreeTable.getTree().setCellRenderer(new DefaultTreeCellRenderer() {
-
+        jbTreeTable.getTree().setCellRenderer(new ColoredTreeCellRenderer() {
             @Override
-            public Component getTreeCellRendererComponent(JTree tree, Object value, boolean isSelected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
-                //默认都认为不是leaf节点，并且在userData里面设置信息
-                super.getTreeCellRendererComponent(tree, value, selected, expanded, leaf, row, hasFocus);
+            public void customizeCellRenderer(@NotNull JTree jTree, Object value, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
                 DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
                 var uo = node.getUserObject();
                 if (uo instanceof String) {
-                    setText((String) uo);
+                    append((String) uo);
                 } else {
                     NodeData data = (NodeData) uo;
-                    setText(data.getTitle());
+                    append(data.getTitle());
                     if (data.isLoading()) {
                         setIcon(SpdEditorIcons.LOADING_16_ICON);
                     } else {
-                        if (selected) {
-                            setIcon(SpdEditorIcons.MENUE_16_ICON);
-                        } else {
-                            setIcon(SpdEditorIcons.MENUE_16_ICON_D);
+                        if(uo instanceof ActionPoweNode){
+                            setIcon(SpdEditorIcons.RIGHTS_16_ICON);
+                        }else if(uo instanceof RootNode){
+                            setIcon(SpdEditorIcons.FOLDER_16_ICON);
+
                         }
                     }
                 }
-                return this;
-
             }
         });
         JBTable table = jbTreeTable.getTable();
+
         final TableColumn c0 = table.getColumnModel().getColumn(0);
-//        c0.setMaxWidth(84);
+        c0.setMaxWidth(84);
         c0.setWidth(84);
 //        c0.setMinWidth(84);
 
