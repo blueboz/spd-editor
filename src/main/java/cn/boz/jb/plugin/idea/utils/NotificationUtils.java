@@ -13,4 +13,11 @@ public class NotificationUtils {
         spdEditorNotification.setContent(message);
         spdEditorNotification.notify(project);
     }
+
+    public static void info(String title,String message, Project project){
+        Notification spdEditorNotification = new Notification(Constants.NOTIFY_GROUP_GLOBAL, SpdEditorIcons.FLOW_16_ICON, NotificationType.INFORMATION);
+        spdEditorNotification.setTitle(title);
+        spdEditorNotification.setContent(message);
+        spdEditorNotification.notify(project);
+    }
 }
