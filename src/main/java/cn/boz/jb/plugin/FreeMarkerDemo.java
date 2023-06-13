@@ -2,6 +2,8 @@ package cn.boz.jb.plugin;
 
 import cn.boz.jb.plugin.freemarker.MyTemplateMethodEx;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import freemarker.cache.StringTemplateLoader;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -11,53 +13,44 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class FreeMarkerDemo {
-    private String outputDest = "F:/Code/FMS/FMSS_xfunds";
+//    private String outputDest = "F:/Code/FMS/FMSS_xfunds";
+//    private String configPath = "F:/Code/spd-editor/src/main/resources/config.json";
+//    private String basePath = "F:/Code/spd-editor/src/main/resources/templates";
 
-    private String configPath = "F:/Code/spd-editor/src/main/resources/config.json";
-    private String basePath = "F:/Code/spd-editor/src/main/resources/templates";
+    private String outputDest = "/home/@chenweidian-yfzx/Code/FMS/FMSS_xfunds";
+    private String configPath = "/home/@chenweidian-yfzx/Code/spd-editor/src/main/resources/config.json";
+    private String basePath = "/home/@chenweidian-yfzx/Code/spd-editor/src/main/resources/templates";
 
     Set<String> skipList = Arrays.stream(new String[]{"fundWhiteList.xls"}).collect(Collectors.toSet());
 //    Map<String,String> namespacePoBaseMapper =new HashMap<String,String>();
 
-
-
-    HashMap mapper;
+    JSONObject mapper;
     private Configuration templateCgr = null;
 
     private StringTemplateLoader stringTemplateLoader = null;
     private Configuration strTemplateCfg = null;
 
     public FreeMarkerDemo() throws TemplateException, IOException {
-//        namespacePoBaseMapper.put("base","com.erayt.xfunds.base.domain.EngineRightPo");
-//        namespacePoBaseMapper.put("pawn","com.erayt.xfunds.pawn.domain.PawnTrade");
-//        namespacePoBaseMapper.put("forex","com.erayt.xfunds.forex.domain.ForexBaseDomain");
-//        namespacePoBaseMapper.put("ndf","com.erayt.xfunds.ndf.domain.NdfBaseDomain");
-//        namespacePoBaseMapper.put("fund","com.erayt.xfunds.fund.domain.FundBaseDomain");
-//        namespacePoBaseMapper.put("option","com.erayt.xfunds.option.domain.OptionBaseDomain");
-//        namespacePoBaseMapper.put("control","com.erayt.xfunds.control.domain.AML");
-//        namespacePoBaseMapper.put("intbank","com.erayt.xfunds.intbank.domain.IntBankBaseDomain");
-
         this.init();
         this.initStringTemplate();
     }
 
     public void initStringTemplate() {
-
         // 创建 Configuration 对象
         strTemplateCfg = new Configuration(Configuration.VERSION_2_3_30);
-
         stringTemplateLoader = new StringTemplateLoader();
         strTemplateCfg.setTemplateLoader(stringTemplateLoader);
-
-
     }
 
     public String converPath(String pathOrg) {
@@ -101,7 +94,6 @@ public class FreeMarkerDemo {
             Template template = templateCgr.getTemplate(relPath);
             relPath = converPath(relPath);
             Path joinPath = Paths.get(outputDest, relPath);
-
             Path parent = joinPath.getParent();
             if (!Files.isDirectory(parent)) {
                 Files.createDirectories(parent);
@@ -112,8 +104,6 @@ public class FreeMarkerDemo {
             if(deletemode){
                 return ;
             }
-
-
             try (BufferedWriter bufferedWriter = Files.newBufferedWriter(joinPath, StandardOpenOption.CREATE)) {
                 template.process(mapper, bufferedWriter);
                 bufferedWriter.flush();
@@ -122,21 +112,53 @@ public class FreeMarkerDemo {
             e.printStackTrace();
         }
     }
+    Pattern pattern = Pattern.compile("(\\w+)\\(([\\w,]+)\\)");
 
     public void init() throws IOException, TemplateException {
         byte[] bytes = Files.readAllBytes(Path.of(configPath));
-        mapper = JSON.parseObject(new String(bytes), HashMap.class);
-//        String namespace = (String) mapper.get("namespace");
-//        if(namespacePoBaseMapper.containsKey(namespace)){
-//            String classFullName = namespacePoBaseMapper.get(namespace);
-//            mapper.put("pojobaseclass",classFullName);
-//            String className=classFullName.substring(classFullName.lastIndexOf(".")+1);
-//            mapper.put("pojobaseclassname",className);
-//        }else{
-//            String classFullName = String.format("com.erayt.xfunds.%s.domain.%sBaseDomain", namespace, firstCharUpper(namespace));
-//            String className=classFullName.substring(classFullName.lastIndexOf(".")+1);
-//            mapper.put("pojobaseclass",className);
-//        }
+        mapper = JSON.parseObject(new String(bytes));
+        JSONArray columns = mapper.getJSONArray("columns");
+        for (int i = 0; i < columns.size(); i++) {
+            JSONObject column = columns.getJSONObject(i);
+            String dataType = column.getString("dataType");
+            Matcher matcher = pattern.matcher(dataType);
+            if(matcher.matches()){
+                String group1 = matcher.group(1);
+                String group2 = matcher.group(2);
+                String[] split = group2.split(",");
+
+                String objType=null;
+                String maxLenInOracle=null;
+                if(group1.toUpperCase().indexOf("VARCHAR")!=-1){
+                    objType="String";
+                    maxLenInOracle=split[0];
+                }else if(group1.toUpperCase().indexOf("NUMBER")!=-1){
+                    if(split.length==2){
+                        Integer prec = Integer.parseInt(split[0]);
+                        Integer scale = Integer.parseInt(split[1]);
+                        String maxVal = String.format("%s.%sd", "9".repeat(prec - scale), "9".repeat(scale));
+//                        System.out.println(maxVal);
+                        objType="Double";
+                        maxLenInOracle=(prec+1)+"";
+                        column.put("limit",maxVal);
+                    }else if(split.length==1){
+                        Integer maxLength = Integer.parseInt(split[0]);
+                        maxLenInOracle=split[0];
+                        if(maxLength>9){
+                            objType="Long";
+                            //使用Long
+                        }else{
+                            //使用Int
+                            objType="Integer";
+                        }
+                        //Int 9位最多
+                    }
+                }
+                column.put("objType",objType);
+                column.put("maxLenInOracle",maxLenInOracle);
+
+            }
+        }
 
         templateCgr = new Configuration(Configuration.VERSION_2_3_30);
         templateCgr.setSharedVariable("myutils",new MyTemplateMethodEx());
@@ -166,11 +188,11 @@ public class FreeMarkerDemo {
 
     public static void main(String[] args) throws IOException, TemplateException {
         FreeMarkerDemo freeMarkerDemo = new FreeMarkerDemo();
-        freeMarkerDemo.setDeletemode(true);
+        freeMarkerDemo.setDeletemode(false);
         freeMarkerDemo.iterTemplatePath();
-    }
 
-    public void dirIterator() {
+
+
 
     }
 

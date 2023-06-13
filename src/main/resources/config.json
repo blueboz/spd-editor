@@ -1,57 +1,86 @@
 {
-
-  "package": "com.erayt.xfunds.forex",
-  "className": "MyTestFun",
-  "beanName": "myTestFun",
-  "namespace": "forex",
-  "tableName": "xfunds_forex_MyTestFun",
-  "menuId": "747",
-  "pmenuId": "7",
-  "powerbits": "721,722,723",
-  "moduleName": "6-外汇处理",
-  "functionbase": "测试代码",
-  "title": "测试自动生成代码",
-  "exceptionFullName": "com.erayt.xfunds.common.XfundsForexException",
-  "exceptionName": "XfundsForexException",
+  "package": "com.erayt.xfunds.pawn",
+  "className": "PawnAdjustHistory",
+  "beanName": "pawnAdjustHistory",
+  "namespace": "pawn",
+  "tableName": "XFUNDS_PAWN_ADJUSTHISTORY",
+  "menuId": "1812",
+  "pmenuId": "18",
+  "powerbits": "1332,1333,1334",
+  "moduleName": "K-质押模块",
+  "functionbase": "质押调整历史",
+  "title": "质押调整历史",
+  "exceptionFullName": "com.erayt.xfunds.pawn.common.PawnTradeException",
+  "exceptionName": "PawnTradeException",
   "columns": [
     {
-      "fieldChName": "后台编号",
-      "fieldName": "downloadKey",
-      "dataType": "VARCHAR(60)",
-      "maxLenInOracle": 60,
+      "fieldChName": "批次号",
+      "fieldName": "batchNo",
+      "dataType": "NUMBER(19)",
       "nullable": false,
       "isId": true
     },
     {
       "fieldChName": "业务编号",
       "fieldName": "businessNo",
-      "dataType": "VARCHAR(60)",
-      "maxLenInOracle": 60,
+      "dataType": "VARCHAR2(30)",
       "nullable": false,
       "isId": false
     },
     {
-      "fieldChName": "交易机构",
-      "fieldName": "bankId",
-      "dataType": "VARCHAR(30)",
-      "maxLenInOracle": 30,
+      "fieldChName": "项目名称",
+      "fieldName": "projectName",
+      "dataType": "VARCHAR2(200)",
+      "nullable": false,
+      "isId": false
+    },
+    {
+      "fieldChName": "原合同编号",
+      "fieldName": "ocontract",
+      "dataType": "VARCHAR2(50)",
       "nullable": true,
       "isId": false
     },
     {
-      "fieldChName": "ecif客户号",
-      "fieldName": "ecifNo",
-      "dataType": "VARCHAR(60)",
+      "fieldChName": "债券代码",
+      "fieldName": "bondCode",
+      "dataType": "VARCHAR2(50)",
       "nullable": true,
-      "maxLenInOracle": 60,
       "isId": false
     },
     {
-      "fieldChName": "客户名称",
-      "fieldName": "name",
-      "dataType": "VARCHAR(60)",
+      "fieldChName": "债券简称",
+      "fieldName": "bondBrief",
+      "dataType": "VARCHAR2(200)",
       "nullable": true,
-      "maxLenInOracle": 60,
+      "isId": false
+    },
+    {
+      "fieldChName": "债券面额",
+      "fieldName": "bondDenom",
+      "dataType": "NUMBER(18,6)",
+      "nullable": true,
+      "isId": false
+    },
+    {
+      "fieldChName": "到期日期",
+      "fieldName": "expireDate",
+      "dataType": "NUMBER(8)",
+      "nullable": true,
+      "isId": false
+    },
+    {
+      "fieldChName": "方向",
+      "fieldName": "direct",
+      "dataType": "NUMBER(1)",
+      "nullable": true,
+      "isId": false
+    },
+    {
+      "fieldChName": "调整金额",
+      "fieldName": "adjustDenom",
+      "dataType": "NUMBER(18,6)",
+      "nullable": true,
       "isId": false
     }
   ]

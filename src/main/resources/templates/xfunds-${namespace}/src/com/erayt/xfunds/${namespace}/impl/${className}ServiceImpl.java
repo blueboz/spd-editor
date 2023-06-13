@@ -83,14 +83,25 @@ public class ${className}ServiceImpl implements ${className}Service {
         <#list columns as col>
         <#assign uname= myutils("upper_case_first",col.fieldName)>
         <#if col.nullable==false>
-
         if (bean.get${uname}() == null) {
             throw new ${exceptionName}("${col.fieldName}非空");
         }
         </#if>
+        <#if col.objType=='String'>
         if (bean.get${uname}() != null && StringHelper.stringByteLength(bean.get${uname}()) > ${col.maxLenInOracle}) {
             throw new ${exceptionName}("${col.fieldName}长度不能超过${col.maxLenInOracle}");
         }
+        </#if>
+        <#if col.objType=='Double'>
+        if(bean.get${uname}()!=null && bean.get${uname}()>${col.limit}||bean.get${uname}()<-${col.limit}){
+            throw new ${exceptionName}("${col.fieldName}的取值范围是[-${col.limit},${col.limit}]");
+        }
+        </#if>
+        <#if (col.objType=='Integer' || col.objType=='Long')>
+        if(bean!=null && String.valueOf(bean.get${uname}()).length()>${col.maxLenInOracle}){
+            throw new ${exceptionName}("${col.fieldName}长度不能超过${col.maxLenInOracle}");
+        }
+        </#if>
         </#list>
 
 

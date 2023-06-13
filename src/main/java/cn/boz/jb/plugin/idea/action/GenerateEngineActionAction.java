@@ -1,5 +1,6 @@
 package cn.boz.jb.plugin.idea.action;
 
+import cn.boz.jb.plugin.floweditor.gui.utils.TranslateUtils;
 import cn.boz.jb.plugin.idea.utils.DialogUtils;
 import cn.boz.jb.plugin.idea.utils.FreeMarkerUtils;
 import cn.boz.jb.plugin.idea.utils.MyStringUtils;
@@ -72,19 +73,31 @@ public class GenerateEngineActionAction  extends AnAction implements ClipboardOw
                 pmap.put("className",((PsiClassReferenceType) type).rawType().getCanonicalText());
             }
             pmap.put("shortName", parameter.getName());
+            if("user".equals(parameter.getName())){
+                pmap.put("source",TranslateUtils.translate("$session[com.erayt.user_key]"));
+                pmap.put("className",TranslateUtils.translate(null));
+            }else{
+                pmap.put("source", TranslateUtils.translate(null));
+                pmap.put("className",TranslateUtils.translate((String) pmap.get("className")));
+            }
             parameterNames.add(pmap);
         }
         mapper.put("parameters", parameterNames);
         mapper.put("actionId", "/" + method.getName() + ".do");
         PsiType returnType = method.getReturnType();
+        String retType = MyStringUtils.firstCharLower(returnType.getPresentableText());
         mapper.put("needOutput",true);
+        if("void".equals(retType)){
+            mapper.put("needOutput",false);
+        }
+        mapper.put("retBeanName",retType);
 
         if(returnType instanceof PsiPrimitiveType){
-            mapper.put("retBeanName", returnType.getCanonicalText());
+            mapper.put("retBeanName", returnType.getPresentableText());
         }else if(returnType instanceof PsiArrayType){
-            mapper.put("retBeanName",""+ returnType.getDeepComponentType().getCanonicalText()+"s");
+            mapper.put("retBeanName",""+ returnType.getDeepComponentType().getPresentableText()+"s");
         }else{
-            mapper.put("retBeanName",((PsiClassReferenceType) returnType).rawType().getCanonicalText());
+            mapper.put("retBeanName",((PsiClassReferenceType) returnType).rawType().getPresentableText());
         }
         mapper.put("retBeanName",MyStringUtils.firstCharLower((String)mapper.get("retBeanName")));
 

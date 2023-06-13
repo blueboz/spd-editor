@@ -20,7 +20,7 @@ END IF;
 END;
 /
 
-comment on table ${tableName?upper_case} is '基金白名单';
+comment on table ${tableName?upper_case} is '${title}';
 <#list columns as col>
 comment on column ${tableName?upper_case}.${col.fieldName?upper_case} is '${col.fieldChName}';
 </#list>
