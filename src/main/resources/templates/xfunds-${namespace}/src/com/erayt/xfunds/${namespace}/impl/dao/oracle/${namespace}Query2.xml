@@ -7,22 +7,31 @@
 		<result property="ROW_ID" column="ROW_ID" />
 		<result property="COUNTNUM" column="COUNTNUM" />
 		<#list columns as col>
-			<result property='${col.fieldName}' column='${col.fieldName}' />
+		<result property='${col.fieldName}' column='${col.fieldName}' />
+		<#if col.codedef??>
+		<result property='${col.fieldName}Name' column='${col.fieldName}Name' />
+		</#if>
 		</#list>
 	</resultMap>
 
 	<select id="query${className}List" resultMap="${beanName}ResultMap" parameterClass="com.erayt.solar2.engine.query.QueryParam">
 		SELECT A.ROW_ID,A.COUNTNUM,
-		<#list columns as col> A.${col.fieldName}<#sep>,</#list>
+		<#list columns as col> A.${col.fieldName}<#if col.codedef??>,pget_codedefname('${col.codedef}',A.${col.fieldName}) ${col.fieldName}Name</#if><#sep>,</#list>
 		FROM (
 		SELECT ROW_NUMBER() OVER(ORDER BY <#list columns?filter(item -> item.isId ==true) as col>${col.fieldName}<#sep>,</#list>) ROW_ID,COUNT(<#list columns?filter(item->item.isId==true) as col>${col.fieldName}<#sep>,</#list>) OVER() COUNTNUM,
 		<#list columns as col> T.${col.fieldName}<#sep>,</#list>
 		FROM ${tableName?upper_case} T
 		WHERE 1=1
 		<#list columns as col>
+		<#if col.objType=='String'>
 		<isNotEmpty property='${col.fieldName}' prepend='and'>
 			T.${col.fieldName} like '%'||trim(#${col.fieldName}#)||'%'
 		</isNotEmpty>
+		<#else>
+		<isNotEmpty property='${col.fieldName}' prepend='and'>
+			T.${col.fieldName} = #${col.fieldName}#
+		</isNotEmpty>
+		</#if>
 		</#list>
 		) A
 		<dynamic prepend="where">

@@ -32,9 +32,10 @@ public class ExceptionProcessorUtils {
         String[] split = msg.split("\n");
         for (String s : split) {
             if (s.contains("at")) {
-
                 if (s.contains("cn.boz")) {
                     sb.append(s);
+                    sb.append("\n");
+
                 }
             } else {
                 sb.append(s);

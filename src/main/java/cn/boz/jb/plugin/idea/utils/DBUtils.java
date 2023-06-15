@@ -195,8 +195,8 @@ public class DBUtils {
 
 
             connection.setAutoCommit(false);
-            List<EngineTask> engineTasks = queryEngineTaskByIdLike(project, processId);
-            List<EngineFlow> engineFlows = queryEngineFlowById(project, processId);
+            List<EngineTask> engineTasks = queryEngineTaskByIdLike(connection, processId);
+            List<EngineFlow> engineFlows = queryEngineFlowById(connection, processId);
             String taskString = engineTasks.stream().map(enginetask -> enginetask.toCsv(wrap)).collect(Collectors.joining("\n"));
             String flowString = engineFlows.stream().map(engineFlow -> engineFlow.toCsv(wrap)).collect(Collectors.joining("\n"));
 
@@ -209,8 +209,8 @@ public class DBUtils {
                 }
             }
 
-            List<EngineTask> engineTasksNew = queryEngineTaskByIdLike(project, processId);
-            List<EngineFlow> engineFlowsNew = queryEngineFlowById(project, processId);
+            List<EngineTask> engineTasksNew = queryEngineTaskByIdLike(connection, processId);
+            List<EngineFlow> engineFlowsNew = queryEngineFlowById(connection, processId);
             String taskStringNew = engineTasksNew.stream().map(enginetask -> enginetask.toCsv(wrap)).collect(Collectors.joining("\n"));
             String flowStringNew = engineFlowsNew.stream().map(engineFlow -> engineFlow.toCsv(wrap)).collect(Collectors.joining("\n"));
             result.put("new", taskStringNew + "\n" + flowStringNew);
@@ -519,32 +519,28 @@ public class DBUtils {
         }
     };
 
-    public List<EngineTask> queryEngineTaskByIdLike(Project project, String id) throws Exception {
+    private List<EngineTask> queryEngineTaskByIdLike(Connection connection, String id) throws Exception {
         String sql = "select id_, type_, title_, expression_, returnvalue_, bussineskey_, bussinesdesc_, rights_, validsecond_, listener_, opensecond_, bussinesid_, tasklistener_ from ENGINE_TASK where id_ like '" + id + "/_%' escape '/' order by ID_";
-        try (Connection connection = getConnection(project)) {
 
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            List<Map<String, Object>> maps = queryForList(preparedStatement);
-            return maps.stream().map(engineTaskMapper).collect(Collectors.toList());
-        }
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        List<Map<String, Object>> maps = queryForList(preparedStatement);
+        return maps.stream().map(engineTaskMapper).collect(Collectors.toList());
     }
 
-    public List<EngineFlow> queryEngineFlowById(Project project, String id) throws Exception {
+    private List<EngineFlow> queryEngineFlowById(Connection connection, String id) throws Exception {
         String sql = "select processid_, source_, target_, condition_, order_ from ENGINE_FLOW where PROCESSID_='" + id + "' order by SOURCE_,TARGET_";
-        try (Connection connection = getConnection(project)) {
 
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            List<Map<String, Object>> maps = queryForList(preparedStatement);
-            return maps.stream().map(map -> {
-                EngineFlow engineFlow = new EngineFlow();
-                engineFlow.setProcessid((String) map.get("processid_"));
-                engineFlow.setSource((String) map.get("SOURCE_"));
-                engineFlow.setTarget((String) map.get("TARGET_"));
-                engineFlow.setCondition((String) map.get("CONDITION_"));
-                engineFlow.setOrder(String.valueOf(map.get("ORDER_")));
-                return engineFlow;
-            }).collect(Collectors.toList());
-        }
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        List<Map<String, Object>> maps = queryForList(preparedStatement);
+        return maps.stream().map(map -> {
+            EngineFlow engineFlow = new EngineFlow();
+            engineFlow.setProcessid((String) map.get("processid_"));
+            engineFlow.setSource((String) map.get("SOURCE_"));
+            engineFlow.setTarget((String) map.get("TARGET_"));
+            engineFlow.setCondition((String) map.get("CONDITION_"));
+            engineFlow.setOrder(String.valueOf(map.get("ORDER_")));
+            return engineFlow;
+        }).collect(Collectors.toList());
     }
 
     public List<EngineTask> queryEngineTaskByExpression(Project project, String name) throws SQLException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, MalformedURLException, ClassNotFoundException {

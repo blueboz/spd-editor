@@ -93,7 +93,7 @@ public class ${className}ServiceImpl implements ${className}Service {
         }
         </#if>
         <#if col.objType=='Double'>
-        if(bean.get${uname}()!=null && bean.get${uname}()>${col.limit}||bean.get${uname}()<-${col.limit}){
+        if(bean.get${uname}()!=null &&(bean.get${uname}()>${col.limit}||bean.get${uname}()<-${col.limit})){
             throw new ${exceptionName}("${col.fieldName}的取值范围是[-${col.limit},${col.limit}]");
         }
         </#if>

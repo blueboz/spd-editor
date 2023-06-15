@@ -141,6 +141,7 @@ public class FreeMarkerDemo {
                         objType="Double";
                         maxLenInOracle=(prec+1)+"";
                         column.put("limit",maxVal);
+                        column.put("digital",scale);
                     }else if(split.length==1){
                         Integer maxLength = Integer.parseInt(split[0]);
                         maxLenInOracle=split[0];

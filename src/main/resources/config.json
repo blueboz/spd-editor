@@ -12,13 +12,22 @@
   "title": "质押调整历史",
   "exceptionFullName": "com.erayt.xfunds.pawn.common.PawnTradeException",
   "exceptionName": "PawnTradeException",
+  "quernamespace": "pawn",
   "columns": [
+
+    {
+      "fieldChName": "后台编号",
+      "fieldName": "downloadKey",
+      "dataType": "NUMBER(16)",
+      "nullable": false,
+      "isId": true
+    },
     {
       "fieldChName": "批次号",
       "fieldName": "batchNo",
-      "dataType": "NUMBER(19)",
+      "dataType": "NUMBER(16)",
       "nullable": false,
-      "isId": true
+      "isId": false,
     },
     {
       "fieldChName": "业务编号",
@@ -67,14 +76,17 @@
       "fieldName": "expireDate",
       "dataType": "NUMBER(8)",
       "nullable": true,
-      "isId": false
+      "isId": false,
+      "class": "e-date"
     },
     {
       "fieldChName": "方向",
       "fieldName": "direct",
       "dataType": "NUMBER(1)",
       "nullable": true,
-      "isId": false
+      "isId": false,
+      "codedef": "W06",
+      "filter": "|1|2|"
     },
     {
       "fieldChName": "调整金额",

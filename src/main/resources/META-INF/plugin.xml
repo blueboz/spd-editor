@@ -277,6 +277,7 @@
             <reference ref="spd.gotoscript.action.group"></reference>
             <reference ref="spd.copysql.action.group"></reference>
             <reference ref="spd.openintoolwindow.action.group"></reference>
+            <action class="cn.boz.jb.plugin.idea.action.JsonFormatAction" text="JsonFormat" icon="SpdEditorIcons.GEAR_16_ICON"></action>
         </group>
         <group id="spd.engineright.dlg.group">
             <reference ref="spd.openintoolwindow.action.group"></reference>

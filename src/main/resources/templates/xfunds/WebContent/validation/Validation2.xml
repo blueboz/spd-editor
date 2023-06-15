@@ -1,21 +1,45 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <formset>
 
-    <form Name="${className}InputForm" Path="/fund/${className}Input.html">
-    <#list columns as col>
-        <item Name="${beanName}.${col.fieldName}"  DataType="LimitB" Min="0" Max="50" Require="0" Message="${col.fieldChName}" Tips="${col.fieldChName}" />
-    </#list>
+    <form Name="${className}InputForm" Path="/${namespace}/${className}Input.html">
+        <#list columns as col>
+        <#if col.class??>
+        <item Name="${beanName}.${col.fieldName}"  DataType="DateField" Require="${col.nullable?then(0,1)}" Message="${col.fieldChName}" Tips="${col.fieldChName}"/>
+        <#else>
+        <#if col.objType=='Double'>
+        <item Name="${beanName}.${col.fieldName}" DataType="AmountConfig" Require="${col.nullable?then(0,1)}" digit="${col.digital}" min="-${col.limit}"  Max="${col.limit}" Tips="${col.fieldChName}" Message="${col.fieldChName}"/>
+        <#else>
+        <item Name="${beanName}.${col.fieldName}"  DataType="LimitB" Min="0" Max="${col.maxLenInOracle}" Require="${col.nullable?then(0,1)}" Message="${col.fieldChName}" Tips="${col.fieldChName}" />
+        </#if>
+        </#if>
+        </#list>
     </form>
 
-    <form Name="${className}InputForm" Path="/${namespace}/${className}mod.html">
-    <#list columns as col>
-        <item Name="${beanName}.${col.fieldName}"  DataType="LimitB" Min="0" Max="50" Require="0" Message="${col.fieldChName}" Tips="${col.fieldChName}" />
-    </#list>
+    <form Name="${className}InputForm" Path="/${namespace}/${className}Mod.html">
+        <#list columns as col>
+        <#if col.class??>
+        <item Name="${beanName}.${col.fieldName}"  DataType="DateField" Require="${col.nullable?then(0,1)}" Message="${col.fieldChName}" Tips="${col.fieldChName}"/>
+        <#else>
+        <#if col.objType=='Double'>
+        <item Name="${beanName}.${col.fieldName}" DataType="AmountConfig" Require="${col.nullable?then(0,1)}" digit="${col.digital}" min="-${col.limit}"  Max="${col.limit}" Tips="${col.fieldChName}" Message="${col.fieldChName}"/>
+        <#else>
+        <item Name="${beanName}.${col.fieldName}"  DataType="LimitB" Min="0" Max="${col.maxLenInOracle}" Require="${col.nullable?then(0,1)}" Message="${col.fieldChName}" Tips="${col.fieldChName}" />
+        </#if>
+        </#if>
+        </#list>
     </form>
 
     <form Name="${beanName}QueryListForm" Path="/${namespace}/${className}QueryList.html">
     <#list columns as col>
-        <item Name="queryParam.${col.fieldName}"  DataType="LimitB" Min="0" Max="50" Require="0" Message="${col.fieldChName}" Tips="${col.fieldChName}" />
+        <#if col.class??>
+        <item Name="queryParam.${col.fieldName}"  DataType="DateField" Require="0" Message="${col.fieldChName}" Tips="${col.fieldChName}"/>
+        <#else>
+        <#if col.objType=='Double'>
+        <item Name="queryParam.${col.fieldName}" DataType="AmountConfig" Require="0" digit="${col.digital}" min="-${col.limit}"  Max="${col.limit}" Tips="${col.fieldChName}" Message="${col.fieldChName}"/>
+        <#else>
+        <item Name="queryParam.${col.fieldName}"  DataType="LimitB" Min="0" Max="${col.maxLenInOracle}" Require="0" Message="${col.fieldChName}" Tips="${col.fieldChName}" />
+        </#if>
+        </#if>
     </#list>
     </form>
 

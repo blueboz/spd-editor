@@ -24,7 +24,7 @@
 			<tr>
 				<td valign="middle" class="blocktd" style="padding: 4px 8px">
 					<img src="../ui/eraui/images/title_icon.gif" style="vertical-align:middle;" />
-					<b>基金白名单</b>
+					<b>${title}</b>
 				</td>
 			</tr>
 			<tr>
@@ -51,7 +51,7 @@
 
 			<tr>
 				<td align=left style="padding: 2px 10px">
-					<form target="_top" method="POST" name="fundWhiteListQueryListForm">
+					<form target="_top" method="POST" name="${beanName}QueryListForm">
 						<table>
 							<tr>
 								<td>
@@ -62,7 +62,23 @@
 											<span >${col.fieldChName}:</span>
 										</span>
 										<span>
-											<input type='text' id='${col.fieldName}' class='inputText' style='width:105px' name='queryParam.${col.fieldName}'></input>
+											<#if col.class??>
+											<input type="text" id="${col.fieldName}" name="queryParam.${col.fieldName}" class="${col.class}" />
+											<#else>
+                                            <#if col.codedef??>
+                                            <#if col.filter??>
+											<input type="hidden" id="${col.fieldName}"  name="queryParam.${col.fieldName}"
+												   class="e-combo" valueindex="codeVal"  textindex="name"  combodefault="{codeVal:'',name:'请选择'}" selectdefault="true"
+												   root="data.list" storeurl="../codeDefFindValueListByTypeAndFilter.do?type=${col.codedef}&filter=${col.filter}"  style='width:138px;'/>
+                                            <#else>
+											<input type="hidden" id="${col.fieldName}"  name="queryParam.${col.fieldName}"
+												   class="e-combo" valueindex="codeVal"  textindex="name"  combodefault="{codeVal:'',name:'请选择'}" selectdefault="true"
+												   root="data.list" storeurl="../codeDefFindValueListByType.do?type=${col.codedef}"  style='width:138px;'/>
+											</#if>
+                                            <#else>
+											<input type='text' id='${col.fieldName}' class='inputText' name='queryParam.${col.fieldName}'></input>
+											</#if>
+											</#if>
 										</span>
 									</span>
 									</#list>

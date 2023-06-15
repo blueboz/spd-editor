@@ -14,10 +14,10 @@
 			<table align="center" width="95%" cellspacing="2" cellpadding="0"
 				style="margin-top: 10px;">
 				<tr>
-					<td style="vertical-align:top;width:350px;height: 220px;">
-						<fieldset style="height: 220px;">
+					<td style="vertical-align:top;width:350px;">
+						<fieldset >
 							<legend>
-								<span >交易信息</span>
+								<span >${title}修改</span>
 							</legend>
 							<table align="center" width="100%" border="0" cellspacing="2"
 								cellpadding="2">
@@ -29,7 +29,25 @@
 
 									<tr>
 										<td><span>${col.fieldChName}:</span></td>
-										<td><input type='text' id='${col.fieldName}' class='inputText' name='${beanName}.${col.fieldName}'></input></td>
+										<td>
+											<#if col.class??>
+											<input type="text" id="${col.fieldName}" name="${beanName}.${col.fieldName}" class="${col.class}" />
+											<#else>
+											<#if col.codedef??>
+											<#if col.filter??>
+											<input type="hidden" id="${col.fieldName}"  name="${beanName}.${col.fieldName}"
+												   class="e-combo" valueindex="codeVal"  textindex="name"  combodefault="{codeVal:'',name:'请选择'}" selectdefault="true"
+												   root="data.list" storeurl="../codeDefFindValueListByTypeAndFilter.do?type=${col.codedef}&filter=${col.filter}"  style='width:138px;'/>
+											<#else>
+											<input type="hidden" id="${col.fieldName}"  name="${beanName}.${col.fieldName}"
+												   class="e-combo" valueindex="codeVal"  textindex="name"  combodefault="{codeVal:'',name:'请选择'}" selectdefault="true"
+												   root="data.list" storeurl="../codeDefFindValueListByType.do?type=${col.codedef}"  style='width:138px;'/>
+											</#if>
+											<#else>
+											<input type='text' id='${col.fieldName}' class='inputText' name='${beanName}.${col.fieldName}'></input>
+											</#if>
+											</#if>
+										</td>
 									</tr>
 								</#list>
 							</table>
