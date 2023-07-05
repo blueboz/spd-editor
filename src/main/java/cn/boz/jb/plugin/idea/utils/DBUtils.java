@@ -947,7 +947,7 @@ public class DBUtils {
     }
 
     public List<XFunCodeDef> queryXfundsCodeDef(Project project,String codeType)throws Exception{
-        String sql = "SELECT id, parentid, type, codeval, isval, name, sname, dispseq, rmk1, rmk2, rmk3, rmk4 FROM XFUNDS_BASE_CODEDEF WHERE type=?";
+        String sql = "SELECT id, parentid, type, codeval, isval, name, sname, dispseq, rmk1, rmk2, rmk3, rmk4 FROM XFUNDS_BASE_CODEDEF WHERE type like ?||'%'";
         try(Connection connection = getConnection(project);){
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, codeType);

@@ -1,25 +1,33 @@
 {
   "package": "com.erayt.xfunds.intbank.domain",
-  "className": "CertAccount",
-  "beanName": "certAccount",
+  "className": "CeftsAccount",
+  "beanName": "ceftsAccount",
   "namespace": "intbank",
-  "tableName": "CertAccount",
-  "menuId": "223",
-  "pmenuId": "2157",
-  "powerbits": "1332,1333,1334",
+  "tableName": "XFUNDS_INTBANK_CEFTSACCOUNT",
+  "menuId": "825",
+  "pmenuId": "9",
+  "powerbits": "812,813,814",
   "moduleName": "8-同业模块",
   "functionbase": "Cefts账户管理-1",
-  "title": "Cert账号查询",
+  "title": "Cefts账号查询",
   "exceptionFullName": "com.erayt.xfunds.common.XfundsIntbankException",
   "exceptionName": "XfundsIntbankException",
   "quernamespace": "intbank",
   "columns": [
     {
+      "fieldChName": "后台编号",
+      "fieldName": "downloadKey",
+      "dataType": "NUMBER(16)",
+      "nullable": false,
+      "isId": true
+    },
+    {
       "fieldChName": "维护类型",
       "fieldName": "type",
       "dataType": "VARCHAR(64)",
       "nullable": false,
-      "isId": true
+      "isId":false,
+      "codedef": "IA2"
     },
     {
       "fieldChName": "业务编号",
@@ -98,8 +106,39 @@
       "dataType": "VARCHAR2(500)",
       "nullable": true,
       "isId": false,
-      "codedef": "W06"
+      "codedef": "IA3"
+    },
+    {
+      "fieldChName": "入库日期",
+      "fieldName": "insertDate",
+      "dataType": "NUMBER(8)",
+      "nullable": true,
+      "isId": false,
+      "class": "e-date"
+    },
+    {
+      "fieldChName": "入库时间",
+      "fieldName": "insertTime",
+      "dataType": "NUMBER(8)",
+      "nullable": true,
+      "isId": false,
+      "class": "e-time"
+    },
+    {
+      "fieldChName": "更新日期",
+      "fieldName": "updateDate",
+      "dataType": "NUMBER(6)",
+      "nullable": true,
+      "isId": false,
+      "class": "e-date"
+    },
+    {
+      "fieldChName": "入库时间",
+      "fieldName": "updateTime",
+      "dataType": "NUMBER(6)",
+      "nullable": true,
+      "isId": false,
+      "class": "e-time"
     }
-
   ]
 }

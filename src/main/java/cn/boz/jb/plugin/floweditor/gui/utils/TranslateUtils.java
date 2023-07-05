@@ -66,4 +66,12 @@ public class TranslateUtils {
         String s = translateToSql(tranExpression(expression));
         return "'"+s+"'";
     }
+
+    public static String translate2(String expression){
+        if(expression==null){
+            return "null";
+        }
+        String s = translateToSql(tranExpression(expression));
+        return "'"+s+"'";
+    }
 }

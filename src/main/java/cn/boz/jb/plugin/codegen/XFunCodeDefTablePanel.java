@@ -41,10 +41,8 @@ public class XFunCodeDefTablePanel extends JFrame {
      */
     private void loadData() {
         String type = typeField.getText().trim();
-
         // 查询数据
         List<XFunCodeDef> list = queryData(type);
-
         // 更新表格数据
         model.setRowCount(0);
         for (XFunCodeDef data : list) {

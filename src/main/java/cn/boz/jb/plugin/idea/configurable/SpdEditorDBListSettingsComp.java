@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.locks.LockSupport;
 
 import static javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION;
 
@@ -59,10 +60,11 @@ public class SpdEditorDBListSettingsComp implements ListSelectionListener {
 
     private static final FileChooserDescriptor FILECHOOSERDESCRIPTOR = new FileChooserDescriptor(true, false, true, true, false, true);
 
+    private Project project;
+
     @SuppressWarnings("unchecked")
     public SpdEditorDBListSettingsComp(Project project) {
-
-
+        this.project=project;
         //生成绘制对象
         idListModels = new DefaultListModel();
         idListModels.clear();
@@ -205,19 +207,19 @@ public class SpdEditorDBListSettingsComp implements ListSelectionListener {
                 String jdbcUrl = jdbcUrlText.getText();
                 String jdbcDriverText = getJdbcDriver();
                 final Ref<Exception> exception = Ref.create();
+
                 ProgressManager.getInstance().runProcessWithProgressSynchronously(() -> {
                     try {
                         DBUtils.getInstance().testConnection(jdbcUser, jdbcPass, jdbcUrl, jdbcDriverText);
                     } catch (Exception ee) {
                         exception.set(ee);
                     }
-                }, "Testing Connection", true, ProjectManager.getInstance().getDefaultProject());
+                }, "Testing Connection", true, project);
                 if (exception.isNull()) {
                     Messages.showMessageDialog("Connection Success", "Connection Success", UIUtil.getInformationIcon());
                 } else {
                     Exception ee = exception.get();
                     ee.printStackTrace();
-
                     Messages.showErrorDialog("Connection Failed\n" + exception.get().getMessage(), "Connection Fail");
                 }
             }

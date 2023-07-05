@@ -74,11 +74,11 @@ public class GenerateEngineActionAction  extends AnAction implements ClipboardOw
             }
             pmap.put("shortName", parameter.getName());
             if("user".equals(parameter.getName())){
-                pmap.put("source",TranslateUtils.translate("$session[com.erayt.user_key]"));
-                pmap.put("className",TranslateUtils.translate(null));
+                pmap.put("source",TranslateUtils.translate2("$session[com.erayt.user_key]"));
+                pmap.put("className",TranslateUtils.translate2(null));
             }else{
-                pmap.put("source", TranslateUtils.translate(null));
-                pmap.put("className",TranslateUtils.translate((String) pmap.get("className")));
+                pmap.put("source", TranslateUtils.translate2(null));
+                pmap.put("className",TranslateUtils.translate2((String) pmap.get("className")));
             }
             parameterNames.add(pmap);
         }

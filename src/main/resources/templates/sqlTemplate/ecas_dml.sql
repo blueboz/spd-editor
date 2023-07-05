@@ -5,13 +5,13 @@ VALUES (999, ${menuId}, '${title}', 1, '${namespace}/${className}QueryList.html'
 
 delete from  ECAS_ACTIONPOWER where POWERBIT=${powerbits?split(',')[0]};
 INSERT INTO ECAS_ACTIONPOWER (APPLID, POWERBIT, PATH, DESCRIPTION, ENABLED, MODULENAME, WEIGHT, ENGMODULE, ENGDESC, MENUID)
-VALUES (999, ${powerbits?split(',')[0]}, '${namespace}/${className}QueryList.html', '${functionbase}-A-${title}', 1, '${moduleName}', 3, null, null, ${menuId});
+VALUES (999, ${powerbits?split(',')[0]}, '${namespace}/${className}QueryList.html', '${functionbase}-${title}', 1, '${moduleName}', 3, null, null, ${menuId});
 
 delete from  ECAS_ACTIONPOWER where POWERBIT=${powerbits?split(',')[1]};
 INSERT INTO ECAS_ACTIONPOWER (APPLID, POWERBIT, PATH, DESCRIPTION, ENABLED, MODULENAME, WEIGHT, ENGMODULE, ENGDESC, MENUID)
-VALUES (999, ${powerbits?split(',')[1]}, '${namespace}/${className}Input.html', '${functionbase}-A-${title}-新增', 1, '${moduleName}', 3, null, null, 0);
+VALUES (999, ${powerbits?split(',')[1]}, '${namespace}/${className}Input.html', '${functionbase}-${title}-新增', 1, '${moduleName}', 3, null, null, 0);
 
 delete from  ECAS_ACTIONPOWER where POWERBIT=${powerbits?split(',')[2]};
 INSERT INTO ECAS_ACTIONPOWER (APPLID, POWERBIT, PATH, DESCRIPTION, ENABLED, MODULENAME, WEIGHT, ENGMODULE, ENGDESC, MENUID)
-VALUES (999, ${powerbits?split(',')[2]}, '${namespace}/${className}Mod.html', '${functionbase}-A-${title}-修改', 1, '${moduleName}', 3, null, null, 0);
+VALUES (999, ${powerbits?split(',')[2]}, '${namespace}/${className}Mod.html', '${functionbase}-${title}-修改', 1, '${moduleName}', 3, null, null, 0);
 
