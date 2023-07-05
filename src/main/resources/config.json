@@ -1,99 +1,105 @@
 {
-  "package": "com.erayt.xfunds.pawn",
-  "className": "PawnAdjustHistory",
-  "beanName": "pawnAdjustHistory",
-  "namespace": "pawn",
-  "tableName": "XFUNDS_PAWN_ADJUSTHISTORY",
-  "menuId": "1812",
-  "pmenuId": "18",
+  "package": "com.erayt.xfunds.intbank.domain",
+  "className": "CertAccount",
+  "beanName": "certAccount",
+  "namespace": "intbank",
+  "tableName": "CertAccount",
+  "menuId": "223",
+  "pmenuId": "2157",
   "powerbits": "1332,1333,1334",
-  "moduleName": "K-质押模块",
-  "functionbase": "质押调整历史",
-  "title": "质押调整历史",
-  "exceptionFullName": "com.erayt.xfunds.pawn.common.PawnTradeException",
-  "exceptionName": "PawnTradeException",
-  "quernamespace": "pawn",
+  "moduleName": "8-同业模块",
+  "functionbase": "Cefts账户管理-1",
+  "title": "Cert账号查询",
+  "exceptionFullName": "com.erayt.xfunds.common.XfundsIntbankException",
+  "exceptionName": "XfundsIntbankException",
+  "quernamespace": "intbank",
   "columns": [
-
     {
-      "fieldChName": "后台编号",
-      "fieldName": "downloadKey",
-      "dataType": "NUMBER(16)",
+      "fieldChName": "维护类型",
+      "fieldName": "type",
+      "dataType": "VARCHAR(64)",
       "nullable": false,
       "isId": true
     },
     {
-      "fieldChName": "批次号",
-      "fieldName": "batchNo",
-      "dataType": "NUMBER(16)",
-      "nullable": false,
-      "isId": false,
-    },
-    {
       "fieldChName": "业务编号",
       "fieldName": "businessNo",
-      "dataType": "VARCHAR2(30)",
-      "nullable": false,
-      "isId": false
-    },
-    {
-      "fieldChName": "项目名称",
-      "fieldName": "projectName",
-      "dataType": "VARCHAR2(200)",
-      "nullable": false,
-      "isId": false
-    },
-    {
-      "fieldChName": "原合同编号",
-      "fieldName": "ocontract",
-      "dataType": "VARCHAR2(50)",
+      "dataType": "VARCHAR(1)",
       "nullable": true,
       "isId": false
     },
     {
-      "fieldChName": "债券代码",
-      "fieldName": "bondCode",
-      "dataType": "VARCHAR2(50)",
+      "fieldChName": "账户类型",
+      "fieldName": "accountType",
+      "dataType": "VARCHAR2(19)",
       "nullable": true,
       "isId": false
     },
     {
-      "fieldChName": "债券简称",
-      "fieldName": "bondBrief",
-      "dataType": "VARCHAR2(200)",
+      "fieldChName": "本方经办方/产品",
+      "fieldName": "product",
+      "dataType": "VARCHAR2(16)",
       "nullable": true,
       "isId": false
     },
     {
-      "fieldChName": "债券面额",
-      "fieldName": "bondDenom",
-      "dataType": "NUMBER(18,6)",
+      "fieldChName": "对手方机构名称",
+      "fieldName": "rivalName",
+      "dataType": "VARCHAR2(2000)",
       "nullable": true,
       "isId": false
     },
     {
-      "fieldChName": "到期日期",
-      "fieldName": "expireDate",
-      "dataType": "NUMBER(8)",
+      "fieldChName": "对手方经办行",
+      "fieldName": "rivalProduct",
+      "dataType": "VARCHAR2(500)",
+      "nullable": true,
+      "isId": false
+    }, {
+      "fieldChName": "支付系统行号",
+      "fieldName": "interBank",
+      "dataType": "VARCHAR2(500)",
+      "nullable": true,
+      "isId": false
+    },
+    {
+      "fieldChName": "资金账号",
+      "fieldName": "account",
+      "dataType": "VARCHAR2(500)",
+      "nullable": true,
+      "isId": false
+    }, {
+      "fieldChName": "资金账户户名",
+      "fieldName": "accountName",
+      "dataType": "VARCHAR2(500)",
+      "nullable": true,
+      "isId": false
+    }, {
+      "fieldChName": "资金开户行名称",
+      "fieldName": "accountBank",
+      "dataType": "VARCHAR2(500)",
+      "nullable": true,
+      "isId": false
+    } , {
+      "fieldChName": "发起机构",
+      "fieldName": "orgName",
+      "dataType": "VARCHAR2(500)",
+      "nullable": true,
+      "isId": false
+    } , {
+      "fieldChName": "备注",
+      "fieldName": "remark",
+      "dataType": "VARCHAR2(500)",
+      "nullable": true,
+      "isId": false
+    }, {
+      "fieldChName": "状态",
+      "fieldName": "status",
+      "dataType": "VARCHAR2(500)",
       "nullable": true,
       "isId": false,
-      "class": "e-date"
-    },
-    {
-      "fieldChName": "方向",
-      "fieldName": "direct",
-      "dataType": "NUMBER(1)",
-      "nullable": true,
-      "isId": false,
-      "codedef": "W06",
-      "filter": "|1|2|"
-    },
-    {
-      "fieldChName": "调整金额",
-      "fieldName": "adjustDenom",
-      "dataType": "NUMBER(18,6)",
-      "nullable": true,
-      "isId": false
+      "codedef": "W06"
     }
+
   ]
 }
