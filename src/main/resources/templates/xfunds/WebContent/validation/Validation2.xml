@@ -4,7 +4,12 @@
     <form Name="${className}InputForm" Path="/${namespace}/${className}Input.html">
         <#list columns as col>
         <#if col.class??>
+        <#if col.class=='e-date'>
         <item Name="${beanName}.${col.fieldName}"  DataType="DateField" Require="${col.nullable?then(0,1)}" Message="${col.fieldChName}" Tips="${col.fieldChName}"/>
+        </#if>
+        <#if col.class=='e-time'>
+        <item Name="${beanName}.expTime" DataType="Integer" Require="1" Min="0" Max="240000" formater="time" Message="optEnquiryInputForm.expTime" Tips="${col.fieldChName}" />
+        </#if>
         <#else>
         <#if col.objType=='Double'>
         <item Name="${beanName}.${col.fieldName}" DataType="AmountConfig" Require="${col.nullable?then(0,1)}" digit="${col.digital}" min="-${col.limit}"  Max="${col.limit}" Tips="${col.fieldChName}" Message="${col.fieldChName}"/>
@@ -18,7 +23,12 @@
     <form Name="${className}InputForm" Path="/${namespace}/${className}Mod.html">
         <#list columns as col>
         <#if col.class??>
+        <#if col.class=='e-date'>
         <item Name="${beanName}.${col.fieldName}"  DataType="DateField" Require="${col.nullable?then(0,1)}" Message="${col.fieldChName}" Tips="${col.fieldChName}"/>
+        </#if>
+        <#if col.class=='e-time'>
+        <item Name="${beanName}.expTime" DataType="Integer" Require="1" Min="0" Max="240000" formater="time" Message="optEnquiryInputForm.expTime" Tips="${col.fieldChName}" />
+        </#if>
         <#else>
         <#if col.objType=='Double'>
         <item Name="${beanName}.${col.fieldName}" DataType="AmountConfig" Require="${col.nullable?then(0,1)}" digit="${col.digital}" min="-${col.limit}"  Max="${col.limit}" Tips="${col.fieldChName}" Message="${col.fieldChName}"/>
@@ -32,7 +42,12 @@
     <form Name="${beanName}QueryListForm" Path="/${namespace}/${className}QueryList.html">
     <#list columns as col>
         <#if col.class??>
-        <item Name="queryParam.${col.fieldName}"  DataType="DateField" Require="0" Message="${col.fieldChName}" Tips="${col.fieldChName}"/>
+        <#if col.class=='e-date'>
+        <item Name="${beanName}.${col.fieldName}"  DataType="DateField" Require="${col.nullable?then(0,1)}" Message="${col.fieldChName}" Tips="${col.fieldChName}"/>
+        </#if>
+        <#if col.class=='e-time'>
+        <item Name="${beanName}.expTime" DataType="Integer" Require="1" Min="0" Max="240000" formater="time" Message="optEnquiryInputForm.expTime" Tips="${col.fieldChName}" />
+        </#if>
         <#else>
         <#if col.objType=='Double'>
         <item Name="queryParam.${col.fieldName}" DataType="AmountConfig" Require="0" digit="${col.digital}" min="-${col.limit}"  Max="${col.limit}" Tips="${col.fieldChName}" Message="${col.fieldChName}"/>

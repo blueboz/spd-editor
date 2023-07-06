@@ -1,3 +1,5 @@
+drop table ${tableName?upper_case};
+
 DECLARE
 VN_COUNT INTEGER;
     V_SQL VARCHAR(30000);

@@ -22,7 +22,7 @@ function pageInit() {
 </#list>
 
 		];
-		tool.init(`${beanName}`, `query.do?queryId=${quernamespace}.query${className}List`, cols1, {
+		tool.init('${beanName}', 'query.do?queryId=${quernamespace}.query${className}List', cols1, {
 			isMenu : false,
 			checkHid : false,
 			multiSel : false,

@@ -24,7 +24,7 @@
     {
       "fieldChName": "维护类型",
       "fieldName": "type",
-      "dataType": "VARCHAR(64)",
+      "dataType": "VARCHAR(1)",
       "nullable": false,
       "isId":false,
       "codedef": "IA2"
@@ -32,78 +32,78 @@
     {
       "fieldChName": "业务编号",
       "fieldName": "businessNo",
-      "dataType": "VARCHAR(1)",
+      "dataType": "VARCHAR(30)",
       "nullable": true,
       "isId": false
     },
     {
       "fieldChName": "账户类型",
       "fieldName": "accountType",
-      "dataType": "VARCHAR2(19)",
+      "dataType": "VARCHAR2(50)",
       "nullable": true,
       "isId": false
     },
     {
       "fieldChName": "本方经办方/产品",
       "fieldName": "product",
-      "dataType": "VARCHAR2(16)",
+      "dataType": "VARCHAR2(200)",
       "nullable": true,
       "isId": false
     },
     {
       "fieldChName": "对手方机构名称",
       "fieldName": "rivalName",
-      "dataType": "VARCHAR2(2000)",
+      "dataType": "VARCHAR2(200)",
       "nullable": true,
       "isId": false
     },
     {
-      "fieldChName": "对手方经办行",
+      "fieldChName": "对手方经办行/产品",
       "fieldName": "rivalProduct",
-      "dataType": "VARCHAR2(500)",
+      "dataType": "VARCHAR2(200)",
       "nullable": true,
       "isId": false
     }, {
       "fieldChName": "支付系统行号",
       "fieldName": "interBank",
-      "dataType": "VARCHAR2(500)",
+      "dataType": "VARCHAR2(14)",
       "nullable": true,
       "isId": false
     },
     {
       "fieldChName": "资金账号",
       "fieldName": "account",
-      "dataType": "VARCHAR2(500)",
+      "dataType": "VARCHAR2(50)",
       "nullable": true,
       "isId": false
     }, {
       "fieldChName": "资金账户户名",
       "fieldName": "accountName",
-      "dataType": "VARCHAR2(500)",
+      "dataType": "VARCHAR2(200)",
       "nullable": true,
       "isId": false
     }, {
       "fieldChName": "资金开户行名称",
       "fieldName": "accountBank",
-      "dataType": "VARCHAR2(500)",
+      "dataType": "VARCHAR2(120)",
       "nullable": true,
       "isId": false
     } , {
       "fieldChName": "发起机构",
       "fieldName": "orgName",
-      "dataType": "VARCHAR2(500)",
+      "dataType": "VARCHAR2(200)",
       "nullable": true,
       "isId": false
     } , {
       "fieldChName": "备注",
       "fieldName": "remark",
-      "dataType": "VARCHAR2(500)",
+      "dataType": "VARCHAR2(400)",
       "nullable": true,
       "isId": false
     }, {
       "fieldChName": "状态",
       "fieldName": "status",
-      "dataType": "VARCHAR2(500)",
+      "dataType": "VARCHAR2(1)",
       "nullable": true,
       "isId": false,
       "codedef": "IA3"
@@ -119,23 +119,30 @@
     {
       "fieldChName": "入库时间",
       "fieldName": "insertTime",
-      "dataType": "NUMBER(8)",
+      "dataType": "NUMBER(6)",
       "nullable": true,
       "isId": false,
       "class": "e-time"
     },
     {
-      "fieldChName": "更新日期",
+      "fieldChName": "最后更新日期",
       "fieldName": "updateDate",
-      "dataType": "NUMBER(6)",
+      "dataType": "NUMBER(8)",
       "nullable": true,
       "isId": false,
       "class": "e-date"
     },
     {
-      "fieldChName": "入库时间",
+      "fieldChName": "最后更新时间",
       "fieldName": "updateTime",
       "dataType": "NUMBER(6)",
+      "nullable": true,
+      "isId": false,
+      "class": "e-time"
+    },{
+      "fieldChName": "失败原因",
+      "fieldName": "failureReason",
+      "dataType": "varchar(500)",
       "nullable": true,
       "isId": false,
       "class": "e-time"
