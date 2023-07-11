@@ -12,7 +12,7 @@
   "title": "Cefts账号查询",
   "exceptionFullName": "com.erayt.xfunds.common.XfundsIntbankException",
   "exceptionName": "XfundsIntbankException",
-  "quernamespace": "intbank",
+  "quernamespace": "intBank",
   "columns": [
     {
       "fieldChName": "后台编号",
@@ -144,8 +144,31 @@
       "fieldName": "failureReason",
       "dataType": "varchar(500)",
       "nullable": true,
-      "isId": false,
-      "class": "e-time"
+      "isId": false
+    },{
+      "fieldChName": "分行柜员Id",
+      "fieldName": "tellerId",
+      "dataType": "varchar(20)",
+      "nullable": true,
+      "isId": false
+    },{
+      "fieldChName": "分行柜员",
+      "fieldName": "tellerName",
+      "dataType": "varchar(20)",
+      "nullable": true,
+      "isId": false
+    },{
+      "fieldChName": "总行柜员Id",
+      "fieldName": "mastertellerId",
+      "dataType": "varchar(20)",
+      "nullable": true,
+      "isId": false
+    },{
+      "fieldChName": "总行柜员姓名",
+      "fieldName": "mastertellerName",
+      "dataType": "varchar(20)",
+      "nullable": true,
+      "isId": false
     }
   ]
 }

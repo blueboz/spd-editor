@@ -18,7 +18,16 @@ function pageInit() {
 <#if col.codedef??>
 		['${col.fieldName}Name', '${col.fieldChName}', true, '120px', false, 'left',false],
 </#if>
-		['${col.fieldName}', '${col.fieldChName}', true, '120px', false, 'left',false]<#sep>,
+<#if col.class??>
+	<#if col.class=='e-date'>
+		['${col.fieldName}', '${col.fieldChName}', true, '120px', false, 'left',false,Formatter.formatDate] <#sep>,
+	</#if>
+	<#if col.class=='e-time'>
+		['${col.fieldName}', '${col.fieldChName}', true, '120px', false, 'left',false,Formatter.formatTime] <#sep>,
+	</#if>
+<#else>
+		['${col.fieldName}', '${col.fieldChName}', true, '120px', false, 'left',false] <#sep>,
+</#if>
 </#list>
 
 		];
