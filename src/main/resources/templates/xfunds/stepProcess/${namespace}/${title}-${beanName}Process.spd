@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions>
+	<process id="${beanName}Process" name="process1">
+		<endEvent id="endevent1" name="End"/>
+		<endEvent id="endevent2" name="End"/>
+		<exclusiveGateway id="exclusivegateway1" name="For Gateway"/>
+		<exclusiveGateway id="exclusivegateway2" name="For Gateway"/>
+		<startEvent id="startevent1" name="Start"/>
+		<userTask id="userTask1" name="总行复核" bussinesId="${businessNo}" bussinesKey="${beanName}" bussinesDescrition="${description}" rights="${beanName}MstChk" expression="{&quot;open&quot; : &quot;../${namespace}/CeftsAccountInput.html?modify=true&quot;, #LEY#&quot;oktoover&quot; : &quot;${beanName}ControlTrade.do?${beanName}.operType=ok&amp;doneType=ok&quot;,#LEY#&quot;refuse&quot; : &quot;ceftsAccountControlTrade.do?pawnTrade.operType=refuse&amp;doneType=refuse&quot;,#LEY#&quot;title&quot;:&quot;金市复核&quot;,#LEY#&quot;width&quot;:1200,#LEY#&quot;height&quot;:700#LEY#}" eventListener="${beanName}Listener" validSecond="-1" openSecond="-1"/>
+		<userTask id="userTask2" name="经办修改" bussinesId="${businessNo}" bussinesKey="${beanName}" bussinesDescrition="${description}" rights="${beanName}Issuer" expression="{&quot;open&quot; : &quot;../${namespace}/CeftsAccountInput.html?modify=true&quot;, #LEY#&quot;oktoover&quot; : &quot;${beanName}ControlTrade.do?${beanName}.operType=ok&amp;doneType=ok&quot;,#LEY#&quot;refuse&quot; : &quot;ceftsAccountControlTrade.do?pawnTrade.operType=refuse&amp;doneType=refuse&quot;,#LEY#&quot;title&quot;:&quot;金市复核&quot;,#LEY#&quot;width&quot;:1200,#LEY#&quot;height&quot;:700#LEY#}" eventListener="${beanName}Listener" validSecond="-1" openSecond="-1"/>
+		<sequenceFlow id="flow1" name="to User Task" sourceRef="startevent1" targetRef="userTask1"/>
+		<sequenceFlow id="flow2" name="to For Gateway" sourceRef="userTask1" targetRef="exclusivegateway1"/>
+		<sequenceFlow id="flow3" name="to End" sourceRef="exclusivegateway1" targetRef="endevent1" conditionExpression="doneType=='ok'"/>
+		<sequenceFlow id="flow4" name="to User Task" sourceRef="exclusivegateway1" targetRef="userTask2" conditionExpression="doneType=='refuse'"/>
+		<sequenceFlow id="flow5" name="to For Gateway" sourceRef="userTask2" targetRef="exclusivegateway2"/>
+		<sequenceFlow id="flow6" name="to User Task" sourceRef="exclusivegateway2" targetRef="userTask1" conditionExpression="doneType=='ok'"/>
+		<sequenceFlow id="flow7" name="to End" sourceRef="exclusivegateway2" targetRef="endevent2" conditionExpression="doneType=='refuse'"/>
+	</process>
+	<Diagram id="Diagram_${beanName}Process">
+		<Shape Element="endevent1" id="Shape_endevent1">
+			<Bounds height="35" width="35" x="100" y="645"/>
+		</Shape>
+		<Shape Element="endevent2" id="Shape_endevent2">
+			<Bounds height="35" width="35" x="502" y="310"/>
+		</Shape>
+		<Shape Element="exclusivegateway1" id="Shape_exclusivegateway1">
+			<Bounds height="40" width="40" x="97" y="492"/>
+		</Shape>
+		<Shape Element="exclusivegateway2" id="Shape_exclusivegateway2">
+			<Bounds height="40" width="40" x="314" y="308"/>
+		</Shape>
+		<Shape Element="startevent1" id="Shape_startevent1">
+			<Bounds height="35" width="35" x="99" y="153"/>
+		</Shape>
+		<Shape Element="userTask1" id="Shape_userTask1">
+			<Bounds height="55" width="105" x="64" y="300"/>
+		</Shape>
+		<Shape Element="userTask2" id="Shape_userTask2">
+			<Bounds height="55" width="105" x="281" y="485"/>
+		</Shape>
+		<Edge Element="flow1" id="Edge_flow1">
+			<Waypoint x="117" y="188"/>
+			<Waypoint x="117" y="300"/>
+		</Edge>
+		<Edge Element="flow2" id="Edge_flow2">
+			<Waypoint x="117" y="355"/>
+			<Waypoint x="117" y="493"/>
+		</Edge>
+		<Edge Element="flow3" id="Edge_flow3">
+			<Waypoint x="118" y="532"/>
+			<Waypoint x="118" y="646"/>
+			<Label>
+				<Bounds height="20" width="48" x="0" y="0"/>
+			</Label>
+		</Edge>
+		<Edge Element="flow4" id="Edge_flow4">
+			<Waypoint x="137" y="513"/>
+			<Waypoint x="281" y="513"/>
+			<Label>
+				<Bounds height="20" width="96" x="0" y="0"/>
+			</Label>
+		</Edge>
+		<Edge Element="flow5" id="Edge_flow5">
+			<Waypoint x="334" y="485"/>
+			<Waypoint x="334" y="348"/>
+		</Edge>
+		<Edge Element="flow6" id="Edge_flow6">
+			<Waypoint x="315" y="328"/>
+			<Waypoint x="169" y="328"/>
+			<Label>
+				<Bounds height="20" width="96" x="0" y="0"/>
+			</Label>
+		</Edge>
+		<Edge Element="flow7" id="Edge_flow7">
+			<Waypoint x="354" y="328"/>
+			<Waypoint x="503" y="328"/>
+			<Label>
+				<Bounds height="20" width="48" x="0" y="0"/>
+			</Label>
+		</Edge>
+	</Diagram>
+</definitions>

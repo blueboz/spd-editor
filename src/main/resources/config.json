@@ -1,172 +1,78 @@
 {
   "package": "com.erayt.xfunds.intbank.domain",
-  "className": "CeftsAccount",
-  "beanName": "ceftsAccount",
+  "className": "Fusbknonm",
+  "beanName": "fusbknonm",
   "namespace": "intbank",
-  "tableName": "XFUNDS_INTBANK_CEFTSACCOUNT",
-  "menuId": "825",
+  "tableName": "XFUNDS_INTBANK_FUSBKNONM",
+  "menuId": "815",
   "pmenuId": "9",
-  "powerbits": "812,813,814",
+  "powerbits": "805,806,807",
   "moduleName": "8-同业模块",
   "functionbase": "Cefts账户管理-1",
-  "title": "Cefts账号查询",
+  "title": "统一支付平台接口",
   "exceptionFullName": "com.erayt.xfunds.common.XfundsIntbankException",
   "exceptionName": "XfundsIntbankException",
   "quernamespace": "intBank",
   "columns": [
     {
-      "fieldChName": "后台编号",
-      "fieldName": "downloadKey",
-      "dataType": "NUMBER(16)",
+      "fieldChName": "参与机构行号",
+      "fieldName": "joinOrgBankNo",
+      "dataType": "varchar(14)",
       "nullable": false,
       "isId": true
     },
     {
-      "fieldChName": "维护类型",
-      "fieldName": "type",
-      "dataType": "VARCHAR(1)",
+      "fieldChName": "行别代码",
+      "fieldName": "bankTypeCode",
+      "dataType": "VARCHAR(3)",
       "nullable": false,
-      "isId":false,
-      "codedef": "IA2"
+      "isId":false
     },
     {
-      "fieldChName": "业务编号",
-      "fieldName": "businessNo",
-      "dataType": "VARCHAR(30)",
+      "fieldChName": "清算行标志",
+      "fieldName": "liquidBankflag",
+      "dataType": "VARCHAR(1)",
       "nullable": true,
       "isId": false
     },
     {
-      "fieldChName": "账户类型",
-      "fieldName": "accountType",
-      "dataType": "VARCHAR2(50)",
-      "nullable": true,
-      "isId": false
-    },
-    {
-      "fieldChName": "本方经办方/产品",
-      "fieldName": "product",
-      "dataType": "VARCHAR2(200)",
-      "nullable": true,
-      "isId": false
-    },
-    {
-      "fieldChName": "对手方机构名称",
-      "fieldName": "rivalName",
-      "dataType": "VARCHAR2(200)",
-      "nullable": true,
-      "isId": false
-    },
-    {
-      "fieldChName": "对手方经办行/产品",
-      "fieldName": "rivalProduct",
-      "dataType": "VARCHAR2(200)",
-      "nullable": true,
-      "isId": false
-    }, {
-      "fieldChName": "支付系统行号",
-      "fieldName": "interBank",
+      "fieldChName": "清算行号",
+      "fieldName": "liquidbankno",
       "dataType": "VARCHAR2(14)",
       "nullable": true,
       "isId": false
     },
     {
-      "fieldChName": "资金账号",
-      "fieldName": "account",
-      "dataType": "VARCHAR2(50)",
+      "fieldChName": "所在城市代码",
+      "fieldName": "ownercitycode",
+      "dataType": "VARCHAR2(6)",
       "nullable": true,
       "isId": false
-    }, {
-      "fieldChName": "资金账户户名",
-      "fieldName": "accountName",
-      "dataType": "VARCHAR2(200)",
-      "nullable": true,
-      "isId": false
-    }, {
-      "fieldChName": "资金开户行名称",
-      "fieldName": "accountBank",
+    },
+    {
+      "fieldChName": "参与机构全称",
+      "fieldName": "joinorgfullname",
       "dataType": "VARCHAR2(120)",
       "nullable": true,
       "isId": false
-    } , {
-      "fieldChName": "发起机构",
-      "fieldName": "orgName",
-      "dataType": "VARCHAR2(200)",
-      "nullable": true,
-      "isId": false
-    } , {
-      "fieldChName": "备注",
-      "fieldName": "remark",
-      "dataType": "VARCHAR2(400)",
+    },
+    {
+      "fieldChName": "电话",
+      "fieldName": "phone",
+      "dataType": "VARCHAR2(60)",
       "nullable": true,
       "isId": false
     }, {
       "fieldChName": "状态",
       "fieldName": "status",
-      "dataType": "VARCHAR2(1)",
-      "nullable": true,
-      "isId": false,
-      "codedef": "IA3"
-    },
-    {
-      "fieldChName": "入库日期",
-      "fieldName": "insertDate",
-      "dataType": "NUMBER(8)",
-      "nullable": true,
-      "isId": false,
-      "class": "e-date"
-    },
-    {
-      "fieldChName": "入库时间",
-      "fieldName": "insertTime",
-      "dataType": "NUMBER(6)",
-      "nullable": true,
-      "isId": false,
-      "class": "e-time"
-    },
-    {
-      "fieldChName": "最后更新日期",
-      "fieldName": "updateDate",
-      "dataType": "NUMBER(8)",
-      "nullable": true,
-      "isId": false,
-      "class": "e-date"
-    },
-    {
-      "fieldChName": "最后更新时间",
-      "fieldName": "updateTime",
-      "dataType": "NUMBER(6)",
-      "nullable": true,
-      "isId": false,
-      "class": "e-time"
-    },{
-      "fieldChName": "失败原因",
-      "fieldName": "failureReason",
-      "dataType": "varchar(500)",
+      "dataType": "VARCHAR2(4)",
       "nullable": true,
       "isId": false
-    },{
-      "fieldChName": "分行柜员Id",
-      "fieldName": "tellerId",
-      "dataType": "varchar(20)",
-      "nullable": true,
-      "isId": false
-    },{
-      "fieldChName": "分行柜员",
-      "fieldName": "tellerName",
-      "dataType": "varchar(20)",
-      "nullable": true,
-      "isId": false
-    },{
-      "fieldChName": "总行柜员Id",
-      "fieldName": "mastertellerId",
-      "dataType": "varchar(20)",
-      "nullable": true,
-      "isId": false
-    },{
-      "fieldChName": "总行柜员姓名",
-      "fieldName": "mastertellerName",
-      "dataType": "varchar(20)",
+    },
+    {
+      "fieldChName": "可用通道列表",
+      "fieldName": "avilchnnellist",
+      "dataType": "VARCHAR2(1000)",
       "nullable": true,
       "isId": false
     }

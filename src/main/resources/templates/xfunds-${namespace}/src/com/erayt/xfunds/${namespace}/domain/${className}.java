@@ -20,4 +20,7 @@ public class ${className} extends EngineRightPo {
 	}
 	</#list>
 
+	public String getDescription(){
+		return "${title}";
+	}
 }
