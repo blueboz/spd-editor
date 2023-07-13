@@ -1,12 +1,3 @@
-/*********************************************
- * Copyright (c) 2023 LI-RTP.
- * All rights reserved.
- * Created on 2023年4月27日
- *
- * Contributors:
- *     rtp - initial implementation
- *********************************************/
-
 package com.erayt.xfunds.${namespace}.listener;
 
 import com.erayt.solar2.engine.process.Event;
@@ -27,8 +18,8 @@ public class ${className}Listener implements EventListener, TaskListener{
 		if(!(obj instanceof ${className})) {
 			return ;
 		}
-		${className} trade = (${className})obj ;
-//		trade.setTaskName(task.getTitle());
+		${className} ${beanName} = (${className})obj ;
+		${beanName}.setTaskName(task.getTitle());
 	}
 
 	@Override
@@ -41,7 +32,7 @@ public class ${className}Listener implements EventListener, TaskListener{
 			return ;
 		}
 		${className} trade = (${className})obj ;
-//		trade.setTaskName(task.getTitle());
+		trade.setTaskName(task.getTitle());
 	}
 
 	@Override
@@ -53,10 +44,12 @@ public class ${className}Listener implements EventListener, TaskListener{
 		if(!(obj instanceof ${className})) {
 			return ;
 		}
-		${className} trade = (${className})obj ;
-//		trade.setEventId(event.getId());
-//		trade.setOperType(event.getDoneType());
-//		trade.setTaskName(task.getTitle());
+		${className} ${beanName} = (${className})obj ;
+		${beanName}.setEventId(event.getId());
+		${beanName}.setOperType(event.getDoneType());
+		${beanName}.setTaskName(task.getTitle());
+		${beanName}.setLinkId(event.getLinkId());
+
 	}
 
 }

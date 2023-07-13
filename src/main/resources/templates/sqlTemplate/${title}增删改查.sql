@@ -31,7 +31,7 @@ VALUES ('/find${className}.do', '${beanName}', 'com.erayt.xfunds.${namespace}.do
 INSERT INTO ENGINE_ACTIONOUTPUT (ACTIONID_, BEANID_, FIELDEXPR_, TARGET_)
 VALUES ('/find${className}.do', 'fundUserRule', null, null);
 
-
+<#if importExcel??>
 delete from ENGINE_ACTION where ID_ = '/add${className}Import.do';
 delete from ENGINE_ACTIONINPUT where ACTIONID_ = '/add${className}Import.do';
 delete from ENGINE_ACTIONOUTPUT where ACTIONID_ = '/add${className}Import.do';
@@ -41,7 +41,7 @@ INSERT INTO ENGINE_ACTIONINPUT (ACTIONID_, BEANID_, CLAZZ_, FIELDEXPR_, SOURCE_)
 VALUES ('/add${className}Import.do', 'file', 'java.io.File', null, null);
 INSERT INTO ENGINE_ACTIONINPUT (ACTIONID_, BEANID_, CLAZZ_, FIELDEXPR_, SOURCE_)
 VALUES ('/add${className}Import.do', 'user', null, null, '$session[com.erayt.user_key]');
-
+</#if>
 
 delete from ENGINE_ACTION where ID_ = '/delete${className}Batch.do';
 delete from ENGINE_ACTIONINPUT where ACTIONID_ = '/delete${className}Batch.do';
@@ -91,3 +91,21 @@ INSERT INTO ENGINE_RIGHTS (RIGHTS_, CANDIDATE_, SQLCONDITION_, DOCONDITION_)
 VALUES ('${beanName}Issuer',
         '${r'${'}${beanName}.insUser${r'}'},${r'${'}${beanName}.mstBaker${r'}'},${r'${'}${beanName}.brhBaker${r'}'},${r'${'}${beanName}.subBaker${r'}'},${r'${'}${beanName}.outBaker${r'}'}',
         '''${r'${'}user.bankid${r'}'}'' in (candidate2_)', 'candidate1_ = ''${r'${'}user.logonid${r'}'}''');
+
+delete from ENGINE_ACTION where ID_='/add${className}Process.do';
+delete from ENGINE_ACTIONINPUT where ACTIONID_='/add${className}Process.do';
+delete from ENGINE_ACTIONOUTPUT where ACTIONID_='/add${className}Process.do';
+INSERT INTO ENGINE_ACTION (ID_, NAMESPACE_, URL_, WINDOWPARAM_, ACTIONSCRIPT_, ACTIONINTERCEPT_) VALUES ('/add${className}Process.do', '${namespace}', null, null, 'processEngine.start("${beanName}Process",CONTEXT)', null);
+INSERT INTO ENGINE_ACTIONINPUT (ACTIONID_, BEANID_, CLAZZ_, FIELDEXPR_, SOURCE_) VALUES ('/add${className}Process.do', '${beanName}', 'com.erayt.xfunds.${namespace}.domain.${className}', null, null);
+INSERT INTO ENGINE_ACTIONINPUT (ACTIONID_, BEANID_, CLAZZ_, FIELDEXPR_, SOURCE_) VALUES ('/add${className}Process.do', 'user', null, null, '$session[com.erayt.user_key]');
+
+delete from ENGINE_ACTION where ID_ = '/find${className}Init.do';
+delete from ENGINE_ACTIONINPUT where ACTIONID_ = '/find${className}Init.do';
+delete from ENGINE_ACTIONOUTPUT where ACTIONID_ = '/find${className}Init.do';
+INSERT INTO ENGINE_ACTION (ID_, NAMESPACE_, URL_, WINDOWPARAM_, ACTIONSCRIPT_, ACTIONINTERCEPT_)
+VALUES ('/find${className}Init.do', '${namespace}', null, null, '${beanName}=${beanName}Service.find${className}Init(user);', null);
+INSERT INTO ENGINE_ACTIONINPUT (ACTIONID_, BEANID_, CLAZZ_, FIELDEXPR_, SOURCE_)
+VALUES ('/find${className}Init.do', 'user', null, null, '$session[com.erayt.user_key]');
+INSERT INTO ENGINE_ACTIONOUTPUT (ACTIONID_, BEANID_, FIELDEXPR_, TARGET_)
+VALUES ('/find${className}Init.do', '${beanName}', null, null);
+

@@ -1,0 +1,62 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<title>${title}</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<link rel="stylesheet" href="../ui/eraui/css/eraui.css" />
+		<link rel="stylesheet" href="../ui/css/ui-all.css" />
+		<link href="../css/main.css" rel="stylesheet" type="text/css"/>
+		<script src="../ui/sea.js" data-main="../js/${namespace}/${beanName}Add.js"></script>
+	</head>
+	<body style="overflow:auto">
+		<form name="${className}InputForm" method="post">
+		<div id="diviframe01" class="diviframeclass">
+			<table align="center" width="95%" cellspacing="2" cellpadding="0"
+				style="margin-top: 10px;">
+				<tr>
+					<td style="vertical-align:top;width:350px;">
+						<fieldset>
+							<legend>
+								<span >${title}新增</span>
+							</legend>
+							<table align="center" width="100%" border="0" cellspacing="2"
+								cellpadding="2">
+								<colgroup>
+									<col style="width:45%;text-align:right" />
+									<col style="width:55%;text-align:left" />
+								</colgroup>
+								<#list columns as col>
+
+								<tr>
+									<td><span>${col.fieldChName}:</span></td>
+									<td>
+										<#if col.class??>
+										<input type="text" id="${col.fieldName}" name="${beanName}.${col.fieldName}" class="${col.class} inputText" />
+										<#else> <#if col.codedef??> <#if col.filter??>
+										<input type="hidden" id="${col.fieldName}"  name="${beanName}.${col.fieldName}"
+											   class="e-combo" valueindex="codeVal"  textindex="name"  combodefault="{codeVal:'',name:'请选择'}" selectdefault="true"
+											   root="data.list" storeurl="../codeDefFindValueListByTypeAndFilter.do?type=${col.codedef}&filter=${col.filter}"  style='width:138px;'/>
+										<#else>
+										<input type="hidden" id="${col.fieldName}"  name="${beanName}.${col.fieldName}"
+											   class="e-combo" valueindex="codeVal"  textindex="name"  combodefault="{codeVal:'',name:'请选择'}" selectdefault="true"
+											   root="data.list" storeurl="../codeDefFindValueListByType.do?type=${col.codedef}"  style='width:138px;'/>
+										</#if>
+										<#else>
+										<input type='text' id='${col.fieldName}' class='inputText' name='${beanName}.${col.fieldName}'></input>
+										</#if>
+										</#if>
+										<#if col.nullable == false><span class="orange">*</span></td></#if>
+									</td>
+								</tr>
+								</#list>
+							</table>
+						</fieldset>
+					</td>
+				</tr>
+			</table>
+			
+			</div>
+			
+		</form>
+	</body>
+</html>

@@ -25,6 +25,8 @@
 					<b>${title}</b>
 				</td>
 			</tr>
+
+			<#if importExcel??>
 			<tr>
 				<td>
                     <div style="line-height: 36px;margin-left: 5px">
@@ -34,6 +36,7 @@
 					</div>
 				</td>
 			</tr>
+			</#if>
 			<tr>
 				<td class=blockTd style="padding: 2px 10px" width="65%">
 					<div class=divbtn url='../${namespace}/${className}Input.html' text='新增'
@@ -80,12 +83,24 @@
 										</span>
 									</span>
 									</#list>
-
-										<span class="fielditem">
-									<a href="javascript:void(0);" class="zButton"
-										style="margin-left: 5px;"><INPUT
-											onclick="if (window.tool){search();}" type='button' value='查询'> </a>
-								</span>
+									<span class="fielditem">
+										<a href="javascript:void(0);" class="zButton"
+										   style="margin-left: 5px;">
+											<input onclick="if (window.tool){search();}" type='button' value='查询'>
+										</a>
+										<a href="javascript:void(0);" class="zButton"
+										   style="margin-left: 5px;">
+											<input onclick="if (window.tool){add();}" type='button' value='新增'>
+										</a>
+										<a href="javascript:void(0);" class="zButton"
+										   style="margin-left: 5px;">
+											<input onclick="if (window.tool){mod();}" type='button' value='修改'>
+										</a>
+										<a href="javascript:void(0);" class="zButton"
+										   style="margin-left: 5px;">
+											<input onclick="if (window.tool){modlogs();}" type='button' value='修改记录'>
+										</a>
+									</span>
 								</td>
 							</tr>
 						</table>

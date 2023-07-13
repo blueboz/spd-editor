@@ -29,10 +29,10 @@ public class FreeMarkerDemo {
 //    private String basePath = "F:/Code/spd-editor/src/main/resources/templates";
 
     private String outputDest = "/home/@chenweidian-yfzx/Code/FMS/FMSS_xfunds";
-    private String configPath = "/home/@chenweidian-yfzx/Code/spd-editor/src/main/resources/config.json";
+    private String configPath = "/home/@chenweidian-yfzx/Code/spd-editor/src/main/resources/Cefts账号维护历史.json";
     private String basePath = "/home/@chenweidian-yfzx/Code/spd-editor/src/main/resources/templates";
 
-    Set<String> skipList = Arrays.stream(new String[]{"fundWhiteList.xls"}).collect(Collectors.toSet());
+    Set<String> skipList = Arrays.stream(new String[]{"${beanName}.xls"}).collect(Collectors.toSet());
 //    Map<String,String> namespacePoBaseMapper =new HashMap<String,String>();
 
     JSONObject mapper;

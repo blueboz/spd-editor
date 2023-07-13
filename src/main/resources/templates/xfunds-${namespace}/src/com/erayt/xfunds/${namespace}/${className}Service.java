@@ -34,11 +34,18 @@ public interface ${className}Service {
 	*/
 	public ${className} find${className}(${className} ${className});
 
-
+	<#if importExcel??>
 	/**
 	 * Excel 数据导入
 	 */
 	public void doImportExcel(File file, User user) ;
+	</#if>
+
+
+	/**
+	 * 新增数据初始化调用的方法
+	 */
+	${className} find${className}Init(User user);
 
 
 }

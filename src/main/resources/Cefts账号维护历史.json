@@ -1,47 +1,33 @@
 {
   "package": "com.erayt.xfunds.intbank.domain",
-  "className": "CeftsAccount",
-  "beanName": "ceftsAccount",
+  "className": "CeftsHistory",
+  "beanName": "ceftsHistory",
   "namespace": "intbank",
-  "tableName": "XFUNDS_INTBANK_CEFTSACCOUNT",
-  "menuId": "825",
+  "tableName": "XFUNDS_INTBANK_CEFTS_HIS",
+  "menuId": "819",
   "pmenuId": "9",
-  "powerbits": "812,813,814",
+  "powerbits": "854,855,856",
   "moduleName": "8-同业模块",
   "functionbase": "Cefts账户管理-1",
-  "title": "Cefts账号查询",
+  "title": "历史记录",
   "exceptionFullName": "com.erayt.xfunds.common.XfundsIntbankException",
   "exceptionName": "XfundsIntbankException",
   "quernamespace": "intBank",
   "importExcel": false,
-  "codedefs": [
-    {"type": "IA2",
-      "rmk1": "同业模块",
-      "rmk2": "Cefts账号维护",
-      "rmk3": "维护类型",
-      "items": [
-        {"name": "新增","value":"1"},
-        {"name": "修改","value":"2"}
-      ]
-    },
-    {"type": "IA3",
-      "rmk1": "同业模块",
-      "rmk2": "Cefts账号维护",
-      "rmk3": "维护状态",
-      "items": [
-        {"name": "维护成功","value":"1"},
-        {"name": "维护失败","value":"2"},
-        {"name": "待运营维护","value":"3"}
-      ]
-    }
-  ],
   "columns": [
+    {
+      "fieldChName": "hisDownloadKey",
+      "fieldName": "历史后台编号",
+      "dataType": "NUMBER(16)",
+      "nullable": false,
+      "isId": true
+    },
     {
       "fieldChName": "后台编号",
       "fieldName": "downloadKey",
       "dataType": "NUMBER(16)",
       "nullable": false,
-      "isId": true
+      "isId": false
     },
     {
       "fieldChName": "维护类型",

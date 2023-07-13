@@ -1,0 +1,80 @@
+{
+  "package": "com.erayt.xfunds.intbank.domain",
+  "className": "Fusbknonm",
+  "beanName": "fusbknonm",
+  "namespace": "intbank",
+  "tableName": "XFUNDS_INTBANK_FUSBKNONM",
+  "menuId": "815",
+  "pmenuId": "9",
+  "powerbits": "805,806,807",
+  "moduleName": "8-同业模块",
+  "functionbase": "Cefts账户管理-1",
+  "title": "统一支付平台接口",
+  "exceptionFullName": "com.erayt.xfunds.common.XfundsIntbankException",
+  "exceptionName": "XfundsIntbankException",
+  "quernamespace": "intBank",
+  "columns": [
+    {
+      "fieldChName": "参与机构行号",
+      "fieldName": "joinOrgBankNo",
+      "dataType": "varchar(14)",
+      "nullable": false,
+      "isId": true
+    },
+    {
+      "fieldChName": "行别代码",
+      "fieldName": "bankTypeCode",
+      "dataType": "VARCHAR(3)",
+      "nullable": false,
+      "isId":false
+    },
+    {
+      "fieldChName": "清算行标志",
+      "fieldName": "liquidBankflag",
+      "dataType": "VARCHAR(1)",
+      "nullable": true,
+      "isId": false
+    },
+    {
+      "fieldChName": "清算行号",
+      "fieldName": "liquidbankno",
+      "dataType": "VARCHAR2(14)",
+      "nullable": true,
+      "isId": false
+    },
+    {
+      "fieldChName": "所在城市代码",
+      "fieldName": "ownercitycode",
+      "dataType": "VARCHAR2(6)",
+      "nullable": true,
+      "isId": false
+    },
+    {
+      "fieldChName": "参与机构全称",
+      "fieldName": "joinorgfullname",
+      "dataType": "VARCHAR2(120)",
+      "nullable": true,
+      "isId": false
+    },
+    {
+      "fieldChName": "电话",
+      "fieldName": "phone",
+      "dataType": "VARCHAR2(60)",
+      "nullable": true,
+      "isId": false
+    }, {
+      "fieldChName": "状态",
+      "fieldName": "status",
+      "dataType": "VARCHAR2(4)",
+      "nullable": true,
+      "isId": false
+    },
+    {
+      "fieldChName": "可用通道列表",
+      "fieldName": "avilchnnellist",
+      "dataType": "VARCHAR2(1000)",
+      "nullable": true,
+      "isId": false
+    }
+  ]
+}

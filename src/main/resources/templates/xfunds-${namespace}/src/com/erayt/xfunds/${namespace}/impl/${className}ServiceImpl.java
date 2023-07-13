@@ -28,7 +28,12 @@ import java.io.InputStream;
 import java.util.*;
 
 public class ${className}ServiceImpl implements ${className}Service {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(${className}Service.class);
+
+    <#if importExcel??>
     private int maxRows=10000;
+    </#if>
  
     private ${className}Dao ${beanName}Dao;
 
@@ -168,7 +173,8 @@ public class ${className}ServiceImpl implements ${className}Service {
         return ${beanName}Dao.select${className}(bean);
     }
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(${className}Service.class);
+
+    <#if importExcel??>
 
     /**
      * 根据Excel 生成白名单
@@ -176,7 +182,7 @@ public class ${className}ServiceImpl implements ${className}Service {
      * @param file
      * @return
      */
-    public List<${className}> buildWhiteList(File file) {
+    public List<${className}> build${className}(File file) {
         List<${className}> result = new ArrayList<${className}>();
         Workbook wb = null;
         int sysDate = DateHelper.sysDate();
@@ -191,7 +197,7 @@ public class ${className}ServiceImpl implements ${className}Service {
             Sheet sheet = wb.getSheetAt(0);
             int lastRowNum = sheet.getLastRowNum();
             if (lastRowNum > maxRows) {
-                throw new XfundsBaseException("单次导入不要超过10000行");
+                throw new XfundsBaseException("单次导入不要超过"+maxRows+"行");
             }
             Set<String> dataRows = new HashSet<>(); // To store unique data rows
             for (int i = 1; i <= sheet.getLastRowNum(); i++) { // Start from row 1, assumes first row is header
@@ -230,11 +236,14 @@ public class ${className}ServiceImpl implements ${className}Service {
 
         return result;
     }
+    </#if>
 
+
+    <#if importExcel??>
 
     @Override
     public void doImportExcel(File file, User user) {
-        List<${className}> ${className}s = buildWhiteList(file);
+        List<${className}> ${className}s = build${className}(file);
         LOGGER.info(String.format("用户%s执行了批量导入",user.getLogonid()));
         if(CollectionUtils.isEmpty(${className}s)){
             throw new ${exceptionName}("未录入任何数据，导入被终止");
@@ -246,6 +255,7 @@ public class ${className}ServiceImpl implements ${className}Service {
         ${beanName}Dao.delete${className}();
         ${beanName}Dao.insert${className}Batch(${className}s);
     }
+    </#if>
 
     @Override
     public void delete${className}Batch(${className}[] ${beanName}s) {
@@ -278,11 +288,12 @@ public class ${className}ServiceImpl implements ${className}Service {
 
     /**
      * 缺少TransName y
-     * @param any${className}
+     * @param ceftsAccount
      * @param user
      * @return
      */
-    private TradeLogs buildTradeLogBase(${className} any${className},User user){
+    @Override
+    public TradeLogs buildTradeLog(CeftsAccount ceftsAccount, User user){
         TradeLogs tradeLogs = new TradeLogs();
         tradeLogs.setDownloadKey(sequenceRepository.findSequenceByType(SequenceConstant.TRADLOG_SEQ));
         tradeLogs.setTellerId(user.getLogonid());
@@ -291,15 +302,38 @@ public class ${className}ServiceImpl implements ${className}Service {
         Bank bank = bankRepository.findBankInfo(tradeLogs.getBankId() != null ? tradeLogs.getBankId() : user.getBankid());
         if (bank == null) {
             LOGGER.error("机构不存在 Bankid={}", user.getBankid());
-            throw new ${exceptionName}("机构不存在");
+            throw new XfundsIntbankException("机构不存在");
         }
         tradeLogs.setBankId(bank.getBankId());
         tradeLogs.setBankName(bank.getDipName());
         tradeLogs.setTradeTime(sysParamRepository.findSysIntTime());
         tradeLogs.setTradeDate(Integer.valueOf(this.sysParamRepository.findSysParamValue(SysParam.NAME_SYSCURRDATE)));
+        CodeDef cdf = this.codeDefRepository.findValueByTypeAndCodeNoExction("P07", ceftsAccount.getOperType());
+        String operTypeName = ceftsAccount.getOperType();
+        if (cdf != null) {
+            operTypeName = cdf.getName();
+        }
+        if(ceftsAccount.getEventId()==0L) {
+            tradeLogs.setTransName("${title}交易-发起");
+        }else {
+            tradeLogs.setTransName("${title}交易-审批流 事件流水号:" + ceftsAccount.getEventId() + "," + "任务名称:" + ceftsAccount.getTaskName() + ",操作类型:" + operTypeName);
+        }
+        tradeLogs.setVerMemo(ceftsAccount.getDescription());
         return tradeLogs;
     }
 
+    /**
+     * 查询数据
+     *
+     * @param bean
+     * @return result
+     */
+    @Override
+    public ${className} find${className}Init(User user) {
+        ${className} ${beanName} = new ${className}();
+        enginePoControlService.initEngineRightPo(${beanName},user);
+        return ${beanName};
+    }
 
 
 }

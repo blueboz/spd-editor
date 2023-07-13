@@ -9,6 +9,46 @@ function search() {
 }
 
 
+/**
+ * 新增
+ */
+function add(){
+	$ui.showJumpDlg({
+		title: "新增",
+		url: "../${namespace}/${className}Add.html",
+		width: 600,
+		height: 600,
+		modal: false
+	});
+
+}
+
+/**
+ * 修改
+ */
+function mod(){
+	$ui.showJumpDlg({
+		title: "修改",
+		url: "../${namespace}/${className}Modify.html?modify=true",
+		width: 600,
+		height: 600,
+		modal: false
+	});
+}
+
+/**
+ * 修改记录
+ */
+function modlogs(){
+	$ui.showJumpDlg({
+		title: "修改记录",
+		url: "../${namespace}/${className}ModifyLogs.html?modify=true",
+		width: 600,
+		height: 600,
+		modal: false
+	});
+}
+
 
 function pageInit() {
 	E_init.init = function() {
