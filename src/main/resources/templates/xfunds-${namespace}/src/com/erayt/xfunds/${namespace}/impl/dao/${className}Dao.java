@@ -28,7 +28,12 @@ public interface ${className}Dao {
 	* @param bean
 	* @return result
 	*/
-	public ${className} select${className}(${className} bean);
+	public ${className} select${className}ById(${className} bean);
+
+	/**
+	 * 查询数据
+	 */
+	public List<${className}> select${className}(${className} bean);
 
 	/**
 	 * 清空所以的数据

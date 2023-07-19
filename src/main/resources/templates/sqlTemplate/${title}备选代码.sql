@@ -1,3 +1,4 @@
+<#if codedefs??>
 <#list codedefs as codedef>
 
 <#list codedef.items as item>
@@ -11,5 +12,4 @@ VALUES ((select trim(to_char(nvl(max(to_number(id)), 0) + 1)) as id from XFUNDS_
 </#list>
 
 </#list>
-
-
+</#if>

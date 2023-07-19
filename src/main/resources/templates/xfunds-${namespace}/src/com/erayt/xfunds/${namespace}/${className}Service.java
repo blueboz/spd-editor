@@ -2,8 +2,9 @@ package com.erayt.xfunds.${namespace};
 import com.erayt.ecas.domain.User;
 import com.erayt.xfunds.base.domain.TradeLogs;
 import com.erayt.xfunds.${namespace}.domain.${className};
-
+<#if importExcel>
 import java.io.File;
+</#if>
 
 public interface ${className}Service {
 
@@ -34,7 +35,7 @@ public interface ${className}Service {
 	*/
 	public ${className} find${className}(${className} ${className});
 
-	<#if importExcel??>
+	<#if importExcel>
 	/**
 	 * Excel 数据导入
 	 */
@@ -47,5 +48,9 @@ public interface ${className}Service {
 	 */
 	${className} find${className}Init(User user);
 
+	/**
+	 * 构建交易日志
+	 */
+	TradeLogs buildTradeLog(${className} ${beanName}, User user);
 
 }

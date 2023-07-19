@@ -29,7 +29,7 @@ public class FreeMarkerDemo {
 //    private String basePath = "F:/Code/spd-editor/src/main/resources/templates";
 
     private String outputDest = "/home/@chenweidian-yfzx/Code/FMS/FMSS_xfunds";
-    private String configPath = "/home/@chenweidian-yfzx/Code/spd-editor/src/main/resources/Cefts账号维护历史.json";
+    private String configPath = "/home/@chenweidian-yfzx/Code/spd-editor/src/main/resources/Nafm会员信息.json";
     private String basePath = "/home/@chenweidian-yfzx/Code/spd-editor/src/main/resources/templates";
 
     Set<String> skipList = Arrays.stream(new String[]{"${beanName}.xls"}).collect(Collectors.toSet());

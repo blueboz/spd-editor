@@ -3,11 +3,19 @@ package com.erayt.xfunds.${namespace}.impl;
 import com.erayt.ecas.domain.User;
 import com.erayt.solar2.engine.facade.ActionContext;
 import com.erayt.solar2.engine.process.ProcessEngine;
-import com.erayt.xfunds.base.*;
+
+import com.erayt.xfunds.base.BankRepository;
+import com.erayt.xfunds.base.CodeDefRepository;
+import com.erayt.xfunds.base.EnginePoControlService;
+import com.erayt.xfunds.base.SequenceRepository;
+import com.erayt.xfunds.base.SysParamRepository;
+import com.erayt.xfunds.base.TradeLogsService;
 import com.erayt.xfunds.base.domain.Bank;
+import com.erayt.xfunds.base.domain.CodeDef;
 import com.erayt.xfunds.base.domain.SequenceConstant;
 import com.erayt.xfunds.base.domain.SysParam;
 import com.erayt.xfunds.base.domain.TradeLogs;
+
 import com.erayt.xfunds.common.DateHelper;
 import com.erayt.xfunds.common.StringHelper;
 import com.erayt.xfunds.common.XfundsBaseException;
@@ -25,13 +33,22 @@ import org.springframework.util.CollectionUtils;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.util.*;
 
 public class ${className}ServiceImpl implements ${className}Service {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(${className}Service.class);
 
-    <#if importExcel??>
+    private CodeDefRepository codeDefRepository;
+
+    public CodeDefRepository getCodeDefRepository() {
+        return codeDefRepository;
+    }
+
+    public void setCodeDefRepository(CodeDefRepository codeDefRepository) {
+        this.codeDefRepository = codeDefRepository;
+    }
+
+    <#if importExcel>
     private int maxRows=10000;
     </#if>
  
@@ -170,11 +187,11 @@ public class ${className}ServiceImpl implements ${className}Service {
         <#assign uname= myutils("upper_case_first",col.fieldName)>
         bean.set${uname}(${beanName}.get${uname}());
         </#list>
-        return ${beanName}Dao.select${className}(bean);
+        return ${beanName}Dao.select${className}ById(bean);
     }
 
 
-    <#if importExcel??>
+    <#if importExcel>
 
     /**
      * 根据Excel 生成白名单
@@ -239,7 +256,7 @@ public class ${className}ServiceImpl implements ${className}Service {
     </#if>
 
 
-    <#if importExcel??>
+    <#if importExcel>
 
     @Override
     public void doImportExcel(File file, User user) {
@@ -275,7 +292,7 @@ public class ${className}ServiceImpl implements ${className}Service {
      */
     @Override
     public ${className} find${className}(${className} bean) {
-        return ${beanName}Dao.select${className}(bean);
+        return ${beanName}Dao.select${className}ById(bean);
     }
 
     public ${className}Dao get${className}Dao() {
@@ -293,7 +310,7 @@ public class ${className}ServiceImpl implements ${className}Service {
      * @return
      */
     @Override
-    public TradeLogs buildTradeLog(CeftsAccount ceftsAccount, User user){
+    public TradeLogs buildTradeLog(${className} ${beanName}, User user){
         TradeLogs tradeLogs = new TradeLogs();
         tradeLogs.setDownloadKey(sequenceRepository.findSequenceByType(SequenceConstant.TRADLOG_SEQ));
         tradeLogs.setTellerId(user.getLogonid());
@@ -308,17 +325,17 @@ public class ${className}ServiceImpl implements ${className}Service {
         tradeLogs.setBankName(bank.getDipName());
         tradeLogs.setTradeTime(sysParamRepository.findSysIntTime());
         tradeLogs.setTradeDate(Integer.valueOf(this.sysParamRepository.findSysParamValue(SysParam.NAME_SYSCURRDATE)));
-        CodeDef cdf = this.codeDefRepository.findValueByTypeAndCodeNoExction("P07", ceftsAccount.getOperType());
-        String operTypeName = ceftsAccount.getOperType();
+        CodeDef cdf = this.codeDefRepository.findValueByTypeAndCodeNoExction("P07", ${beanName}.getOperType());
+        String operTypeName = ${beanName}.getOperType();
         if (cdf != null) {
             operTypeName = cdf.getName();
         }
-        if(ceftsAccount.getEventId()==0L) {
+        if(${beanName}.getEventId()==0L) {
             tradeLogs.setTransName("${title}交易-发起");
         }else {
-            tradeLogs.setTransName("${title}交易-审批流 事件流水号:" + ceftsAccount.getEventId() + "," + "任务名称:" + ceftsAccount.getTaskName() + ",操作类型:" + operTypeName);
+            tradeLogs.setTransName("${title}交易-审批流 事件流水号:" + ${beanName}.getEventId() + "," + "任务名称:" + ${beanName}.getTaskName() + ",操作类型:" + operTypeName);
         }
-        tradeLogs.setVerMemo(ceftsAccount.getDescription());
+        tradeLogs.setVerMemo(${beanName}.getDescription());
         return tradeLogs;
     }
 

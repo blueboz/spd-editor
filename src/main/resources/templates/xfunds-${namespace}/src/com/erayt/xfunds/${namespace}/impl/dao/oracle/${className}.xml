@@ -15,6 +15,16 @@
 			</isNotEmpty>
 		</#list>
 	</select>
+
+	<select id='select${className}ById' resultMap='${className}Map' parameterClass='com.erayt.xfunds.${namespace}.domain.${className}'>
+	select <#list columns?filter(item->item.isId) as col> ${col.fieldName}<#sep>,</#list>
+			from ${tableName} where 1=1
+		<#list columns as col>
+			<isNotEmpty property='${col.fieldName}' prepend='and'>
+			${col.fieldName}=#${col.fieldName}#
+			</isNotEmpty>
+		</#list>
+	</select>
 	<update id='update${className}' parameterClass='com.erayt.xfunds.${namespace}.domain.${className}'>
 		update ${tableName} set
 		<#list columns as col>

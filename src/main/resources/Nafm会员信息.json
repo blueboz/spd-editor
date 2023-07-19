@@ -14,44 +14,35 @@
   "exceptionName": "XfundsIntbankException",
   "quernamespace": "intBank",
   "importExcel": false,
-  "codedefs": [
-    {"type": "IA5",
-      "rmk1": "同业模块",
-      "rmk2": "Cefts账号维护",
-      "rmk3": "Nafm会员信息",
-      "items": [
-        {"name": "新增","value":"0"},
-        {"name": "修改","value":"1"},
-        {"name": "删除","value":"2"}
-      ]
-    }
-  ],
   "columns": [
     {
       "fieldChName": "批次号",
       "fieldName": "serialno",
-      "dataType": "NUMBER(32)",
-      "nullable": true
+      "dataType": "VARCHAR(32)",
+      "nullable": true,
+      "isId": false
+
     },
     {
       "fieldChName": "机构21位码",
       "fieldName": "partyid",
-      "dataType": "NUMBER(32)",
-      "nullable": true
+      "dataType": "VARCHAR(32)",
+      "nullable": true,
+      "isId": false
     },
     {
       "fieldChName": "NAFM会员编号",
       "fieldName": "manualcorpid",
-      "dataType": "NUMBER(32)",
-      "nullable": false,
-      "isId": false
+      "dataType": "VARCHAR(32)",
+      "nullable": true,
+      "isId": true
     },
     {
       "fieldChName": "NAFM中文简称",
       "fieldName": "shotchnm",
       "dataType": "VARCHAR(140)",
       "nullable": true,
-      "isId":false
+      "isId": false
     },
     {
       "fieldChName": "NAFM中文全称",
@@ -74,7 +65,5 @@
       "nullable": true,
       "isId": false
     }
-
-
   ]
 }

@@ -1,0 +1,527 @@
+-------- HEADER --------
+VERSION 2
+JVM_STARTED 1689676385142
+LOG_STARTED 1689676385551
+-------- EOF HEADER --------
+2023-07-18 18:33:05.567 INFO  Started logging for JRebel 2023.1.2, build 202303061304 (e2d2f593a5df26d5074def1604106e78cb20ed37)
+2023-07-18 18:33:06.259 INFO  [0] [Core] Started logging in thread: main daemon=false
+2023-07-18 18:33:06.272 INFO  [0] [Core] Base module: module java.base, Our module: module java.base, System cl: jdk.internal.loader.ClassLoaders$AppClassLoader@7b3300e5, cl's unnamed: unnamed module @4ca8195f
+2023-07-18 18:33:06.272 INFO  [0] [Core] Rebel properties loaded from /home/@chenweidian-yfzx/.jrebel/jrebel.properties:
+rebel.license.email=tom@qq.com
+rebel.license.url=http://139.199.89.239:1008/88414687-3b91-4286-89ba-2dc813b107ce
+rebel.log=info
+rebel.log.file=C:\Users\lihanlin\.jrebel\jrebel.log
+rebel.preferred.license=1
+rebel.properties.version=2
+
+2023-07-18 18:33:06.277 INFO  [0] [Startup] Using deferred init
+2023-07-18 18:33:06.282 INFO  [1] [Core] Started logging in thread: pool-1-thread-2 daemon=false
+2023-07-18 18:33:06.288 INFO  [1] [Core-SDK] Using user temp directory : /home/@chenweidian-yfzx/.jrebel/jrebel-temp/a3858cd7
+2023-07-18 18:33:06.291 INFO  [2] [Core] Started logging in thread: pool-1-thread-5 daemon=false
+2023-07-18 18:33:06.300 DEBUG [2] [Core-Logger] Calculated maximum logging level after logger instance creation
+2023-07-18 18:33:06.301 INFO  [2] [Core] Starting plugin org.zeroturnaround.javarebel.integration.IntegrationPlugin from /home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar in null
+2023-07-18 18:33:06.302 INFO  [3] [Core] Started logging in thread: pool-1-thread-6 daemon=false
+2023-07-18 18:33:06.302 INFO  [3] [Core-Stat] Statistics initialized in 45 ms
+2023-07-18 18:33:06.302 INFO  [1] [Core-SDK] Using user temp directory : /home/@chenweidian-yfzx/.jrebel/jrebel-temp/ver-495cc6cf
+2023-07-18 18:33:06.303 INFO  [1] [Core-SDK] Found 27 locks from /home/@chenweidian-yfzx/.jrebel/jrebel-temp/index.jrl
+2023-07-18 18:33:06.303 INFO  [1] [Core-SDK] Lock /home/@chenweidian-yfzx/.jrebel/jrebel-temp/index_5514fdf8.jrl is new, don't remove
+2023-07-18 18:33:06.306 INFO  [1] [Core-SDK] Lock /home/@chenweidian-yfzx/.jrebel/jrebel-temp/index_d4e9d537.jrl is new, don't remove
+2023-07-18 18:33:06.307 INFO  [1] [Core-SDK] Lock /home/@chenweidian-yfzx/.jrebel/jrebel-temp/index_11255da5.jrl is new, don't remove
+2023-07-18 18:33:06.308 INFO  [1] [Core-SDK] Lock /home/@chenweidian-yfzx/.jrebel/jrebel-temp/index_e63e192.jrl is new, don't remove
+2023-07-18 18:33:06.308 INFO  [1] [Core-SDK] Lock /home/@chenweidian-yfzx/.jrebel/jrebel-temp/index_a6735468.jrl is new, don't remove
+2023-07-18 18:33:06.309 INFO  [1] [Core-SDK] Lock /home/@chenweidian-yfzx/.jrebel/jrebel-temp/index_86ec1051.jrl is new, don't remove
+2023-07-18 18:33:06.309 INFO  [1] [Core-SDK] Lock /home/@chenweidian-yfzx/.jrebel/jrebel-temp/index_e4daf96a.jrl is new, don't remove
+2023-07-18 18:33:06.309 INFO  [1] [Core-SDK] Lock /home/@chenweidian-yfzx/.jrebel/jrebel-temp/index_bab35437.jrl is new, don't remove
+2023-07-18 18:33:06.310 INFO  [1] [Core-SDK] Lock /home/@chenweidian-yfzx/.jrebel/jrebel-temp/index_2737d7ea.jrl is new, don't remove
+2023-07-18 18:33:06.310 INFO  [1] [Core-SDK] Lock /home/@chenweidian-yfzx/.jrebel/jrebel-temp/index_c8d1284d.jrl is new, don't remove
+2023-07-18 18:33:06.315 INFO  [1] [Core-SDK] Lock /home/@chenweidian-yfzx/.jrebel/jrebel-temp/index_1eb10a06.jrl is new, don't remove
+2023-07-18 18:33:06.319 INFO  [1] [Core-SDK] Lock /home/@chenweidian-yfzx/.jrebel/jrebel-temp/index_1839d2e0.jrl is new, don't remove
+2023-07-18 18:33:06.319 INFO  [1] [Core-SDK] Lock /home/@chenweidian-yfzx/.jrebel/jrebel-temp/index_ca2d08c5.jrl is new, don't remove
+2023-07-18 18:33:06.320 INFO  [1] [Core-SDK] Lock /home/@chenweidian-yfzx/.jrebel/jrebel-temp/index_97842847.jrl is new, don't remove
+2023-07-18 18:33:06.321 INFO  [1] [Core-SDK] Lock /home/@chenweidian-yfzx/.jrebel/jrebel-temp/index_586a3c6b.jrl is new, don't remove
+2023-07-18 18:33:06.321 INFO  [1] [Core-SDK] Lock /home/@chenweidian-yfzx/.jrebel/jrebel-temp/index_80c6b882.jrl is new, don't remove
+2023-07-18 18:33:06.321 INFO  [1] [Core-SDK] Lock /home/@chenweidian-yfzx/.jrebel/jrebel-temp/index_f62922f9.jrl is new, don't remove
+2023-07-18 18:33:06.322 INFO  [1] [Core-SDK] Lock /home/@chenweidian-yfzx/.jrebel/jrebel-temp/index_42126dfb.jrl is new, don't remove
+2023-07-18 18:33:06.322 INFO  [1] [Core-SDK] Lock /home/@chenweidian-yfzx/.jrebel/jrebel-temp/index_1a21548c.jrl is new, don't remove
+2023-07-18 18:33:06.326 INFO  [1] [Core-SDK] Lock /home/@chenweidian-yfzx/.jrebel/jrebel-temp/index_9be8363.jrl is new, don't remove
+2023-07-18 18:33:06.329 INFO  [1] [Core-SDK] Lock /home/@chenweidian-yfzx/.jrebel/jrebel-temp/index_236ae22b.jrl is new, don't remove
+2023-07-18 18:33:06.329 INFO  [1] [Core-SDK] Lock /home/@chenweidian-yfzx/.jrebel/jrebel-temp/index_f80f8f54.jrl is new, don't remove
+2023-07-18 18:33:06.330 INFO  [1] [Core-SDK] Lock /home/@chenweidian-yfzx/.jrebel/jrebel-temp/index_cc7c5367.jrl is new, don't remove
+2023-07-18 18:33:06.330 INFO  [1] [Core-SDK] Lock /home/@chenweidian-yfzx/.jrebel/jrebel-temp/index_5d149eec.jrl is new, don't remove
+2023-07-18 18:33:06.330 INFO  [1] [Core-SDK] Lock /home/@chenweidian-yfzx/.jrebel/jrebel-temp/index_6212102b.jrl is new, don't remove
+2023-07-18 18:33:06.331 INFO  [1] [Core-SDK] Lock /home/@chenweidian-yfzx/.jrebel/jrebel-temp/index_a0aceaf6.jrl is new, don't remove
+2023-07-18 18:33:06.331 INFO  [1] [Core-SDK] Lock /home/@chenweidian-yfzx/.jrebel/jrebel-temp/index_178cd9ae.jrl not found, remove
+2023-07-18 18:33:06.338 INFO  [2] [Core-SDK] Using user temp directory : /home/@chenweidian-yfzx/.jrebel/jrebel-temp/cbp-cache-b2e0c850
+2023-07-18 18:33:06.338 INFO  [2] [CBP-Cache] Using cache ID: JRebel|2023.1.2|202303061304
+2023-07-18 18:33:06.339 INFO  [2] [CBP-Cache] Using cache dir: /home/@chenweidian-yfzx/.jrebel/jrebel-temp/cbp-cache-b2e0c850
+2023-07-18 18:33:06.344 INFO  [2] [ClassCache] Used index size: 3021 and data size: 1708623
+2023-07-18 18:33:06.345 INFO  [4] [Core] Started logging in thread: pool-2-thread-6 daemon=false
+2023-07-18 18:33:06.347 INFO  [4] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.jackson.JacksonPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/jackson-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.349 INFO  [5] [Core] Started logging in thread: pool-2-thread-7 daemon=false
+2023-07-18 18:33:06.352 INFO  [5] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.GrailsCliPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/grails-cli-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.362 INFO  [6] [Core] Started logging in thread: pool-2-thread-1 daemon=false
+2023-07-18 18:33:06.363 INFO  [6] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.glassfish.GlassFishPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/glassfish-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.364 INFO  [7] [Core] Started logging in thread: pool-2-thread-3 daemon=false
+2023-07-18 18:33:06.366 INFO  [7] [Core] Found dependent plugin 'org.zeroturnaround.javarebel.integration.tapestry5.Tapestry5Plugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/tapestry5-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.369 INFO  [8] [Core] Started logging in thread: pool-2-thread-2 daemon=false
+2023-07-18 18:33:06.372 INFO  [8] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.camel.spring.CamelSpringPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/camel-spring-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.374 INFO  [9] [Core] Started logging in thread: pool-2-thread-4 daemon=false
+2023-07-18 18:33:06.377 INFO  [9] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.integration.tiles1.Tiles1Plugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/tiles1-struts-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.380 INFO  [10] [Core] Started logging in thread: pool-2-thread-8 daemon=false
+2023-07-18 18:33:06.383 INFO  [10] [Core] Found dependent plugin 'org.zeroturnaround.javarebel.integration.jasper.JasperPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/jasper-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.386 INFO  [11] [Core] Started logging in thread: pool-2-thread-5 daemon=false
+2023-07-18 18:33:06.389 INFO  [11] [Core] Found dependent plugin 'org.zeroturnaround.javarebel.integration.metro.MetroPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/metro-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.391 INFO  [10] [Core] Found dependent plugin 'org.zeroturnaround.javarebel.integration.catalina.CatalinaPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/catalina-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.392 INFO  [11] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.websphere.WebsphereJAXRS2Plugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/websphere-jaxrs2-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.394 INFO  [4] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.thymeleaf.ThymeleafPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/thymeleaf-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.398 INFO  [8] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.resteasy.spring.RESTEasySpringPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/resteasy-spring-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.399 INFO  [9] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.ebean.EbeanPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/ebean-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.400 INFO  [7] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.facelets.FaceletsPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/facelets-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.402 INFO  [5] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.switchyard.SwitchYardPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/switchyard-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.404 INFO  [11] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.integration.click.ClickPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/click-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.405 INFO  [6] [Core] Found dependent plugin 'org.zeroturnaround.javarebel.integration.log4j.Log4jPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/log4j-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.408 INFO  [5] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.integration.spring.integration.SpringIntegrationPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/spring-integration-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.409 INFO  [9] [Core] Found dependent plugin 'org.zeroturnaround.javarebel.integration.spring.webflow.SpringWebflowPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/spring-webflow-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.411 INFO  [10] [Core] Found dependent plugin 'org.zeroturnaround.javarebel.integration.spring.SpringMvcPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/spring-mvc-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.414 INFO  [7] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.integration.helidon.HelidonPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/helidon-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.416 INFO  [11] [Core] Found dependent plugin 'org.zeroturnaround.javarebel.integration.servlet.undertow.UndertowServletPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/undertow-servlet-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.417 INFO  [4] [Core] Found dependent plugin 'org.zeroturnaround.javarebel.felix.FelixPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/felix-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.419 INFO  [6] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.zk.ZKPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/zk-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.421 INFO  [8] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.spring.metro.SpringMetroPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/spring-metro-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.422 INFO  [5] [Core] Found dependent plugin 'org.zeroturnaround.javarebel.velocity.VelocityPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/velocity-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.424 INFO  [9] [Core] Found dependent plugin 'org.zeroturnaround.javarebel.integration.spring.actuator.SpringBootActuatorPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/spring-boot-actuator-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.428 INFO  [7] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.wink.WinkPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/wink-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.430 INFO  [4] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.weld2.websphere.Weld2WebspherePlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/weld2-websphere-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.431 INFO  [5] [Core] Found dependent plugin 'org.zeroturnaround.javarebel.integration.spring.expression.SpringExpressionPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/spring-expression-plugin-2023.1.2.jar
+2023-07-18 18:33:06.433 INFO  [11] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.mojarra.MojarraPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/mojarra-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.434 INFO  [7] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.jbossaop.JBossAOPPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/jbossaop-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.436 INFO  [9] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.bval2.BVal2Plugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/bval2-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.439 INFO  [8] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.myfaces.MyFacesPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/myfaces-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.441 INFO  [10] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.openwebbeans.OpenWebBeansPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/openwebbeans-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.442 INFO  [6] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.integration.atg.AtgPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/atg-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.444 INFO  [5] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.gemini.blueprint.GeminiBlueprintPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/gemini-blueprint-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.446 INFO  [7] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.neo4j.Neo4jPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/neo4j-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.447 INFO  [9] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.integration.amazon.AmazonPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/amazon-uitoolkit-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.449 INFO  [5] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.integration.logback.LogbackPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/logback-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.451 INFO  [9] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.jersey.JerseyPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/jersey-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.453 INFO  [8] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.seam.SeamPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/seam-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.456 INFO  [11] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.weld1.WeldPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/weld-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.457 INFO  [5] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.jackson2.Jackson2Plugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/jackson2-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.458 INFO  [6] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.springplugin.SpringPluginPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/spring-plugin-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.458 INFO  [4] [Core] Found dependent plugin 'org.zeroturnaround.javarebel.jboss.JbossPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/jboss-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.458 INFO  [9] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.undertow.UndertowPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/undertow-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.458 INFO  [7] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.jersey2.Jersey2Plugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/jersey2-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.466 INFO  [10] [Core] Found dependent plugin 'org.zeroturnaround.javarebel.integration.vraptor.VRaptorPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/vraptor-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.466 INFO  [5] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.integration.eclipselink.EclipseLinkPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/eclipselink-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.467 INFO  [11] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.springfox.schema.SpringfoxSchemaPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/springfox-schema-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.469 INFO  [8] [Core] Found dependent plugin 'com.zeroturnaround.javarebel.aspectj.AspectJPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/aspectj-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.472 INFO  [6] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.integration.axis2.was.Axis2WasPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/axis2-was-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.473 INFO  [9] [Core] Found dependent plugin 'org.zeroturnaround.javarebel.integration.hibernate5.HibernatePlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/hibernate5-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.473 INFO  [7] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.vaadin.cdiutils.VaadinCdiutilsPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/vaadin-cdiutils-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.476 INFO  [5] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.integration.axis2.Axis2Plugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/axis2-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.477 INFO  [11] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.lift.LiftPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/lift-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.477 INFO  [10] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.grails2.Grails2Plugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/grails2-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.477 INFO  [8] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.integration.kumuluz.KumuluzPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/kumuluz-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.481 INFO  [2] [Core-SDK] Added exclude filter for 'org.jboss.mx.loading.HeirarchicalLoaderRepository3$CacheClassLoader'
+2023-07-18 18:33:06.482 INFO  [4] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.vaadin.VaadinLiveReloadPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/vaadin-livereload-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.484 INFO  [7] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.springfox.SpringfoxPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/springfox-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.485 INFO  [6] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.integration.stripes.StripesPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/stripes-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.494 INFO  [9] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.stats.id.container.ContainerIdentifierPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/jr-container-identifier-2023.1.2.jar
+2023-07-18 18:33:06.494 INFO  [7] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.integration.eclipselinkmoxy.EclipseLinkMOXyPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/eclipselinkmoxy-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.494 INFO  [11] [Core] Found dependent plugin 'org.zeroturnaround.javarebel.integration.spring.boot.SpringBootPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/spring-boot-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.498 INFO  [9] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.bval.BValPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/bval-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.499 INFO  [8] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.prettyfaces.PrettyfacesPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/prettyfaces-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.499 INFO  [5] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.thorntail.ThorntailPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/thorntail-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.499 INFO  [6] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.websphere.WebspherePlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/websphere-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.499 INFO  [10] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.axon.AxonPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/axon-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.551 INFO  [9] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.jruby.JRubyPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/jruby-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.552 INFO  [4] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.weblogic.WeblogicPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/weblogic-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.561 INFO  [7] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.adf.faces.AdfFacesPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/adf-faces-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.567 INFO  [10] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.mybatis.MyBatisPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/mybatis-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.567 INFO  [6] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.mustache.MustachePlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/mustache-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.568 INFO  [5] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.infinispan.InfinispanPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/infinispan-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.570 INFO  [9] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.hibernate.validator.HibernateValidatorPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/hibernate-validator-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.572 INFO  [11] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.springws.SpringWSPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/spring-ws-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.573 INFO  [8] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.wicket.WicketPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/wicket-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.573 INFO  [7] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.magnolia.MagnoliaPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/magnolia-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.573 INFO  [4] [Core] Found dependent plugin 'org.zeroturnaround.javarebel.integration.spring.SpringPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/spring-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.577 INFO  [11] [Core] Found dependent plugin 'org.zeroturnaround.javarebel.integration.fileservlet.FileServletPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/fileservlet-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.577 INFO  [10] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.captaincasa.CaptainCasaPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/captaincasa-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.577 INFO  [6] [Core] Found dependent plugin 'org.zeroturnaround.javarebel.integration.eclipse.EclipsePlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/eclipse-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.577 INFO  [5] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.restlet.RestletPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/restlet-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.580 INFO  [7] [Core] Found dependent plugin 'org.zeroturnaround.javarebel.integration.spring.context.support.SpringContextSupportPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/spring-context-support-plugin-2023.1.2.jar
+2023-07-18 18:33:06.580 INFO  [9] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.integration.springdata.SpringDataPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/spring-data-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.586 INFO  [5] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.integration.spring.security.SpringSecurityPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/spring-security-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.587 INFO  [7] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.integration.seam3.Seam3Plugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/seam3-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.587 INFO  [9] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.hk2.HK2Plugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/hk2-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.587 INFO  [10] [Core] Found dependent plugin 'org.zeroturnaround.javarebel.integration.spring.tx.SpringTxPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/spring-tx-plugin-2023.1.2.jar
+2023-07-18 18:33:06.593 INFO  [11] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.primefaces.PrimefacesPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/primefaces-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.594 INFO  [4] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.remoting.RootRemotingPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/jr-remoting-root-2023.1.2.jar
+2023-07-18 18:33:06.595 INFO  [8] [Core] Found dependent plugin 'org.zeroturnaround.javarebel.integration.jetty.JettyPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/jetty-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.595 INFO  [6] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.grails3.Grails3Plugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/grails3-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.595 INFO  [5] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.adf.core.AdfCorePlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/adf-core-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.595 INFO  [7] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.deltaspike.DeltaspikePlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/deltaspike-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.599 INFO  [9] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.solder.SolderPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/solder-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.600 INFO  [11] [Core] Found dependent plugin 'org.zeroturnaround.javarebel.integration.spring.reactive.SpringWebFluxPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/spring-webflux-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.603 INFO  [7] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.camel.CamelPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/camel-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.604 INFO  [6] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.intellij.FSNotifyPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/fsnotify-intellij-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.604 INFO  [8] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.weld2.glassfish.Weld2GlassfishPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/weld2-glassfish-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.605 INFO  [4] [Core] Found dependent plugin 'org.zeroturnaround.javarebel.integration.servlet.ServletIntegrationPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/jr-servlet-integration-2023.1.2.jar
+2023-07-18 18:33:06.609 INFO  [10] [Core] Found dependent plugin 'org.zeroturnaround.javarebel.seamwicket.SeamWicketPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/seam-wicket-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.611 INFO  [5] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.scalate.ScalatePlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/scalate-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.613 INFO  [9] [Core] Found dependent plugin 'org.zeroturnaround.javarebel.integration.spring.orm.SpringOrmPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/spring-orm-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.613 INFO  [6] [Exec] exec: /bin/bash -c ulimit -n
+2023-07-18 18:33:06.615 INFO  [11] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.weld2.Weld2Plugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/weld2-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.615 INFO  [10] [Core] Found dependent plugin 'org.zeroturnaround.javarebel.integration.dozer.DozerPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/dozer-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.615 INFO  [8] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.hybris.HybrisPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/hybris-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.615 INFO  [9] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.remoting.RemotingPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/jr-remoting-2023.1.2.jar
+2023-07-18 18:33:06.618 INFO  [5] [Core] Found dependent plugin 'org.zeroturnaround.javarebel.integration.spring.core.SpringCorePlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/spring-core-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.618 INFO  [7] [Core] Found dependent plugin 'org.zeroturnaround.javarebel.integration.spring.jms.SpringJmsPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/spring-jms-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.619 INFO  [4] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.ibatis.IbatisPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/ibatis-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.619 INFO  [11] [Core] Found dependent plugin 'org.zeroturnaround.javarebel.integration.spring.oxm.SpringOxmPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/spring-oxm-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.621 INFO  [7] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.integration.openjpa.OpenJPAPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/openjpa-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.621 INFO  [4] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.integration.toplink.TopLinkPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/toplink-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.622 INFO  [8] [Core] Found dependent plugin 'org.zeroturnaround.javarebel.integration.wildfly.undertow.WildFlyPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/wildfly-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.624 INFO  [5] [Core] Found dependent plugin 'org.zeroturnaround.javarebel.integration.log4j2.Log4j2Plugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/log4j2-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.625 INFO  [9] [Core] Found dependent plugin 'org.zeroturnaround.javarebel.integration.hibernate.HibernatePlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/hibernate-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.627 INFO  [10] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.liferay.LiferayPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/liferay-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.628 INFO  [12] [Core] Started logging in thread: pool-1-thread-4 daemon=false
+2023-07-18 18:33:06.628 DEBUG [12] [Core-Logger] Calculated maximum logging level after logger instance creation
+2023-07-18 18:33:06.628 INFO  [12] [Core] System properties found:
+awt.toolkit=sun.awt.X11.XToolkit
+file.encoding=UTF-8
+file.separator=/
+java.awt.graphicsenv=sun.awt.X11GraphicsEnvironment
+java.awt.printerjob=sun.print.PSPrinterJob
+java.class.path=/home/@chenweidian-yfzx/Code/spd-editor/build/classes/java/main:/home/@chenweidian-yfzx/Code/FMS/FMSS_xfunds/xfunds/WebContent/WEB-INF/lib/ojdbc8.jar:/home/@chenweidian-yfzx/Code/FMS/FMSS_xfunds/xfunds/WebContent/WEB-INF/lib/orai18n-19.3.0.0.jar:/home/@chenweidian-yfzx/.gradle/caches/modules-2/files-2.1/com.jcraft/jsch/0.1.55/bbd40e5aa7aa3cfad5db34965456cee738a42a50/jsch-0.1.55.jar:/home/@chenweidian-yfzx/.m2/repository/org/dom4j/dom4j/2.1.3/dom4j-2.1.3.jar:/home/@chenweidian-yfzx/.gradle/caches/modules-2/files-2.1/org.apache.commons/commons-lang3/3.9/122c7cee69b53ed4a7681c03d4ee4c0e2765da5/commons-lang3-3.9.jar:/home/@chenweidian-yfzx/.m2/repository/javax/annotation/javax.annotation-api/1.3.2/javax.annotation-api-1.3.2.jar:/home/@chenweidian-yfzx/.gradle/caches/modules-2/files-2.1/com.alibaba/fastjson/1.2.78/119651d0f0d9cd5bfb35e8885a447e957cdc3a29/fastjson-1.2.78.jar:/home/@chenweidian-yfzx/.gradle/caches/modules-2/files-2.1/org.freemarker/freemarker/2.3.30/86d70d335c7821178f62b554aa3a4bc538a94f1a/freemarker-2.3.30.jar:/home/@chenweidian-yfzx/.m2/repository/org/thymeleaf/thymeleaf/3.1.1.RELEASE/thymeleaf-3.1.1.RELEASE.jar:/home/@chenweidian-yfzx/.m2/repository/com/zaxxer/HikariCP/4.0.3/HikariCP-4.0.3.jar:/home/@chenweidian-yfzx/.gradle/caches/modules-2/files-2.1/ognl/ognl/3.3.4/1904789bdd96f226ad252a02f230be1015f4462b/ognl-3.3.4.jar:/home/@chenweidian-yfzx/.m2/repository/org/attoparser/attoparser/2.0.6.RELEASE/attoparser-2.0.6.RELEASE.jar:/home/@chenweidian-yfzx/.m2/repository/org/unbescape/unbescape/1.1.6.RELEASE/unbescape-1.1.6.RELEASE.jar:/home/@chenweidian-yfzx/.gradle/caches/modules-2/files-2.1/org.slf4j/slf4j-api/2.0.5/3a759df277e854f7c4ca951e5899bcec0dbdca73/slf4j-api-2.0.5.jar:/home/@chenweidian-yfzx/.gradle/caches/modules-2/files-2.1/org.javassist/javassist/3.29.0-GA/d3959fa7e00bf04dbe519228a23213d2afb625d8/javassist-3.29.0-GA.jar:/idea/idea-IU-201.8743.12/lib/idea_rt.jar
+java.class.version=55.0
+java.home=/home/@chenweidian-yfzx/App/jdk-11.0.17
+java.io.tmpdir=/tmp
+java.library.path=/usr/java/packages/lib:/usr/lib64:/lib64:/lib:/usr/lib
+java.runtime.name=Java(TM) SE Runtime Environment
+java.runtime.version=11.0.17+10-LTS-269
+java.specification.name=Java Platform API Specification
+java.specification.vendor=Oracle Corporation
+java.specification.version=11
+java.vendor=Oracle Corporation
+java.vendor.url=https://openjdk.java.net/
+java.vendor.url.bug=https://bugreport.java.com/bugreport/
+java.vendor.version=18.9
+java.version=11.0.17
+java.version.date=2022-10-18
+java.vm.compressedOopsMode=Zero based
+java.vm.info=mixed mode
+java.vm.name=Java HotSpot(TM) 64-Bit Server VM
+java.vm.specification.name=Java Virtual Machine Specification
+java.vm.specification.vendor=Oracle Corporation
+java.vm.specification.version=11
+java.vm.vendor=Oracle Corporation
+java.vm.version=11.0.17+10-LTS-269
+jdk.debug=release
+line.separator=
+
+os.arch=amd64
+os.name=Linux
+os.version=4.19.0-amd64-desktop
+path.separator=:
+rebel.base=/home/@chenweidian-yfzx/.jrebel
+rebel.env.ide=intellij
+rebel.env.ide.plugin.version=2023.1.2
+rebel.env.ide.product=IU
+rebel.env.ide.version=2020.1.4
+rebel.native.image=/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/lib/libjrebel64.so
+rebel.notification.url=http://localhost:40959
+sun.arch.data.model=64
+sun.boot.library.path=/home/@chenweidian-yfzx/App/jdk-11.0.17/lib
+sun.cpu.endian=little
+sun.cpu.isalist=
+sun.desktop=gnome
+sun.io.unicode.encoding=UnicodeLittle
+sun.java.command=cn.boz.jb.plugin.FreeMarkerDemo
+sun.java.launcher=SUN_STANDARD
+sun.jnu.encoding=UTF-8
+sun.management.compiler=HotSpot 64-Bit Tiered Compilers
+sun.os.patch.level=unknown
+user.country=CN
+user.dir=/home/@chenweidian-yfzx/Code/spd-editor
+user.home=/home/@chenweidian-yfzx
+user.language=zh
+user.name=chenweidian-yfzx
+user.timezone=Asia/Shanghai
+
+2023-07-18 18:33:06.631 INFO  [12] [Core] VM arguments: 
+-agentlib:jdwp=transport=dt_socket,address=127.0.0.1:50035,suspend=y,server=n
+-Drebel.base=/home/@chenweidian-yfzx/.jrebel
+-Drebel.env.ide.plugin.version=2023.1.2
+-Drebel.env.ide.version=2020.1.4
+-Drebel.env.ide.product=IU
+-Drebel.env.ide=intellij
+-Drebel.notification.url=http://localhost:40959
+-Xshare:off
+-agentpath:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/lib/libjrebel64.so
+-javaagent:/idea/idea-IU-201.8743.12/plugins/java/lib/rt/debugger-agent.jar=file:/tmp/capture.props
+-Dfile.encoding=UTF-8
+2023-07-18 18:33:06.631 INFO  [11] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.integration.tiles2.Tiles2Plugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/tiles2-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.632 INFO  [9] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.vaadin.VaadinPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/vaadin-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.634 INFO  [4] [Core] Found dependent plugin 'org.zeroturnaround.javarebel.integration.struts2.Struts2Plugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/struts2-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.634 INFO  [5] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.picketlink.PicketlinkPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/picketlink-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.636 INFO  [7] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.grails4.Grails4Plugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/grails4-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.637 INFO  [9] [Core] Found dependent plugin 'org.zeroturnaround.javarebel.integration.jasper.LiferayJasperPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/liferay-jasper-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.638 INFO  [8] [Core] Found dependent plugin 'org.zeroturnaround.javarebel.integration.cxf.CXFPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/cxf-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.638 INFO  [11] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.integration.gwt.GwtPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/gwt-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.638 INFO  [9] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.integration.jasypt.JasyptPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/jasypt-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.640 INFO  [4] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.resteasy.ResteasyPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/resteasy-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.640 INFO  [5] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.integration.payara.micro.PayaraMicroPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/payara-micro-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.641 INFO  [10] [Core] Found dependent plugin 'org.zeroturnaround.javarebel.integration.spring.aop.SpringAopPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/spring-aop-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.641 INFO  [5] [Core] Found dependent plugin 'com.zeroturnaround.javarebel.guice.GuicePlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/guice-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.641 INFO  [9] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.liferay.LiferayStatusPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/liferay-status-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.641 INFO  [11] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.groovy.GroovyPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/groovy-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.642 INFO  [4] [Core] Found dependent plugin 'org.zeroturnaround.javarebel.integration.spring.beans.SpringBeansPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/spring-beans-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.642 INFO  [8] [Core] Found dependent plugin 'org.zeroturnaround.jrebel.equinox.EquinoxPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/equinox-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.642 INFO  [7] [Core] Found dependent plugin 'org.zeroturnaround.javarebel.integration.spring.SpringWebPlugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/spring-web-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.642 INFO  [4] [Core] Found dependent plugin 'org.zeroturnaround.javarebel.integration.struts.Struts1Plugin' from jar:file:/home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar!/plugins/struts1-jr-plugin-2023.1.2.jar
+2023-07-18 18:33:06.643 INFO  [2] [Core-SDK] Added exclude filter for 'com.bea.security.OESIsolationClassLoader'
+2023-07-18 18:33:06.643 INFO  [2] [Core-SDK] Added exclude filter for 'scala.tools.nsc.util.ScalaClassLoader$URLClassLoader'
+2023-07-18 18:33:06.643 INFO  [6] [Exec] Result: 0
+2023-07-18 18:33:06.643 INFO  [6] [Exec] Message: 1048576
+2023-07-18 18:33:06.644 INFO  [6] [IntelliJFSNotify] Registering IntelliJ IDE FSNotify
+2023-07-18 18:33:06.644 INFO  [2] [Core-SDK] Added exclude filter for 'groovy.lang.GroovyClassLoader$InnerLoader'
+2023-07-18 18:33:06.644 INFO  [1] [Core-SDK] Starting fs monitor rebel.fsnotify.intellij in order 1/1 with priority 100
+2023-07-18 18:33:06.644 INFO  [1] [IntelliJFSNotify] Using old executable from /home/@chenweidian-yfzx/.jrebel/jrebel-temp/ver-495cc6cf/fsnotifier64
+2023-07-18 18:33:06.644 INFO  [1] [IntelliJFSNotify] Starting file watcher: /home/@chenweidian-yfzx/.jrebel/jrebel-temp/ver-495cc6cf/fsnotifier64
+2023-07-18 18:33:06.645 INFO  [1] [IntelliJFSNotify] Process: java.lang.ProcessImpl@5b58bfc
+2023-07-18 18:33:06.645 INFO  [1] [IntelliJFSNotify] IntelliJ Native file watcher is operational.
+2023-07-18 18:33:06.682 INFO  [2] [Core] Starting plugin com.zeroturnaround.javarebel.hke from /home/@chenweidian-yfzx/.local/share/JetBrains/IntelliJIdea2020.1/jr-ide-idea/lib/jrebel6/jrebel.jar in null
+2023-07-18 18:33:06.922 INFO  [0] [NativeMess] Mess wrapper not detected!
+2023-07-18 18:33:06.922 INFO  [0] [Core-SDK] Using user temp directory : /home/@chenweidian-yfzx/.jrebel/jrebel-temp/classcache-191379387
+2023-07-18 18:33:06.933 INFO  [0] [ClassCache] Used index size: 0 and data size: 1
+2023-07-18 18:33:06.933 INFO  [0] [ClassCache] Using class definition cache from /home/@chenweidian-yfzx/.jrebel/jrebel-temp/classcache-191379387
+2023-07-18 18:33:06.984 INFO  [0] [ReTransform] Initializing retransformation of 'com.zeroturnaround.jrebelbase.facade.ay'
+2023-07-18 18:33:06.994 INFO  [0] [ReTransform] Completed retransformation of 'com.zeroturnaround.jrebelbase.facade.ay'
+2023-07-18 18:33:06.995 INFO  [0] [ReTransform] Initializing retransformation of 'com.zeroturnaround.jrebelbase.facade.as'
+2023-07-18 18:33:06.997 INFO  [0] [ReTransform] Completed retransformation of 'com.zeroturnaround.jrebelbase.facade.as'
+2023-07-18 18:33:06.998 INFO  [0] [ReTransform] Initializing retransformation of 'com.zeroturnaround.jrebelbase.facade.a'
+2023-07-18 18:33:07.019 INFO  [0] [ReTransform] Completed retransformation of 'com.zeroturnaround.jrebelbase.facade.a'
+2023-07-18 18:33:07.020 INFO  [0] [ReTransform] Initializing retransformation of 'com.zeroturnaround.jrebelbase.d'
+2023-07-18 18:33:07.028 INFO  [0] [ReTransform] Completed retransformation of 'com.zeroturnaround.jrebelbase.d'
+2023-07-18 18:33:07.036 INFO  [0] [ReTransform] Initializing retransformation of 'com.zeroturnaround.jrebelbase.facade.f'
+2023-07-18 18:33:07.049 INFO  [0] [ReTransform] Completed retransformation of 'com.zeroturnaround.jrebelbase.facade.f'
+2023-07-18 18:33:07.050 INFO  [0] [ReTransform] Initializing retransformation of 'com.zeroturnaround.jrebelbase.facade.e'
+2023-07-18 18:33:07.061 INFO  [0] [ReTransform] Completed retransformation of 'com.zeroturnaround.jrebelbase.facade.e'
+2023-07-18 18:33:07.061 INFO  [0] [ReTransform] Initializing retransformation of 'com.zeroturnaround.jrebelbase.facade.g'
+2023-07-18 18:33:07.064 INFO  [0] [ReTransform] Completed retransformation of 'com.zeroturnaround.jrebelbase.facade.g'
+2023-07-18 18:33:07.072 INFO  [0] [ReTransform] Initializing retransformation of 'com.zeroturnaround.jrebelbase.facade.ad'
+2023-07-18 18:33:07.080 INFO  [0] [ReTransform] Completed retransformation of 'com.zeroturnaround.jrebelbase.facade.ad'
+2023-07-18 18:33:07.324 INFO  [0] [Core-SDK] Added exclude filter for 'sun.misc.Launcher$ExtClassLoader'
+2023-07-18 18:33:07.326 INFO  [0] [Core-SDK] Added exclude filter for 'jdk.internal.internal.ClassLoaders$PlatformClassLoader'
+2023-07-18 18:33:07.328 INFO  [0] [Core-SDK] Added exclude filter for 'jdk.internal.internal.ClassLoaders$BootClassLoader'
+2023-07-18 18:33:07.365 INFO  [0] [Core-SDK] Added include managed filter com.zeroturnaround.javarebel.is@9a7504c
+2023-07-18 18:33:07.367 INFO  [0] [Core-SDK] Added exclude managed filter com.zeroturnaround.javarebel.it@587d1d39
+2023-07-18 18:33:07.378 INFO  [0] [Core-SDK] Added exclude managed filter com.zeroturnaround.javarebel.iu@5bb21b69
+2023-07-18 18:33:07.444 INFO  [0] [Core-SDK] Added global request listener com.zeroturnaround.javarebel.wv@77ec78b9
+2023-07-18 18:33:07.451 INFO  [0] [Core-SDK] Added global request listener com.zeroturnaround.javarebel.wh@76a3e297
+2023-07-18 18:33:07.505 INFO  [0] [ServiceRequestIntegration] Added service request listener com.zeroturnaround.javarebel.wi@2a70a3d8
+2023-07-18 18:33:07.508 INFO  [0] [Core] Rebel runtime under 'jdk.internal.loader.ClassLoaders$PlatformClassLoader@26a7b76d' created.
+2023-07-18 18:33:07.532 INFO  [0] [Core] jdk.internal.loader.ClassLoaders$PlatformClassLoader@26a7b76d is using native source org.zeroturnaround.javarebel.integration.generic.FindResourceClassResourceSource@365185bd
+2023-07-18 18:33:07.827 INFO  [0] [Core] Rebel runtime under 'jdk.internal.loader.ClassLoaders$AppClassLoader@7b3300e5' created.
+2023-07-18 18:33:07.828 INFO  [0] [Core] jdk.internal.loader.ClassLoaders$AppClassLoader@7b3300e5 is using native source org.zeroturnaround.javarebel.integration.generic.FindResourceClassResourceSource@5c18298f
+2023-07-18 18:33:07.830 INFO  [0] [Core] jdk.internal.loader.ClassLoaders$AppClassLoader@7b3300e5 parents: jdk.internal.loader.ClassLoaders$PlatformClassLoader@26a7b76d
+2023-07-18 18:33:07.979 INFO  [0] [Core] jdk.internal.loader.ClassLoaders$AppClassLoader@7b3300e5 found resource: 'org/zeroturnaround/jrebel/thymeleaf/ThymeleafPlugin.class' from 'jar:file:/home/@chenweidian-yfzx/.jrebel/jrebel-temp/ver-495cc6cf/plugins/thymeleaf-jr-plugin-2023.1.2.jar!/org/zeroturnaround/jrebel/thymeleaf/ThymeleafPlugin.class'.
+2023-07-18 18:33:07.980 INFO  [0] [Core] Starting plugin org.zeroturnaround.jrebel.thymeleaf.ThymeleafPlugin from /home/@chenweidian-yfzx/.jrebel/jrebel-temp/ver-495cc6cf/plugins/thymeleaf-jr-plugin-2023.1.2.jar in jdk.internal.loader.ClassLoaders$AppClassLoader@7b3300e5
+2023-07-18 18:33:08.034 INFO  [0] [Core] jdk.internal.loader.ClassLoaders$AppClassLoader@7b3300e5 found resource: 'org/zeroturnaround/jrebel/stats/id/container/ContainerIdentifierPlugin.class' from 'jar:file:/home/@chenweidian-yfzx/.jrebel/jrebel-temp/ver-495cc6cf/plugins/jr-container-identifier-2023.1.2.jar!/org/zeroturnaround/jrebel/stats/id/container/ContainerIdentifierPlugin.class'.
+2023-07-18 18:33:08.035 INFO  [0] [Core] Starting plugin org.zeroturnaround.jrebel.stats.id.container.ContainerIdentifierPlugin from /home/@chenweidian-yfzx/.jrebel/jrebel-temp/ver-495cc6cf/plugins/jr-container-identifier-2023.1.2.jar in jdk.internal.loader.ClassLoaders$AppClassLoader@7b3300e5
+2023-07-18 18:33:08.059 INFO  [0] [Core] System class loader hierarchy:
+2023-07-18 18:33:08.059 INFO  [0] [Core] jdk.internal.loader.ClassLoaders$AppClassLoader@7b3300e5 parent: jdk.internal.loader.ClassLoaders$PlatformClassLoader@26a7b76d
+2023-07-18 18:33:08.072 INFO  [0] [Licensing] Current installation GUID is juqytNpjVQhZTulg5HedzhvmDuFeQ3HpAP1af+EeaMA=
+2023-07-18 18:33:08.155 DEBUG [0] [Core-Logger] Calculated maximum logging level after logger instance creation
+2023-07-18 18:33:08.159 INFO  [0] [Core] Rebel properties loaded from /home/@chenweidian-yfzx/.jrebel/jrebel.properties:
+rebel.license.email=tom@qq.com
+rebel.license.url=http://139.199.89.239:1008/88414687-3b91-4286-89ba-2dc813b107ce
+rebel.log=info
+rebel.log.file=C:\Users\lihanlin\.jrebel\jrebel.log
+rebel.preferred.license=1
+rebel.properties.version=2
+
+2023-07-18 18:33:08.172 INFO  [0] [Licensing] Using asynchronous license initialization.
+2023-07-18 18:33:08.426 INFO  [0] [Core-SDK] Added reload listener com.zeroturnaround.javarebel.pn@618b19ad for all classes
+2023-07-18 18:33:08.427 INFO  [13] [Core] Started logging in thread: rebel-init-licensing daemon=true
+2023-07-18 18:33:08.428 INFO  [13] [Licensing] Trying remoting licensing ..
+2023-07-18 18:33:08.428 INFO  [13] [Licensing]  --> This licensing source didn't find valid licensing
+2023-07-18 18:33:08.435 INFO  [13] [Licensing] Trying licenseServer licensing
+2023-07-18 18:33:08.435 INFO  [14] [Core] Started logging in thread: rebel-leaseManager-1 daemon=true
+2023-07-18 18:33:08.435 INFO  [14] [Core-SDK] Added reload listener com.zeroturnaround.javarebel.hfe@2fbd95b8 for all classes
+2023-07-18 18:33:08.517 INFO  [13] [q] Using initializer for proxy creations: ProxyInitializerImpl{CORE instance}
+2023-07-18 18:33:08.649 INFO  [15] [Core] Started logging in thread: rebel-debugger-attach-notifier daemon=true
+2023-07-18 18:33:08.649 INFO  [15] [Core] Debugger attached major=0, minor=1 with IDE identifier '0x400000000000000'.
+2023-07-18 18:33:08.818 INFO  [13] [Licensing-LS] Creating new http with proxy: ProxySelector{validatorTimeout=5000, theChosenOne=null, source=AGENT_LICENSING}
+2023-07-18 18:33:10.614 INFO  [13] [Licensing-LS] Created new LicenseServer client: com.zeroturnaround.javarebel.mn@42af6f22[serverRootUrl=http://139.199.89.239:1008,token=88414687-3b91-4286-89ba-2dc813b107ce,installationGuid=juqytNpjVQhZTulg5HedzhvmDuFeQ3HpAP1af+EeaMA=]
+2023-07-18 18:33:10.622 INFO  [0] [InstrumentationInit] Invoking delayed agent: com.intellij.rt.debugger.agent.CaptureAgent.premain(file:/tmp/capture.props)
+2023-07-18 18:33:10.660 INFO  [16] [Core] Started logging in thread: rebel-build-info daemon=true
+2023-07-18 18:33:10.662 INFO  [16] [Core-SDK] Added reload listener com.zeroturnaround.javarebel.uq@32c19384 for all classes
+2023-07-18 18:33:10.735 INFO  [13] [Licensing-LS] Lease : com.zeroturnaround.javarebel.mc@3387b10d[leaseId=1,offline=true,clientRandomness=oAwyjXQzSpo=,serverRandomness=H2ulzLlh7E0=,validFrom=Thu Jun 01 01:10:49 CST 2023,validUntil=Tue Nov 28 01:10:49 CST 2023,serverGuid=a1b4aea8-b031-4302-b602-670a990272cb,serverVersion=3.2.4,zeroIds=[],seatPoolType=standalone,evaluationLicense=false]
+2023-07-18 18:33:10.741 INFO  [13] [Banner] Now: Tue Jul 18 18:33:10 CST 2023
+2023-07-18 18:33:10.763 INFO  [0] [ClassChangeDetector] root: '/home/@chenweidian-yfzx/Code/spd-editor/build/classes/java/main/' for 'com.zeroturnaround.reload.b@4c36250e'.
+2023-07-18 18:33:10.767 INFO  [0] [Core-SDK] Added file listener org.zeroturnaround.javarebel.integration.util.WeakUtil$WeakFileEventListener@5471388b[com.zeroturnaround.reload.d@66ea1466] for /home/@chenweidian-yfzx/Code/spd-editor/build/classes/java/main with result true
+2023-07-18 18:33:10.767 INFO  [0] [Transform] jdk.internal.loader.ClassLoaders$AppClassLoader@7b3300e5 instrumented class 'cn/boz/jb/plugin/FreeMarkerDemo' from 'file:/home/@chenweidian-yfzx/Code/spd-editor/build/classes/java/main/cn/boz/jb/plugin/FreeMarkerDemo.class'.
+2023-07-18 18:33:10.791 INFO  [0] [Metrics] JVM language: languages.java detected.
+2023-07-18 18:33:10.801 INFO  [13] [Banner]  Starting logging to file: /home/@chenweidian-yfzx/Code/spd-editor/C:\Users\lihanlin\.jrebel\jrebel.log
+2023-07-18 18:33:10.801 INFO  [13] [Banner]  
+2023-07-18 18:33:10.803 INFO  [13] [Banner]  #############################################################
+2023-07-18 18:33:10.805 INFO  [13] [Banner]  
+2023-07-18 18:33:10.808 INFO  [13] [Banner]  JRebel Agent 2023.1.2 (202303061304)
+2023-07-18 18:33:10.811 INFO  [13] [Banner]  (c) Copyright 2007-2023 Perforce Software, Inc.
+2023-07-18 18:33:10.819 INFO  [13] [Banner]  
+2023-07-18 18:33:10.820 INFO  [13] [Banner]  Over the last 30 days JRebel prevented
+2023-07-18 18:33:10.821 INFO  [13] [Banner]  at least 131 redeploys/restarts saving you about 5.3 hours.
+2023-07-18 18:33:10.823 INFO  [13] [Banner]  
+2023-07-18 18:33:10.824 INFO  [13] [Banner]  License acquired from License Server: http://139.199.89.239:1008
+2023-07-18 18:33:10.825 INFO  [13] [Banner]  
+2023-07-18 18:33:10.826 INFO  [13] [Banner]  Licensed to lihanlin.
+2023-07-18 18:33:10.827 INFO  [13] [Banner]  
+2023-07-18 18:33:10.828 INFO  [13] [Banner]  You are using an offline license.
+2023-07-18 18:33:10.833 INFO  [13] [Banner]  
+2023-07-18 18:33:10.834 INFO  [13] [Banner]  
+2023-07-18 18:33:10.836 INFO  [13] [Banner]  #############################################################
+2023-07-18 18:33:10.836 INFO  [13] [Banner]  
+2023-07-18 18:33:10.837 INFO  [13] [Licensing] JRebel is running with the following internal licensing configurationLicenseUtils:
+2023-07-18 18:33:10.837 INFO  [13] [Licensing]     License valid? true
+2023-07-18 18:33:10.837 INFO  [13] [Licensing]     License type: ENTERPRISE
+2023-07-18 18:33:10.837 INFO  [13] [Licensing]     License source: LICENSE_SERVER
+2023-07-18 18:33:10.838 INFO  [13] [Licensing]     License valid from: 2023-06-01
+2023-07-18 18:33:10.839 INFO  [13] [Licensing]     License valid until: 2023-11-28
+2023-07-18 18:33:10.840 INFO  [13] [Licensing] JRebel version: 2023.1.2
+2023-07-18 18:33:10.840 INFO  [13] [Licensing] Java version: 11.0.17+10-LTS-269, name: Java HotSpot(TM) 64-Bit Server VM, info: mixed mode, arch: amd64
+2023-07-18 18:33:10.886 INFO  [0] [Core] jdk.internal.loader.ClassLoaders$AppClassLoader@7b3300e5 found resource: 'cn/boz/jb/plugin/FreeMarkerDemo.class' from 'file:/home/@chenweidian-yfzx/Code/spd-editor/build/classes/java/main/cn/boz/jb/plugin/FreeMarkerDemo.class'.
+2023-07-18 18:33:10.886 INFO  [0] [Core] Main JAR: null
+2023-07-18 18:33:10.886 INFO  [0] [Core] Main class: cn.boz.jb.plugin.FreeMarkerDemo
+2023-07-18 18:33:10.887 INFO  [0] [Core] Arguments: []
+2023-07-18 18:33:10.913 INFO  [0] [Remoting] initJetty
+2023-07-18 18:33:10.914 INFO  [0] [Remoting] Remoting port is configured to -1
+2023-07-18 18:33:10.936 INFO  [13] [Core-SDK] Added reload listener com.zeroturnaround.javarebel.tt@46e434e8 for all classes
+2023-07-18 18:33:10.967 INFO  [17] [Core] Started logging in thread: rebel-disk-info daemon=true
+2023-07-18 18:33:10.979 INFO  [17] [DiskInfo] lsblk:
+NAME        KNAME     FSTYPE MOUNTPOINT UUID                                 MODEL          SIZE ROTA TYPE
+nvme0n1     nvme0n1                                                          UNSPC512AKMM   477G    0 disk
+├─nvme0n1p1 nvme0n1p1 ext4   /boot      a1894595-c165-468d-9189-aec81c76b4c0                1.5G    0 part
+├─nvme0n1p2 nvme0n1p2                                                                         1K    0 part
+├─nvme0n1p3 nvme0n1p3 ext4   /recovery  199c6b01-4d7f-4bcf-b895-9216ecd48bcb                 19G    0 part
+├─nvme0n1p4 nvme0n1p4 swap   [SWAP]     afb21216-8358-414f-9163-3b8a181a0ec8                 16G    0 part
+├─nvme0n1p5 nvme0n1p5 ext4   /          efbfc958-9be9-42d3-b7ef-62ebc28bb7cf                 15G    0 part
+├─nvme0n1p6 nvme0n1p6 ext4              dc13b28b-730d-4f4f-8d95-68babf3d8b5a                 15G    0 part
+└─nvme0n1p7 nvme0n1p7 ext4   /data      dab64836-370f-4bc3-9536-4303c7cef13f              410.4G    0 part
+
+2023-07-18 18:33:10.983 INFO  [18] [Core] Started logging in thread: rebel-update-notifier-thread daemon=true
+2023-07-18 18:33:10.983 INFO  [18] [Core-Stat] Connection failed: update.zeroturnaround.com: 未知的名称或服务
+2023-07-18 18:33:11.006 INFO  [17] [DiskInfo] mount:
+sysfs on /sys type sysfs (rw,nosuid,nodev,noexec,relatime)
+proc on /proc type proc (rw,nosuid,nodev,noexec,relatime)
+udev on /dev type devtmpfs (rw,nosuid,relatime,size=7906900k,nr_inodes=1976725,mode=755)
+devpts on /dev/pts type devpts (rw,nosuid,noexec,relatime,gid=5,mode=620,ptmxmode=000)
+tmpfs on /run type tmpfs (rw,nosuid,nodev,noexec,relatime,size=1590196k,mode=755)
+/dev/nvme0n1p5 on / type ext4 (rw,relatime)
+securityfs on /sys/kernel/security type securityfs (rw,nosuid,nodev,noexec,relatime)
+tmpfs on /dev/shm type tmpfs (rw,nosuid,nodev)
+tmpfs on /run/lock type tmpfs (rw,nosuid,nodev,noexec,relatime,size=5120k)
+tmpfs on /sys/fs/cgroup type tmpfs (ro,nosuid,nodev,noexec,mode=755)
+cgroup2 on /sys/fs/cgroup/unified type cgroup2 (rw,nosuid,nodev,noexec,relatime,nsdelegate)
+cgroup on /sys/fs/cgroup/systemd type cgroup (rw,nosuid,nodev,noexec,relatime,xattr,name=systemd)
+pstore on /sys/fs/pstore type pstore (rw,nosuid,nodev,noexec,relatime)
+bpf on /sys/fs/bpf type bpf (rw,nosuid,nodev,noexec,relatime,mode=700)
+cgroup on /sys/fs/cgroup/net_cls,net_prio type cgroup (rw,nosuid,nodev,noexec,relatime,net_cls,net_prio)
+cgroup on /sys/fs/cgroup/perf_event type cgroup (rw,nosuid,nodev,noexec,relatime,perf_event)
+cgroup on /sys/fs/cgroup/pids type cgroup (rw,nosuid,nodev,noexec,relatime,pids)
+cgroup on /sys/fs/cgroup/devices type cgroup (rw,nosuid,nodev,noexec,relatime,devices)
+cgroup on /sys/fs/cgroup/freezer type cgroup (rw,nosuid,nodev,noexec,relatime,freezer)
+cgroup on /sys/fs/cgroup/memory type cgroup (rw,nosuid,nodev,noexec,relatime,memory)
+cgroup on /sys/fs/cgroup/cpu,cpuacct type cgroup (rw,nosuid,nodev,noexec,relatime,cpu,cpuacct)
+cgroup on /sys/fs/cgroup/rdma type cgroup (rw,nosuid,nodev,noexec,relatime,rdma)
+cgroup on /sys/fs/cgroup/blkio type cgroup (rw,nosuid,nodev,noexec,relatime,blkio)
+cgroup on /sys/fs/cgroup/cpuset type cgroup (rw,nosuid,nodev,noexec,relatime,cpuset)
+systemd-1 on /proc/sys/fs/binfmt_misc type autofs (rw,relatime,fd=29,pgrp=1,timeout=0,minproto=5,maxproto=5,direct,pipe_ino=13750)
+mqueue on /dev/mqueue type mqueue (rw,relatime)
+debugfs on /sys/kernel/debug type debugfs (rw,relatime)
+hugetlbfs on /dev/hugepages type hugetlbfs (rw,relatime,pagesize=2M)
+/dev/nvme0n1p3 on /recovery type ext4 (rw,relatime)
+/dev/nvme0n1p1 on /boot type ext4 (rw,relatime)
+/dev/nvme0n1p7 on /data type ext4 (rw,relatime)
+/dev/nvme0n1p7 on /var type ext4 (rw,relatime)
+/dev/nvme0n1p7 on /root type ext4 (rw,relatime)
+/dev/nvme0n1p7 on /home type ext4 (rw,relatime)
+/dev/nvme0n1p7 on /opt type ext4 (rw,relatime)
+binfmt_misc on /proc/sys/fs/binfmt_misc type binfmt_misc (rw,relatime)
+/dev/nvme0n1p5 on /proc/921 type ext4 (rw,relatime)
+fusectl on /sys/fs/fuse/connections type fusectl (rw,relatime)
+tmpfs on /run/user/205011 type tmpfs (rw,nosuid,nodev,relatime,size=1590192k,mode=700,uid=205011,gid=205011)
+gvfsd-fuse on /run/user/205011/gvfs type fuse.gvfsd-fuse (rw,nosuid,nodev,relatime,user_id=205011,group_id=205011)
+/dev/nvme0n1p5 on /proc/3752 type ext4 (rw,relatime)
+
+2023-07-18 18:33:11.148 INFO  [19] [Core] Started logging in thread: rebel-container-identifier daemon=true
+2023-07-18 18:33:11.148 INFO  [19] [ContainerIdentifier] Container: UNKNOWN 
+2023-07-18 18:33:11.154 INFO  [19] [ContainerIdentifier] Container identification took 25 millis
+2023-07-18 18:33:12.664 DEBUG [0] [Core-Logger] Calculated maximum logging level after logger instance creation
+2023-07-18 18:33:12.664 INFO  [0] [Core-SDK] Class 'freemarker/template/Configuration' processed by 'org.zeroturnaround.javarebel.integration.freemarker.FreemarkerConfigurationCBP@f61f06e'.
+2023-07-18 18:33:12.910 INFO  [0] [Core] jdk.internal.loader.ClassLoaders$AppClassLoader@7b3300e5 found resource: 'freemarker/version.properties' from 'jar:file:/home/@chenweidian-yfzx/.gradle/caches/modules-2/files-2.1/org.freemarker/freemarker/2.3.30/86d70d335c7821178f62b554aa3a4bc538a94f1a/freemarker-2.3.30.jar!/freemarker/version.properties'.
+2023-07-18 18:33:12.935 INFO  [0] [Core] jdk.internal.loader.ClassLoaders$AppClassLoader@7b3300e5 found resource: 'freemarker/template/utility/RichObjectWrapper.class' from 'jar:file:/home/@chenweidian-yfzx/.gradle/caches/modules-2/files-2.1/org.freemarker/freemarker/2.3.30/86d70d335c7821178f62b554aa3a4bc538a94f1a/freemarker-2.3.30.jar!/freemarker/template/utility/RichObjectWrapper.class'.
+2023-07-18 18:33:12.935 INFO  [0] [Core] jdk.internal.loader.ClassLoaders$AppClassLoader@7b3300e5 found resource: 'freemarker/template/utility/WriteProtectable.class' from 'jar:file:/home/@chenweidian-yfzx/.gradle/caches/modules-2/files-2.1/org.freemarker/freemarker/2.3.30/86d70d335c7821178f62b554aa3a4bc538a94f1a/freemarker-2.3.30.jar!/freemarker/template/utility/WriteProtectable.class'.
+2023-07-18 18:33:12.935 INFO  [0] [Core] jdk.internal.loader.ClassLoaders$AppClassLoader@7b3300e5 found resource: 'freemarker/template/utility/RichObjectWrapper.class' from 'jar:file:/home/@chenweidian-yfzx/.gradle/caches/modules-2/files-2.1/org.freemarker/freemarker/2.3.30/86d70d335c7821178f62b554aa3a4bc538a94f1a/freemarker-2.3.30.jar!/freemarker/template/utility/RichObjectWrapper.class'.
+2023-07-18 18:33:12.936 INFO  [0] [Core] jdk.internal.loader.ClassLoaders$AppClassLoader@7b3300e5 found resource: 'freemarker/template/ObjectWrapperAndUnwrapper.class' from 'jar:file:/home/@chenweidian-yfzx/.gradle/caches/modules-2/files-2.1/org.freemarker/freemarker/2.3.30/86d70d335c7821178f62b554aa3a4bc538a94f1a/freemarker-2.3.30.jar!/freemarker/template/ObjectWrapperAndUnwrapper.class'.
+2023-07-18 18:33:12.936 INFO  [0] [Core] jdk.internal.loader.ClassLoaders$AppClassLoader@7b3300e5 found resource: 'freemarker/template/utility/ObjectWrapperWithAPISupport.class' from 'jar:file:/home/@chenweidian-yfzx/.gradle/caches/modules-2/files-2.1/org.freemarker/freemarker/2.3.30/86d70d335c7821178f62b554aa3a4bc538a94f1a/freemarker-2.3.30.jar!/freemarker/template/utility/ObjectWrapperWithAPISupport.class'.
+2023-07-18 18:33:12.937 INFO  [0] [Core] jdk.internal.loader.ClassLoaders$AppClassLoader@7b3300e5 found resource: 'freemarker/template/ObjectWrapperAndUnwrapper.class' from 'jar:file:/home/@chenweidian-yfzx/.gradle/caches/modules-2/files-2.1/org.freemarker/freemarker/2.3.30/86d70d335c7821178f62b554aa3a4bc538a94f1a/freemarker-2.3.30.jar!/freemarker/template/ObjectWrapperAndUnwrapper.class'.
+2023-07-18 18:33:12.938 INFO  [0] [Core] jdk.internal.loader.ClassLoaders$AppClassLoader@7b3300e5 found resource: 'freemarker/template/ObjectWrapper.class' from 'jar:file:/home/@chenweidian-yfzx/.gradle/caches/modules-2/files-2.1/org.freemarker/freemarker/2.3.30/86d70d335c7821178f62b554aa3a4bc538a94f1a/freemarker-2.3.30.jar!/freemarker/template/ObjectWrapper.class'.
+2023-07-18 18:33:12.938 INFO  [0] [Core] jdk.internal.loader.ClassLoaders$AppClassLoader@7b3300e5 found resource: 'freemarker/template/ObjectWrapper.class' from 'jar:file:/home/@chenweidian-yfzx/.gradle/caches/modules-2/files-2.1/org.freemarker/freemarker/2.3.30/86d70d335c7821178f62b554aa3a4bc538a94f1a/freemarker-2.3.30.jar!/freemarker/template/ObjectWrapper.class'.
+2023-07-18 18:33:12.944 INFO  [0] [Core] jdk.internal.loader.ClassLoaders$AppClassLoader@7b3300e5 found resource: 'freemarker/template/utility/ObjectWrapperWithAPISupport.class' from 'jar:file:/home/@chenweidian-yfzx/.gradle/caches/modules-2/files-2.1/org.freemarker/freemarker/2.3.30/86d70d335c7821178f62b554aa3a4bc538a94f1a/freemarker-2.3.30.jar!/freemarker/template/utility/ObjectWrapperWithAPISupport.class'.
+2023-07-18 18:33:12.944 INFO  [0] [Core] jdk.internal.loader.ClassLoaders$AppClassLoader@7b3300e5 found resource: 'freemarker/template/utility/WriteProtectable.class' from 'jar:file:/home/@chenweidian-yfzx/.gradle/caches/modules-2/files-2.1/org.freemarker/freemarker/2.3.30/86d70d335c7821178f62b554aa3a4bc538a94f1a/freemarker-2.3.30.jar!/freemarker/template/utility/WriteProtectable.class'.
+2023-07-18 18:33:12.950 INFO  [0] [Core] jdk.internal.loader.ClassLoaders$AppClassLoader@7b3300e5 found resource: 'freemarker/template/Version.class' from 'jar:file:/home/@chenweidian-yfzx/.gradle/caches/modules-2/files-2.1/org.freemarker/freemarker/2.3.30/86d70d335c7821178f62b554aa3a4bc538a94f1a/freemarker-2.3.30.jar!/freemarker/template/Version.class'.
+2023-07-18 18:33:12.951 INFO  [0] [Core] jdk.internal.loader.ClassLoaders$AppClassLoader@7b3300e5 found resource: 'freemarker/ext/beans/BeansWrapperConfiguration.class' from 'jar:file:/home/@chenweidian-yfzx/.gradle/caches/modules-2/files-2.1/org.freemarker/freemarker/2.3.30/86d70d335c7821178f62b554aa3a4bc538a94f1a/freemarker-2.3.30.jar!/freemarker/ext/beans/BeansWrapperConfiguration.class'.
+2023-07-18 18:33:12.969 INFO  [0] [Core-SDK] Class 'freemarker/ext/beans/BeansWrapper' processed by 'org.zeroturnaround.javarebel.integration.freemarker.BeansWrapperCBP@32089590'.
+2023-07-18 18:33:13.069 INFO  [0] [Core] jdk.internal.loader.ClassLoaders$AppClassLoader@7b3300e5 found resource: 'freemarker/ext/beans/DefaultMemberAccessPolicy-rules' from 'jar:file:/home/@chenweidian-yfzx/.gradle/caches/modules-2/files-2.1/org.freemarker/freemarker/2.3.30/86d70d335c7821178f62b554aa3a4bc538a94f1a/freemarker-2.3.30.jar!/freemarker/ext/beans/DefaultMemberAccessPolicy-rules'.
+2023-07-18 18:33:13.268 INFO  [0] [Core-SDK] Class 'freemarker/ext/beans/ClassIntrospector' processed by 'org.zeroturnaround.javarebel.integration.freemarker.FreemarkerClassIntrospectorCBP@7dc155b3'.
+2023-07-18 18:33:13.330 INFO  [0] [Core-SDK] Added reload listener freemarker.ext.beans.JRebelClassChangeNotifier$ClassIntrospectorCacheInvalidator@ccd3e52 for all classes
+2023-07-18 18:33:13.344 INFO  [0] [Core-SDK] Added reload listener freemarker.ext.beans.JRebelClassChangeNotifier$ClassIntrospectorCacheInvalidator@1b0947c3 for all classes
+2023-07-18 18:33:13.344 INFO  [0] [Core-SDK] Added reload listener freemarker.ext.beans.JRebelClassChangeNotifier$ClassIntrospectorCacheInvalidator@59631e2a for all classes
+2023-07-18 18:33:13.363 INFO  [0] [Core-SDK] Added reload listener freemarker.ext.beans.JRebelClassChangeNotifier$ClassIntrospectorCacheInvalidator@294e4c35 for all classes
+2023-07-18 18:33:13.380 INFO  [0] [Core-SDK] Class 'freemarker/cache/TemplateCache' processed by 'org.zeroturnaround.javarebel.integration.freemarker.FreemarkerTemplateCacheCBP@5c15d1bc'.
+2023-07-18 18:33:13.453 INFO  [0] [Transform] jdk.internal.loader.ClassLoaders$AppClassLoader@7b3300e5 instrumented class 'cn/boz/jb/plugin/freemarker/MyTemplateMethodEx' from 'file:/home/@chenweidian-yfzx/Code/spd-editor/build/classes/java/main/cn/boz/jb/plugin/freemarker/MyTemplateMethodEx.class'.
+2023-07-18 18:33:13.507 INFO  [0] [Core] jdk.internal.loader.ClassLoaders$AppClassLoader@7b3300e5 found resource: 'freemarker/template/Configuration.class' from 'jar:file:/home/@chenweidian-yfzx/.gradle/caches/modules-2/files-2.1/org.freemarker/freemarker/2.3.30/86d70d335c7821178f62b554aa3a4bc538a94f1a/freemarker-2.3.30.jar!/freemarker/template/Configuration.class'.
+2023-07-18 18:33:13.508 INFO  [0] [Core] jdk.internal.loader.ClassLoaders$AppClassLoader@7b3300e5 found resource: 'freemarker/core/ParserConfiguration.class' from 'jar:file:/home/@chenweidian-yfzx/.gradle/caches/modules-2/files-2.1/org.freemarker/freemarker/2.3.30/86d70d335c7821178f62b554aa3a4bc538a94f1a/freemarker-2.3.30.jar!/freemarker/core/ParserConfiguration.class'.
+2023-07-18 18:33:13.509 INFO  [0] [Core] jdk.internal.loader.ClassLoaders$AppClassLoader@7b3300e5 found resource: 'freemarker/core/Configurable.class' from 'jar:file:/home/@chenweidian-yfzx/.gradle/caches/modules-2/files-2.1/org.freemarker/freemarker/2.3.30/86d70d335c7821178f62b554aa3a4bc538a94f1a/freemarker-2.3.30.jar!/freemarker/core/Configurable.class'.
+2023-07-18 18:33:13.509 INFO  [0] [Core] jdk.internal.loader.ClassLoaders$AppClassLoader@7b3300e5 found resource: 'freemarker/core/Configurable.class' from 'jar:file:/home/@chenweidian-yfzx/.gradle/caches/modules-2/files-2.1/org.freemarker/freemarker/2.3.30/86d70d335c7821178f62b554aa3a4bc538a94f1a/freemarker-2.3.30.jar!/freemarker/core/Configurable.class'.
+2023-07-18 18:33:13.515 INFO  [0] [Core] jdk.internal.loader.ClassLoaders$AppClassLoader@7b3300e5 found resource: 'freemarker/core/ParserConfiguration.class' from 'jar:file:/home/@chenweidian-yfzx/.gradle/caches/modules-2/files-2.1/org.freemarker/freemarker/2.3.30/86d70d335c7821178f62b554aa3a4bc538a94f1a/freemarker-2.3.30.jar!/freemarker/core/ParserConfiguration.class'.
+2023-07-18 18:33:13.516 INFO  [0] [Core] jdk.internal.loader.ClassLoaders$AppClassLoader@7b3300e5 found resource: 'freemarker/template/Configuration.class' from 'jar:file:/home/@chenweidian-yfzx/.gradle/caches/modules-2/files-2.1/org.freemarker/freemarker/2.3.30/86d70d335c7821178f62b554aa3a4bc538a94f1a/freemarker-2.3.30.jar!/freemarker/template/Configuration.class'.
+2023-07-18 18:33:13.520 INFO  [0] [Core-SDK] Class 'freemarker/template/Template' processed by 'org.zeroturnaround.javarebel.integration.metrics.TemplateCBP@262ac4cc'.
+2023-07-18 18:33:13.539 INFO  [0] [VersionStats] Detected freemarker version 2.3.x
+2023-07-18 18:33:14.379 INFO  [0] [Core-SDK] Added reload listener freemarker.ext.beans.JRebelClassChangeNotifier$ClassIntrospectorCacheInvalidator@2d85487 for all classes
+2023-07-18 18:33:14.967 INFO  [20] [Core] Started logging in thread: rebel-runtime-shutdown daemon=false
+2023-07-18 18:33:14.967 INFO  [20] [Core] JVM shutdown, disabling class reloading
+2023-07-18 18:33:14.967 INFO  [21] [Core] Started logging in thread: rebel-finalize daemon=false
+2023-07-18 18:33:14.968 INFO  [21] [StartupTracker] premain called total=0 since last=0
+2023-07-18 18:33:14.968 INFO  [21] [StartupTracker] init called total=725 since last=725
+2023-07-18 18:33:14.968 INFO  [21] [StartupTracker] startup preInitialize start total=730 since last=5
+2023-07-18 18:33:14.968 INFO  [21] [StartupTracker] startup preInitialize done total=2089 since last=1359
+2023-07-18 18:33:14.968 INFO  [21] [StartupTracker] preinit start total=2089 since last=0
+2023-07-18 18:33:14.968 INFO  [21] [StartupTracker] preinit done total=2204 since last=115
+2023-07-18 18:33:14.968 INFO  [21] [StartupTracker] fastpath start total=2248 since last=44
+2023-07-18 18:33:14.969 INFO  [21] [StartupTracker] fastpath done total=2495 since last=247
+2023-07-18 18:33:14.969 INFO  [21] [StartupTracker] startup initialize start total=2587 since last=92
+2023-07-18 18:33:14.969 INFO  [21] [StartupTracker] initialize systemcl start total=2648 since last=61
+2023-07-18 18:33:14.969 INFO  [21] [StartupTracker] initialize systemcl end total=3325 since last=677
+2023-07-18 18:33:14.969 INFO  [21] [StartupTracker] metrics initialize start total=3344 since last=19
+2023-07-18 18:33:14.970 INFO  [21] [StartupTracker] metrics initialize done total=3408 since last=64
+2023-07-18 18:33:14.970 INFO  [21] [StartupTracker] licensing initialize start total=3422 since last=14
+2023-07-18 18:33:14.970 INFO  [21] [StartupTracker] licensing initialize end total=3692 since last=270
+2023-07-18 18:33:14.970 INFO  [21] [StartupTracker] startup initialize done total=3747 since last=55
+2023-07-18 18:33:14.970 INFO  [21] [StartupTracker] premain done total=6022 since last=2275
+2023-07-18 18:33:14.970 INFO  [21] [StartupTracker] before main start total=6154 since last=132
+2023-07-18 18:33:14.970 INFO  [21] [StartupTracker] before main done total=6185 since last=31
+2023-07-18 18:33:14.970 INFO  [21] [StartupTracker] shutdown total=10236 since last=4051
+2023-07-18 18:33:14.975 INFO  [22] [Core] Started logging in thread: rebel-resources-cleanup daemon=false
+2023-07-18 18:33:14.975 INFO  [22] [IntelliJFSNotify] destroy
+2023-07-18 18:33:14.975 INFO  [23] [Core] Started logging in thread: rebel-debugger-thread daemon=true
+2023-07-18 18:33:14.975 INFO  [23] [Core] Debugger detached
+2023-07-18 18:33:14.980 INFO  [24] [Core] Started logging in thread: rebel-missed-classes daemon=false
+2023-07-18 18:33:14.980 INFO  [24] [Startup] Checking 5824 classes
+2023-07-18 18:33:14.985 INFO  [25] [Core] Started logging in thread: rebel-fsnotify-ShutdownOnTermination daemon=true
+2023-07-18 18:33:14.986 INFO  [25] [IntelliJFSNotify] FSNotifier terminated with: 143 on java.lang.ProcessImpl@5b58bfc
+2023-07-18 18:33:15.016 WARN  [24] [Startup] not instrumented class sun.util.locale.LocaleExtensions loaded with: null RM: null Final: false
+2023-07-18 18:33:15.017 WARN  [24] [Startup] not instrumented class jdk.internal.vm.VMSupport loaded with: null RM: null Final: false
+2023-07-18 18:33:15.021 INFO  [24] [Startup] Found 7 missing classes in hindsight
