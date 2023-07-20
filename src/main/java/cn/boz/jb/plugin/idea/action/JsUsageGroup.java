@@ -1,8 +1,8 @@
 package cn.boz.jb.plugin.idea.action;
 
+import cn.boz.jb.plugin.floweditor.gui.utils.StringUtils;
 import com.intellij.find.FindModel;
 import com.intellij.find.findInProject.FindInProjectManager;
-import com.intellij.lang.javascript.JavaScriptFileType;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
@@ -23,14 +23,10 @@ public class JsUsageGroup extends DefaultActionGroup {
         boolean b = editor != null && psiFile != null;
         if (b) {
             FileType fileType = psiFile.getFileType();
-            try {
-                Class.forName("com.intellij.lang.javascript.JavaScriptFileType");
-                if (fileType instanceof JavaScriptFileType) {
-                    e.getPresentation().setEnabledAndVisible(true);
-                    return;
-                }
-            } catch (ClassNotFoundException ex) {
-                ex.printStackTrace();
+            boolean javascript = StringUtils.equalIgnoreCase(fileType.getName(), "javascript");
+            if(javascript){
+                e.getPresentation().setEnabledAndVisible(true);
+                return;
             }
         }
         e.getPresentation().setEnabledAndVisible(false);
@@ -47,7 +43,7 @@ public class JsUsageGroup extends DefaultActionGroup {
                 return;
             }
             FileType fileType = psiFile.getFileType();
-            if (fileType instanceof JavaScriptFileType) {
+            if (StringUtils.equalIgnoreCase(fileType.getName(),"javascript")) {
                 String fileName = virtualFile.getName();
                 FindInProjectManager instance = FindInProjectManager.getInstance(anActionEvent.getProject());
                 FindModel findModel = new FindModel();
@@ -67,7 +63,7 @@ public class JsUsageGroup extends DefaultActionGroup {
                 return;
             }
             FileType fileType = psiFile.getFileType();
-            if (fileType instanceof JavaScriptFileType) {
+            if(StringUtils.equalIgnoreCase(fileType.getName(),"javascript")){
                 String cpath = virtualFile.getPath();
                 String ppath = virtualFile.getParent().getParent().getPath();
                 String destpath = cpath.replace(ppath, "");

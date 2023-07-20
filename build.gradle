@@ -115,7 +115,8 @@ intellij {
 
 //    localPath="F:/Program Files/JetBrains/IntelliJ IDEA 2023.1.2"
 //    localPath="F:\\App\\ideaIU-2020.1.4.win"
-	  localPath="/idea/idea-IU-201.8743.12"
+    localPath="/home/@chenweidian-yfzx/Downloads/idea-IC-201.8743.12"
+//	  localPath="/idea/idea-IU-201.8743.12"
 //    localSourcesPath=""
 //    localPath = 'F:\\App\\JetBrains\\IntelliJ IDEA 2021.1.1'
 //    intellijRepository="https://cache-redirector.jetbrains.com/www.jetbrains.com/intellij-repository"
@@ -132,8 +133,8 @@ intellij {
 //    sandboxDir.set("${project.rootDir}/.sandbox")
     sandboxDir = "${project.rootDir}/.sandbox"
     plugins = ['com.intellij.java',
-               'JavaScript',
-               'DatabaseTools',
+//               'JavaScript',
+//               'DatabaseTools',
                'Git4Idea',
     ]
 

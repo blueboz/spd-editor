@@ -17,6 +17,18 @@ public class StringUtils {
         }
         return false;
     }
+    public static boolean equalIgnoreCase(String left,String right){
+        if(left==null&&right==null){
+            return true;
+        }
+        if(left==null){
+            return false;
+        }
+        if(right==null){
+            return false;
+        }
+        return left.toUpperCase().equals(right.toUpperCase());
+    }
 
     /**
      * 比较带字母与数字字符串的顺序

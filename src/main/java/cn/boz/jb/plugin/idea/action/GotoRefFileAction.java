@@ -13,6 +13,7 @@ import cn.boz.jb.plugin.idea.configurable.SpdEditorDBState;
 import cn.boz.jb.plugin.idea.callsearch.CallerSearcherCommentPanel;
 import cn.boz.jb.plugin.idea.dialog.EngineActionDialog;
 import cn.boz.jb.plugin.idea.dialog.EngineTaskDialog;
+import cn.boz.jb.plugin.idea.utils.CaretUtils;
 import cn.boz.jb.plugin.idea.utils.Constants;
 import cn.boz.jb.plugin.idea.utils.DBUtils;
 import com.intellij.codeInsight.navigation.NavigationUtil;
@@ -28,8 +29,8 @@ import com.intellij.ide.actions.searcheverywhere.SearchEverywhereManagerImpl;
 import com.intellij.ide.highlighter.HtmlFileType;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.ide.highlighter.XmlFileType;
-import com.intellij.lang.javascript.JavaScriptFileType;
-import com.intellij.lang.javascript.psi.JSLiteralExpression;
+//import com.intellij.lang.javascript.JavaScriptFileType;
+//import com.intellij.lang.javascript.psi.JSLiteralExpression;
 import com.intellij.lang.jvm.JvmMethod;
 import com.intellij.openapi.actionSystem.ActionGroup;
 import com.intellij.openapi.actionSystem.ActionManager;
@@ -39,6 +40,8 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.editor.CaretModel;
+import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.progress.ProgressIndicator;
@@ -60,6 +63,7 @@ import com.intellij.openapi.ui.popup.util.BaseListPopupStep;
 import com.intellij.openapi.ui.popup.util.PopupUtil;
 import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.util.Ref;
+import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiClass;
@@ -171,13 +175,12 @@ public class GotoRefFileAction extends AnAction {
                 }
             }
         } else {
-            if (fileType instanceof JavaScriptFileType) {
+            if (StringUtils.equalIgnoreCase(fileType.getName(),"javascript")) {
                 if (element != null) {
                     PsiElement context = element.getContext();
+                    String stringValue = CaretUtils.localString(editor);
+                    if (!StringUtils.isBlank(stringValue)) {
 
-                    if (context instanceof JSLiteralExpression) {
-                        JSLiteralExpression jsLiteralExpression = (JSLiteralExpression) context;
-                        String stringValue = jsLiteralExpression.getStringValue();
                         boolean tryToGotoFileRef = tryToGotoFileRef(psiFile, anActionEvent, stringValue);
                         if (tryToGotoFileRef) {
                             return;
@@ -196,6 +199,8 @@ public class GotoRefFileAction extends AnAction {
                         }
                         //尝试搜索文件名
 
+                    } else {
+                        return;
                     }
                 }
 
@@ -357,7 +362,7 @@ public class GotoRefFileAction extends AnAction {
                 engineActionRef.set(engineActions);
                 xfundsBatchRef.set(xfundsBatches);
             } catch (Exception e) {
-                DBUtils.dbExceptionProcessor(e,project);
+                DBUtils.dbExceptionProcessor(e, project);
                 exceptionRef.set(e);
             }
         }, "Loading...", true, anActionEvent.getProject());
@@ -1009,13 +1014,13 @@ public class GotoRefFileAction extends AnAction {
         Project project = anActionEvent.getProject();
         String[] split = value.split("\\?");
         VirtualFile virtualFile = psiFile.getVirtualFile();
-        while(true){
+        while (true) {
             virtualFile = virtualFile.getParent();
-            if(virtualFile==null){
+            if (virtualFile == null) {
                 break;
             }
             VirtualFile fileByRelativePath = virtualFile.findFileByRelativePath(split[0]);
-            if(fileByRelativePath != null) {
+            if (fileByRelativePath != null) {
                 PsiFile targetJsFile = PsiManager.getInstance(project).findFile(fileByRelativePath);
                 NavigationUtil.activateFileWithPsiElement(targetJsFile);
                 return true;
@@ -1039,10 +1044,11 @@ public class GotoRefFileAction extends AnAction {
             } else {
                 try {
                     Class.forName("com.intellij.lang.javascript.JavaScriptFileType");
-                    if (fileType instanceof JavaScriptFileType) {
-                        e.getPresentation().setEnabled(true);
-                        e.getPresentation().setVisible(true);
-                    }
+                    //TOBETESt
+//                    if (fileType instanceof JavaScriptFileType) {
+//                        e.getPresentation().setEnabled(true);
+//                        e.getPresentation().setVisible(true);
+//                    }
                     return;
                 } catch (ClassNotFoundException classNotFoundException) {
                     e.getPresentation().setEnabled(true);
