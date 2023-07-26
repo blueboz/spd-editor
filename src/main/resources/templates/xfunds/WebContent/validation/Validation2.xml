@@ -12,9 +12,9 @@
         </#if>
         <#else>
         <#if col.objType=='Double'>
-        <item Name="${beanName}.${col.fieldName}" DataType="AmountConfig" Require="${col.nullable?then(0,1)}" digit="${col.digital}" min="-${col.limit}"  Max="${col.limit}" Tips="${col.fieldChName}" Message="${col.fieldChName}"/>
+        <item Name="${beanName}.${col.fieldName}" DataType="AmountConfig" Require="${col.nullable?then(0,1)}" digit="${col.digital}" min="-${col.limit}"  Max="${col.limit}" Tips="${col.fieldChName}最大长度${col.maxLenInOracle}" Message="${col.fieldChName}"/>
         <#else>
-        <item Name="${beanName}.${col.fieldName}"  DataType="LimitB" Min="0" Max="${col.maxLenInOracle}" Require="${col.nullable?then(0,1)}" Message="${col.fieldChName}" Tips="${col.fieldChName}" />
+        <item Name="${beanName}.${col.fieldName}"  DataType="LimitB" Min="0" Max="${col.maxLenInOracle}" Require="${col.nullable?then(0,1)}" Message="${col.fieldChName}最大长度${col.maxLenInOracle}" Tips="${col.fieldChName}" />
         </#if>
         </#if>
         </#list>
@@ -27,7 +27,7 @@
         <item Name="${beanName}.${col.fieldName}"  DataType="DateField" Require="${col.nullable?then(0,1)}" Message="${col.fieldChName}" Tips="${col.fieldChName}"/>
         </#if>
         <#if col.class=='e-time'>
-        <item Name="${beanName}.${col.fieldName}" DataType="Integer" Require="1" Min="0" Max="240000" formater="time" Message="${col.fieldChName}" Tips="${col.fieldChName}" />
+        <item Name="${beanName}.${col.fieldName}" DataType="Integer" Require="1" Min="0" Max="240000" formater="time" Message="${col.fieldChName}最大长度${col.maxLenInOracle}" Tips="${col.fieldChName}" />
         </#if>
         <#else>
         <#if col.objType=='Double'>

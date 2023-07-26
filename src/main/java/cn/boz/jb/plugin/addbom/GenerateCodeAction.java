@@ -5,15 +5,11 @@ import com.alibaba.fastjson.JSONObject;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
-import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiFile;
-import org.apache.commons.io.IOUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -31,9 +27,9 @@ public class GenerateCodeAction extends AnAction {
             e.getPresentation().setEnabledAndVisible(false);
             return;
         }
-        boolean b = virtualFile.getName().endsWith(".json");
+        boolean b = virtualFile.getName().endsWith(".codegen");
         if(b){
-            e.getPresentation().setEnabledAndVisible(false);
+            e.getPresentation().setEnabledAndVisible(true);
         }else{
             e.getPresentation().setEnabledAndVisible(false);
         }
@@ -43,7 +39,10 @@ public class GenerateCodeAction extends AnAction {
         VirtualFile virtualFile = anActionEvent.getData(CommonDataKeys.VIRTUAL_FILE);
         try {
             byte[] bytes = Files.readAllBytes(Path.of(virtualFile.getPath()));
-            JSONObject mapper = JSON.parseObject(new String(bytes));
+            String configText = new String(bytes);
+            JSONObject mapper = JSON.parseObject(configText);
+            System.out.println(mapper);
+
 
         } catch (IOException e) {
             e.printStackTrace();

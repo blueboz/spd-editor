@@ -46,6 +46,8 @@ public class SpdEditorIcons {
     public static Icon LOADING_16_ICON_D = icon("/icons/loading_dark.svg");
     public static Icon MENUE_16_ICON = icon("/icons/menue.svg");
     public static Icon MENUE_16_ICON_D = icon("/icons/menue_dark.svg");
+    public static Icon CODEGEN_16_ICON = icon("/icons/codegen.svg");
+
 
     static Icon icon(String path) {
         Icon icon = IconLoader.getIcon(path, SpdEditorIcons.class);

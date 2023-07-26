@@ -1,0 +1,196 @@
+{
+  "package": "com.erayt.xfunds.intbank.domain",
+  "className": "CeftsAccount",
+  "beanName": "ceftsAccount",
+  "namespace": "intbank",
+  "tableName": "XFUNDS_INTBANK_CEFTSACCOUNT",
+  "menuId": "825",
+  "pmenuId": "9",
+  "powerbits": "812,813,814",
+  "moduleName": "8-同业模块",
+  "functionbase": "Cefts账户管理-1",
+  "title": "Cefts账号查询",
+  "exceptionFullName": "com.erayt.xfunds.common.XfundsIntbankException",
+  "exceptionName": "XfundsIntbankException",
+  "quernamespace": "intBank",
+  "importExcel": false,
+  "codedefs": [
+    {"type": "IA2",
+      "rmk1": "同业模块",
+      "rmk2": "Cefts账号维护",
+      "rmk3": "维护类型",
+      "items": [
+        {"name": "新增","value":"1"},
+        {"name": "修改","value":"2"}
+      ]
+    },
+    {"type": "IA3",
+      "rmk1": "同业模块",
+      "rmk2": "Cefts账号维护",
+      "rmk3": "维护状态",
+      "items": [
+        {"name": "维护成功","value":"1"},
+        {"name": "维护失败","value":"2"},
+        {"name": "待运营维护","value":"3"}
+      ]
+    }
+  ],
+  "columns": [
+    {
+      "fieldChName": "后台编号",
+      "fieldName": "downloadKey",
+      "dataType": "NUMBER(16)",
+      "nullable": false,
+      "isId": true
+    },
+    {
+      "fieldChName": "维护类型",
+      "fieldName": "type",
+      "dataType": "VARCHAR(1)",
+      "nullable": false,
+      "isId":false,
+      "codedef": "IA2"
+    },
+    {
+      "fieldChName": "业务编号",
+      "fieldName": "businessNo",
+      "dataType": "VARCHAR(30)",
+      "nullable": true,
+      "isId": false
+    },
+    {
+      "fieldChName": "账户类型",
+      "fieldName": "accountType",
+      "dataType": "VARCHAR2(50)",
+      "nullable": true,
+      "isId": false
+    },
+    {
+      "fieldChName": "本方经办方/产品",
+      "fieldName": "product",
+      "dataType": "VARCHAR2(200)",
+      "nullable": true,
+      "isId": false
+    },
+    {
+      "fieldChName": "对手方机构名称",
+      "fieldName": "rivalName",
+      "dataType": "VARCHAR2(200)",
+      "nullable": true,
+      "isId": false
+    },
+    {
+      "fieldChName": "对手方经办行/产品",
+      "fieldName": "rivalProduct",
+      "dataType": "VARCHAR2(200)",
+      "nullable": true,
+      "isId": false
+    }, {
+      "fieldChName": "支付系统行号",
+      "fieldName": "interBank",
+      "dataType": "VARCHAR2(14)",
+      "nullable": true,
+      "isId": false
+    },
+    {
+      "fieldChName": "资金账号",
+      "fieldName": "account",
+      "dataType": "VARCHAR2(50)",
+      "nullable": true,
+      "isId": false
+    }, {
+      "fieldChName": "资金账户户名",
+      "fieldName": "accountName",
+      "dataType": "VARCHAR2(200)",
+      "nullable": true,
+      "isId": false
+    }, {
+      "fieldChName": "资金开户行名称",
+      "fieldName": "accountBank",
+      "dataType": "VARCHAR2(120)",
+      "nullable": true,
+      "isId": false
+    } , {
+      "fieldChName": "发起机构",
+      "fieldName": "orgName",
+      "dataType": "VARCHAR2(200)",
+      "nullable": true,
+      "isId": false
+    } , {
+      "fieldChName": "备注",
+      "fieldName": "remark",
+      "dataType": "VARCHAR2(400)",
+      "nullable": true,
+      "isId": false
+    }, {
+      "fieldChName": "状态",
+      "fieldName": "status",
+      "dataType": "VARCHAR2(1)",
+      "nullable": true,
+      "isId": false,
+      "codedef": "IA3"
+    },
+    {
+      "fieldChName": "入库日期",
+      "fieldName": "insertDate",
+      "dataType": "NUMBER(8)",
+      "nullable": true,
+      "isId": false,
+      "class": "e-date"
+    },
+    {
+      "fieldChName": "入库时间",
+      "fieldName": "insertTime",
+      "dataType": "NUMBER(6)",
+      "nullable": true,
+      "isId": false,
+      "class": "e-time"
+    },
+    {
+      "fieldChName": "最后更新日期",
+      "fieldName": "updateDate",
+      "dataType": "NUMBER(8)",
+      "nullable": true,
+      "isId": false,
+      "class": "e-date"
+    },
+    {
+      "fieldChName": "最后更新时间",
+      "fieldName": "updateTime",
+      "dataType": "NUMBER(6)",
+      "nullable": true,
+      "isId": false,
+      "class": "e-time"
+    },{
+      "fieldChName": "失败原因",
+      "fieldName": "failureReason",
+      "dataType": "varchar(500)",
+      "nullable": true,
+      "isId": false
+    },{
+      "fieldChName": "分行柜员Id",
+      "fieldName": "tellerId",
+      "dataType": "varchar(20)",
+      "nullable": true,
+      "isId": false
+    },{
+      "fieldChName": "分行柜员",
+      "fieldName": "tellerName",
+      "dataType": "varchar(20)",
+      "nullable": true,
+      "isId": false
+    },{
+      "fieldChName": "总行柜员Id",
+      "fieldName": "mastertellerId",
+      "dataType": "varchar(20)",
+      "nullable": true,
+      "isId": false
+    },{
+      "fieldChName": "总行柜员姓名",
+      "fieldName": "mastertellerName",
+      "dataType": "varchar(20)",
+      "nullable": true,
+      "isId": false
+    }
+  ]
+}

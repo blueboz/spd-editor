@@ -27,8 +27,9 @@
 
 
     <extensions defaultExtensionNs="com.intellij">
-        <lang.findUsagesProvider language="HTML" implementationClass=""></lang.findUsagesProvider>
+<!--        <lang.findUsagesProvider language="HTML" implementationClass=""></lang.findUsagesProvider>-->
         <internalFileTemplate name="Spd Process"/>
+        <internalFileTemplate name="config"/>
         <!-- Add your extensions here -->
         <fileEditorProvider implementation="cn.boz.jb.plugin.idea.fileeditor.SpdFileEditorProvider"
                             id="myFileEditorProvider" order="last">
@@ -42,6 +43,7 @@
                     anchor="right"
                     order="last" icon="SpdEditorIcons.MENU_16_ICON"/>
         <fileType name="Spd" extensions="spd" implementationClass="cn.boz.jb.plugin.idea.filetype.SpdFileType" language="Spd" fieldName="INSTANCE"/>
+        <fileType name="CodeGen" extensions="codegen" implementationClass="cn.boz.jb.plugin.idea.filetype.CodeGenFileType" language="Codegen" fieldName="INSTANCE"></fileType>
         <themeMetadataProvider path="/META-INF/SpdEditor.themeMetadata.json"/>
         <projectService serviceImplementation="cn.boz.jb.plugin.idea.configurable.SpdEditorDBState"/>
         <projectService serviceImplementation="cn.boz.jb.plugin.idea.configurable.SpdEditorNormState"/>
@@ -173,10 +175,19 @@
                     text="Go To EngineRight"
                     icon="AllIcons.Nodes.SecurityRole"/>
         </group>
+        <action class="cn.boz.jb.plugin.idea.action.NewCodeGenAction" id="NewCodeGen" text="CodeGen File"
+                icon="SpdEditorIcons.CODEGEN_16_ICON" description="CodeGen File" >
+            <add-to-group group-id="NewGroup" anchor="last"/>
+        </action>
 
         <action class="cn.boz.jb.plugin.idea.action.NewSpdFileAction" id="NewSpdFile" text="Spd File"
                 icon="SpdEditorIcons.FLOW_16_ICON" description="Spd File">
             <add-to-group group-id="NewGroup" anchor="last"/>
+        </action>
+
+        <action class="cn.boz.jb.plugin.addbom.GenerateCodeAction" id="GenerateCode"
+                icon="SpdEditorIcons.CODEGEN_16_ICON" text="GenerateCode" description="GenerateCode" >
+            <add-to-group group-id="EditorPopupMenu" anchor="first"></add-to-group>
         </action>
 
         <group>
@@ -209,6 +220,7 @@
             <add-to-group group-id="EditorPopupMenu" anchor="first"></add-to-group>
 
         </group>
+
         <!--        GoToJsFile-->
 
         <group id="spd.gotorefaction.group">

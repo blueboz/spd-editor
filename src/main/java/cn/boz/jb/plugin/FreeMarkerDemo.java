@@ -30,9 +30,9 @@ public class FreeMarkerDemo {
 
     private String outputDest = "/home/@chenweidian-yfzx/Code/FMS/FMSS_xfunds";
     private String configPath = "/home/@chenweidian-yfzx/Code/spd-editor/src/main/resources/Nafm会员信息.json";
-    private String basePath = "/home/@chenweidian-yfzx/Code/spd-editor/src/main/resources/templates";
+    private String templatePath = "/home/@chenweidian-yfzx/Code/spd-editor/src/main/resources/templates";
 
-    Set<String> skipList = Arrays.stream(new String[]{"${beanName}.xls"}).collect(Collectors.toSet());
+    Set<String> skipList = Arrays.stream(new String[]{""}).collect(Collectors.toSet());
 //    Map<String,String> namespacePoBaseMapper =new HashMap<String,String>();
 
     JSONObject mapper;
@@ -87,7 +87,7 @@ public class FreeMarkerDemo {
                 return;
             }
             path = path.replaceAll("\\\\", "/");
-            String relPath = path.replace(basePath, "");
+            String relPath = path.replace(templatePath, "");
             if (templateCgr == null) {
                 return;
             }
@@ -163,7 +163,7 @@ public class FreeMarkerDemo {
 
         templateCgr = new Configuration(Configuration.VERSION_2_3_30);
         templateCgr.setSharedVariable("myutils",new MyTemplateMethodEx());
-        templateCgr.setDirectoryForTemplateLoading(new File(basePath));
+        templateCgr.setDirectoryForTemplateLoading(new File(templatePath));
     }
     public String firstCharUpper(String str){
         return str.substring(0,1).toUpperCase()+str.substring(1);
@@ -171,7 +171,7 @@ public class FreeMarkerDemo {
 
     public void iterTemplatePath() {
 
-        File file = new File(basePath);
+        File file = new File(templatePath);
         Deque<File> queue = new LinkedList<>();
         queue.add(file);
         while (!queue.isEmpty()) {

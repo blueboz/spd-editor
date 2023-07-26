@@ -425,7 +425,22 @@ public class MockStartMethodAction extends AnAction {
         }
 
     }
+    @Override
+    public void update(@NotNull AnActionEvent e) {
+        Editor editor = e.getData(CommonDataKeys.EDITOR);
+        PsiFile psiFile = e.getData(CommonDataKeys.PSI_FILE);
+        boolean b = editor != null && psiFile != null;
+        if (b) {
+            FileType fileType = psiFile.getFileType();
+            if (fileType instanceof JavaFileType) {
+                e.getPresentation().setEnabled(true);
+                e.getPresentation().setVisible(true);
+                return;
+            }
+        }
+        e.getPresentation().setVisible(false);
 
+    }
 
 }
 

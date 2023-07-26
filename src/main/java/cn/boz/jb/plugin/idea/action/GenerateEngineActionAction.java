@@ -141,6 +141,7 @@ public class GenerateEngineActionAction  extends AnAction implements ClipboardOw
                 return;
             }
         }
+        e.getPresentation().setVisible(false);
 
     }
 

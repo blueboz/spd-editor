@@ -1,0 +1,17 @@
+[
+  { "pname": "package", "type": "java.lang.String" },
+  { "pname": "className", "type": "java.lang.String" },
+  { "pname": "beanName", "type": "java.lang.String" },
+  { "pname": "namespace", "type": "java.lang.String" },
+  { "pname": "tableName", "type": "java.lang.String" },
+  { "pname": "menuId", "type": "java.lang.String" },
+  { "pname": "pmenuId", "type": "java.lang.String" },
+  { "pname": "powerbits", "type": "java.lang.String" },
+  { "pname": "moduleName", "type": "java.lang.String" },
+  { "pname": "functionbase", "type": "java.lang.String" },
+  { "pname": "title", "type": "java.lang.String" },
+  { "pname": "exceptionFullName", "type": "java.lang.String" },
+  { "pname": "exceptionName", "type": "java.lang.String" },
+  { "pname": "quernamespace", "type": "java.lang.String" },
+  { "pname": "importExcel", "type": "java.lang.Boolean" }
+]
