@@ -48,8 +48,12 @@
         <projectService serviceImplementation="cn.boz.jb.plugin.idea.configurable.SpdEditorDBState"/>
         <projectService serviceImplementation="cn.boz.jb.plugin.idea.configurable.SpdEditorNormState"/>
         <projectService serviceImplementation="cn.boz.jb.plugin.idea.configurable.SpdEditorDBListState"/>
+        <projectService serviceImplementation="cn.boz.jb.plugin.idea.configurable.CodeGenState"></projectService>
 
         <!--项目领域的数据库配置信息-->
+        <projectConfigurable parentId="tools" instance="cn.boz.jb.plugin.idea.configurable.CodeGenSettings"
+                             id="codeGenConfigurable" displayName="CodeGenSettings" nonDefaultProject="true"/>
+
 
         <projectConfigurable parentId="tools" instance="cn.boz.jb.plugin.idea.configurable.SpdEditorDBListSettings"
                              id="spdEditorListConfigurable" displayName="DbConfigList" nonDefaultProject="true"/>
@@ -185,7 +189,7 @@
             <add-to-group group-id="NewGroup" anchor="last"/>
         </action>
 
-        <action class="cn.boz.jb.plugin.addbom.GenerateCodeAction" id="GenerateCode"
+        <action class="cn.boz.jb.plugin.addbom.CodeGenAction" id="GenerateCode"
                 icon="SpdEditorIcons.CODEGEN_16_ICON" text="GenerateCode" description="GenerateCode" >
             <add-to-group group-id="EditorPopupMenu" anchor="first"></add-to-group>
         </action>

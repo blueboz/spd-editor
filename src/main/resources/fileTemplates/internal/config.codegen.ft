@@ -1,5 +1,4 @@
 {
-  "package": "com.erayt.xfunds.intbank.domain",
   "className": "CeftsAccount",
   "beanName": "ceftsAccount",
   "namespace": "intbank",

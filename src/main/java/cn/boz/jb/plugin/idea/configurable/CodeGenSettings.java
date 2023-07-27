@@ -30,7 +30,7 @@ public class CodeGenSettings implements Configurable,Configurable.WithEpDependen
 
     @Override
     public @Nullable JComponent createComponent() {
-        settings = new CodeGenComponent();
+        settings = new CodeGenComponent(project);
         return settings.getPanel();
     }
 

@@ -20,9 +20,6 @@ public class CodeGenState implements PersistentStateComponent<CodeGenState> {
     //输出路径
     public String outputDest = "";
 
-    //配置文件路径
-    public String configPath = "/home/@chenweidian-yfzx/Code/spd-editor/src/main/resources/Nafm会员信息.json";
-
     //模板路径
     public String templatePath="/home/@chenweidian-yfzx/Code/spd-editor/src/main/resources/templates";
 
