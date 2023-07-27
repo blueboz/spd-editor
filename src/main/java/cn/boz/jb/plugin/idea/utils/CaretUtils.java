@@ -34,6 +34,9 @@ public class CaretUtils {
     }
 
     private  static String extractByChar(int lineOffset, String selectedLine,char ch) {
+        if(StringUtils.isBlank(selectedLine)){
+            return null;
+        }
         int wordstartoffset = lineOffset;
         int wordendoffset = lineOffset;
         while (wordendoffset < selectedLine.length()) {

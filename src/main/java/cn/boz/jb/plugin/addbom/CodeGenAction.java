@@ -11,11 +11,6 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.intellij.ide.scratch.ScratchFileCreationHelper;
-import com.intellij.ide.scratch.ScratchFileService;
-import com.intellij.ide.scratch.ScratchFileServiceImpl;
-import com.intellij.ide.scratch.ScratchRootType;
-import com.intellij.ide.scratch.ScratchUtil;
-import com.intellij.json.JsonFileType;
 import com.intellij.json.JsonLanguage;
 import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationType;
@@ -24,19 +19,12 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.fileEditor.FileEditorManager;
-import com.intellij.openapi.fileTypes.FileType;
-import com.intellij.openapi.fileTypes.FileTypeManager;
 import com.intellij.openapi.options.ShowSettingsUtil;
 import com.intellij.openapi.project.DumbAwareAction;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.vfs.VirtualFileManager;
-import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiFileFactory;
 import freemarker.cache.StringTemplateLoader;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -112,7 +100,6 @@ public class CodeGenAction extends AnAction implements ClipboardOwner {
             if (StringUtils.isBlank(codeGenState.outputDest)) {
                 int idx = Messages.showDialog("输出路径未配置", "配置信息缺失", new String[]{"去配置", "取消"}, 0, SpdEditorIcons.CODEGEN_16_ICON);
                 if (idx == 0) {
-                    Messages.showErrorDialog("输出路径未配置", "");
                     ShowSettingsUtil.getInstance().showSettingsDialog(anActionEvent.getProject(), CodeGenSettings.class);
                 }
                 return;
@@ -120,7 +107,6 @@ public class CodeGenAction extends AnAction implements ClipboardOwner {
             if (StringUtils.isBlank(codeGenState.templatePath)) {
                 int idx = Messages.showDialog("模板路径未配置", "配置信息缺失", new String[]{"去配置", "取消"}, 0, SpdEditorIcons.CODEGEN_16_ICON);
                 if (idx == 0) {
-                    Messages.showErrorDialog("模板路径未配置", "");
                     ShowSettingsUtil.getInstance().showSettingsDialog(anActionEvent.getProject(), CodeGenSettings.class);
                 }
                 return;
@@ -169,7 +155,7 @@ public class CodeGenAction extends AnAction implements ClipboardOwner {
                 @Override
                 public void actionPerformed(@NotNull AnActionEvent anActionEvent) {
                     try {
-                        Desktop.getDesktop().open(file);
+                        Desktop.getDesktop().open(outputdest);
                     } catch (IOException ioException) {
                         ioException.printStackTrace();
                     }

@@ -199,8 +199,6 @@ public class GotoRefFileAction extends AnAction {
                         }
                         //尝试搜索文件名
 
-                    } else {
-                        return;
                     }
                 }
 
