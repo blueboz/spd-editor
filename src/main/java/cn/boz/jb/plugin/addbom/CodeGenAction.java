@@ -221,7 +221,7 @@ public class CodeGenAction extends AnAction implements ClipboardOwner {
 
     public void process(String path) {
         try {
-            path = path.replaceAll("\\\\", "/");
+
             String relPath = path.replace(templatePath, "");
             if (templateCgr == null) {
                 return;

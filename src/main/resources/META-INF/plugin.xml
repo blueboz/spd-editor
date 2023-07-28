@@ -43,7 +43,7 @@
                     anchor="right"
                     order="last" icon="SpdEditorIcons.MENU_16_ICON"/>
         <fileType name="Spd" extensions="spd" implementationClass="cn.boz.jb.plugin.idea.filetype.SpdFileType" language="Spd" fieldName="INSTANCE"/>
-        <fileType name="CodeGen" extensions="codegen" implementationClass="cn.boz.jb.plugin.idea.filetype.CodeGenFileType" language="Codegen" fieldName="INSTANCE"></fileType>
+        <fileType name="CodeGen" extensions="codegen" implementationClass="cn.boz.jb.plugin.idea.filetype.CodeGenFileType" language="CodeGen" fieldName="INSTANCE"></fileType>
         <themeMetadataProvider path="/META-INF/SpdEditor.themeMetadata.json"/>
         <projectService serviceImplementation="cn.boz.jb.plugin.idea.configurable.SpdEditorDBState"/>
         <projectService serviceImplementation="cn.boz.jb.plugin.idea.configurable.SpdEditorNormState"/>
@@ -68,7 +68,8 @@
         <projectService serviceImplementation="cn.boz.jb.plugin.idea.notification.SpdEditorNotification"/>
 
 <!--        <gotoSymbolContributor implementation=""></gotoSymbolContributor>-->
-        <completion.contributor language="JAVA" implementationClass="cn.boz.jb.plugin.idea.lexer.MyCompleteContributor"></completion.contributor>
+        <completion.contributor language="CodeGen" implementationClass="cn.boz.jb.plugin.idea.lexer.MyCompleteContributor" >
+        </completion.contributor>
         <lang.findUsagesProvider language="Spd"
                                  implementationClass="cn.boz.jb.plugin.idea.lexer.MyFindUsagesProvider"/>
     </extensions>
@@ -206,14 +207,16 @@
 
             <action class="cn.boz.jb.plugin.idea.action.fmss.XFunCodeDefInvoker" text="CodeDef"></action>
             <action class="cn.boz.jb.plugin.idea.action.GotoRefFileAction" id="GoToRef" text="Go To Ref"
-                    icon="SpdEditorIcons.REF_16_ICON"></action>
+                    icon="SpdEditorIcons.REF_16_ICON" ></action>
             <action class="cn.boz.jb.plugin.idea.action.GenerateEngineActionAction"  text="Gen Engine Action"/>
             <action class="cn.boz.jb.plugin.idea.action.mock.MockStartMethodAction" id="SpdMockStartMethod" text="MockMethod"
             icon="SpdEditorIcons.MOCK_16_ICON"></action>
             <group text="ExtQuery" id="SpdExtQuery" popup="true">
                 <action class="cn.boz.jb.plugin.idea.action.GotoAnyRefAction" icon="AllIcons.Actions.Search"
                         id="GoToRefAction"
-                        text="ListQueryActionByActionId"></action>
+                        text="ListQueryActionByActionId">
+                    <keyboard-shortcut first-keystroke="F10" keymap="$default"></keyboard-shortcut>
+                </action>
                 <action class="cn.boz.jb.plugin.idea.action.GotoAnyRefExtAction" icon="AllIcons.Actions.Search"
                         text="TableQueryActionByActionId" id="GoToRefExt"></action>
                 <action class="cn.boz.jb.plugin.idea.action.QueryExpressionUsages" text="QueryExpression" id="SpdQueryExpression"/>

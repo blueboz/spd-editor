@@ -16,7 +16,7 @@ public class CodeGenFileType extends JsonFileType {
     public static final CodeGenFileType INSTANCE = new CodeGenFileType();
 
     private CodeGenFileType() {
-        super(JsonLanguage.INSTANCE);
+        super(CodeGenLanguage.INSTANCE);
     }
 
 

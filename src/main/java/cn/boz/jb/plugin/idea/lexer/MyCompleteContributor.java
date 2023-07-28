@@ -20,6 +20,21 @@ public class MyCompleteContributor extends CompletionContributor {
                                           @NotNull ProcessingContext processingContext, @NotNull CompletionResultSet resultSet) {
 
                 resultSet.addElement(LookupElementBuilder.create("Hello"));
+                resultSet.addElement(LookupElementBuilder.create("Blueboz"));
+                resultSet.addElement(LookupElementBuilder.create("package"));
+                resultSet.addElement(LookupElementBuilder.create("className"));
+                resultSet.addElement(LookupElementBuilder.create("package"));
+                resultSet.addElement(LookupElementBuilder.create("beanName"));
+                resultSet.addElement(LookupElementBuilder.create("namespace"));
+                resultSet.addElement(LookupElementBuilder.create("tableName"));
+                resultSet.addElement(LookupElementBuilder.create("menuId"));
+                resultSet.addElement(LookupElementBuilder.create("pmenuId"));
+                resultSet.addElement(LookupElementBuilder.create("powerbits"));
+                resultSet.addElement(LookupElementBuilder.create("moduleName"));
+                resultSet.addElement(LookupElementBuilder.create("functionbase"));
+                resultSet.addElement(LookupElementBuilder.create("title"));
+                resultSet.addElement(LookupElementBuilder.create("exceptionFullName"));
+                resultSet.addElement(LookupElementBuilder.create("exceptionName"));
 
             }
         });
